@@ -82,6 +82,1724 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-12-18-carthage-decentralized-dependency-manager.html">Carthage去中心化的Cocoa依赖管理器</a></h1>
+			<p class="meta"><time datetime="2015-12-18T00:36:07+08:00" 
+			pubdate data-updated="true">2015/12/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>说到 iOS 的依赖管理工具，大家一定首先想到的是 CocoaPods ，不错，CocoaPods 确实是一个很好依赖管理工具，已然成为了 Cocoa 依赖管理的标准，丰富的支持库、文档等等，CocoaPods 相关的文章有很多，这里就不一一赘述了。</p>
+
+<p>今天要介绍的是一款新的依赖管理工具，名曰 “Carthage”，名字有点难理解，简单方便，完全独立，不修改 XCode 项目文件或配置。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-06-03-hello-swift.html">美国一名程序员对Swift语言的看法</a></h1>
+			<p class="meta"><time datetime="2014-06-03T00:32:58+08:00" 
+			pubdate data-updated="true">2014/6/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>近20年来，苹果一直把Objective-C作为主要的编程语言，而在今天举行的全球开发者大会上，苹果推出了一个全新的编程语言Swift。据悉，苹果此次发布的Swift兼容Objective-C语言，从其开发者指南中，我们看到Swift从Python和JavaScript中吸取了许多东西，从而让Swift更易读，或者说更为“口语化”。</p>
+
+<p>然而，对这类语法更为简洁的语言，许多人会质疑其运行效率。对此苹果指出，Swift在许多方面性能都比Objective-C好。</p>
+
+<p>美国一名程序员看完了Swift的指南后，写出了自己对这个新编程语言的看法。以下为译文：</p>
+
+<h1 id="toc_0">Swift保障体系</h1>
+
+<ul>
+<li>Swift可供所有人使用；</li>
+<li>Swift语言继承了C语言以及Objective-C的特性，且克服了C语言的兼容性问题；Swift还采用安全编程模式，且加入多种新功能，使编程更简单、灵活；</li>
+<li>和许多其他的编程语言一样，Swift可被LLVM编译为本地代码，且它的运行速度特别快，可供很多原生设备使用。</li>
+</ul>
+
+<h1 id="toc_1">Swift功能特性</h1>
+
+<ul>
+<li>Swift中并没有加入宏系统；其协议和扩展都源自Objective-C；</li>
+<li>Swift采用var声明变量和let声明常量；结合if和let，可方便处理可空变量；</li>
+<li>单继承类显示重写和内容，外加多种接口；</li>
+<li>Lambdas表达式看起来和类Ruby块形式十分相似；</li>
+<li>Swift没有明确的指标，依赖像C#语言一样的二分法价值和引用类型；</li>
+<li>Swift是一个没有globs的基本模块系统，以进口或重命名分类，通过属性，支持重新导出功能；</li>
+<li>Swift支持本地类型推断、整理数值类型，具有更好的文字处理功能，但不支持隐式强制转换，因此所有的代码需要转化为显式类型；</li>
+<li>脚本语言支持词典文字，简单的脚本可做大规模的工作，可在多核计算机、集群、网格、云和超级计算机上运行。</li>
+</ul>
+
+<h1 id="toc_2">Swift的独特性</h1>
+
+<ul>
+<li>Swift支持默认检查算法功能；</li>
+<li>Swift使用[]操作符声明数组和字典，数组还有独特的延伸语义功能；但不清楚是否允许程序员自己执行迭代器协议；</li>
+<li>Swift看起来并不像是个表达式语言；</li>
+<li>参量可以双向接口，参数需要无敌的单元件；</li>
+<li>Swift使用class来创建类，类可包含字段和方法；</li>
+<li>Swift采用Objective-C的命名参数和动态对象模型，提供了对Cocoa框架和mix-and-match的互操作性。基于这些基础，Swift引入了很多新功能，如结合面向过程和面向对象。</li>
+<li>除了代数类型、选择类型和偶然会发生的“”runtime error外，Swift没设其他处理错误的讨论区。</li>
+</ul>
+
+<p>原文出自：<a href="http://graydon2.dreamwidth.org/5785.html">Swift</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-05-08-elegant-uninstall-default-git.html">优雅的卸载Mac默认的Xcode附带的git</a></h1>
+			<p class="meta"><time datetime="2014-05-08T00:32:32+08:00" 
+			pubdate data-updated="true">2014/5/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>这里说的优雅的卸载其实不是真正的卸载，而是不用动Xcode附带的git，通过用户~/.bash_profile的文件来优雅的完成。仅仅需要在~/.bash_profile文件后追加如下的导出变量代码即可:</p>
+
+<pre><code>export GIT_HOME=/usr/local/git
+export PATH=$GIT_HOME/bin:$PATH
+</code></pre>
+
+<p>通git官网下载的mac安装包进行安装，git会被安装到</p>
+
+<pre><code>/usr/local/git
+</code></pre>
+
+<p>Xcode附带的git被安装到</p>
+
+<pre><code>/usr/bin
+</code></pre>
+
+<p>不必移动或者删除这里的git版本，仅仅需要更改一下用户下面的~/.bash_profile的文件即可优雅的解决git版本的问题.</p>
+
+<p>如果您非要卸载旧的也可以通过下面的命令来完成</p>
+
+<pre><code>sudo cd /usr/bin
+sudo mkdir old-git
+sudo mv git* old-git
+ln -s /usr/local/git ./
+</code></pre>
+
+<p>~/.bash_profile文件这个文件除了导出GIT_HOME，也会导出其他的HOME，下面是我常用的一些导出</p>
+
+<pre><code>export COCOS2DX_ROOT=/Users/Lamb/Applications/cocos2d/cocos2d-x-2.2.1
+export PATH=$COCOS2DX_ROOT:$PATH
+
+export NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_SDK_ROOT=/Users/Lamb/Applications/android-sdk-macosx
+export PATH=$NDK_ROOT:$PATH
+export PATH=$ANDROID_NDK_ROOT:$PATH
+export PATH=$ANDROID_SDK_ROOT:$PATH
+
+export M2_HOME=/Users/Lamb/Applications/maven/apache-maven-3.2.1
+export PATH=$M2_HOME/bin:$PATH
+export GRADLE_HOME=/Users/Lamb/Applications/gradle/gradle-1.11
+export PATH=$GRADLE_HOME/bin:$PATH
+
+export MONGO_HOME=/Users/Lamb/Applications/mongodb/mongodb-osx-x86_64-2.6.1
+export PATH=$MONGO_HOME/bin:$PATH
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a></h1>
+			<p class="meta"><time datetime="2014-05-07T00:31:56+08:00" 
+			pubdate data-updated="true">2014/5/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在Mac下可以通过往/etc/launchd.conf文件中追加命令去来实现对一些环境变量的设置</p>
+
+<pre><code>setenv  HOME  /PATH
+</code></pre>
+
+<p>intellij idea下会默认去读取M2_HOME这个环境变量，可以往/etc/launchd.conf文件中追加命令</p>
+
+<pre><code>setenv M2_HOME /Users/Lamb/Applications/maven/apache-maven-3.2.1
+</code></pre>
+
+<p>mac下面安装了最新版本的jdk(如1.8)，但是运行eclipse和idea还是提示需要安装jre,如果点击同意会自动安装一个jre6，安装至下面的路径：</p>
+
+<pre><code>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</code></pre>
+
+<p>但是其实不需要安装，只需要设置一下JAVA_HOME环境变量即可，安装最新版本的jdk会被安装至下面的路径：</p>
+
+<pre><code>/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
+</code></pre>
+
+<p>可以往/etc/launchd.conf文件中追加命令</p>
+
+<pre><code>setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
+</code></pre>
+
+<p>如果你安装了苹果提供的jre6，也就是想当于设置了JAVA_HOME为jre6，这样在运行java应用程序（如java ***）或者依赖于java的应用程序（如mvn ***）时，默认使用的是jre6，eclipse和idea的运行是没有问题的，但是运行maven命令行是有可能会出现错误。如果你的maven-compiler-plugin插件中的编译级别高于1.6，比如设置为1.8。但是运行mvn tomcat7:run时maven的jre版本却为1.6,相当于用jre6来运行1.8编译的代码，这肯定会出现一些问题的。这也可以通过上面重新设置JAVA_HOME来解决。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-08-mongodb-2-6-0.html">Mongdb2.6.0 一个新版本号</a></h1>
+			<p class="meta"><time datetime="2014-04-08T00:31:25+08:00" 
+			pubdate data-updated="true">2014/4/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>MongoDB 2.6 发布了，这是一个主要的发行版本，改进涉及到核心、存储、网络、查询和安全性等诸多方面。核心主要改进内容包括：</p>
+
+<ul>
+<li>聚合函数增强</li>
+<li>集成全文搜索</li>
+<li>改进插入和更新操作</li>
+<li>新的写操作协议</li>
+<li>Windows 下的 MSI 安装包</li>
+</ul>
+
+<h3 id="toc_0">聚合函数增强</h3>
+
+<ul>
+<li>现在db.collection.aggregate() 返回一个游标, 可以使用管道操作符来限制返回文档的数量</li>
+<li>聚合函数也可以使用explain来打印详细的查询信息来帮助分析了</li>
+<li>Aggregation can now use a more efficient external-disk-based sorting process.</li>
+<li>新的管道操作符\(out和\)redact </li>
+<li>New or modified operators:
+set expression operators
+\(let and \)map operators to allow for the use of variables
+\(literal operator and \)size operator
+$cond expression now accepts either an object or an array</li>
+</ul>
+
+<p>下面的略，有空再细看一下.</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-08-bye-windwos-xp.html">再见Windows XP</a></h1>
+			<p class="meta"><time datetime="2014-04-08T00:30:55+08:00" 
+			pubdate data-updated="true">2014/4/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天（4月8日）微软将正式停止针对Windows XP的安全维护， 意味着这一服役长达13年之久的操作系统终于开始退出历史舞台了。Windows XP于2001年10月25日正式发布，相比其前一代操作系统Windows 2000和Windows Me，其全新的用户图形界面、简化的操作体验，使其快速抢占了市场。随后微软推出的Vista由于各种缺陷（耗资源、速度慢、兼容性差等），也无法成功替代XP，反而使得用户的XP情结更加根深蒂固，继而成为微软后续操作系统（Windows 7/8）推广的最大绊脚石。 </p>
+
+<p>我现在已经脱离Windows很久，但是还是要写篇文章纪念一下，因为80后谁敢拍着胸膛说我没用过Windows XP，谁敢说我没用过盗版XP。我用过，所以我要说“再见，Windows XP！”</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-07-mongodb-daemon-start-and-down.html">Mongdb后台daemon方式启动与停止</a></h1>
+			<p class="meta"><time datetime="2014-04-07T00:30:25+08:00" 
+			pubdate data-updated="true">2014/4/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在后台开启Mongdb服务可以使用--fork。启用fork必须要带上--logpath来指定日志输出目录。为了防止日志被覆盖可以开启--logappend。</p>
+
+<pre><code>mongod --fork --logpath /data/log/20140407.log --logappend
+</code></pre>
+
+<p>mongodb默认的数据保存路径是/data/db/，默认端口号为27017。如果想修改可以使用--dbpath和--port来修改</p>
+
+<pre><code>mongod --dbpath /mydata/ --port 20111
+</code></pre>
+
+<p>也可以把参数写入配置文件中，通过配置文件来启动。</p>
+
+<pre><code>mongod -f /data/conf/mongodb.conf
+</code></pre>
+
+<p>配置文件如下：</p>
+
+<pre><code>port = 27017
+dbpath = /data/db
+logpath = /data/log/20140407.log
+logappend = true
+fork = true
+</code></pre>
+
+<p>如果没有使用--fork，退出终端的时候mongodb会自动清理退出，把没有写好的数据写完成，并最终关闭数据文件。要注意的是这个过程会持续到所有操作都完成。如果使用--fork在后台运行mongdb服务，那么就要通过向服务器发送shutdownServer()消息来关闭。</p>
+
+<pre><code>use admin
+db.shutdownServer()
+</code></pre>
+
+<p>要注意的是，这个命令只允许在本地，或是一个经过认证的客户端。</p>
+
+<p>如果这是一个主从式的复制集群，在1.9.1版本后将按下面的步骤来关闭</p>
+
+<ul>
+<li>检查从Mongodb的数据更新时间</li>
+<li>如果所有的从Mongodb和主的时间差都超过10，这个时候不会关闭mongodb（在这种情况下面，我们可以通过配置timeoutSecs的方式来让从Mongodb完成数据的更新）</li>
+<li>如果其中有一个从Mongodb与主服务时间差在10秒内，那么主服务器将会关闭，并且等待从Mongodb更新完成并关闭。</li>
+</ul>
+
+<p>如果没有up-to-date 从Mongodb且你想强制关闭服务，可以通过添加force:true;命令如下：</p>
+
+<pre><code>db.adminCommand({shutdown : 1, force : true})
+or
+db.shutdownServer({force : true, timeoutsec : 5})
+</code></pre>
+
+<p>Window下面以后台服务的方式启动可以使用下面的命令添加服务，配置文件的内容同mac下的</p>
+
+<pre><code>sc create MongoDB binPath= &quot;\&quot;%MONGO_HOME%\bin\mongod.exe\&quot; --service --config=\&quot;%MONGO_HOME%\mongod.cfg\&quot;&quot; DisplayName= &quot;MongoDB&quot; start= &quot;auto&quot;
+</code></pre>
+
+<p>如果成功看到</p>
+
+<pre><code>[SC] CreateService SUCCESS
+</code></pre>
+
+<p>服务安装成功后可以使用命名启动也可以手动启动</p>
+
+<pre><code>net start MongoDB
+</code></pre>
+
+<p>想删除服务可以使用如下命令</p>
+
+<pre><code>sc delete &quot;MongoDB&quot;
+</code></pre>
+
+<p>单个进程打开的最大文件句柄数量限制的修改，在/etc/profile文件最下面添加命令</p>
+
+<pre><code>ulimit -n 1024
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-05-can-break-wind-but-cannot-break-sb.html">防风，但不防傻逼</a></h1>
+			<p class="meta"><time datetime="2014-04-05T00:29:46+08:00" 
+			pubdate data-updated="true">2014/4/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>耐不住毕业前的躁动与无聊，我前段时间养成了半夜在走廊和人抽烟聊天的习惯。有一次我偶然发现隔壁寝室的四个男生一人买了个zippo打火机，我虽然偶尔也抽烟，但用的都是一块钱一个偶尔死活打不着偶尔却能烧到头发的便宜货，因此对这种高端霸气上档次的东西心存敬畏与好奇，便借来把玩了一番。</p>
+
+<p>我打着了后弱弱问一哥们道：“这玩意防风么？”</p>
+
+<p>他点点头道：“嗯，zippo打火机都是防风的。”</p>
+
+<p>然后我“呼”的一声就把火给吹灭了，然后得意洋洋地把打火机在他前面晃了晃道：“你看，不防风吧。”</p>
+
+<p>他淡淡地说了句道：“防风，但不防傻逼。”</p>
+
+<p>当时虽然被周围一票人给笑了半天，但我自己也忍不住跟着笑了很久，倒不是我缺心眼听不懂好歹话或者是喜欢被人称作傻逼，而是我觉得这个说法真心很赞，光从这句回答本身的机智程度来看就足够给好评了，无论这个所指的对象是不是我，我都觉得很享受。</p>
+
+<p>后来有天我和一个朋友聊天的时候，他跟我说起他之前的一个经历。他之前在学校的学生会里工作，因为权利问题还有一些个人的矛盾和其中的一个同学搞得很僵，但他一直都处处让着那个同学，反倒是那个同学处处刁难他，还想方设法排挤孤立他。终于有一天他觉得呆不下去了，选择主动退出学生会，临走前他特意约了那个同学出来，给他道歉说之前都是自己的不对，希望他能够原谅自己。</p>
+
+<p>我听完后忍不住骂他实在是怂，整件事情他并没有做错什么，到头来不仅是你退出，还去给那个伤害你的人道歉，究竟是不是脑子搭错了。他只是淡淡的告诉我，有些事情冤冤相报何时了，他本来也没想争个啥，既然一山不容二虎不如就我退一步呗，我给他道歉其实是想告诉他，我不是一个喜欢认输的人，但对于没品的对手以及没意义的争斗，我就把这种满足感施舍给你可怜的虚荣心好了。</p>
+
+<p>他的这个回答让我再次想起了前些天在走廊里听到的那句话，作为zippo打火机，既然你标榜你是防风的，那就难免会有人用各种奇怪的方式来验证你究竟是不是能防风，能防什么样的风，也肯定会有人在弄灭你以后耀武扬威地向旁人得意地炫耀他的胜利以及你的无能。然而这时候的你，是满腔怒火要和那个人争一个高下，给他灌输所谓的防风的标准是什么，还是徒劳地努力改变自己，让自己变得不仅能防各种阴风台风龙卷风，还能防水防盗防学长呢。我觉得与其去和傻逼较劲，不如放自己一条生路，告诉他对不起这个打火机让你失望了，希望他能够找到更适合自己的点烟方式，无论是用火柴煤气灶还是氧气切割机。</p>
+
+<p>我越发觉得这是一个累心的年代，记得之前有人因为我转载的一张图片，声称要发微博让广大网民一起声讨我，我当时还可傻逼地写了一条很长的状态来解释缘由声明自己的立场，生怕自己被狂热的粉丝们人肉出来挂在城楼上晒成腊肉条。现在想想，无论是在网上和人吵个面红耳赤，还是急于在各种流言蜚语前证明自己的清白，都是一种自寻烦恼而自讨没趣的行为，还容易把自己的情商与智商拉到地平线以下。</p>
+
+<p>既然你愿意站得高，愿意把自己的想法拿出来分享，那么难免就会被人看到你的弱点，被不同居心的揣测或是针对，就像你说你是个防风的打火机，还是个颇有些出名的牌子，那么就避免不了有秀下限的人来试试你究竟是不是真的防风。然而当有人用极端手段或是错误的手段成功地挑战了你时，你究竟是怒不可遏地反过来挑战他的智商，维护自己那飘渺的尊严，还是一笑而过，让傻逼飞一会儿呢。</p>
+
+<p>我想绝大多数人都咽不下这一口气，也受不了这个委屈，然而为了变得更强大，很多时候我们需要这样的修炼，直到所有的质疑和否定相比起你的强大都变得微不足道的那一天。</p>
+
+<p>好吧，我终于还是用我最讨厌的文体写完了这篇文章，就为了这句最初用来形容我却让我爱得不行的一句话。</p>
+
+<p>“防风，但不防傻逼。”愿各位共勉。</p>
+
+<p>文/陈谌 <a href="http://site.douban.com/177678/widget/notes/10060932/note/273510395/?qq-pf-to=pcqq.discussion">原文链接</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-08-13-dispel-your-windjs's-doubts.html">消除你对Wind.js的疑虑</a></h1>
+			<p class="meta"><time datetime="2012-08-13T00:28:55+08:00" 
+			pubdate data-updated="true">2012/8/13</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">eval is (always) evil</h3>
+
+<p>eval大概也算是整个ECMAScript语言中最强大的一个方法，<br/>
+他就像是一个完整的ECMAScript解析器。你说它evil,我也承认这个<br/>
+方法会存在危险，有可能带来安全问题，特别是在用它执行用户输入<br/>
+数据的情况下。但Wind.js是用eval来运行已经“编译”后的代码，<br/>
+让你更舒服顺畅的来编写异步回调的代码。这些代码是你自己写的，<br/>
+所以不必担心代码注入、跨站脚本攻击这样的安全问题。没有这这个<br/>
+困扰和担忧，我相信eval应该是美好的。</p>
+
+<h3 id="toc_1">API太丑，eval为什么不封装？</h3>
+
+<p>通过eval执行的代码是被认为是包含该次调用的执行环境的一部分，<br/>
+因此被执行的代码具有与该执行环境有着相同的作用域链。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var msg = &#39;hello world&#39;;
+eval(&quot;console.log(msg)&quot;);//hello world
+
+var msg = &#39;hello world&#39;;
+var newFunc = eval(Wind.compile(&quot;async&quot;, function () { 
+    console.log(msg);
+}));
+newFunc().start();//hello world
+</code></pre>
+
+<p>变量msg是在eval外定义的，但eval中还是能够打印&quot;hello world&quot;。<br/>
+如果包装起来如法访问到msg这个变量。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var msg = &#39;hello world&#39;;
+var newFunc = $async(function () { 
+    console.log(msg);
+});
+newFunc().start();//[WARNING] An unhandled error occurred: ReferenceError: msg is not defined
+</code></pre>
+
+<p>上面的例子中看到我们使用vm模块对eval有一个简单的包装，可以直接<br/>
+使用$async方法来替换以前的写法。从打印信息中，你很容易看出访问<br/>
+不到msg这个参数。麻烦请注意一下调用script.runInNewContext()方法<br/>
+时传入了一个sandbox对象，这相当于往代码运行环境中添加上下文参数。<br/>
+如果sanbox这个参数不传递，运行上端代码会报ReferenceError: Wind <br/>
+is not defined的错误。这就是eval为什么无法包装的原因。</p>
+
+<p>如果你的代码不需要依赖上下文你可以用上述方法包装，例如这样：</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var fib = $async(function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+});
+
+fib().start();
+</code></pre>
+
+<h3 id="toc_2">Wind.js很重很慢不适合前端</h3>
+
+<p>Wind.js基础组件及异步运行库共计4K大小（Minified + GZipped），<br/>
+Wind.js完全不会给前端带来负担，给你带来顺畅舒服的异步编程体验。</p>
+
+<h3 id="toc_3">生成的代码看不懂，难以调试</h3>
+
+<p>Wind.js生产的代码也完全是Javascript代码，你无需为调试担忧。<br/>
+下面是一个例子，我相信你很容易就可以看懂。</p>
+
+<pre><code>// Original: 
+function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+}
+
+// Windified: 
+/* async &lt;&lt; function () { */     (function () {
+                                     var _builder_$0 = Wind.builders[&quot;async&quot;];
+                                     return _builder_$0.Start(this,
+                                         _builder_$0.Delay(function () {
+/*     $await(Wind.Async.sleep(1000)); */    return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(0); */                        console.log(0);
+/*     $await(Wind.Async.sleep(1000)); */        return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(1); */                            console.log(1);
+/*     var a = 0, current = 1; */                    var a = 0, current = 1;
+                                                     return _builder_$0.While(function () {
+/*     while (true) { */                                 return true;
+                                                     },
+                                                         _builder_$0.Delay(function () {
+/*         var b = a; */                                     var b = a;
+/*         a = current; */                                   a = current;
+/*         current = a + b; */                               current = a + b;
+/*         $await(Wind.Async.sleep(1000)); */                return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*         console.log(current); */                              console.log(current);
+                                                                 return _builder_$0.Normal();
+                                                             });
+                                                         })
+/*     } */                                          );
+                                                 });
+                                             });
+                                         })
+                                     );
+/* } */                          })
+</code></pre>
+
+<h3 id="toc_4">eval性能方面会有问题</h3>
+
+<p>有童鞋提出这方面的问题，但不知道提供什么样子的测试才能令人信服，从而消除疑虑，放心大胆的使用Wind.js。<br/>
+这个问题还在收集整理中...</p>
+
+<h3 id="toc_5">写在最后</h3>
+
+<p>在ADC被老赵的执着打动了，支持老赵从文档开始吧。<br/>
+如果你还有对Wind.js的任何疑虑都可以留言，这个文档的目的就是消除你对Wind.js的疑虑。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-08-12-test-v8-delete.html">v8 can not handle delete yet</a></h1>
+			<p class="meta"><time datetime="2012-08-12T00:27:15+08:00" 
+			pubdate data-updated="true">2012/8/12</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>v8 delete操作存在的这个问题</p>
+
+<p><img src="/resource/image/v8delete.jpeg" alt="有帮助的截图"/></p>
+
+<p>测试地址在这里， <a href="http://jsperf.com/test-v8-delete%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9C%A8node%E4%B8%AD%E6%B5%8B%E8%AF%95">http://jsperf.com/test-v8-delete，也可以用下面的代码在node中测试</a></p>
+
+<pre><code>var begin = new Date();
+function Foo() {}
+Foo.prototype.x = 1;
+Foo.prototype.y = 2;
+
+//delete Foo.prototype.y;
+
+var foo = new Foo();
+
+var result = 0;
+for (var i = 0; i &lt; 100000; i++) {
+    result = result + foo.x;
+}
+
+var end = new Date();
+console.log(end - begin);
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-07-22-what-is-solo.html">solo(独唱团)这是一个由Node构建的静态博客</a></h1>
+			<p class="meta"><time datetime="2012-07-22T00:26:24+08:00" 
+			pubdate data-updated="true">2012/7/22</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ul>
+<li>这个静态博客是用markdown来写文章，通过皮肤模板可以build出html页面。</li>
+<li>你可以将他提交至GithubPages或者云端（七牛）或者一个Node服务器。</li>
+<li>这里有示例:<a href="http://jinyang.mynah.org/">Pages</a>  <a href="http://qiniu.mynah.org/">七牛</a></li>
+</ul>
+
+<h3 id="toc_0">为什么会有这样一个静态博客</h3>
+
+<ul>
+<li>以前的博客不方便添加自己的demo例子页面(前端开发的童鞋应该会有强烈的认同感)</li>
+<li>markdown语法简洁易用，所见即所得的html编辑器不好用也太重</li>
+<li>不依赖于数据库，所有的内容都是文本，方便管理和迁移</li>
+<li>不需要一个什么复杂的服务器，也不需要担心什么配额，可以托管html页面就可以</li>
+<li>不用为图片文件等外链来发愁，直接放到相应的目录下，一起上传即可</li>
+</ul>
+
+<h3 id="toc_1">如何部署</h3>
+
+<ul>
+<li>你可以在<a href="https://github.com/lambgao/solo">这里</a>找到他。</li>
+<li>如果你熟悉<a href="http://pages.github.com/">Github Pages</a>,可以直接Push到你的Pages仓库即可。</li>
+<li>如果有一个Node服务器，那么你可以部署至你的服务器,启动app.js即可。</li>
+<li>如果你有一个云端（七牛）服务，那么你可以上传至你的云端(运行lib/publish.js)。</li>
+</ul>
+
+<h3 id="toc_2">如何使用</h3>
+
+<ul>
+<li>你会发现根目录下md文件夹，这个里面存放的都是博客内容(markdown格式)。</li>
+<li>md下有article和page两个文件夹，从字面上就很容易理解，分别是文章和页面。</li>
+<li>md/article下面的文章在build之后会在article目录下生成同文件名的html页面</li>
+<li>md/page下面的页面在build之后会在根目录下生成同文件名的html页面</li>
+<li>运行lib/build.js来build页面(请先安装<a href="http://www.nodejs.org/">Node</a>,并安装依赖npm install)</li>
+</ul>
+
+<h3 id="toc_3">皮肤模板修改</h3>
+
+<ul>
+<li>你会发现根目录下skin文件夹,这个文件夹里面存放的都是皮肤模板(html文件)。</li>
+<li>上面提到了article和page两种页面，那么皮肤模板也提供了article.html和page.html两个模板文件。</li>
+<li>如果两个页面用到了共同的内容那么你可以把共同的内容提取出来放到skin/slot文件夹下。</li>
+<li>在模板文件中${slot}就可以将这个文件引入到当前模板文件中。</li>
+<li>${article}这个变量用于引入文章或者页面的内容，即md文件夹下生成的内容。</li>
+<li>根目录下你还会发现css、image、javascript文件夹，这些是存放模板使用到的静态文件</li>
+</ul>
+
+<h3 id="toc_4">有疑问或者...</h3>
+
+<ul>
+<li>如果你有疑问、建议、bug提交都可以找我。</li>
+<li>找我请这里新浪微博<a href="http://weibo.com/lambsand">@金氧</a>,或这里Github<a href="https://github.com/lamb">@lambgao</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-03-05-ziiiro-originality-watch.html">ziiiro创意手表，大爱这个品牌</a></h1>
+			<p class="meta"><time datetime="2012-03-05T00:25:53+08:00" 
+			pubdate data-updated="true">2012/3/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="http://www.ziiiro.com/">ziiiro</a>创意手表，大爱这个品牌<br/>
+<p><img src="http://www.ziiiro.com/images/products/ZIIIRO_Mercury_black_blue_big_1.png" alt="" width="361" height="500"></p></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-01-29-review-fast-sort.html">纪念大师，复习快排</a></h1>
+			<p class="meta"><time datetime="2012-01-29T00:25:18+08:00" 
+			pubdate data-updated="true">2012/1/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<pre><code>package com.test;
+
+public class Sort {
+    // 对R[low..high]快速排序
+    public static void QuickSort(Comparable[] data, int low, int high) { 
+        int pivotpos; // 划分后的基准记录的位置
+
+        if (low &lt; high) {// 仅当区间长度大于1时才须排序
+            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
+            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
+            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
+        }
+    } // QuickSort
+
+    private static int Partition(Comparable[] data, int i, int j) {
+        // 从数组两端交替地向中间扫描
+        Comparable pivotKey = data[i];
+        // 进行扫描的指针i,j;i从左边开始,j从右边开始
+        while (i &lt; j) {
+            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
+                j--;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素小的移动到左边
+                data[i] = data[j];
+                i++;
+            }// end if
+            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
+                i++;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素大的移动到右边
+                data[j] = data[i];
+                j--;
+            }// end if
+        }// end while
+        // 枢纽元素移动到正确位置
+        data[i] = pivotKey;
+        return i;
+    }
+
+    public static void main(String[] args) {
+        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
+        QuickSort(c, 0, c.length - 1);
+        for (Comparable data : c) {
+            System.out.println(data);
+        }
+    }
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-11-16-hello-nodejs.html">Hello Node.js</a></h1>
+			<p class="meta"><time datetime="2011-11-16T00:24:46+08:00" 
+			pubdate data-updated="true">2011/11/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><img src="http://nodejs.org/logo.png" alt="nodejs" width="420" height="111"></p>
+
+<h1 id="toc_0">Node.js</h1>
+
+<p>这里是官网：<a href="http://nodejs.org">http://nodejs.org</a></p>
+
+<h1 id="toc_1">安装</h1>
+
+<p>要使用Node.js,首先需要进行安装。关于如何安装Node.js，这里就不赘述了，可以直接参考官方的安装指南。</p>
+
+<h1 id="toc_2">“Hello World”</h1>
+
+<p>好了，“废话”不多说了，马上开始我们第一个Node.js应用：“Hello World”。</p>
+
+<p>打开你最喜欢的编辑器，创建一个helloworld.js文件。我们要做就是向控制台或命令行输出“Hello World”，如下是实现该功能的代码：</p>
+
+<pre><code>console.log(&quot;Hello World&quot;);
+</code></pre>
+
+<p>保存该文件，并通过Node.js来执行：<br/>
+node helloworld.js<br/><br/>
+正常的话，就会在终端输出Hello World<br/>
+Hello world太简单？那来点复杂的！</p>
+
+<pre><code>var Buffer = require(&#39;buffer&#39;).Buffer,
+buf = new Buffer(256),
+len = buf.write(&#39;\u00bd + \u00bc = \u00be&#39;, 0);
+console.log(len + &quot; bytes: &quot; + buf.toString(&#39;utf8&#39;, 0, len));
+</code></pre>
+
+<p>不用管什么意思，拷贝执行，感受一下就可以！</p>
+
+<h1 id="toc_3">HTTP</h1>
+
+<p>如果启动一个http服务呢？嗯，很简单！来感受一下在浏览器中看到hello world。</p>
+
+<pre><code>var http = require(&#39;http&#39;);
+http.createServer(function (req, res) {
+  res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;});
+  res.end(&#39;Hello World &#39;);
+}).listen(80);
+console.log(&#39;Server is running&#39;);
+</code></pre>
+
+<h1 id="toc_4">END</h1>
+
+<p>入门结束</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-resolution-browse.html">各种分辨率一览，方便开发对应</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:23:50+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ul>
+<li>QVGA = 320 * 240;</li>
+<li>WQVGA = 320 * 480;</li>
+<li>WQVGA2 = 400 * 240;</li>
+<li>WQVGA3 = 432 * 240;</li>
+<li>HVGA = 480 * 320;</li>
+<li>VGA = 640 * 480;</li>
+<li>WVGA = 800 * 480;</li>
+<li>WVGA2 = 768 * 480;</li>
+<li>FWVGA = 854 * 480;</li>
+<li>DVGA = 960 * 640;</li>
+<li>PAL = 576 * 520;</li>
+<li>NTSC = 486 * 440;</li>
+<li>SVGA = 800 * 600;</li>
+<li>WSVGA = 1024 * 576;</li>
+<li>XGA = 1024 * 768;</li>
+<li>XGAPLUS = 1152 * 864;</li>
+<li>HD720 = 1280 * 720;</li>
+<li>WXGA = 1280 * 768;</li>
+<li>WXGA2 = 1280 * 800;</li>
+<li>WXGA3 = 1280 * 854;</li>
+<li>SXGA = 1280 * 1024;</li>
+<li>WXGA4 = 1366 * 768;</li>
+<li>SXGAMINUS = 1280 * 960;</li>
+<li>SXGAPLUS = 1400 * 1050;</li>
+<li>WXGAPLUS = 1440 * 900;</li>
+<li>HD900 = 1600 * 900;</li>
+<li>WSXGA = 1600 * 1024;</li>
+<li>WSXGAPLUS = 1680 * 1050;</li>
+<li>UXGA = 1600 * 1200;</li>
+<li>HD1080 = 1920 * 1080;</li>
+<li>QWXGA = 2048 * 1152;</li>
+<li>WUXGA = 1920 * 1200;</li>
+<li>TXGA = 1920 * 1400;</li>
+<li>QXGA = 2048 * 1536;</li>
+<li>WQHD = 2560 * 1440;</li>
+<li>WQXGA = 2560 * 1600;</li>
+<li>QSXGA = 2560 * 2048;</li>
+<li>QSXGAPLUS = 2800 * 2100;</li>
+<li>WQSXGA = 3200 * 2048;</li>
+<li>QUXGA = 3200 * 2400;</li>
+<li>QFHD = 3840 * 2160;</li>
+<li>WQUXGA = 3840 * 2400;</li>
+<li>HD4K = 4096 * 2304;</li>
+<li>HXGA = 4096 * 3072;</li>
+<li>WHXGA = 5120 * 3200;</li>
+<li>HSXGA = 5120 * 4096;</li>
+<li>WHSXGA = 6400 * 4096;</li>
+<li>HUXGA = 6400 * 4800;</li>
+<li>SHV = 7680 * 4320;</li>
+<li>WHUXGA = 7680 * 4800;</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-frequently-used-eclipse-plugins.html">Frequently Used Eclipse Plugins</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:23:19+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>m2eclipse Core    - <a href="http://m2eclipse.sonatype.org/sites/m2e">http://m2eclipse.sonatype.org/sites/m2e</a></p>
+
+<p>m2eclipse Extras - <a href="http://m2eclipse.sonatype.org/sites/m2e-extras">http://m2eclipse.sonatype.org/sites/m2e-extras</a></p>
+
+<p>Subclipse - <a href="http://subclipse.tigris.org/update_1.8.x">http://subclipse.tigris.org/update_1.8.x</a></p>
+
+<p>Android    - <a href="https://dl-ssl.google.com/android/eclipse/">https://dl-ssl.google.com/android/eclipse/</a></p>
+
+<p>ECLEMM   - <a href="http://update.eclemma.org/">http://update.eclemma.org/</a></p>
+
+<p>Google     - <a href="http://dl.google.com/eclipse/plugin/3.x">http://dl.google.com/eclipse/plugin/3.x</a></p>
+
+<p>EGit      - <a href="http://download.eclipse.org/egit/updates">http://download.eclipse.org/egit/updates</a></p>
+
+<p>WindowBuilder - <a href="http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x">http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-difference-between-different-android-sdk-versions.html">Android SDK版本间的区别</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:22:40+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h1 id="toc_0">Android 1.0</h1>
+
+<ul>
+<li> 第一版商用操作系统</li>
+</ul>
+
+<h1 id="toc_1">Android 1.1</h1>
+
+<ul>
+<li> 更新了部分API，新增一些功能，修正了一些错误，同时增加com.google.android.maps包</li>
+</ul>
+
+<h1 id="toc_2">Android 1.5</h1>
+
+<ul>
+<li> 智能虚拟键盘</li>
+<li> 使用widgets实现桌面个性化</li>
+<li> 在线文件夹(Live Folder)快速浏览在线数据</li>
+<li> 视频录制和分享</li>
+<li> 图片上传</li>
+<li> 更快的标准兼容浏览器</li>
+<li> Voice search 语音搜索</li>
+<li> 立体声蓝牙和免提电话</li>
+</ul>
+
+<h1 id="toc_3">Android 1.6</h1>
+
+<ul>
+<li> 完全重新设计的Android Market，可以显示更多的屏幕截图</li>
+<li> 手势支持，可以让开发者生成针对某个应用程序的手势库</li>
+<li> 支持CDMA网络：中国电信的用户可以期待EVDO的Android手机了</li>
+<li> TXT-2-Speech，支持了更多语言的发音，包括英语、法语、德语、意大利语等</li>
+<li> 快速搜索框，可直接搜索括联系人，音乐，浏览历史，书签等手机内容</li>
+<li> 全新的拍照界面：新版相机程序启动速度快了39%，拍照间的延迟减少了28%</li>
+<li> 应用程序耗电查看：这下好了，哪个软件耗多少电，现在一见了然了</li>
+<li> 新增面向视觉或听觉困难人群的易用性插件</li>
+<li> linux内核升级到2.6.29</li>
+<li> 其他：支持更多的屏幕分辨率，如WVGA，QVGA等</li>
+</ul>
+
+<h1 id="toc_4">Android 2.0</h1>
+
+<ul>
+<li> 由于文件结构的改动优化，使得整个操作流畅性得到了很大的提升</li>
+<li> 自带的Chrome Lite浏览器现在加入了对双击屏幕进行缩放的支持</li>
+<li> 加强了网络社交功能，比如Facebook好友整合至联系人功能</li>
+<li> 强化了语音识别的搜索控制。整个系统多处都支持语音控制，并拥有独立的控制面板</li>
+<li> 谷歌地图服务更新，加入了全新的导航系统，甚至比转业的导航软件更为先进</li>
+<li> 加入了原生微软Exchange邮件服务支持</li>
+<li> 提供了多个不同帐户，统一的邮件收件箱</li>
+<li> 只需双击就能上传图片至YouTube</li>
+<li> 优化了驾车时的体验，新的“Car Home”应用程序为各功能提供了易于操作的快捷链接，还能方便地使用语音控制功能，便于用户驾车时使用</li>
+</ul>
+
+<h1 id="toc_5">Android 2.1</h1>
+
+<ul>
+<li> 可以同时绑定多个Google账号</li>
+<li> 无线控件里有了VPN设置</li>
+<li> 增加了连接到PC设置</li>
+<li> 增强了语言和声音的转换功能，并加入了文字到语音转换</li>
+<li> 全新的拨号界面，按键更大，更易于操作</li>
+<li> 更多桌面Widget</li>
+<li> 新的Google地图可以使用谷歌地图导航功能</li>
+<li> 新的浏览器版本，加强了稳定性和网页渲染能力</li>
+<li> 全局搜索功能加强</li>
+<li> 全新的Market程序，搜索更快布局更合理</li>
+</ul>
+
+<h1 id="toc_6">Android 2.2</h1>
+
+<ul>
+<li> 全面支持Flash 10.1</li>
+<li> 应用程序自动升级，让升级更加人性化</li>
+<li> 支持应用程序安装在外置内存上</li>
+<li> Linux内核将升级为最新的2.6.32版本，系统更加稳定</li>
+<li> 对系统性能进一步优化，让手机有更多的运行内存</li>
+<li> 增加了轨迹球LED指示灯变色这个新功能</li>
+<li> 增加了对3D性能的优化，3D性能更加强大</li>
+<li> FM功能也将在新系统中得到全面支持</li>
+</ul>
+
+<h1 id="toc_7">Android 2.3</h1>
+
+<ul>
+<li> 用户界面更美观</li>
+<li> 提升游戏体验</li>
+<li> 提升多媒体能力</li>
+<li> 增加官方进程管理</li>
+<li> 改善电源管理</li>
+<li> NFC近场通信</li>
+<li> 全局下载管理</li>
+<li> 全新虚拟键盘</li>
+<li> 原生支持前置前置摄像头</li>
+<li> SIP网络电话</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-android-source-download.html">Android源码打包下载</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:21:37+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Android源码打包下载<br/>
+如果动手能力不强，不会自己build那到这里下载吧！<br/>
+<a href="http://rgruet.free.fr/public/">http://rgruet.free.fr/public/</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-04-29-decimal-fractions.html">无限循环小数转化成分数（Java实现）</a></h1>
+			<p class="meta"><time datetime="2011-04-29T00:20:53+08:00" 
+			pubdate data-updated="true">2011/4/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>如何精确的表达无限小数呢？这在计算机中是一个不可能完成的事情；但是无限循环小数是可以转化成分数，从而精确表达的；那问题来了，如何将无限循环小数转化成分数？例如0.（3），括号中是循环体，可以用1/3或3/9来表示。当然，我们想要的是分子分母不能再约分的最简分数。好吧：）来看看如何实现吧！</p>
+
+<pre><code>import java.math.*;
+
+public class Decimal2Fraction {
+    public String Repeating2Smallest(String repeating, String separate){
+        String separate_l = separate.substring(0,1);
+        String separate_r = separate.substring(1,2);
+        String separate_p = &quot;.&quot;;
+        int index_p = repeating.indexOf(separate_p);
+        int index_l = repeating.indexOf(separate_l);
+        int index_r = repeating.indexOf(separate_r);
+        BigInteger number = new BigInteger(repeating.substring(0,index_p));
+        int n = index_l-index_p-1;
+        BigInteger a = BigInteger.ZERO;
+        if(n&gt;0)a = new BigInteger(repeating.substring(index_p+1,index_l));
+        int m = index_r-index_l-1;
+        BigInteger b = BigInteger.ZERO;
+        if(m&lt;=0) return &quot;请输入正确的循环体&quot;;
+        if(m&gt;0)b= new BigInteger(repeating.substring(index_l+1,index_r));
+        BigInteger numerator = NumeratorFormula(n, m, a, b);
+        BigInteger denominator = DenominatorFormula(n , m);
+        BigInteger GCD = BigInteger.ZERO;
+        while(!GCD.equals(BigInteger.ONE)){
+            GCD = numerator.gcd(denominator);
+            numerator = numerator.divide(GCD);
+            denominator = denominator.divide(GCD);
+        }
+        return number+&quot; &quot;+numerator+&quot;/&quot;+denominator;
+    }
+    public BigInteger NumeratorFormula(int n,int m,BigInteger a,BigInteger b){
+        return BigInteger.TEN.pow(m).subtract(BigInteger.ONE).multiply(a).add(b);
+    }
+    public BigInteger DenominatorFormula(int n,int m){
+        return BigInteger.TEN.pow(m).subtract(BigInteger.ONE).multiply(BigInteger.TEN.pow(n));
+    }
+    public static void  Console(Object o){System.out.println(o.toString());}
+    public static void main(String[] args) {
+        Decimal2Fraction d2f = new Decimal2Fraction();
+        String s = &quot;0.2[22]&quot;;
+        Console(d2f.Repeating2Smallest(s,&quot;[]&quot;));
+    }
+
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-03-25-android-suspend-opensource.html">Google宣布Android暂停开源</a></h1>
+			<p class="meta"><time datetime="2011-03-25T00:20:24+08:00" 
+			pubdate data-updated="true">2011/3/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>一向以大举开源旗帜的Google昨日做出了一项令人吃惊的决定，Android 3.0系统源代码将暂停开源。不久前以不开源为由在Chrome中停止支持H.264，今天却又闭源Android 3.0，怎么看都是只许州官放火不许百姓点灯。</p>
+
+<p>谷歌宣布Android 3.0暂停开源</p>
+
+<p>北京时间3月25日早间消息，谷歌周四宣布，将暂时不开放针对平板电脑设计的Android 3.0“蜂巢”操作系统的源代码。</p>
+
+<p>谷歌一名发言人表示，谷歌将“临时限制”对“蜂巢”系统代码的访问，主要原因是“谷歌尚未做好该系统被改变，或是针对不同产品进行定制的准备”。</p>
+
+<p>然而业内人士认为，谷歌封闭“蜂巢”系统是由于谷歌的合作伙伴不希望较小的竞争对手也可以利用这一系统。谷歌发言人表示：“Android 3.0‘蜂巢’系统是针对大屏幕尺寸设备重新设计的一款系统，在小部件、多任务、浏览、通知和个人定制等方面都有所改进。尽管我们很高兴向Android 平板电脑提供这些功能，但在将这款系统移植到手机等其他设备的过程中，我们还有更多工作要做。在此之前，我们决定不对‘蜂巢’开源。”</p>
+
+<p>谷歌的合作伙伴摩托罗拉已经发布了基于“蜂巢”系统的平板电脑Xoom，三星电子、戴尔、HTC和宏碁等厂商也将推出同类产品。</p>
+
+<p>谷歌此前一直标榜Android是一款开源的操作系统，但“蜂巢”却是在封闭状态下开发的。而即使这款操作系统最终开源，其中的一些部件，包括 Android电子市场和谷歌地图，仍将是谷歌私有的。谷歌目前也拥有Android的商标权。这意味着，手机厂商无法在不遵守谷歌规定的情况下开发 Android设备。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-03-14-tomcat-jdk-welcome-page.html">tomcat-5.5.33、jdk1.6.0_24访问不到欢迎页</a></h1>
+			<p class="meta"><time datetime="2011-03-14T00:19:19+08:00" 
+			pubdate data-updated="true">2011/3/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天下午碰到比较郁闷的问题，apache-tomcat-5.5.33、jdk1.6.0_24在win7下访问不到欢迎页；纠结了3个小时才发现是这两个版本存在兼容性问题，换用稍微低一点的jdk，不一定非要是1.5，具体是update_X的具体哪个版本真不清楚，如果你有兴趣可以自己试试，如果你还有兴趣可以告诉我一下。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-02-02-2010-summary.html">2010总结</a></h1>
+			<p class="meta"><time datetime="2011-02-02T00:16:36+08:00" 
+			pubdate data-updated="true">2011/2/2</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>一年又一年，一年又一年，一些理想，一些故事，一些回忆，一些感慨，一些是非，一些遗憾，看，又不小心搁置到了下一年，2010已经过去！</p>
+
+<h3 id="toc_0">　回到学校</h3>
+
+<p>回学校回了两次，一次是春节返校准备毕业设计，一次是实习返校答辩。<br/>
+去年春节后，还是继续回到学校，因为那时我还是一名学生，但是已经没有悠闲，更多的是就业的压力。很现实的事情摆在眼前，我要毕业了，我要有一份工作了。我喜欢计算机，对互联网不管是移动互联网还是互联网都一样的狂热，自然希望做一份自己的喜欢的工作。我的初始毕业论文题目是《基于移动最小二乘法的曲线曲面拟合》，这是多么让人悲剧的题目啊！我是一名数学专业的学生，但是出于对计算机的热爱，自学了很多计算机方面的知识。但是大学数学大家都懂的，纯数学的东西就是天书，像实变函数与泛函分析这样的课程能学好的一定不是“人”。导致悲剧发生的原因是因为一直身在校外没有和校内的老师及时联系到，以至选择的方面很窄。但是现在回想起来我感觉我非常幸运，因为这样才让我遇到周老师这样一位好老师，在我的毕业论文给予了我很大很大的帮助，非常感谢她！在新的一年里祝愿我从小到大的老师们身体健康工作顺利！<br/>
+上海中软资源、第一次、面试通过、签三方协议、实习，就这样回大连没多久就去了上海。但是这样一走就给我的毕业论文带来了困难，所以很果断的找老师帮助把毕业论文换成了计算机类自拟的题目《基于页面内容的搜索引擎的设计与实现》，这样就可以在上海工作的闲暇时间做自己擅长的方面的毕业设计。当然周老师在这期间也给了我很多很多的帮助。<br/>
+今年悲剧的事情之一就是毕业照没有赶上，打折机票已定不能退不能改签，但是幸好又补照了一次，但是人还是不全，在此给童鞋们致歉，深深的忏悔。<br/>
+回到学校，各种毕业材料填写、各种补；毕业论文那边也是各种材料各种文档补。答辩前两天，今年悲剧的事情之一又发生了，我的电脑显卡又烧掉了；答辩完去上海又烧了一次；幸好在保修期内，要不然就更悲剧了，鄙视联想，下次果断华硕。<br/>
+今年最悲剧的事情是毕业论文被评成A。还清楚的记得当时中午大一616宿舍吃散伙饭，突然收到老师短信说要我拿论文去找她签字。去了字没签，但是噩耗传来，论文要再次修改，因为我论文被评成了A等，学校要对A等的论文进行审查。传奇的妈总还搞了一个反抄袭的检测软件，我的论文被检测成悲剧，因为有关名词解释和定义都是百度谷歌来的。幸好我信妈总的意念是无比的坚定，信妈总，大家懂的！<br/>
+离别、吃饭、K歌、通宵，这些是在学校最后一段时光的有力的描述。楠哥最后的提议大手笔，貌似也没有吃回来。博博说，大后天你就去上海了，以后就没机会了。无奈被拖至合声通宵K歌。再见！</p>
+
+<h3 id="toc_1">　腾讯校园之星</h3>
+
+<p>在上海工作中的一个中午无意中发现腾讯的比赛，一个午休时间，2个小时，代码、文档统统搞定提交，成功入围，获得腾讯校园之星纪念T恤一件，手环被腾讯黑掉了。这个奖是在校外完成的，但是又是以学生身份完成的。</p>
+
+<h3 id="toc_2">　MSN Homepage Foundamental</h3>
+
+<p>当时还不知具体啥业务，和我同去上海8人（3个同班同学）。初到上海的时候一切都是新鲜的，只是不熟悉而已。第一次进入公司感觉什么都是那么陌生，幸好公司的制度管理非常的完善，很人性化的给我们每人都安排了一个带教。感谢Naico教会了我好多东西，他是我初入职场的第一个老师，非常阳光帅气的小伙子。还有Glen我的Leader，也给我了很多的帮助。Glen是非常好的一位领导，在他的手下感觉毫无压力，但是工作还是有条不紊的进行着。喜欢Glen的热情，还记得有次他兴致勃勃的把我们整个团队叫到“滕王阁”（这是个会议室，名字我貌似没有记错，感觉中软的这种细节的文化做的都很到位，其他会议室的名字还有如“长江”“黄山”等），自己热火朝天的讲讲半个点，由于我刚刚接触所以云里雾里；但是其他的前辈已经很熟悉了，看，春哥（Foundamental组的需要信的哥）都瞌睡了。<br/>
+在MSN组还是学习到了很多东西，不光是技术，js、jquery、xml、xsl、xslt、xpath，还有前端架构、数据采集等等非常前沿的知识，还有敏捷开发、团队协作等，这些都给我很大的帮助。</p>
+
+<h3 id="toc_3">　职业规划</h3>
+
+<p>程序员 -&gt; 项目经理 -&gt; 架构师</p>
+
+<p>程序员 -&gt; 项目经理 -&gt; 产品经理</p>
+
+<p>这是两条职业规划，这也是没有留在相对比较稳定的上海的原因。</p>
+
+<h3 id="toc_4">　AITP</h3>
+
+<p>这个项目离我的想象中的距离还差的太远太远。<br/>
+这个项目没有太多的教会我什么，但是引起了我的很多思考。关于团队、关于管理、关于开发、关于测试、关于其他......</p>
+
+<h3 id="toc_5">　B3LOG</h3>
+
+<p>关于GAE方面的学习也是源于上海工作的清闲，所以研究了一下搭建了第一版的博客，双重性格的矛盾兔斯基风格的博客。后来发现了B3LOG，很高兴加入了B3LOG，现在手上正在开发情侣博客中。喜欢开源、自由这种氛围，我会继续努力的。D、V、K、P，一起加油！B3LOG会更好！</p>
+
+<h3 id="toc_6">　想给父母说的话</h3>
+
+<ol>
+<li>注意身体！身体是革命的本钱！（老爸最常给我说的话）</li>
+<li>我们长大了，真的可以照顾自己，就让我们自己碰碰钉子吧。</li>
+<li>你们对我的期望好高，我总是达不到，觉得对不起你们。我希望你们能够接受一个平凡的我。看到我以尽力而为后，可否鼓励鼓励我？</li>
+<li>我不想做一个读书的机器，我想找到自己的兴趣希望你们能支持</li>
+</ol>
+
+<h3 id="toc_7">　关于书</h3>
+
+<p>一年买了几本书，android，flex, 产品，编程之美等等屈指可数，感觉还是需要继续学习。所以做了个硬性的规定：保证每月至少一本书的阅读量，尽量提高阅读质量和效率。</p>
+
+<h3 id="toc_8">　2011的目标：</h3>
+
+<ol>
+<li>带一个项目，多学习管理等方面的知识</li>
+<li>扩展视野，深入学习</li>
+<li>B3LOG的开发投入、产品设计，还有很重要的策划推广</li>
+<li>属于自己的互联网产品</li>
+<li>属于自己的Android产品</li>
+</ol>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-27-android-3-is-coming.html">蜂窝Android3.0传说3月发布</a></h1>
+			<p class="meta"><time datetime="2010-12-27T00:13:23+08:00" 
+			pubdate data-updated="true">2010/12/27</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><img style="float: left;" src="http://dl.javaeye.com/upload/attachment/375335/af52b4ee-9b00-33d3-9e7b-a4e7233ed859.jpg" alt="" width="310" height="235"></p>
+
+<p>无论是Chrome浏览器还是Android手机系统，Google均展示了其版本帝的频繁升级特征。特别是Android系统平台，今年就经历 了 Android 2.1、2.2、2.3三个大的版本，而且其保密工作也开始更加严格，下一个蜂窝版本现在还不清楚就是是2.4还是3.0。除了Android 2.4版在明年2月份MWC 2011移动通信世界大会中正式发布这一传闻版本之外，今天又有了新的消息出现，据说下一个版本为Android 3.0，将会在明年三月份发布。 <br/>
+消息来自于台湾电子时报，在报道微星、华硕等厂商将会CES 2011国际消费电子展中展示自己的平板机电脑，在谈及微星Android平板机的时候，他们称：“微星还将准备在Google于明年三月份发布 Android 3.0之后，在4月或者5月出售基于NVIDIA Tegra 2的平板机产品。” <br/>
+正如近期发布的Android2.3版姜饼系统一样，在发布之前都没确定其真正的版本号，下一代蜂窝系统也是这样，不过现在已经可以确定蜂窝系统将会针对平板机使用特征做出大量优化，<br/>
+并将对双核心处理器进行更好的支持。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-25-android-go.html">Android, GO!</a></h1>
+			<p class="meta"><time datetime="2010-12-25T00:12:47+08:00" 
+			pubdate data-updated="true">2010/12/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Android 的 Dalvik 虚拟机运行的不是 Java 程序，可以说 Dalvik 完全可以运行其它语言开发的程序，但是 Google 为了吸引 Java 程序员，允许 程序员使用 Android 的SDK 将 Java 代码转换成 Dalvik 可以运行的代码。它是如何实现的呢？Google 在开发 Android 的时候，雇佣了 Sun 的一些程序员，利用 Harmony 中的开源 Java 库来实现 Java 程序的转换，避开了授权费用。这意味着开发者可以使用 Java 语言为非 Java 平台开发程序，Android 的火爆发展不能给 Sun 带来商业利益，而且可能造成平台分裂。</p>
+
+<p>开源领袖Ricard Stallman 早就指出Java 是“带着镣铐的自由”（Free but shackled），警告开发者谨防 Java 陷阱。此后，Sun 开源了大部分的 Java 实现代码，因此 Java 陷阱已经可以避免，但仍然要注意使用完全自由的平台，因为并非所有的平台都是自由的。 </p>
+
+<p>如果 Google 收购 Sun，将 Java 收归己有，或者当初与 Sun 达成协议，也许今天情形会不同。或着当初开发 Android 的时候，Google 应该培育自己的 Go 语言，而不是急于利用现有的 Java 开发者队伍。Java 关于开放的说法只是一个假象，而如今 Java 易手，一切都改变了。 </p>
+
+<p>很难想象 Google 会放弃 Android 系统，问题是如何发展它。Java 将逐步脱离开源社区，沦为 Oracle 的生财之道，这是一个利益当头、注重企业而不考虑个人开发者的公司，与 Java 的纠缠不清只能带来更多的麻烦。</p>
+
+<p>现有的智能手机平台中，Java 已经不是开发者的首选，iOS，MeeGo 都有自己的开发环境，WebOS 不需要 Java 实现，而 RIM 也在逐渐抛弃 Java，转向 Adobe AIR，这意味着 Java 在手机市场的空间在逐步缩小。讽刺的是，现在 Android 的飞速发展反而有利于 Java 语言在手持领域的地位。如果 Google 抛弃 Java，是否 Java 将只能在低端机之间苟延残喘，逐渐消亡呢？相信随着 Web 开发技术的进步，HTML/CSS/Javascript这样的网络开发环境将成为网络应用的首选，而底层应用开发将会是 C/C++的天下。 </p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-18-product-interaction-design-book-share.html">产品交互设计方面的书籍分享</a></h1>
+			<p class="meta"><time datetime="2010-12-18T00:11:43+08:00" 
+			pubdate data-updated="true">2010/12/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>最近买了一本书《锦绣蓝图:怎样规划令人流连忘返的网站(第2版)》，但是在卓越上浏览书《UCD火花集——有效的互联网产品设计 交互》的时候发现这样一条评论，感觉还是很不错的，与大家分享！列出的书确实不错，会慢慢一一拜读，认真学习！</p>
+
+<p>评论如下：</p>
+
+<p>一本讲交互设计用户体验的书能做成这样真是不容易啊，稍微有点信息架构和用户体验概念的人都不至于把这本书做成这样，这也直接说明国内在交互设计方面实在 是水平太低了，不过低不是问题，我们可以慢慢追赶，但我非常诚恳的建议想读这本书的朋友，如果你希望通过本书学到什么有价值的东西，那最好放弃，我建议业 内人士还是老老实实地从下面的几本书开始阅读（别怕厚，这方面的书都是图，看的速度会快很多）： </p>
+
+<p>-《Web信息架构：设计大型网站》 <br/>
+-《About face 3.0》 <br/>
+-《网站交互设计模式》<br/>
+-《锦绣蓝图:怎样规划令人流连忘返的网站（第2版）》 <br/>
+-《Web导航设计》 <br/>
+-《瞬间之美——web界面设计如何让用户心动》 <br/>
+-《设计心理学》（唐纳德 A 诺曼）</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-16-see-or-not.html">见与不见 十诫诗</a></h1>
+			<p class="meta"><time datetime="2010-12-16T00:11:13+08:00" 
+			pubdate data-updated="true">2010/12/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>见与不见<br/>
+你见，或者不见我 <br/>
+我就在那里<br/>
+不悲不喜<br/>
+你念，或者不念我<br/>
+情就在那里<br/>
+不来不去<br/>
+你爱，或者不爱我<br/>
+爱就在那里<br/>
+不增不减<br/>
+你跟，或者不跟我<br/>
+我的手就在你手里<br/>
+不舍不弃<br/>
+来我的怀里<br/>
+或者<br/>
+让我住进你的心里<br/>
+默然　相爱<br/>
+寂静　欢喜</p>
+
+<p>十诫诗</p>
+
+<p>第一最好不相见，如此便可不相恋。<br/>
+第二最好不相知，如此便可不相思。<br/>
+第三最好不相伴，如此便可不相欠。<br/>
+第四最好不相惜，如此便可不相忆。<br/>
+第五最好不相爱，如此便可不相弃。<br/>
+第六最好不相对，如此便可不相会。<br/>
+第七最好不相误，如此便可不相负。<br/>
+第八最好不相许，如此便可不相续。<br/>
+第九最好不相依，如此便可不相偎。<br/>
+第十最好不相遇，如此便可不相聚。<br/>
+但曾相见便相知，相见何如不见时。<br/>
+安得与君相诀绝，免教生死作相思。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-16-android-use-thread-problem.html">Android中使用Thread线程会遇到哪些问题？</a></h1>
+			<p class="meta"><time datetime="2010-12-16T00:10:15+08:00" 
+			pubdate data-updated="true">2010/12/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>很多初入Android或Java开发的新手对Thread、Looper、Handler和Message仍然比较迷惑，衍生的有 HandlerThread、java.util.concurrent、Task、AsyncTask由于目前市面上的书籍等资料都没有谈到这些问题， 今天就这一问题做更系统性的总结.</p>
+
+<p>Android开发过程中为什么要线程能？</p>
+
+<p>我们创建的 Service、Activity以及Broadcast均是一个主线程处理，这里我们可以理解为UI线程.但是在操作一些耗时操作时，比如I/O读写的 大文件读写，数据库操作以及网络下载需要很长时间，为了不阻塞用户界面，出现ANR的响应提示窗口，这个时候我们可以考虑使用Thread线程来解决.</p>
+
+<p>Android中使用Thread线程会遇到哪些问题？</p>
+
+<p>对于从事过J2ME开发的程序员来说Thread比较简单，直接匿名创建重写run方法，调用start方法执行即可.或者从Runnable接口继 承，但对于Android平台来说UI控件都没有设计成为线程安全类型，所以需要引入一些同步的机制来使其刷新，这点Google在设计Android时 倒是参考了下Win32的消息处理机制.</p>
+
+<ol>
+<li><p>对于线程中的刷新一个View为基类的界面，可以使用postInvalidate（）方法在线程中来处理，其中还提供了一些重写方法比如 postInvalidate（int left，int top，int right，int bottom） 来刷新一个矩形区域，以及延时执行，比如postInvalidateDelayed（long delayMilliseconds）或postInvalidateDelayed（long delayMilliseconds，int left，int top，int right，int bottom） 方法，其中第一个参数为毫秒，如下：</p></li>
+<li><p>当然推荐的方法是通过一个Handler来处理这些，可以在一个线程的run方法中调用handler对象的 postMessage或sendMessage方法来实现，Android程序内部维护着一个消息队列，会轮训处理这些，如果你是Win32程序员可以 很好理解这些消息处理，不过相对于Android来说没有提供 PreTranslateMessage这些干涉内部的方法.</p></li>
+<li><p>Looper又是什么呢？ ，其实Android中每一个Thread都跟着一个Looper，Looper可以帮助Thread维护一个消息队列，昨天的问题 Can&#39;t create handler inside thread 错误 一文中提到这一概念，但是Looper和Handler没有什么关系，我们从开源的代码可以看到Android还提供了一个Thread继承类 HanderThread可以帮助我们处理，在HandlerThread对象中可以通过getLooper方法获取一个Looper对象控制句柄，我们 可以将其这个Looper对象映射到一个Handler中去来实现一个线程同步机制，Looper对象的执行需要初始化Looper.prepare方法 就是昨天我们看到的问题，同时推出时还要释放资源，使用Looper.release方法.</p></li>
+</ol>
+
+<p>4.Message 在Android是什么呢？ 对于Android中Handler可以传递一些内容，通过Bundle对象可以封装String、Integer以及Blob二进制对象，我们通过在线 程中使用Handler对象的 sendEmptyMessage或sendMessage方法来传递一个Bundle对象到Handler处理器.对于Handler类提供了重写方法 handleMessage（Message msg） 来判断，通过msg.what来区分每条信息.将Bundle解包来实现Handler类更新UI线程中的内容实现控件的刷新操作.相关的Handler 对象有关消息发送sendXXXX相关方法如下，同时还有postXXXX相关方法，这些和Win32中的道理基本一致，一个为发送后直接返回，一个为处 理后才返回 ：</p>
+
+<ol>
+<li><p>java.util.concurrent对象分析，对于过去从事Java开发的程序员不会对Concurrent对象感到陌生吧，他是JDK 1.5以后新增的重要特性作为掌上设备，我们不提倡使用该类，考虑到Android为我们已经设计好的Task机制，我们这里Android开发网对其不 做过多的赘述，相关原因参考下面的介绍：</p></li>
+<li><p>在Android中还提供了一种有别于线程的处理方式，就是Task以及AsyncTask，从开源代码中可以看到是针对Concurrent的封装，开 发人员可以方便的处理这些异步任务，具体的Android123在以前的文章中有详细解释，可以使用站内搜索来了解更多.</p></li>
+</ol>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-15-js-test-network-speed.html">javascript网络测速</a></h1>
+			<p class="meta"><time datetime="2010-12-15T00:09:39+08:00" 
+			pubdate data-updated="true">2010/12/15</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<pre><code>//图片大小  单位kb
+var filesize = 126.0 
+var sum=0;
+var n=0;
+var starttime;
+$(document).ready(function(){
+    timedCount();
+    });
+function getVelocity(timestamp) {
+    var endtime = new Date();
+    var speed = formatFloat(Math.round(filesize * 1024) / (endtime - starttime),2);    //得到网速 kb/s  
+    sum+=speed;n++;
+    var averagespeed=formatFloat(sum/n,2);
+    $(&quot;.speed&quot;).val(speed);
+    $(&quot;.averagespeed&quot;).val(averagespeed);
+    $(&quot;#&quot;+timestamp).remove();          
+}
+function timedCount()
+{      
+    var nowtime = new Date();
+    var timestamp = nowtime.getTime();
+    var imgsrc = &quot;http://hiphotos.baidu.com/baidu/pic/item/da6c6827187c9620908f9d2b.jpeg?timestamp=&quot;+timestamp;
+    var imgtag = &quot;&lt;img id=&quot;&quot;+timestamp+&quot;&quot; src=&quot;http://lamb.b3log.org/&quot;+imgsrc+&quot;&quot; alt=&quot;&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;&quot;;
+    //alert(imgtag);
+    starttime = new Date();
+    $(imgtag).appendTo(&quot;body&quot;);
+    var testspeed = setTimeout(&quot;timedCount()&quot;,1000)
+}
+function formatFloat(src, pos)
+{
+     return Math.round(src*Math.pow(10, pos))/Math.pow(10, pos);
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-14-if-i-lead-team.html">如果我来带团队</a></h1>
+			<p class="meta"><time datetime="2010-12-14T00:08:56+08:00" 
+			pubdate data-updated="true">2010/12/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ol>
+<li>计划执行：计划安排得当，不要老加班，不要老是现实和计划不匹配。不要做到哪儿计划就推后到哪儿。</li>
+<li>研发成果：成功产出几个重影响力级别的、完整成块的、有成就感自豪感的产品或项目</li>
+<li>团队氛围：这个团队每个人都相处的很融洽</li>
+<li>团队协作：每个人都能找到自己擅长并喜欢做的事情。团队允许发出不同声音，不打击不反击。团队允许各种性格和背景的人都能存在并融洽存在。</li>
+<li>团队协作：团队不要造成老是关键几个人忙死，其他人都在等这几个关键人完成核心事情后才能工作</li>
+<li>团队氛围：团队有向往的发展愿景，有积极向上、努力拼搏的精神</li>
+<li>团队氛围：团队有鼓励创新思考、尝试创新的机会和时间耐心</li>
+<li>能力提升：部门经理注重团队每个成员的能力随时随地的指导、培养、给机会、给鼓励，给与做事方向和方法上的指导，给与心态上的主动慰问、沟通、倾听、理解、疏导</li>
+<li>团队分享：部门经理注重团队成员之间的经验分享、每个人都在研究什么产出什么都在干什么的信息同步分享，产出成果大家共享，每个项目后的总结、交流、反思</li>
+<li>方法论研发：积极探索研究更简化、更快速准确、更有效果提升开发效率、开发质量，缩短开发周期，降低开发难度、开发成本的分析方法、设计方法、架构方法、自动化工具、测试方法。</li>
+<li>上下游协作：积极探索研究上下游紧密协作方法：让上下游分工明确，目标一致；让上游产出就是下游输入；让上下游计划、进展、变更、异常信息互相透明；</li>
+</ol>
+
+<p>团队满意度、团队幸福感，皆来自于此。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-12-math-analysis-tell-me-what.html">数学分析告诉了我什么</a></h1>
+			<p class="meta"><time datetime="2010-12-12T00:08:26+08:00" 
+			pubdate data-updated="true">2010/12/12</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>我是一名数学类专业的学生！但是对互联网狂热，有激情有梦想！<br/>
+数学类课程的学习，不仅仅给了我缜密的逻辑、透彻的分析等等，还告诉了我...<br/>
+1. 人生的痛苦在于追求错误的东西。所谓追求错误的东西，就是你在无限趋近于它的时候，才猛然发现，你和它是不连续的。<br/>
+2. 人和人就像数轴上的有理数点，彼此可以靠得很近很近，但你们之间始终存在隔阂。<br/>
+3. 人是不孤独的，正如数轴上有无限多个有理点，在你的任意一个小邻域内都可以找到你的伙伴。但人又是寂寞的，正如把整个数轴的无理点标记上以后，就一个人都见不到了。<br/>
+4. 人和命运的关系就像F(x)=x与G(x)=x<sup>2的关系。一开始，你以为命运是你的无穷小量。随着年龄的增长，你才发现你用尽全力也赶不上命运的步伐。这时候，若不是以一种卑微的姿态走下去，便是结束自己的生命。</sup><br/>
+5. 零点存在定理告诉我们，哪怕你和他站在对立面，只要你们的心还是连续的，你们就能找到你们的平衡点。<br/>
+6. 人生是一个级数，理想是你渴望收敛到的那个值。不必太在意，因为我们要认识到有限的人生刻画不出无穷的级数，收敛也只是一个梦想罢了。不如脚踏实地，经营好每一天吧。<br/>
+7. 有限覆盖定理告诉我们，一件事情如果是可以实现的，那么你只要投入有限的时间和精力就一定可以实现。至于那些在你能力范围之外的事情，就随他去吧。<br/>
+8. 痛苦的回忆是可以缩小的，但不可能消亡。区间套最后套出的那一个点在整个区间上微不足道，但一定是存在的，而且刻骨铭心。<br/>
+9. 我们曾有多少的理想和承诺，在经历几次求导的考验之后就面目全非甚至荡然无存？有没有那么一个誓言，叫做f(x)=e<sup>x？</sup><br/>
+10. 幸福是可积的，有限的间断点并不影响它的积累。所以，乐观地面对人生吧~<br/>
+11.r=a(1-cosθ) 我写的这个函数，谁能看得懂呢？</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-12-03-tencent-cdc-dorado.html">Dorado简单、小巧、高效、专为设计而生</a></h1>
+			<p class="meta"><time datetime="2010-12-03T00:07:42+08:00" 
+			pubdate data-updated="true">2010/12/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Dorado简单、小巧、高效、专为设计而生。<br/>
+<img title="点击下载Dorado" src="http://cdc.tencent.com/wp-content/uploads/2010/12/dorado-header.jpg" width="477" height="264" /><br/>
+简介：</p>
+
+<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/11.png" alt="Dorado"/></p>
+
+<p>设计稿尺寸标注与取色专用工具，适用于设计、界面开发与网页前端</p>
+
+<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/22.png" alt="Dorado"/></p>
+
+<p>安装包仅700KB，全绿色</p>
+
+<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/3.png" alt="Dorado"/></p>
+
+<p>独有的双模式切换可支持双屏显示器，一面设计，一面标注</p>
+
+<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/4.png" alt="Dorado"/></p>
+
+<p>在全新S3D图像引擎技术下，支持PSD、PNG 、BMP、GIF、JPG、JPEG、JPE、JFIF、TIF、TIFF、EMF等17种图片格式文件</p>
+
+<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/5.png" alt="Dorado"/></p>
+
+<p>支持图像的复制、粘贴、导出，工具全键盘操作更是不在话下</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-11-24-wulinwaizhuan-movie.html">电影版《武林外传》相当期待</a></h1>
+			<p class="meta"><time datetime="2010-11-24T00:07:11+08:00" 
+			pubdate data-updated="true">2010/11/24</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>《武林外传》相当期待，预告片已发<br/>
+<embed src="http://player.youku.com/player.php/sid/XMjIzMjE1MjU2/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-10-11-everyone-is-product-manager.html">人人都是产品经理</a></h1>
+			<p class="meta"><time datetime="2010-10-11T00:06:25+08:00" 
+			pubdate data-updated="true">2010/10/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>《人人都是产品经理》，这是最近读的一本书，也是这本书，我发现自己身上已经有了做产品的职业病，下面这些是书的开头的一段话，我自己也扪心自问过，现在一条一条回答一下。</p>
+
+<h3 id="toc_0">是谁？每次K 歌都对着点歌面板评头论足。</h3>
+
+<p>一直埋怨K歌的点歌板不方便，自己给它设计很多功能。比如用会员登录，可以收藏本次没有唱完歌的列表，以便下次继续；<br/>
+可以去网上搜索新歌播放，KTV的歌实在是太陈旧了。（版权问题先忽略）</p>
+
+<h3 id="toc_1">是谁？逛超市时总在想“这个商品能解决什么需求？</h3>
+
+<p>每次买东西前都仔细分析这个商品，可以解决什么需求，设计这个商品的人是想给用户带来什么样的方便，有其他可以替代的同类的商品吗。</p>
+
+<h3 id="toc_2">是谁？会给自己的个人发展做战略规划。</h3>
+
+<p>我喜欢计算机，对互联网狂热，理想就是做出亿万人使用的互联网应用。虽然学习数学类专业（信息与计算科学），但是把课余的大部分时间都用来学习了WEB开发方面的知识，这也就导致了毕业论文也是计算机方面（搜索引擎）。因为出于真心的热爱，所以感到非常快乐。在大一就给制定计划，毕业以后从事计算机和互联网相关的工作。校内的实践活动，只要和计算机有关肯定少不了我的。慢慢对WEB的了解越来越深，对自己的职业规划是，从底层的程序员做起，慢慢向管理层次发展，项目经理、系统分析、架构师这些都是我的职业目标。有了实际的工作经验后，发现好的产品要有好的设计，也需要好的创意，产品经理才符合我一直不变的理想。</p>
+
+<h3 id="toc_3">是谁？一定要在自己的婚礼中讲一个PPT。</h3>
+
+<p>未婚。整个婚礼写个需求文档，写策划报告等等，婚礼结束讲所有文档打包命名V1.0，相信不会有升级的版本。</p>
+
+<h3 id="toc_4">是谁？会拿用户调研的方法与亲朋好友交流。</h3>
+
+<p>最近对电子商务和社交网络突发奇想，并召集同学想实现自己想法。由于需要调研，以至于不管是真实碰面还是在QQ、MSN上都是追着朋友询问有关淘宝和人人相结合的有关问题。</p>
+
+<h3 id="toc_5">是谁？装修房子的时候抢着当项目经理。</h3>
+
+<p>还没买房。但是我会的。老婆家人是老板与用户，我要满足这些用户的需求，设计出满意的装修方案，效果图DEMO、“功能点”、预算等等都不能少。</p>
+
+<h3 id="toc_6">是谁？看电视广告总想在几十秒中提炼出三大卖点。</h3>
+
+<p>广告是在推广产品，其实广告也是一个产品。如何在短时间内展示自己的优点，非常的难。广告上聚集了大量的设计创意，看创意广告也变成我的爱好之一。</p>
+
+<h3 id="toc_7">是谁？会给自己的孩子设计各种“功能点”。</h3>
+
+<p>未婚，孩子更没有。感觉这个更走火入魔，但愿我不要变成这样。不要给子女设计他的未来，应该完全根据他的兴趣来挖掘，发挥自己最大的潜能和创意。中国的应试教育，教呆了好多人。中国缺少创新，中国现在很多成功的应用都是抄袭外国的创意，真心的希望中国可以多多出现“中国创造”。</p>
+
+<h3 id="toc_8">是谁？访问任何网站都能一下子挑出好几个Bug。</h3>
+
+<p>这个早已经成为我的职业病，无论用什么新的应用或者产品，都会不自觉的测试一下各种的功能点，分析一下，寻找Bug。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-07-25-gathering-send-off-huier.html">大连小聚黑鱼两斤半嘎嘎爽</a></h1>
+			<p class="meta"><time datetime="2010-07-25T00:05:00+08:00" 
+			pubdate data-updated="true">2010/7/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>由于巩的周六加班，吃饭小聚为我接风改在了今天周天。<br/>
+昨天和以前616宿舍的室友还有高志坤钟凤文他们一起小聚了一下。<br/>
+十点去了黑石礁，想办张移动的电话卡，<br/>
+老是上海的卡比较闹心，漫游太贵;<br/>
+但是非常悲剧的是营业厅没有号，没办法办。<br/>
+然后巩、会儿、大芳买了扑克去蜀味风情里打扑克等大丑和博博。<br/>
+捞了一条两斤半的黑鱼，烧了汤，挺爽。<br/>
+这家饭店的菜做的还不错，凉菜素菜很清爽，肉菜也不是很腻挺入味。<br/>
+菜的价格也是不菲的。黑鱼就 90 块钱，感觉还是比较贵的。<br/>
+但是味道确实不错。白云没来，没吃着。<br/>
+下次聚会还是会选择去这里的，因为还送了一百元的代金券。<br/>
+下午，我们去了星海公园。<br/>
+没有地方坐，无奈花了60元坐在卖海鲜的地方，打了一下午扑克。<br/>
+60块一壶茶，喝得我们平均去了厕所3躺，我是去了五躺。<br/>
+下次来星海还是准备好泳裤，直接去洗澡，又省钱又爽。<br/>
+大连，我胡汉三又回来了！嘎嘎！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-07-19-leave-chinasoft.html">今天辞职，准备回大连</a></h1>
+			<p class="meta"><time datetime="2010-07-19T00:04:15+08:00" 
+			pubdate data-updated="true">2010/7/19</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天，给Leader头儿说了自己想法，头儿说：“支持你！”<br/>
+Naico说：“你早该走了！”</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-07-13-pay-attention-to-your-body.html">朋友们，注意身体</a></h1>
+			<p class="meta"><time datetime="2010-07-13T00:03:36+08:00" 
+			pubdate data-updated="true">2010/7/13</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>老爸常给我说：“身体是革命的本钱”。<br/>
+健康是第一位的。<br/>
+从昨天晚上到今天，<br/>
+我灰常灰常的不舒服，又吐又泄。<br/>
+朋友们，在外一定要注意身体。<br/>
+祝我的朋友们及其在家为我们担心的父母们身体健康！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-07-05-graphics-card-burn-again.html">显卡又又...又烧了</a></h1>
+			<p class="meta"><time datetime="2010-07-05T00:02:54+08:00" 
+			pubdate data-updated="true">2010/7/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>我的笔记本显卡又又又烧了。<br/>
+联想，让我太失望了！<br/>
+上周六送修的，今天拿回来，不知道可以用多久。<br/>
+这次修的速度，才2天就搞定了。<br/>
+他们说，主板换了。<br/>
+我又问，这主板又不能是全新的。<br/>
+他说，不是，是预留的新的。<br/>
+这不是也是新的嘛？就是放的时间长一点而已。<br/>
+这些电器不受潮，又不会发霉变质掉。<br/>
+真搞不懂！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2010-06-28-join-foundamental-team.html">真正进入项目小组Foundamental</a></h1>
+			<p class="meta"><time datetime="2010-06-28T00:02:02+08:00" 
+			pubdate data-updated="true">2010/6/28</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天是带教结束的日子。<br/>
+我被正式分进了项目小组Foundamental。<br/>
+到目前为止还不知道这个组具体干什么的，<br/>
+继续学习，继续努力吧！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2010-06-26-so-near-so-far.html">这么近，那么远... ...</a></h1>
 			<p class="meta"><time datetime="2010-06-26T23:28:22+08:00" 
 			pubdate data-updated="true">2010/6/26</time></p>
@@ -270,33 +1988,63 @@ public class Sort {
 	  
 	      
 		      <li class="post">
-		        <a href="2010-06-26-so-near-so-far.html">这么近，那么远... ...</a>
+		        <a href="2015-12-18-carthage-decentralized-dependency-manager.html">Carthage去中心化的Cocoa依赖管理器</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2010-06-22-university-graduated.html">离别 吃饭 K歌 通宵 再见</a>
+		        <a href="2014-06-03-hello-swift.html">美国一名程序员对Swift语言的看法</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2010-06-13-graduation-thesis-a.html">灰常灰常的不幸，毕业论文被评成A</a>
+		        <a href="2014-05-08-elegant-uninstall-default-git.html">优雅的卸载Mac默认的Xcode附带的git</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2010-06-12-tencent-school-star.html">入围腾讯校园之星优秀作品</a>
+		        <a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2008-08-08-hello-world.html">你好，世界</a>
+		        <a href="2014-04-08-mongodb-2-6-0.html">Mongdb2.6.0 一个新版本号</a>
 		      </li>
 	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
 	   
 	  </ul>
 	</section>
