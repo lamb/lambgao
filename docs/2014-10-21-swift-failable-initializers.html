@@ -96,6 +96,8 @@ $(document).ready(function(event) {
 <pre><code>NSImage(contentsOfFile: &quot;swift.png&quot;)
 </code></pre>
 
+<span id="more"></span><!-- more -->
+
 <p>如果该文件不存在或者因为某种原因不允许访问，那么NSImage的初始化过程就会失败。在Swift 1.1版本中，像这种情况可以通过可失败构造器进行捕获。如果在构造一个对象时使用可失败构造器，那么当对象构造成功时返回该对象，当对象构造失败时则返回nil。因此可以直接用条件判断语句使用可失败构造器来实例化对象：</p>
 
 <pre><code>if let image = NSImage(contentsOfFile: &quot;swift.png&quot;) {

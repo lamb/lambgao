@@ -102,6 +102,8 @@ pstmt.addBatch(&quot;insert into settings values(5,&#39;jun&#39;)&quot;);
 pstmt.executeBatch();
 </code></pre>
 
+<span id="more"></span><!-- more -->
+
 <p>但不幸的是对于批量查询，JDBC并没有内建（built-in）的方法，而且JDBC执行批处理的时候也不能有SELECT语句，如：</p>
 
 <pre><code>Statement pstmt = conn.createStatement();

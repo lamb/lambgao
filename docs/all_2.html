@@ -106,87 +106,15 @@ $(document).ready(function(event) {
 <li>其它选项</li>
 </ol>
 
-<h3 id="toc_0">第一步  – 提高JVM栈内存Increase JVM heap memory</h3>
-
-<p>你使用过tomcat的话，简单的说就是“内存溢出”. 通常情况下，这种问题出现在实际的生产环境中.产生这种问题的原因是tomcat使用较少的内存给进程,通过配置TOmcat的配置文件(Windows 下的catalina.bat或Linux下的catalina.sh)可以解决这种问题.这种解决方法是通过增加JVM的栈内存实现的.也就是说，JVM通常不去调用垃圾回收器，所以服务器可以更多关注处理web请求，并要求尽快完成。要更改文件(catalina.sh) 位于”\tomcat server folder\bin\catalina.sh”，下面，给出这个文件的配置信息，</p>
-
-<pre><code>JAVA_OPTS=&quot;-Djava.awt.headless=true -Dfile.encoding=UTF-8
--server -Xms1024m -Xmx1024m  
--XX:NewSize=512m -XX:MaxNewSize=512m -XX:PermSize=512m  
--XX:MaxPermSize=512m -XX:+DisableExplicitGC&quot;
-</code></pre>
-
-<p>-Xms – 指定初始化时化的栈内存<br/>
--Xmx – 指定最大栈内存<br/>
-在重启你的Tomcat服务器之后，这些配置的更改才会有效。下面将介绍如何处理JRE内存泄漏.</p>
-
-<h3 id="toc_1">第二步 – 解决JRE内存泄露</h3>
-
-<p>性能表现不佳的另一个主要原因是内存泄漏，正如我之前说过：始终使用最新的tomcat服务器以获得更好的性能和可伸缩性。现在，这句话变成真的。如果我们使用最新的tomcat版本6.0.26及以上就可以解决这个错误，因为它包含了一个监听器来处理JRE和PermGen的内存泄漏。使用的监听器是，</p>
-
-<pre><code>&lt;Listener className=&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot; /&gt;
-</code></pre>
-
-<p>你可以在server.xml文件中找到这个监听器的配置，server.xml位置在“tomcat project folder/conf/server.xml”。接下来，我们将看看如何调整连接属性“maxThreads”。</p>
-
-<h3 id="toc_2">第三步 – 线程池设置</h3>
-
-<p>线程池指定Web请求负载的数量，因此，为获得更好的性能这部分应小心处理。可以通过调整连接器属性“maxThreads”完成设置。maxThreads的值应该根据流量的大小，如果值过低，将有没有足够的线程来处理所有的请求，请求将进入等待状态，只有当一个的处理线程释放后才被处理；如果设置的太大，Tomcat的启动将花费更多时间。因此它取决于我们给maxThreads设置一个正确的值。</p>
-
-<pre><code>&lt;Connector port=&quot;8080&quot; address=&quot;localhost&quot;
-maxThreads=&quot;250&quot; maxHttpHeaderSize=&quot;8192&quot;
-emptySessionPath=&quot;true&quot; protocol=&quot;HTTP/1.1&quot;
-enableLookups=&quot;false&quot; redirectPort=&quot;8181&quot; acceptCount=&quot;100&quot;
-connectionTimeout=&quot;20000&quot; disableUploadTimeout=&quot;true&quot; /&gt;
-</code></pre>
-
-<p>在上述配置中，maxThreads值设定为“250”，这指定可以由服务器处理的并发请求的最大数量。如果没有指定，这个属性的默认值为“200”。任何多出的并发请求将收到“拒绝连接”的错误提示，直到另一个处理请求进程被释放。错误看起来如下，</p>
-
-<pre><code>org.apache.tomcat.util.threads.ThreadPool logFull SEVERE: All threads (250) are  
-currently busy, waiting. Increase maxThreads (250) or check the servlet status
-</code></pre>
-
-<p>如果应用提示上述错误，务必检查上述错误是否是由于单个请求花费太长时间造成的，这个问题的原因是这样的，有时候如果数据库连接不释放的话，进程将不会处理其它请求。<br/>
-注意: 如果请求的数量超过了“750”，这将不是意味着将maxThreads属性值设置为“750”，它意外着最好使用“Tomcat集群”的多个实例。也就是说，如果有“1000”请求，两个Tomcat实例设置“maxThreads= 500”，而不在单Tomcat实例的情况下设置maxThreads=1000。</p>
-
-<p>根据我的经验，准确值的设定可以通过将应用在在各种环境中测试得出。接下来，我们来看看如何压缩的MIME类型。</p>
-
-<h3 id="toc_3">第4步- 压缩</h3>
-
-<p>Tomcat有一个通过在server.xml配置文件中设置压缩的选项。压缩可以在connector像如下设置中完成，</p>
-
-<pre><code>&lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; 
-connectionTimeout=&quot;20000&quot; 
-redirectPort=&quot;8181&quot; compression=&quot;500&quot; 
-compressableMimeType=&quot;text/html,text/xml,text/plain,application/octet-stream&quot; /&gt;
-</code></pre>
-
-<p>在前面的配置中，当文件的大小大于等于500bytes时才会压缩。如果当文件达到了大小但是却没有被压缩，那么设置属性compression=”on”。否则Tomcat默认设置是“off”。接下来我们将看看如何调优数据库。</p>
-
-<h3 id="toc_4">第五步- 数据库性能调优</h3>
-
-<p>Tomcat性能在等待数据库查询被执行期间会降低。如今大多数应用程序都是使用可能包含“命名查询”的关系型数据库。如果是那样的话，Tomcat会在启动时默认加载命名查询，这个可能会提升性能。另一件重要事是确保所有数据库连接正确地关闭。给数据库连接池设置正确值也是十分重要的。我所说的值是指Resource要素的最大空闲数（maxIdle），最大连接数（maxActive）,最大建立连接等待时间（maxWait）属性的值。因为配置依赖与应用要求，我也不能在本文指定正确的值。你可以通过调用数据库性能测试来找到正确的值。</p>
-
-<h3 id="toc_5">第6步 – Tomcat原生库</h3>
-
-<p>Tomcat的原生库基于Apache可移植运行时（Apache Portable Runtime简称APR），给程序员提供了超强的扩展性和性能，在产品运作中帮助融合原生的服务器技术以展现最佳的性能。想知道安装说明的朋友请参考<a href="http://www.techbrainwave.com/?p=1017">Tomcat Native Library – (APR) Installation</a>。</p>
-
-<h3 id="toc_6">第7步 – 其他选项</h3>
-
-<p>这些选项是：</p>
-
-<ul>
-<li>开启浏览器的缓存，这样读取存放在webapps文件夹里的静态内容会更快，大大推动整体性能。</li>
-<li>每当开机时，Tomcat服务器应当自动地重启。</li>
-<li>一般情况下HTTPS请求会比HTTP请求慢。如果你想要更好的安全性，即使慢一点我们还是要选择HTTPS。</li>
-</ul>
-
-<p>就这么多啦。在这篇文章里，我教给了大家一些提高Tomcat服务器性能的方法。如果你觉得这篇文章有用，或者你对提高Tomcat服务器性能有别的看法，请不要忘记留下宝贵的评论。</p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-07-21-tomcat-performance-tuning.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -202,63 +130,15 @@ compressableMimeType=&quot;text/html,text/xml,text/plain,application/octet-strea
 
 <p>本文给出了一个Hibernate面试问题列表，这些都是我从朋友以及同事那里搜集来的。Hibernate 是一个非常流行的对象关系影射框架，熟捻Hibernate的优势所在以及Hibernate的Sesion API是搞定Hibernate面试之关键所在。</p>
 
-<h3 id="toc_0">Hibernate中get和load有什么不同之处?</h3>
-
-<p>把get和load放到一起进行对比是Hibernate面试时最常问到的问题，这是因为只有正确理解get()和load()这二者后才有可能高效地使用Hibernate。get和load的最大区别是，如果在缓存中没有找到相应的对象，get将会直接访问数据库并返回一个完全初始化好的对象，而这个过程有可能会涉及到多个数据库调用；而load方法在缓存中没有发现对象的情况下，只会返回一个代理对象，只有在对象getId()之外的其它方法被调用时才会真正去访问数据库，这样就能在某些情况下大幅度提高性能。你也可以参考 <a href="http://javarevisited.blogspot.com/2012/07/hibernate-get-and-load-difference-interview-question.html">Hibernate中get和load的不同之处</a>， 此链接给出了更多的不同之处并对该问题进行了更细致的讨论。</p>
-
-<h3 id="toc_1">Hibernate中save、persist和saveOrUpdate这三个方法的不同之处？</h3>
-
-<p>除了get和load，这又是另外一个经常出现的Hibernate面试问题。 所有这三个方法，也就是save()、saveOrUpdate()和persist()都是用于将对象保存到数据库中的方法，但其中有些细微的差别。例如，save()只能INSERT记录，但是saveOrUpdate()可以进行 <a href="http://javarevisited.blogspot.com/2013/01/jdbc-batch-insert-and-update-example-java-prepared-statement.html">记录的INSERT和UPDATE</a>。还有，save()的返回值是一个Serializable对象，而persist()方法返回值为void。你还可以访问 <a href="http://javarevisited.blogspot.com/2012/09/difference-hibernate-save-vs-persist-and-saveOrUpdate.html">save、persist以及saveOrUpdate</a>，找到它们所有的不同之处。</p>
-
-<h3 id="toc_2">Hibernate中的命名SQL查询指的是什么?</h3>
-
-<p>Hibernate的这个面试问题同Hibernate提供的查询功能相关。命名查询指的是用<sql-query>标签在影射文档中定义的SQL查询，可以通过使用Session.getNamedQuery()方法对它进行调用。命名查询使你可以使用你所指定的一个名字拿到某个特定的查询。 Hibernate中的命名查询可以使用注解来定义，也可以使用我前面提到的xml影射问句来定义。在Hibernate中，@NameQuery用来定义单个的命名查询，@NameQueries用来定义多个命名查询。</p>
-
-<h3 id="toc_3">Hibernate中的SessionFactory有什么作用?</h3>
-
-<p>SessionFactory是线程安全的吗？ 这也是Hibernate框架的常见面试问题。顾名思义，SessionFactory就是一个用于创建Hibernate的Session对象的工厂。SessionFactory通常是在应用启动时创建好的，应用程序中的代码用它来获得Session对象。作为一个单个的数据存储，它也是 <a href="http://javarevisited.blogspot.com/2012/12/how-to-create-thread-safe-singleton-in-java-example.html">线程安全的</a>，所以多个线程可同时使用同一个SessionFactory。Java JEE应用一般只有一个SessionFactory，服务于客户请求的各线程都通过这个工厂来获得Hibernate的Session实例，这也是为什么SessionFactory接口的实现必须是线程安全的原因。还有，SessionFactory的内部状态包含着同对象关系影射有关的所有元数据，它是 <a href="http://javarevisited.blogspot.com/2013/03/how-to-create-immutable-class-object-java-example-tutorial.html">不可变的</a>，一旦创建好后就不能对其进行修改了。</p>
-
-<h3 id="toc_4">Hibernate中的Session指的是什么? 可否将单个的Session在多个线程间进行共享？</h3>
-
-<p>前面的问题问完之后，通常就会接着再问这两个问题。问完SessionFactory的问题后就该轮到Session了。Session代表着Hibernate所做的一小部分工作，它负责维护者同数据库的链接而且 不是线程安全的，也就是说，Hibernage中的Session不能在多个线程间进行共享。虽然Session会以主动滞后的方式获得数据库连接，但是Session最好还是在用完之后立即将其关闭。</p>
-
-<h3 id="toc_5">hibernate中sorted collection和ordered collection有什么不同?</h3>
-
-<p>这个是你会碰到的所有Hibernate面试问题中比较容易的问题。sorted collection是通过使用 Java的<a href="http://java67.blogspot.com/2012/10/how-to-sort-object-in-java-comparator-comparable-example.html">Comparator</a>在内存中进行排序的，ordered collection中的排序用的是数据库的order by子句。对于比较大的数据集，为了避免在内存中对它们进行排序而出现 <a href="http://javarevisited.blogspot.com/2011/09/javalangoutofmemoryerror-permgen-space.html">Java中的OutOfMemoryError</a>，最好使用ordered collection。</p>
-
-<h3 id="toc_6">Hibernate中transient、persistent、detached对象三者之间有什么区别？</h3>
-
-<p>在Hibernate中，对象具有三种状态：transient、persistent和detached。同Hibernate的session有关联的对象是persistent对象。对这种对象进行的所有修改都会按照事先设定的刷新策略，反映到数据库之中，也即，可以在对象的任何一个属性发生改变时自动刷新，也可以通过调用Session.flush()方法显式地进行刷新。如果一个对象原来同Session有关联关系，但当下却没有关联关系了，这样的对象就是detached的对象。你可以通过调用任意一个session的update()或者saveOrUpdate()方法，重新将该detached对象同相应的seesion建立关联关系。Transient对象指的是新建的持久化类的实例，它还从未同Hibernate的任何Session有过关联关系。同样的，你可以调用persist()或者save()方法，将transient对象变成persistent对象。可要记住，这里所说的transient指的可不是 <a href="http://javarevisited.blogspot.com/2012/03/difference-between-transient-and.html">Java中的transient关键字</a>，二者风马牛不相及。</p>
-
-<h3 id="toc_7">Hibernate中Session的lock()方法有什么作用?</h3>
-
-<p>这是一个比较棘手的Hibernate面试问题，因为Session的lock()方法重建了关联关系却并没有同数据库进行同步和更新。因此，你在使用lock()方法时一定要多加小心。顺便说一下，在进行关联关系重建时，你可以随时使用Session的update()方法同数据库进行同步。有时这个问题也可以这么来问：Session的lock()方法和update()方法之间有什么区别？。这个小节中的关键点也可以拿来回答这个问题。</p>
-
-<h3 id="toc_8">Hibernate中二级缓存指的是什么？</h3>
-
-<p>这是同Hibernate的缓存机制相关的第一个面试问题，不出意外后面还会有更多这方面的问题。二级缓存是在SessionFactory这个级别维护的缓存，它能够通过节省几番<a href="http://javarevisited.blogspot.com/2012/01/improve-performance-java-database.html">数据库调用往返</a>来提高性能。还有一点值得注意，二级缓存是针对整个应用而不是某个特定的session的。</p>
-
-<h3 id="toc_9">Hibernate中的查询缓存指的是什么？</h3>
-
-<p>这个问题有时是作为上个Hibernate面试问题的后继问题提出的。查询缓存实际上保存的是sql查询的结果，这样再进行相同的sql查询就可以之间从缓存中拿到结果了。为了改善性能，查询缓存可以同二级缓存一起来使用。Hibernate支持用多种不同的开源缓存方案，比如EhCache，来实现查询缓存。</p>
-
-<h3 id="toc_10">为什么在Hibernate的实体类中要提供一个无参数的构造器这一点非常重要？</h3>
-
-<p>每个Hibernate实体类必须包含一个 <a href="http://javarevisited.blogspot.com/2012/12/what-is-constructor-in-java-example-chainning-overloading.html">无参数的构造器</a>, 这是因为Hibernate框架要使用Reflection API，通过调用Class.newInstance()来创建这些实体类的实例。如果在实体类中找不到无参数的构造器，这个方法就会抛出一个InstantiationException异常。</p>
-
-<h3 id="toc_11">可不可以将Hibernate的实体类定义为final类?</h3>
-
-<p>是的，你可以将Hibernate的实体类定义为final类，但这种做法并不好。因为Hibernate会使用代理模式在延迟关联的情况下提高性能，如果你把实体类定义成final类之后，因为 <a href="http://javarevisited.blogspot.com/2011/12/final-variable-method-class-java.html">Java不允许对final类进行扩展</a>，所以Hibernate就无法再使用代理了，如此一来就限制了使用可以提升性能的手段。不过，如果你的持久化类实现了一个接口而且在该接口中声明了所有定义于实体类中的所有public的方法轮到话，你就能够避免出现前面所说的不利后果。</p>
-
-<p>Java开发者的Hibernate面试问答列表就到此为止了。没人会对Hibernate作为ORM解决方案的受欢迎程度产生怀疑，如果你要申请的是Java J2EE方面的职位，你就等着人来问你Hibernate方面的面试问题吧。在JEE界，Spring和Hibernate是两个最流行的Java框架。要是你被问到了其它也值得分享的Hibernate方面的面试问题， 别忘了在Java社区中同大家分享一下。</p>
-
-<p>翻译出处： <a href="http://www.oschina.net/translate/10-hibernate-interview-questions-answers-java-j2ee-senior">开源中国</a><br/>
-原文出处： <a href="http://javarevisited.blogspot.com.br/2013/05/10-hibernate-interview-questions-answers-java-j2ee-senior.html">10 Hibernate Interview Questions and Answers for Java J2EE Programmers</a></p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-07-12-ten-hibernate-interview-questions-answers-java-j2ee-senior.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -274,38 +154,15 @@ compressableMimeType=&quot;text/html,text/xml,text/plain,application/octet-strea
 
 <p>这几个JDBC性能贴示不见得有多酷或者有些你从没听说过，虽然讲的很基础但是在实践中上很多程序员经常忽略它们，当然你可能把标题称为数据库性能提示。</p>
 
-<h3 id="toc_0">JDBC性能贴士一：使用缓存</h3>
-
-<p>查出应用中有 多少数据库调用 ，然后把它们减到最少，不管你信不信性能问题大多数情况下罪魁祸首是访问数据库的那些代码。因为连接到数据库需要准备好连接（connections），还有往返的网络传输和数据库系统后端的处理。如果你可以把数据缓存下来的话这是减少数据库调用最好的方式，即使你的应用有完全动态的数据，短暂的缓存可以节省很大的数据苦往返的传输。加速Java应用后至少能减少20-50%的数据库调用，如果想找出数据库调用，那么仅仅把DAO层的每个db调用中记录到日志中就行，如果记录好每个线程进入和退出数据库访问的时间更好，它能告诉你一个调用究竟花了多少时间。</p>
-
-<h3 id="toc_1">JDBC性能贴士二：使用数据库索引</h3>
-
-<p>检查数据库列上（columns）是否有索引，如果你正做查询发现所花的时间比预想的要长，那么首先想到的是检查在列上（正在查询的where子句中的那列）是否做了索引。程序员中常犯这个错误，有索引和没有索引在做查询时有巨大的差异。这条贴士在性能上至少能提速100%，当然合适的索引更重要，太多的索引反而会减慢数据的插入和更新操作。因此使用索引的时候要小心，象id、类别（category）、类（class）等字段上做索引是经常使用的。</p>
-
-<h3 id="toc_2">JDBC性能贴士三：使用PreparedStatement</h3>
-
-<p>使用PreparedStatement或者存储过程（Stored Procedure）执行查询时PreparedStatement（预处理语句）比普通的Statement对象要快。因为数据库可以对查询语句做预处理何查询缓存计划。 因此总是使用 ** 参数化形式的预处理语句** 如SELECT * FROM table WHERE id=?,而不要使用SELECT * FROM table WHERE id=&#39;&quot;+id &quot;&#39;,虽然后者仍是一个预处理语句但不是参数化的。使用第二种查询方式在性能上没有任何优势，更多参考可以查下看<a href="/2015-06-14-why-use-preparedstatement-in-java-jdbc.html">JDBC为什么要使用PreparedStatement而不是Statement</a></p>
-
-<h3 id="toc_3">JDBC性能贴士四：使用数据库连接池</h3>
-
-<p>连接池用来存放数据库连接（Connection），创建数据库连接是个比较慢的过程而且会耗很长时间。所以如果每个请求都要创建一个连接，那么显然响应时间将会更长。用连接池根据上游的流量及并发请求数创建适当数量的连接。即使连接池在开始的请求中创建连接、缓存连接会比较慢，但总体还是能减不少开销。</p>
-
-<h3 id="toc_4">JDBC性能贴士五：使用JDBC批量更新</h3>
-
-<p>使用JDBC批量更新操作能显著提升Java数据库应用的性能。你应该始终用批量处理来执行插入和更新操作。通过使用Statment或者PreparedStatement做批量查询。用executeBatch（）方法做批量查询。</p>
-
-<h3 id="toc_5">JDBC性能贴士六：取消自动提交</h3>
-
-<p>查询时设置setAutoCommit(false)，默认JDBC连接自动提交模式是打开的，意味着每个独立的SQL语句都将在自己的事务中执行。然而你可以把SQL语句按组归到一个逻辑事务中去，这样通过调用commit()或rollback()要么提交要么回滚。试着运行相同数量的查询次数对比一下使用自动提交和不使用自动提交时的性能区别有多大的差异性。</p>
-
-<p>这些Java数据库应用性能小提示看起来非常简单，很多高级Java程序员能熟练运用在生产级代码中，但我还看到很多Java程序员并没有在乎这些，直到他们发现Java应用变得很慢时。所以对于新手来说有必要记住它使用它。同时你还可以使用这些Java性能小提示作为代码审查机制的一个参考，在你写的Java应用是使用数据库作为后端存储的时候。</p>
-
-<p>以上就是关于如何改善Java应用程序的性能的贴士，如果你有什么更好的提示不妨给我留言。</p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-06-27-improve-performance-java-database.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -328,151 +185,15 @@ pstmt.addBatch(&quot;insert into settings values(5,&#39;jun&#39;)&quot;);
 pstmt.executeBatch();
 </code></pre>
 
-<p>但不幸的是对于批量查询，JDBC并没有内建（built-in）的方法，而且JDBC执行批处理的时候也不能有SELECT语句，如：</p>
-
-<pre><code>Statement pstmt = conn.createStatement();
-pstmt.addBatch(&quot;select * from settings&quot;);
-pstmt.executeBatch();
-</code></pre>
-
-<p>会抛出异常：</p>
-
-<pre><code>Exception in thread &quot;main&quot; java.sql.BatchUpdateException: Can not issue SELECT via executeUpdate().
-    at com.mysql.jdbc.Statement.executeBatch(Statement.java:961)
-    at test.SelectBatchTest.test2(SelectBatchTest.java:49)
-    at test.SelectBatchTest.main(SelectBatchTest.java:12)
-</code></pre>
-
-<p>假设你想从一系列指定的id列表中获取名字，逻辑上，我们要做的事情看起来应该是：</p>
-
-<pre><code>PreparedStatement stmt = conn.prepareStatement(
-    &quot;select id, name from users where id in (?)&quot;);
-stmt.setString(&quot;1,2,3&quot;);
-</code></pre>
-
-<p>但是这样做并不能得到预期的结果，JDBC只允许你用单个的字面值来替换“？” JDBC之所以这么做是有必要的，因为如果SQL自身可以改变的话，JDBC驱动就没法预编译SQL语句了，另一方面它还能防止SQL注入攻击。</p>
-
-<p>但有四种可替代的实现方法可供选择：</p>
-
-<ol>
-<li>分别对每个id做查询</li>
-<li>一个查询做完所有事</li>
-<li>使用存储过程</li>
-<li>分批处理</li>
-</ol>
-
-<h3 id="toc_0">方法一： 分别对每个id做查询</h3>
-
-<p>假设有100个id，那么就有100次数据库调用：</p>
-
-<pre><code>PreparedStatement stmt = conn.prepareStatement(
-    &quot;select id, name from users where id = ?&quot;);
-for ( int i=0; i &lt; 100; i++ ) {
-  stmt.setInt(i);  // or whatever values you are trying to query by
- 
-  // execute statement and get result
-}
-</code></pre>
-
-<p>这种方法写起来非常简单，但是性能非常慢，数据库往返要处理100次。</p>
-
-<h3 id="toc_1">方法二：一个查询完成所有事</h3>
-
-<p>在运行时，你可以使用一个循环来构建如下SQL语句：</p>
-
-<pre><code>PreparedStatement stmt = conn.prepareStatement(
-    &quot;select id, name from users where id in (?, ?, ?)&quot;);
-stmt.setInt(1);
-stmt.setInt(2);
-stmt.setInt(3);
-</code></pre>
-
-<p>这种方案从代码相比第一种方法算是第二简单的，它解决了来回多次请求数据库的问题，但是如果每次请求参数的个数不一样时预处理语句就必须重新编译，由于每次SQL字面值不匹配，因此如果分别用10个id、3个id、100个，这样会在缓存中产生三个预处理语句。除了重新编译预处理语句之外，先前缓存池中的预处理语句将被移除（受限于缓存池大小），进而导致重新编译已编译过的语句。最后，这种查询方式在内存溢出或磁盘分页操作时查询会占用很长时间。</p>
-
-<p>该方案的另一种变体就是在SQL语句中硬编码：</p>
-
-<pre><code>PreparedStatement stmt = conn.prepareStatement(
-    &quot;select id, name from users where id in (1, 2, 3)&quot;);
-</code></pre>
-
-<p>这样方式甚至更差，而且没有任何机会对SQL语句重用，至少用“？”还可以对使用相同数量参数的SQL语句进行重用。</p>
-
-<pre><code>PreparedStatement stmt = conn.prepareStatement(
-   &quot;select id, name from users where id in (?) ; &quot;  
-   + &quot;select id, name from users where id in (?); &quot;
-   + &quot;select id, name from users where id in (?)&quot;);
-stmt.setInt(1);
-stmt.setInt(2);
-stmt.setInt(3);
-</code></pre>
-
-<p>这种方法的优点就是每次查询模版语句都一样，数据库不需要每次计算执行路径。然而，从数据库驱动的角度来说SQL每次都不一样，预处理语句每次必须预处理保存在缓存中。而且不是所有数据库系统都支持分号间隔的多个SQL语句的</p>
-
-<h3 id="toc_2">方法三：使用存储过程</h3>
-
-<p>存储过程执行在数据库系统中，因此它可以做很多查询而不需要太多网络负载，存储过程可以收集所有结果一次性返回。这是一种速度很快的解决方案。但是它对数据库的依赖比较强，不能随意的切换数据库系统，否则需要重写存储过程而且需要你分离应用服务器与数据库服务器之间的逻辑。如果应用架构已经使用了存储过程，无疑这是只最佳方案。</p>
-
-<h3 id="toc_3">方法四：分批处理</h3>
-
-<p>批量查询是方案一和方案二的折衷选择，它预先确定一批查询参数的常量，然后用这些参数构建一批查询。因为这只会涉及到有限个查询，所以它有预处理语句的优势（预编译不会与缓存中的预处理发生碰撞）。批处理多个值在相同的查询保留了服务器来回请求最小化的优势。最后你可以通过控制批处理的上限来避免大查询的内存问题。如果你有很关键的查询对性能方面有要求又不想用存储过程，那么这是一种很好的解决办法，现在我们通过一个例子说明：</p>
-
-<pre><code>public static final int SINGLE_BATCH = 1;
-public static final int SMALL_BATCH = 4;
-public static final int MEDIUM_BATCH = 11;
-public static final int LARGE_BATCH = 51;
-</code></pre>
-
-<p>第一件要做的事是你要衡量有多少批处理以及每个批处理的大小。（注意：在真实的代码中，这些值应该写在一个配置文件中而不是采取硬编码的形式，也就是说，你可以在运行时试验并改变批处理的大小）不管真正的批处理大小是多大，你总需要一个单个的批处理—大小为1的批处理（SINGLE_BATTCH）。这样如果有人请求的就是一个值或者在一个很大的查询中最后有遗留下来的单个值都能派上用场。对于批处理的大小，使用素数会更好些。换句话说，大小不应该可以相互的整除或者被相同的数整除。请求数的最大值将有最少的服务器往返。批处理的大小的数量和真正的大小是基于配置变化的。需要注意的是：大的批处理大小不应该太大否则你将遇到内存麻烦。同时最小批处理的大小应该很小，你可能会使用这个来做很多次的查询。</p>
-
-<pre><code>while ( totalNumberOfValuesLeftToBatch &gt; 0 ) {
-</code></pre>
-
-<p>按如下方式重复操作直到推出循环。</p>
-
-<pre><code>int batchSize = SINGLE_BATCH;
-if ( totalNumberOfValuesLeftToBatch &gt;= LARGE_BATCH ) {
-  batchSize = LARGE_BATCH;
-} else if ( totalNumberOfValuesLeftToBatch &gt;= MEDIUM_BATCH ) {
-  batchSize = MEDIUM_BATCH;
-} else if ( totalNumberOfValuesLeftToBatch &gt;= SMALL_BATCH ) {
-  batchSize = SMALL_BATCH;
-}
-totalNumberOfValuesLeftToBatch -= batchSize;
-</code></pre>
-
-<p>这种方案在这里是查找到最大的批处理大小，可能这个最大值比我们实际要查询的值稍大。举例说明：假设查询有75个参数，那么首先选择51个元素（LARGE_BATCH），现在还剩24个待查询，然后接着用11个元素的查询（MEDIUM_BATCH）。现在还有13个值，因为仍然大于11，再做一次11个元素的查询，现在只剩下2个值，它少于那个最小的批处理4（SMALL_BATCH），所以做两次单查询。总共5次往返用了3次预处理在缓存中。这是一个很重要的改进比单独地坐75次单查询。</p>
-
-<pre><code>StringBuilder inClause = new StringBuilder();
-boolean firstValue = true;
-for (int i=0; i &lt; batchSize; i++) {
-  inClause.append(&#39;?&#39;);
-  if ( firstValue ) {
-    firstValue = false;
-  } else {
-    inClause.append(&#39;,&#39;);
-  }
-}
-PreparedStatement stmt = conn.prepareStatement(
-    &quot;select id, name from users where id in (&quot; + inClause.toString() + &#39;)&#39;);
-</code></pre>
-
-<p>现在已经构建了一个真实的预处理语句，由于一直用相同的方式构建的查询，驱动注意到SQL是相同的。（注意：如果你还没有用Java5，使用StringBuffer替换StringBuilder才能正常编译），返回id很重要这样有利于查找哪个名字对应哪个id。</p>
-
-<pre><code>for (int i=0; i &lt; batchSize; i++) {
-  stmt.setInt(i);  // or whatever values you are trying to query by
-}
-</code></pre>
-
-<p>设置合适的值数量去查询，包括其他搜索条件查询。仅仅只要把这些参数在之举参数之后。在这种情况你可以最终当前的索引。</p>
-
-<p>从这点来看，你仅仅只是执行查询返回了结果，在第一次尝试的时候，你应该关注一下性能的提升，根据具体情况调整优化批处理的大小（batch size）。</p>
-
-<p>正如那句名言所说：“过早的优化是万恶之源”，批处理应该是用于解决性能问题。</p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-06-26-batching-select-statements-in-jdbc.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -488,266 +209,15 @@ PreparedStatement stmt = conn.prepareStatement(
 
 <p>今年6月，一年一度的WWDC大会如期而至，在大会上Apple发布了Swift 2.0，引入了很多新的特性，以帮助开发者能更快，更简单的构建应用。我在这里也说道说道Swift 2.0中值得大家注意的新特性。</p>
 
-<h3 id="toc_0">guard语句</h3>
-
-<p>guard语句和if语句有点类似，都是根据其关键字之后的表达式的布尔值决定下一步执行什么。但与if语句不同的是，guard语句只会有一个代码块，不像if语句可以if else多个代码块。</p>
-
-<p>那么guard语句的作用到底是什么呢？顾名思义，就是守护。guard语句判断其后的表达式布尔值为false时，才会执行之后代码块里的代码，如果为true，则跳过整个guard语句，我们举例来看看。</p>
-
-<p>我们以今年高考为例，在进入考场时一般都会检查身份证和准考证，我们写这样一个方法：</p>
-
-<pre><code>func checkup(person: [String: String!]) {
-  
-    // 检查身份证，如果身份证没带，则不能进入考场
-    guard let id = person[&quot;id&quot;] else {
-        print(&quot;没有身份证，不能进入考场!&quot;)
-        return
-    }
-    
-    // 检查准考证，如果准考证没带，则不能进入考场
-    guard let examNumber = person[&quot;examNumber&quot;] else {
-        print(&quot;没有准考证，不能进入考场!&quot;)
-        return
-    }
-    
-    // 身份证和准考证齐全，方可进入考场
-    print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)。请进入考场!&quot;)
-    
-}
-
-checkup([&quot;id&quot;: &quot;123456&quot;]) // 没有准考证，不能进入考场!
-checkup([&quot;examNumber&quot;: &quot;654321&quot;]) // 没有身份证，不能进入考场!
-checkup([&quot;id&quot;: &quot;123456&quot;, &quot;examNumber&quot;: &quot;654321&quot;]) // 您的身份证号为:123456，准考证号为:654321。请进入考场!
-</code></pre>
-
-<p>上述代码中的第一个guard语句用于检查身份证，如果检查到身份证没带，也就是表达式为false时，执行大括号里的代码，并返回。第二个guard语句则检查准考证。</p>
-
-<p>如果两证齐全，则执行最后一个打印语句，上面的两个guard语句大括号内的代码都不会执行，因为他们表达式的布尔值都是true。</p>
-
-<p>这里值得注意的是，id和examNumber可以在guard语句之外使用，也就是说当guard对其表达式进行验证后，id和examNumber可在整个方法的作用域中使用，并且是解包后的。</p>
-
-<p>我们再用if else语句写一个类似的方法：</p>
-
-<pre><code>func checkupUseIf(person: [String: String!]) {
-    
-    if let id = person[&quot;id&quot;], let examNumber = person[&quot;examNumber&quot;] {
-        print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)。请进入考场！&quot;)
-    } else {
-        print(&quot;证件不齐全，不能进入考场!&quot;)
-    }
-    
-    print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)&quot;)  // 报异常
-    
-}
-
-checkupUseIf([&quot;id&quot;: &quot;123456&quot;]) // 证件不齐全，不能进入考场!
-checkupUseIf([&quot;examNumber&quot;: &quot;654321&quot;]) // 证件不齐全，不能进入考场!
-checkupUseIf([&quot;id&quot;: &quot;123456&quot;, &quot;examNumber&quot;: &quot;654321&quot;]) // 您的身份证号为:123456，准考证号为:654321。请进入考场!
-</code></pre>
-
-<p>我们可以看到用if else实现的方法显然不如guard实现的那么精准。而且id和examNumber的作用域只限在if的第一个大括号内，超出这个作用域编译就会报错。</p>
-
-<p>通过上述两个小例子不难看出，guard语句正如一个称职的守卫，层层把关，严防一切不允许发生的事，并且让代码具有更高的可读性，非常棒。</p>
-
-<h3 id="toc_1">异常处理</h3>
-
-<p>在Swift 1.0时代是没有异常处理和抛出机制的，如果要处理异常，要么使用if else语句或switch语句判断处理，要么使用闭包形式的回调函数处理，再要么就使用NSError处理。以上这些方法都不能像Java中的try catch异常控制语句那样行如流水、从容不迫的处理异常，而且也会降低代码的可读性。当Swift 2.0到来后，一切都不一样了。</p>
-
-<p>在Swift 2.0中Apple提供了使用throws、throw、try、do、catch这五个关键字组成的异常控制处理机制。下面我们来举例看看如何使用，我用使用手机刷朋友圈为例。</p>
-
-<p>首先我们需要定义异常枚举，在Swift 2.0中Apple提供了ErrorType协议需要我们自定义的异常枚举遵循：</p>
-
-<pre><code>enum WechatError: ErrorType {
-    case NoBattery // 手机没电
-    case NoNetwork // 手机没网
-    case NoDataStream // 手机没有流量
-}
-</code></pre>
-
-<p>我们定义了导致不能刷微信的错误枚举’wechatError。然后定义一个检查是否可以刷微信的方法checkIsWechatOk()：</p>
-
-<pre><code>func checkIsWechatOk(isPhoneHasBattery: Bool, isPhoneHasNetwork: Bool, dataStream: Int) throws {
-    
-    guard isPhoneHasBattery else {
-        throw WechatError.NoBattery
-    }
-    
-    guard isPhoneHasNetwork else {
-        throw WechatError.NoNetwork
-    }
-    
-    guard dataStream &gt; 50 else {
-        throw WechatError.NoDataStream
-    }
-    
-}
-</code></pre>
-
-<p>这里注意，在方法名后有throws关键字，意思为该方法产生的异常向上层抛出。在方法体内使用guard语句对各种状态进行判断，然后使用throw关键字抛出对应的异常。然后我们定义刷微信的方法：</p>
-
-<pre><code>func playWechat(isPhoneHasBattery: Bool, isPhoneHasNetwork: Bool, dataStream: Int) {
-    
-    do {
-        try checkIsWechatOk(isPhoneHasBattery, isPhoneHasNetwork: isPhoneHasNetwork, dataStream: dataStream)
-        print(&quot;放心刷，刷到天昏地暗！&quot;)
-    } catch WechatError.NoBattery {
-        print(&quot;手机都没电，刷个鬼啊！&quot;)
-    } catch WechatError.NoNetwork {
-        print(&quot;没有网络哎，洗洗玩单机吧！&quot;)
-    } catch WechatError.NoDataStream {
-        print(&quot;没有流量了，去蹭Wifi吧！&quot;)
-    } catch {
-        print(&quot;见鬼了！&quot;)
-    }
-    
-}
-
-playWechat(true, isPhoneHasNetwork: true, dataStream: 60) // 放心刷，刷到天昏地暗！
-playWechat(true, isPhoneHasNetwork: false, dataStream: 60) // 没有网络哎，洗洗玩单机吧！
-playWechat(false, isPhoneHasNetwork: true, dataStream: 60) // 手机都没电，刷个鬼啊！
-playWechat(true, isPhoneHasNetwork: true, dataStream: 30) // 没有流量了，去蹭Wifi吧！
-</code></pre>
-
-<p>上述的代码示例中，首先检查是否可以刷微信的方法前使用try关键字，表示允许该方法抛出异常，然后使用了do catch控制语句捕获抛出的异常，进而做相关的逻辑处理。</p>
-
-<p>这套异常处理机制使Swift更加的全面和安全，并且提高了代码的可读性，非常棒。</p>
-
-<h3 id="toc_2">协议扩展</h3>
-
-<p>在Swift 1.0 时代，协议（Protocol）基本上类似一个接口，定义若干属性和方法，供类、结构体、枚举遵循和实现。在Swift 2.0中，可以对协议进行属性或者方法的扩展，和扩展类与结构体类似。这让我们开启了面向协议编程的篇章。</p>
-
-<p>Swift中，大多数基础对象都遵循了CustomStringConvertible协议，比如Array、Dictionary（Swift 1.0中的Printable协议），该协议定义了description方法，用于print方法打印对象。现在我们对该协议扩展一个方法，让其打印出大写的内容:</p>
-
-<pre><code>var arr = [&quot;hello&quot;, &quot;world&quot;]
-print(arr.description) // &quot;[hello, world]&quot;
-
-extension CustomStringConvertible {
-    var upperDescription: String {
-        return &quot;\(self.description.uppercaseString)&quot;
-    }
-}
-print(arr.upperDescription) // &quot;[HELLO, WORLD]&quot;
-</code></pre>
-
-<p>如果在Swfit 1.0时代，要想达到上述示例的效果，那么我们需要分别对Array、Dictionary进行扩展，所以协议的扩展极大的提高了我们的编程效率，也同样使代码更简洁和易读。</p>
-
-<h3 id="toc_3">打印语句的改变</h3>
-
-<p>在Swift1中，有’println()’和’print()’两个在控制台打印语句的方法，前者是换行打印，后者是连行打印。在Swift2中，’println()’已成为过去，取而代之的是他俩的结合体。如果你想做换行打印，现在需要这样写：</p>
-
-<pre><code>print(&quot;我要换行！&quot;, appendNewline: true)
-</code></pre>
-
-<h3 id="toc_4">available检查</h3>
-
-<p>作为iOS开发者，谁都希望使用最新版本iOS的Api进行开发，省事省力。但常常事与愿违，因为我们经常需要适配老版本的iOS，这就会面临一个问题，一些新特性特性或一些类无法在老版本的iOS中使用，所以在编码过程中经常会对iOS的版本做以判断，就像这样：</p>
-
-<pre><code>if NSClassFromString(&quot;NSURLQueryItem&quot;) != nil {
-    // iOS 8或更高版本
-} else{
-    // iOS8之前的版本
-}
-</code></pre>
-
-<p>以上这只是一种方式，在Swift 2.0之前也没有一个标准的模式或机制帮助开发者判断iOS版本，而且容易出现疏漏。在Swift 2.0到来后，我们有了标准的方式来做这个工作：</p>
-
-<pre><code>if #available(iOS 8, *) {
-    // iOS 8或更高版本
-    let queryItem = NSURLQueryItem()
-    
-} else {
-    // iOS8之前的版本
-    
-}
-</code></pre>
-
-<p>这个特性让我们太幸福。</p>
-
-<h3 id="toc_5">do-while语句重命名</h3>
-
-<p>经典的do-while语句改名了，改为了repeat-while：</p>
-
-<pre><code>var i = 0
-repeat {
-    i++
-    print(i)
-} while i &lt; 10
-</code></pre>
-
-<p>个人感觉更加直观了。</p>
-
-<h3 id="toc_6">defer关键字</h3>
-
-<p>在一些语言中，有try/finally这样的控制语句，比如Java。这种语句可以让我们在finally代码块中执行必须要执行的代码，不管之前怎样的兴风作浪。在Swift 2.0中，Apple提供了defer关键字，让我们可以实现同样的效果。</p>
-
-<pre><code>func checkSomething() {
-    
-    print(&quot;CheckPoint 1&quot;)
-    doSomething()
-    print(&quot;CheckPoint 4&quot;)
-    
-}
-
-func doSomething() {
-    
-    print(&quot;CheckPoint 2&quot;)
-    defer {
-        print(&quot;Clean up here&quot;)
-    }
-    print(&quot;CheckPoint 3&quot;)
-    
-}
-
-checkSomething() // CheckPoint 1, CheckPoint 2, CheckPoint 3, Clean up here, CheckPoint 4
-</code></pre>
-
-<p>上述示例可以看到，在打印出“CheckPoint 2”之后并没有打印出“Clean up here”，而是“CheckPoint 3”，这就是defer的作用，它对进行了print(&quot;Clean up here&quot;)延迟。我们再来看一个I/O的示例：</p>
-
-<pre><code>// 伪代码
-func writeSomething() {
-    
-    let file = OpenFile()
-    
-    let ioStatus = fetchIOStatus()
-    guard ioStatus != &quot;error&quot; else {
-        return
-    }
-    file.write()
-    
-    closeFile(file)
-    
-}
-</code></pre>
-
-<p>上述示例是一个I/O操作的伪代码，如果获取到的ioStatus正常，那么该方法没有问题，如果ioStatus取到的是error，那么会被guard语句抓到执行return操作，这样的话closeFile(file)就永远都不会执行了，一个严重的Bug就这样产生了。下面我们看看如何用defer来解决这个问题：</p>
-
-<pre><code>// 伪代码
-func writeSomething() {
-    
-    let file = OpenFile()
-    defer {
-        closeFile(file)
-    }
-    
-    let ioStatus = fetchIOStatus()
-    guard ioStatus != &quot;error&quot; else {
-        return
-    }
-    file.write()
-    
-}
-</code></pre>
-
-<p>我们将closeFile(file)放在defer代码块里，这样即使ioStatus为error，在执行return前会先执行defer里的代码，这样就保证了不管发生什么，最后都会将文件关闭。</p>
-
-<p>defer又一个保证我们代码健壮性的特性，我非常喜欢。</p>
-
-<p>Swift 2.0中的新特性当然不止以上这些，但窥一斑可见全豹，Swift 2.0努力将更快、更安全做到极致，这是开发人员的福音，让我们尽情享受这门美妙的语言吧。</p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-06-20-what-is-new-in-swift.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -761,166 +231,15 @@ func writeSomething() {
 		  	
 		  	<p>PreparedStatement是用来执行SQL查询语句的API之一，Java提供了 Statement、PreparedStatement 和 CallableStatement三种方式来执行查询语句，其中 Statement 用于通用查询， PreparedStatement 用于执行参数化查询，而 CallableStatement则是用于存储过程。同时PreparedStatement还经常会在Java面试被提及，譬如：Statement与PreparedStatement的区别以及如何避免SQL注入式攻击？这篇教程中我们会讨论为什么要用PreparedStatement？使用PreparedStatement有什么样的优势？PreparedStatement又是如何避免SQL注入攻击的？</p>
 
-<h3 id="toc_0">PreparedStatement是什么？</h3>
-
-<p>PreparedStatement是java.sql包下面的一个接口，用来执行SQL语句查询，通过调用connection.preparedStatement(sql)方法可以获得PreparedStatment对象。数据库系统会对sql语句进行预编译处理（如果JDBC驱动支持的话），预处理语句将被预先编译好，这条预编译的sql查询语句能在将来的查询中重用，这样一来，它比Statement对象生成的查询速度更快。下面是一个例子：</p>
-
-<pre><code>public class PreparedStmtExample {
- 
-    public static void main(String args[]) throws SQLException {
-        Connection conn = DriverManager.getConnection(&quot;mysql:\\localhost:1520&quot;, &quot;root&quot;, &quot;root&quot;);
-        PreparedStatement preStatement = conn.prepareStatement(&quot;select distinct loan_type from loan where bank=?&quot;);
-        preStatement.setString(1, &quot;Citibank&quot;);
- 
-        ResultSet result = preStatement.executeQuery();
- 
-        while(result.next()){
-            System.out.println(&quot;Loan Type: &quot; + result.getString(&quot;loan_type&quot;));
-        }       
-    }
-} 
-
-Output:
-Loan Type: Personal Loan
-Loan Type: Auto Loan
-Loan Type: Home Loan
-Loan Type: Gold Loan
-</code></pre>
-
-<p>这个例子中，如果还是用 PreparedStatement 做同样的查询，哪怕参数值不一样，比如：”Standard Chated” 或者”HSBC”作为参数值，数据库系统还是会去调用之前编译器编译好的执行语句（系统库系统初次会对查询语句做最大的性能优化）。默认会返回”TYPE_FORWARD_ONLY”类型的结果集（ ResultSet ）,当然你也可以使用preparedstatment()的重载方法返回不同类型的结果集。</p>
-
-<h3 id="toc_1">预处理语句的优势</h3>
-
-<p>PreparedStatement提供了诸多好处，企业级应用开发中强烈推荐使用PreparedStatement来做SQL查询，下面列出PreparedStatement的几点优势。</p>
-
-<h4 id="toc_2">1.PreparedStatement可以写动态参数化的查询</h4>
-
-<p>用PreparedStatement你可以写带参数的sql查询语句，通过使用相同的sql语句和不同的参数值来做查询比创建一个不同的查询语句要好，下面是一个参数化查询：</p>
-
-<pre><code>SELECT interest_rate FROM loan WHERE loan_type=?
-</code></pre>
-
-<p>现在你可以使用任何一种loan类型如：”personal loan”,”home loan” 或者”gold loan”来查询，这个例子叫做参数化查询，因为它可以用不同的参数调用它，这里的”?”就是参数的占位符。</p>
-
-<h4 id="toc_3">2.PreparedStatement比 Statement 更快</h4>
-
-<p>使用 PreparedStatement 最重要的一点好处是它拥有更佳的性能优势，SQL语句会预编译在数据库系统中。执行计划同样会被缓存起来，它允许数据库做参数化查询。使用预处理语句比普通的查询更快，因为它做的工作更少（数据库对SQL语句的分析，编译，优化已经在第一次查询前完成了）。为了减少数据库的负载，生产环境中德JDBC代码你应该总是使用PreparedStatement 。值得注意的一点是：为了获得性能上的优势，应该使用参数化sql查询而不是字符串追加的方式。下面两个SELECT 查询，第一个SELECT查询就没有任何性能优势。<br/>
-SQL Query 1:字符串追加形式的PreparedStatement</p>
-
-<pre><code>String loanType = getLoanType();
-PreparedStatement prestmt = conn.prepareStatement(&quot;select banks from loan where loan_type=&quot; + loanType);
-</code></pre>
-
-<p>SQL Query 2：使用参数化查询的PreparedStatement</p>
-
-<pre><code>PreparedStatement prestmt = conn.prepareStatement(&quot;select banks from loan where loan_type=?&quot;);
-prestmt.setString(1,loanType);
-</code></pre>
-
-<p>第二个查询就是正确使用PreparedStatement的查询，它比SQL1能获得更好的性能。</p>
-
-<h4 id="toc_4">3.PreparedStatement可以防止SQL注入式攻击</h4>
-
-<p>如果你是做Java web应用开发的，那么必须熟悉那声名狼藉的SQL注入式攻击。去年Sony就遭受了SQL注入攻击，被盗用了一些Sony play station（PS机）用户的数据。在SQL注入攻击里，恶意用户通过SQL元数据绑定输入，比如：某个网站的登录验证SQL查询代码为：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users WHERE name = &#39;&quot; + userName + &quot;&#39; and pw = &#39;&quot;+ passWord +&quot;&#39;;&quot;
-</code></pre>
-
-<p>恶意填入：</p>
-
-<pre><code>userName = &quot;1&#39; OR &#39;1&#39;=&#39;1&quot;;
-passWord = &quot;1&#39; OR &#39;1&#39;=&#39;1&quot;;
-</code></pre>
-
-<p>那么最终SQL语句变成了：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users WHERE name = &#39;1&#39; OR &#39;1&#39;=&#39;1&#39; and pw = &#39;1&#39; OR &#39;1&#39;=&#39;1&#39;;&quot;
-</code></pre>
-
-<p>因为WHERE条件恒为真，这就相当于执行：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users;&quot;
-</code></pre>
-
-<p>因此可以达到无账号密码亦可登录网站。如果恶意用户要是更坏一点，用户填入：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users;&quot;
-</code></pre>
-
-<p>SQL语句变成了：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users WHERE name = &#39;any_value&#39; and pw = &#39;&#39;; DROP TABLE users&quot;
-</code></pre>
-
-<p>这样一来，虽然没有登录，但是数据表都被删除了。</p>
-
-<p>然而使用PreparedStatement的参数化的查询可以阻止大部分的SQL注入。在使用参数化查询的情况下，数据库系统（eg:MySQL）不会将参数的内容视为SQL指令的一部分来处理，而是在数据库完成SQL指令的编译后，才套用参数运行，因此就算参数中含有破坏性的指令，也不会被数据库所运行。<br/>
-补充：避免SQL注入的第二种方式：<br/>
-在组合SQL字符串的时候，先对所传入的参数做字符取代（将单引号字符取代为连续2个单引号字符，因为连续2个单引号字符在SQL数据库中会视为字符中的一个单引号字符，譬如：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users WHERE name = &#39;&quot; + userName + &quot;&#39;;&quot;
-</code></pre>
-
-<p>传入字符串：</p>
-
-<pre><code>userName  = &quot; 1&#39; OR 1=1 &quot;
-</code></pre>
-
-<p>把userName做字符替换后变成：</p>
-
-<pre><code>userName = &quot; 1&#39;&#39; OR 1=1&quot;
-</code></pre>
-
-<p>最后生成的SQL查询语句为：</p>
-
-<pre><code>strSQL = &quot;SELECT * FROM users WHERE name = &#39;1&#39;&#39; OR 1=1&#39;
-</code></pre>
-
-<p>这样数据库就会去系统查找name为“1′ ‘ OR 1=1”的记录，而避免了SQL注入。</p>
-
-<p>比起凌乱的字符串追加似的查询，PreparedStatement查询可读性更好、更安全。</p>
-
-<h3 id="toc_5">PreparedStatement的局限性</h3>
-
-<p>尽管PreparedStatement非常实用，但是它仍有一定的限制。<br/>
-1. 为了防止SQL注入攻击，PreparedStatement不允许一个占位符（？）有多个值，在执行有IN子句查询的时候这个问题变得棘手起来。下面这个SQL查询使用PreparedStatement就不会返回任何结果</p>
-
-<pre><code>SELECT * FROM loan WHERE loan_type IN (?)
-preparedSatement.setString(1, &quot;&#39;personal loan&#39;, &#39;home loan&#39;, &#39;gold loan&#39;&quot;);
-</code></pre>
-
-<p>那如何解决这个问题呢？请你继续关注本博客，下期告诉你答案。</p>
-
-<p>不算总结的总结</p>
-
-<p>关于PreparedStatement接口，需要重点记住的是：</p>
-
-<ol>
-<li>PreparedStatement可以写参数化查询，比Statement能获得更好的性能。</li>
-<li>对于PreparedStatement来说，数据库可以使用已经编译过及定义好的执行计划，这种预处理语句查询比普通的查询运行速度更快。</li>
-<li>PreparedStatement可以阻止常见的SQL注入式攻击。</li>
-<li>PreparedStatement可以写动态查询语句</li>
-<li>PreparedStatement与java.sql.Connection对象是关联的，一旦你关闭了connection，PreparedStatement也没法使用了。</li>
-<li>“?” 叫做占位符。</li>
-<li>PreparedStatement查询默认返回FORWARD_ONLY的ResultSet，你只能往一个方向移动结果集的游标。当然你还可以设定为其他类型的值如：”CONCUR_READ_ONLY”。</li>
-<li>不支持预编译SQL查询的JDBC驱动，在调用connection.prepareStatement(sql)的时候，它不会把SQL查询语句发送给数据库做预处理，而是等到执行查询动作的时候（调用executeQuery()方法时）才把查询语句发送个数据库，这种情况和使用Statement是一样的。</li>
-<li>占位符的索引位置从1开始而不是0，如果填入0会导致<em>java.sql.SQLException invalid column index</em>异常。所以如果PreparedStatement有两个占位符，那么第一个参数的索引时1，第二个参数的索引是2.</li>
-</ol>
-
-<p>以上就是为什么要使用PreparedStatement的全部理由，不过你仍然可以使用Statement对象用来做做测试。但是在生产环境下你一定要考虑使用 PreparedStatement 。</p>
-
-<h3 id="toc_6">更多参考：</h3>
-
-<ul>
-<li><a href="http://zh.wikipedia.org/wiki/SQL%E8%B3%87%E6%96%99%E9%9A%B1%E7%A2%BC%E6%94%BB%E6%93%8A">SQL注入攻击</a></li>
-<li><a href="http://zh.wikipedia.org/wiki/%E5%8F%83%E6%95%B8%E5%8C%96%E6%9F%A5%E8%A9%A2">参数化查询</a></li>
-<li><a href="http://php.net/manual/zh/pdo.prepared-statements.php">预处理语句与存储过程</a></li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-06-14-why-use-preparedstatement-in-java-jdbc.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -940,63 +259,15 @@ preparedSatement.setString(1, &quot;&#39;personal loan&#39;, &#39;home loan&#39;
 <li><p>控件的translatesAutoresizingMaskIntoConstraints属性为NO;</p></li>
 </ul>
 
-<h3 id="toc_0">Masonry简单实现</h3>
-
-<h4 id="toc_1">(左下角正方形):</h4>
-
-<pre><code>[targetView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-20);
-        make.leading.equalTo(self.view).offset(20);
-        make.size.mas_equalTo(CGSizeMake(100, 100));
-}];
-</code></pre>
-
-<h4 id="toc_2">内边距为50:</h4>
-
-<h4 id="toc_3">第一种实现方式</h4>
-
-<pre><code>make.leading.top.mas_equalTo(@50);
-make.trailing.bottom.mas_equalTo(@-50);
-</code></pre>
-
-<h4 id="toc_4">第二种实现方式</h4>
-
-<pre><code>make.edges.insets(UIEdgeInsetsMake(50, 50, 50, 50));
-</code></pre>
-
-<h3 id="toc_5">Masonry使用技巧:</h3>
-
-<p>定义以下两个宏,在使用Masonry框架时就不需要加mas_前缀了<br/>
-(定义宏一定要在引入Masonry.h文件之前).</p>
-
-<pre><code>//define this constant if you want to use Masonry without the &#39;mas_&#39; prefix
-#define MAS_SHORTHAND
-//define this constant if you want to enable auto-boxing for default syntax
-#define MAS_SHORTHAND_GLOBALS
-</code></pre>
-
-<h3 id="toc_6">使用Masonry添加兄弟控件约束不需要考虑父控件.</h3>
-
-<p>具体实现代码如下:</p>
-
-<pre><code>[leftView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.offset(20);
-        make.bottom.offset(-20);
-        make.trailing.equalTo(rightiew.leading).offset(-20);
-        make.height.equalTo(100);
-        make.height.equalTo(rightiew.height);
-    }];    
-[rightiew makeConstraints:^(MASConstraintMaker *make) {
-        make.trailing.equalTo(self.view.trailing).offset(-20);
-        make.top.equalTo(leftView.top);
-        make.width.equalTo(leftView.width);
-}];
-</code></pre>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-05-23-masonry.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1030,25 +301,15 @@ class UserApi {
 
 <p>当然，你可以不用JSON转而XML或者使用ProtoBuf以及其他什么。这很简单而且不会因为修改造成代码错误，比起Jersey要简单很多。</p>
 
-<p>通常你的应用程序除了RESTful API还会有其他东西，比如标准的HTML页面、文件下载/上传、复杂的API请需求数据流处理、重要的后台处理、数据库访问、复杂的认证和授权与外部服务集成等等。Spring框架可以将这些完成得很好。同时我最喜欢的就是，通常会有两种办法达成目标：“应急办法”和常规办法:)</p>
-
-<p>实际上我是Grails web的粉丝，我真的很喜欢它并且为Grails写了一些插件。我相信构建传统 web应用方面Grails是最好的框架。但是当我看见采用RESTful构建和一些现代应用之后（大多数是“单页面App”）——我总是会建议使用Spring MVC （+ Groovy，这又是另外一个话题）。</p>
-
-<p>一些有用的链接：</p>
-
-<ul>
-<li>Spring – <a href="http://www.springsource.org/spring-framework">http://www.springsource.org/spring-framework</a></li>
-<li>Spring安全项目，如果你需要使用认证–<a href="http://www.springsource.org/spring-security">http://www.springsource.org/spring-security</a></li>
-<li>所有Spring项目 – <a href="http://www.springsource.org/projects">http://www.springsource.org/projects</a></li>
-<li>如果真的打算做一个好的RESTful应用，你需要Spring HATEOAS –<a href="https://github.com/SpringSource/spring-hateoas">https://github.com/SpringSource/spring-hateoas</a></li>
-<li>Spring MVC文档 –<a href="http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/mvc.html">http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/mvc.html</a></li>
-<li>一篇使用Spring进行内容交互的好文 –<a href="http://blog.springsource.org/2013/05/11/content-negotiation-using-spring-mvc/">http://blog.springsource.org/2013/05/11/content-negotiation-using-spring-mvc/</a></li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-05-15-restful-using-spring-framework.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1084,107 +345,15 @@ if source, present = p.sources[name]; !present {
 }
 </code></pre>
 
-<p>经测试，该实现大约可以达到 <strong>1,400,000 插入/秒</strong>（通过协程并发调用，GOMAXPROCS 设置为 4）。看上去很快，但实际上它是慢于单个协程的，因为多个协程间存在锁竞争。</p>
-
-<p>我们简化一下情况来说明这个问题，假设两个协程分别要获取“a”、“b”，并且“a”、“b”都已经存在于该 map 中。上述实现在运行时，一个协程获取到锁、拿指针、解锁、继续执行，此时另一个协程会被卡在获取锁。等待锁释放是非常耗时的，并且协程越多性能越差。</p>
-
-<p>让它变快的方法之一是移除锁控制，并保证只有一个协程访问这个 map。这个方法虽然简单，但没有伸缩性。下面我们看看另一种简单的方法，并保证了线程安全和伸缩性。 </p>
-
-<pre><code>var source *memorySource
-var present bool
-
-if source, present = p.sources[name]; !present { // added this line
-    // The source wasn&#39;t found, so we&#39;ll create it.
-
-    p.lock.Lock() // lock the mutex
-    defer p.lock.Unlock() // unlock at the end
-
-    if source, present = p.sources[name]; !present {
-        source = &amp;memorySource{
-            name: name,
-            metrics: map[string]*memoryMetric{},
-        }
-
-        // Insert the newly created *memorySource.
-        p.sources[name] = source
-    }
-    // if present is true, then another goroutine has already inserted
-    // the element we want, and source is set to what we want.
-
-} // added this line
-
-// Note that if the source was present, we avoid the lock completely!
-</code></pre>
-
-<p>该实现可以达到 <strong>5,500,000 插入/秒</strong>，比第一个版本快 <strong>3.93</strong> 倍。有 4 个协程在跑测试，结果数值和预期是基本吻合的。</p>
-
-<p>这个实现是 ok 的，因为我们没有删除、修改操作。在 CPU 缓存中的指针地址我们可以安全使用，不过要注意的是我们还是需要加锁。如果不加，某协程在创建插入 source 时另一个协程可能已经正在插入，它们会处于竞争状态。这个版本中我们只是在很少情况下加锁，所以性能提高了很多。</p>
-
-<p><a href="https://twitter.com/JohnPotocny1">John Potocny</a> 建议移除 defer，因为会延误解锁时间（要在整个函数返回时才解锁），下面给出一个“终极”版本：</p>
-
-<pre><code>var source *memorySource
-var present bool
-
-if source, present = p.sources[name]; !present {
-    // The source wasn&#39;t found, so we&#39;ll create it.
-
-    p.lock.Lock() // lock the mutex
-    if source, present = p.sources[name]; !present {
-        source = &amp;memorySource{
-            name: name,
-            metrics: map[string]*memoryMetric{},
-        }
-
-        // Insert the newly created *memorySource.
-        p.sources[name] = source
-    }
-    p.lock.Unlock() // unlock the mutex
-}
-
-// Note that if the source was present, we avoid the lock completely!
-</code></pre>
-
-<p><strong>9,800,000 插入/秒</strong>！改了 4 行提升到 <strong>7</strong> 倍啊！！有木有！！！！</p>
-
-<hr/>
-
-<p>更新：（译注：原作者循序渐进非常赞）</p>
-
-<p>上面实现正确么？No！通过 <a href="https://golang.org/doc/articles/race_detector.html">Go Data Race Detector</a> 我们可以很轻松发现竟态条件，我们不能保证 map 在同时读写时的完整性。</p>
-
-<p>下面给出不存在竟态条件、线程安全，应该算是“正确”的版本了。使用了 RWMutex，读操作不会被锁，写操作保持同步。</p>
-
-<pre><code>var source *memorySource
-var present bool
-
-p.lock.RLock()
-if source, present = p.sources[name]; !present {
-    // The source wasn&#39;t found, so we&#39;ll create it.
-    p.lock.RUnlock()
-    p.lock.Lock()
-    if source, present = p.sources[name]; !present {
-        source = &amp;memorySource{
-            name: name,
-            metrics: map[string]*memoryMetric{},
-        }
-
-        // Insert the newly created *memorySource.
-        p.sources[name] = source
-    }
-    p.lock.Unlock()
-} else {
-    p.lock.RUnlock()
-}
-</code></pre>
-
-<p>经测试，该版本性能为其之前版本的 <strong>93.8%</strong>，在保证正确性的前提先能到达这样已经很不错了。也许我们可以认为它们之间根本没有可比性，因为之前的版本是错的。</p>
-
-<p>本文译自：<a href="http://misfra.me/optimizing-concurrent-map-access-in-go">Optimizing Concurrent Map Access in Go</a></p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1234,163 +403,15 @@ This is a bit pointless
 
 <p>上面的例子可能稍微有点难理解，不过没关系，我们先来了解一下 Go 模版的基本用法。</p>
 
-<h3 id="toc_2">模版指令</h3>
-
-<p>{{ }} 语法用于处理模版指令，大括号外的任何字符都将直接输出。</p>
-
-<h3 id="toc_3">上下文</h3>
-
-<p>“.” 表示“当前上下文”。大多数情况下表示了容器元数据的整个数据结构，但在某些情况下可以重新规定上下文，比如使用 with 函数：</p>
-
-<pre><code>$ docker inspect -f &#39;{{.State.Pid}}&#39; jenkins
-6331
-$ docker inspect -f &#39;{{with .State}} {{.Pid}} {{end}}&#39; jenkins
-6331
-</code></pre>
-
-<p>可以使用 $ 来获取根上下文，例如：</p>
-
-<pre><code>$ docker inspect -f &#39;{{with .State}} {{$.Name}} has pid {{.Pid}} {{end}}&#39; jenkins
- /jenkins has pid 6331
-</code></pre>
-
-<p>注意，单独使用 “.” 本身也是可以的，将输出未格式化的完整元数据：</p>
-
-<pre><code>$ docker inspect -f &#39;{{.}}&#39; jenkins
-...
-</code></pre>
-
-<h3 id="toc_4">数据类型</h3>
-
-<p>inspect 数据可以由浮点数、字符串和布尔组成，可以使用 Go 模版内置函数进行比较判断。虽然 Go 模版支持整数，但目前 inspect 数据中的数值类型都是浮点数，而整数应该对于大多数场景更方便（详见该 <a href="https://github.com/docker/docker/issues/11641">Issue</a>）。使用字符串时可以使用双引号。</p>
-
-<p>数据中不存在的值是不可以用来比较的：</p>
-
-<pre><code>$ docker inspect -f &#39;{{.ExecIDs}}&#39; jenkins
-&lt;no value&gt;
-$ docker inspect -f &#39;{{eq .ExecIDs .ExecIDs}}&#39; jenkins
-FATA[0000] template: :1:2: executing &quot;&quot; at &lt;eq .ExecIDs .ExecIDs&gt;: error calling eq: invalid type for comparison
-</code></pre>
-
-<h3 id="toc_5">数据结构</h3>
-
-<p>inspect 数据使用 map 以及数组保存。Map 结构非常简单，前面我们曾经展示过，可以通过 . 的链式来访问 map 内部数据：</p>
-
-<pre><code>$ docker inspect -f &#39;{{.State.ExitCode}}&#39; jenkins
-0
-</code></pre>
-
-<p>不过有些情况（比如 map 的键不是字符串）是不能直接使用 . 方式来获取 map 值的，此时我们可以使用 index 函数，前面卷的例子可以这样写：</p>
-
-<pre><code>docker inspect -f &#39;{{index .Volumes &quot;/var/jenkins_home&quot;}}&#39; jenkins-data
-/var/lib/docker/vfs/dir/5a6f7b306b96af38723fc4d31def1cc515a0d75c785f3462482f60b730533b1a
-</code></pre>
-
-<p>我们也可以使用 index 来获取指定下标的数组值：</p>
-
-<pre><code>$ docker inspect -f &#39;{{.HostConfig.Binds}}&#39; jenkins
-[/var/run/docker.sock:/var/run/docker.sock /usr/bin/docker:/usr/bin/docker]
-$ docker inspect -f &#39;{{index .HostConfig.Binds 1}}&#39; jenkins
-/usr/bin/docker:/usr/bin/docker
-</code></pre>
-
-<h3 id="toc_6">函数</h3>
-
-<p>除了 index  函数，其他很多函数也很常用。比如逻辑函数 and、or 可以返回布尔结果。注意，函数是不能放在中间：</p>
-
-<pre><code>$ docker inspect -f &#39;{{and true true}}&#39; jenkins
-true
-</code></pre>
-
-<p>而不是：</p>
-
-<pre><code>$ docker inspect -f &#39;{{true and true}}&#39; jenkins
-FATA[0000] template: :1:2: executing &quot;&quot; at &lt;true&gt;: can&#39;t give argument to non-function true
-</code></pre>
-
-<p>下面是一些常用的比较函数：</p>
-
-<ul>
-<li>eq (等于)</li>
-<li>ne (不等于)</li>
-<li>lt (小于)</li>
-<li>le (小于等于)</li>
-<li>gt (大于)</li>
-<li>ge (大于等于)</li>
-</ul>
-
-<p>我们可以用这些函数来比较字符串、浮点数或整数：</p>
-
-<pre><code>$ docker inspect -f &#39;{{eq &quot;abc&quot; &quot;abc&quot;}}&#39; jenkins
-true
-$ docker inspect -f &#39;{{ge 1 -1}}&#39; jenkins
-true
-$ docker inspect -f &#39;{{lt 4.5 4.6}}&#39; jenkins
-true
-$ docker inspect -f &#39;{{ne 4.5 4.5}}&#39; jenkins
-false
-</code></pre>
-
-<p>要注意的是操作数类型必须匹配，数字比较时使用浮点数：</p>
-
-<pre><code>$ docker inspect -f &#39;{{eq &quot;4.5&quot; 4.5}}&#39; jenkins
-FATA[0000] template: :1:2: executing &quot;&quot; at &lt;eq &quot;4.5&quot; 4.5&gt;: error calling eq: incompatible types for comparison
-$ docker inspect -f &#39;{{gt .State.Pid 1}}&#39; jenkins
-FATA[0000] template: :1:2: executing &quot;&quot; at &lt;gt .State.Pid 1&gt;: error calling gt: incompatible types for comparison 
-$ docker inspect -f &#39;{{gt .State.Pid 1.0}}&#39; jenkins
-true
-</code></pre>
-
-<p>另外，可以使用 json 函数来生成 JSON 输出：</p>
-
-<pre><code>$ docker inspect -f &#39;{{json .NetworkSettings.Ports}}&#39; jenkins
-{&quot;50000/tcp&quot;:null,&quot;8080/tcp&quot;:[{&quot;HostIp&quot;:&quot;0.0.0.0&quot;,&quot;HostPort&quot;:&quot;8080&quot;}]}
-</code></pre>
-
-<p>我们也可以使用 jq 工具来组合结果：</p>
-
-<pre><code>$ docker inspect -f &#39;{{json .State}}&#39; jenkins-data | jq &#39;.StartedAt&#39;
-&quot;2015-03-15T20:26:30.526796706Z&quot;
-</code></pre>
-
-<p>当然，docker inspect 的默认输出结果就是 JSON，所以下面这样也可以：</p>
-
-<pre><code>$ docker inspect jenkins-data | jq &#39;.[] | .State.StartedAt&#39;
-&quot;2015-03-15T20:26:30.526796706Z&quot;
-</code></pre>
-
-<p>更多函数请参考 <a href="http://golang.org/pkg/text/template/">Go 官方文档</a>，不过很奇怪的是官方文档中并没有描述 json 函数（我是从 <a href="http://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy/">Nathan LeClaire’s blog</a> 中学到的），你如果知道其中原因，记得告诉我！</p>
-
-<h3 id="toc_7">If 语句</h3>
-
-<p>条件语句 if 可以和前面的比较函数一起使用：</p>
-
-<pre><code>$ docker inspect -f &#39;{{if eq .State.ExitCode 0.0}} 
-Normal Exit
-{{else if eq .State.ExitCode 1.0}} 
-Not a Normal Exit 
-{{else}} 
-Still Not a Normal Exit 
-{{end}}&#39; jenkins
-</code></pre>
-
-<p>Normal Exit<br/>
-注意，{{end}} 语句必须有，else if 和 else 按需使用。</p>
-
-<h3 id="toc_8">结论</h3>
-
-<p>我想本文应该涵盖了 docker inspect -f 使用模版时的大部分内容，不过另外还有一些很常用的特性，比如使用 range 来迭代数据、自定义函数、使用管道等需要你来自己摸索实践。</p>
-
-<p>我还没找到一份全面的使用 Go 模版的参考文档，目前我觉得这份还不错：<a href="http://jan.newmarch.name/go/template/chapter-template.html">chapter from a the free e-book “Network programming with Go</a>” by Jan Newmarch。</p>
-
-<p>当然，你可以参考 <a href="http://golang.org/pkg/text/template/">Go 官方文档</a>，但是它太精简了，特别是对于非 Go 程序员来说比较难理解。</p>
-
-<p>本文译自：<a href="http://container-solutions.com/2015/03/docker-inspect-template-magic">Docker Inspect Template Magic</a></p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-31-docker-inspect-template-magic-chinese.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1418,63 +439,15 @@ Still Not a Normal Exit
 
 <p>界面搭建完成。</p>
 
-<h3 id="toc_2">属性绑定</h3>
-
-<p>切换到双向视图，分别右键拖动 UIPanGestureRecognizer 和该 View 的 Top Space 的 Auto Layout 属性到 ViewController 中绑定,然后将 UIPanGestureRecognizer 右键拖动绑定：</p>
-
-<p><img src="/resource/image/2015-03-08-auto-layout-drag-rebound/3.jpg" alt="Image3"/></p>
-
-<h3 id="toc_3">编写代码</h3>
-
-<pre><code>class ViewController: UIViewController {
-    
-    var middleViewTopSpaceLayoutConstant: CGFloat!
-    var middleViewOriginY: CGFloat!
-    
-    @IBOutlet weak var middleView: UIView!
-    @IBOutlet weak var middleViewTopSpaceLayout: NSLayoutConstraint!
-    @IBOutlet var panGesture: UIPanGestureRecognizer!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        panGesture.addTarget(self, action: Selector(&quot;pan&quot;))
-        middleViewTopSpaceLayoutConstant = middleViewTopSpaceLayout.constant
-        middleViewOriginY = middleView.frame.origin.y
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func pan() {
-        if panGesture.state == UIGestureRecognizerState.Ended {
-            UIView.animateWithDuration(0.4, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -&gt; Void in
-                self.middleView.frame.origin.y = self.middleViewOriginY
-                }, completion: { (success) -&gt; Void in
-                    if success {
-                        self.middleViewTopSpaceLayout.constant = self.middleViewTopSpaceLayoutConstant
-                    }
-            })
-            return
-        }
-        let y = panGesture.translationInView(self.view).y
-        middleViewTopSpaceLayout.constant = middleViewTopSpaceLayoutConstant + y
-    }
-
-}
-</code></pre>
-
-<h3 id="toc_4">查看效果</h3>
-
-<p><img src="/resource/image/2015-03-08-auto-layout-drag-rebound/purpose.gif" alt="Image"/></p>
-
-<h4 id="toc_5">22 行代码，拖动回弹效果完成！</h4>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-08-auto-layout-drag-rebound.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1503,37 +476,15 @@ Still Not a Normal Exit
 <li>相等约束。如：跟父 view 等宽。</li>
 </ol>
 
-<h3 id="toc_2">三等分设计思路</h3>
-
-<p>许多人刚开始接触 Auto Layout，可能会以为它只能实现上面的1、2功能，其实后面3、4两个功能才是强大、特别的地方。接下来我们将尝试设计横向三等分：</p>
-
-<ol>
-<li>第一个元素距离左边一定距离。</li>
-<li>最后一个元素距离右边一定距离。</li>
-<li>三者高度恒定，宽度相等。（此处我们设置为高度恒定（height 属性），如果你需要的是固定长宽比，则需要设定 Aspect Ratio 属性）</li>
-<li>1和2、2和3的横向间距固定。</li>
-</ol>
-
-<h4 id="toc_3">干货，实现过程的动图：</h4>
-
-<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/process.gif" alt="动图"/></p>
-
-<h4 id="toc_4">运行结果</h4>
-
-<p>4 寸：</p>
-
-<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/1.jpg" alt="Image1"/></p>
-
-<p>4.7 寸：</p>
-
-<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/2.jpg" alt="Image2"/></p>
-
-<h4 id="toc_5">纵向三等分实现方式类似，大家可以自己尝试一下哦~</h4>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-07-auto-layout-three-equal-parts.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1572,98 +523,15 @@ Still Not a Normal Exit
 
 <p>1、2 两个按钮将会在未来的开发中产生巨大的作用，他们将拥有本系列文章的全局名称：按钮1，按钮2。请先记下他们的位置。</p>
 
-<h4 id="toc_4">2. 直接上手，开始使用</h4>
-
-<p>这也是我对学习新的软件编程技术的基本学习方法：有一个具体客观驱动的目标，例如做一个真正要给客户用的软件，而不是“为了学习新技术提高自己”这类伪目标。</p>
-
-<p>让我们直接上手：绘制一个距离左右边都有一定距离、固定高度、垂直居中的按钮，叫“Swift on iOS”。</p>
-
-<ol>
-<li>第一步，从右侧拖过来一个按钮，置于页面最中间。会有参考线出现，这一步很容易：</li>
-</ol>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/3.jpg" alt="Image3"/></p>
-
-<ol>
-<li>选中这个 button，将按钮背景色和前景色进行如下设置：<br/></li>
-</ol>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/4.jpg" alt="Image4"/></p>
-
-<ol>
-<li>将按钮左侧边界往左拖动直到自动吸附，留下一定的距离。右侧进行同样操作：<br/></li>
-</ol>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/5.jpg" alt="Image5"/></p>
-
-<ol>
-<li>选中这个 button，修改文字为 Swift on iOS:<br/></li>
-</ol>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/6.jpg" alt="Image6"/></p>
-
-<ol>
-<li>选中这个 button，点击 按钮2 ，选择这一项：<br/></li>
-</ol>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/7.jpg" alt="Image7"/></p>
-
-<p>这时候 button 周围会出现一些蓝色的线条，这些就是 Auto Layout 的约束项。</p>
-
-<h4 id="toc_5">3. 大功告成，查看效果</h4>
-
-<p>3.5:  </p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/8.jpg" alt="Image8"/></p>
-
-<p>4:  </p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/9.jpg" alt="Image9"/></p>
-
-<p>4.7:  </p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/10.jpg" alt="Image10"/></p>
-
-<p>5.5:  </p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/11.jpg" alt="Image11"/></p>
-
-<h4 id="toc_6">4. 分析</h4>
-
-<p>选中这个 button，在右侧查看自动生成的约束项：  </p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/12.jpg" alt="Image12"/></p>
-
-<p>只有三项，这三项的意思分别是：和父视图纵向居中对齐、右侧和父视图对齐、左侧和父视图对齐。</p>
-
-<p>我们很容易就能理解这样可以定位一个按钮，但是总感觉少了点什么。实际上这三个自动生成的约束项并不能描述一个 button 的位置，因为少了一个关键的属性：button 的高度。以后我们会详细地讨论。</p>
-
-<h4 id="toc_7">5. 核心思想</h4>
-
-<h4 id="toc_8">本质分析</h4>
-
-<p>Auto Layout 的本质是依靠 <em>某几项约束条件</em> 来达到对某一个元素的定位。我们可以在某个地方只使用一个约束，以达到一个小目的，例如防止内容遮盖、防止边界溢出等。但我的最佳实践证明，如果把页面上每一个元素的位置都用 Auto Layout 进行 <em>“严格约束”</em> 的话，那么 Auto Layout 可以帮我们省去非常多的计算 frame 的代码。</p>
-
-<h4 id="toc_9">“严格约束” 是什么？</h4>
-
-<p>简单来说，严格约束就是对某一个元素的绝对定位，让它在任一屏幕尺寸下都有着唯一的位置。这里的绝对定位不是定死的位置，而是对一个元素 <em>完善的约束条件</em>。</p>
-
-<p>让我们看图说话：</p>
-
-<p><img src="/resource/image/2015-03-06-auto-layout-start-up/13.png" alt="Image13"/></p>
-
-<ol>
-<li>我们要在一个直角坐标系里描述一个矩形。</li>
-<li>那么只需要指定这个矩形的位置和大小。</li>
-<li>那么只要给出上图中的四个值即可：到左边界的距离，到上边界的距离，宽度，高度。</li>
-<li>这四个约束是最简单的情况。在对一个元素进行严格约束时，请直接在脑中构建这个元素，并且加上几条约束条件，如果他无法缩放和动弹，那么严格约束就是成功的！</li>
-<li>必须牢记，使用 Auto Layout 时最重要的是：对页面上每一个元素都进行严格约束，不严格的约束是万恶之源。</li>
-</ol>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-06-auto-layout-start-up.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  

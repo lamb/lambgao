@@ -188,50 +188,15 @@ func listFiles(dirname string) []string {
 显示登录跳转页后自动跳转回 a.com，单点登录完成<br/>
 用户在访问 b.com 时无需再次登录</p>
 
-<h3 id="toc_2">实现原理</h3>
-
-<h4 id="toc_3">登录</h4>
-
-<ol>
-<li>统一登录页登录请求完成后响应为登录跳转页</li>
-<li>登录跳转页中通知各子站进行登录</li>
-</ol>
-
-<pre><code>&lt;script src=&#39;b.com/login?uid=xxxx&amp;token=xxxxx&#39;&gt;&lt;/script&gt;
-&lt;script src=&#39;c.com/login?uid=xxxx&amp;token=xxxxx&#39;&gt;&lt;/script&gt;
-</code></pre>
-
-<ol>
-<li>子站收到登录请求后验证 token 是否有效，有效的话在响应中设置 cookie（user_token=xxxx）</li>
-</ol>
-
-<h4 id="toc_4">token 验证</h4>
-
-<ul>
-<li>账户中心使用私钥加密 user id，生成 token</li>
-<li>子站使用公钥解密 token，将得到的 user id 和参数 uid 对比，如果一样就是校验通过</li>
-</ul>
-
-<h4 id="toc_5">登出</h4>
-
-<ol>
-<li>用户在某个子站主动登出时跳转到账户中心统一登出页 account.com/logout?uid=xxxx&amp;token=xxxx</li>
-<li>账户中心验证 token 后进行登出，在登出跳转页中通知各子站进行登出（设置 cookie），类似登录通知</li>
-<li>子站收到登出请求后验证 token 是否有效，有效的话在响应中设置 cookie（删除 user_token）</li>
-</ol>
-
-<h3 id="toc_6">关键点</h3>
-
-<ul>
-<li>浏览器渲染登录跳转页时将执行上面用 script 发送的登录通知请求，执行完后（或者超时）才跳转回前面登录的子站</li>
-<li>登录通知请求是跨域的（当前域是账户中心 account.com），所以在响应中设置 cookie 时 IE 某些版本需要设置 P3P 头</li>
-<li>在验证 token 时可以考虑使用账户中心提供高性能的验证接口，子站进行调用</li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-08-04-sso-via-cross-domain-cookie.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -260,145 +225,15 @@ func listFiles(dirname string) []string {
 
 <p>这是以应用为中心的一个闭环（市场-开发-运维-市场），实现了应用的整个生命周期，我们可以把平台看成是这个场景的支撑，场景中的所有活动都是在平台上完成的，整个场景就是一个 SaaS 生态系统。</p>
 
-<h4 id="toc_2">组成元素</h4>
-
-<p>在这个 SaaS 生态系统中，我们可以简单总结出以下几个必须的组成元素：</p>
-
-<ul>
-<li>开发者：个人/组织，要做的事情是开发应用、运维应用</li>
-<li>运行环境：应用程序实际运行的环境，要解决的是如何接入/部署应用</li>
-<li>运维控制：应用运行情况监控，要解决的是动态监控</li>
-<li>用户：使用应用的个人/组织，要做的事情是（购买）使用应用</li>
-<li>社区：开发者社区、用户社区，供开发者/用户进行分享、反馈</li>
-<li>应用市场：应用上架展示，供开发者应用上线，用户（购买）使用</li>
-</ul>
-
-<p>按参与者角色（开发者、平台、用户）把这几个组成元素分类后，SaaS 平台部分包括了：运行环境、运维控制、社区、应用市场。这里的“平台”是个广义概念，是多个具体平台的综合。例如“Android 平台”，包括了开发平台、应用市场、硬件平台、开发者社区等。</p>
-
-<h4 id="toc_3">面向应用用户</h4>
-
-<p>如果把 SaaS 应用比作是一个游戏，那么，</p>
-
-<ul>
-<li>SaaS 平台制订了基本的游戏规则，并提供了游戏道具</li>
-<li>开发者制订了游戏的细节规则，形成游戏玩法</li>
-<li>用户选择游戏，玩游戏</li>
-</ul>
-
-<p>最终，用户的体验是该游戏是否好玩，这是由平台和开发者共同决定的。也就是说，SaaS 平台和开发者是利益共同体，并且平台的基本规则决定了游戏的质量的起点。</p>
-
-<h4 id="toc_4">PaaS 与 SaaS</h4>
-
-<p>从用户角度看：PaaS 面向的是开发者用户，SaaS 面向的是应用用户<br/>
-从应用角度看：PaaS 侧重应用的 Runtime，SaaS 侧重应用的接入与集成<br/>
-PaaS 不关注应用业务领域，SaaS 则是某业务领域<br/>
-PaaS 成功与否看的是开发者的反馈，SaaS 成功与否是应用用户的反馈<br/>
-另外，SaaS 不是必然包含 PaaS。开发者在选定了 SaaS 后应该也可以选择 PaaS。但这个方式需要开发者熟悉多种平台，提高了运维的难度。</p>
-
-<h3 id="toc_5">应用引擎</h3>
-
-<p>应用引擎（App Engine）是目前业界实现 PaaS 的主流方式。它至少需要为开发者提供以下几个功能：</p>
-
-<ul>
-<li>部署：上传部署包部署</li>
-<li>实例管理：启停实例</li>
-<li>日志：查看日志，分实例</li>
-</ul>
-
-<p>内部至少需要实现以下几个功能：</p>
-
-<ul>
-<li>请求路由：请求分发到应用进程实例</li>
-<li>状态采集：基础设施、实例状态采集</li>
-<li>应用隔离：应用之间不能相互影响</li>
-<li>实例管理：按需启停</li>
-<li>资源控制：应用对资源的使用是受控的</li>
-<li>耗用统计：API 调用次数、IO/存储大小</li>
-<li>配额模型：量化应用对资源的使用</li>
-</ul>
-
-<p>目前我们熟悉的几个 XAE 都是这样做的，并且从传统的沙箱模型（API 受控）迁移到基于 LXC 的容器（Docker）已经是趋势，因为这样对应用开发的限制更小，开发者更容易接受。</p>
-
-<h4 id="toc_6">服务</h4>
-
-<p>目前业界主流的 PaaS 中都提供了基础服务，这些服务都是属于技术服务：</p>
-
-<ul>
-<li>缓存</li>
-<li>消息队列</li>
-<li>消息推送</li>
-<li>文件存储</li>
-<li>定时任务</li>
-<li>...</li>
-</ul>
-
-<p>这一块相对比较固定，调用方式一般都是基于 SDK API，有的也有 RESTful 接口。</p>
-
-<h4 id="toc_7">部署包</h4>
-
-<p>以 Java 为例，部署包一般都是 war 包，但除了满足标准 war 结构外，还需要加入一些平台特定的配置规则。比如通过配置文件描述 appid（或是通过 war 包名），用于部署时对应到平台上的应用配置。也就是说所有的应用配置都是可以做成非包内配置文件的，好比应用上某些地方需要抉择使用数据库或配置文件，这是平台设计时需要仔细考虑的。</p>
-
-<h3 id="toc_8">应用集成</h3>
-
-<p>应用集成主要是针对 SaaS 而言，用户选择多个应用后可以在一个视图中使用它们，这些应用之间也可能存在调用交互。</p>
-
-<h4 id="toc_9">视图</h4>
-
-<p>最简单的视图集成方式就是通过导航（图标），用户安装了某应用后，该应用图标就出现在这个用户的“首页”视图中。由平台给出集成规则，应用开发时遵循这些规则就可以集成进来。</p>
-
-<p>对于平台来说，这一块很有难度，或者说很难把握：</p>
-
-<ul>
-<li>如果集成规则太复杂，那会对开发者造成很多困扰和不便，但对用户来说就更透明、无缝，用户体验会更好</li>
-<li>如果集成规则太简单，那对开发者约束较低，但集成度也更低，用户体验可能很难提升</li>
-</ul>
-
-<p>目前业界的大多数 SaaS 在做这一块时都选择了简单的集成方式：接入图标，用户使用时点击图标并跳转到对应的应用。深度的集成（样式、交互模式统一）的方式很少见（互联网 SaaS 基本不可行，除非已经是业界标准）。</p>
-
-<h4 id="toc_10">RPC</h4>
-
-<p>服务端的调用也存在集成，应用之间互调也是 SaaS 需要考虑的场景。这部分可选的做法是 SaaS 提供 RPC 协议实现，这样应用间可以通过统一的调用协议进行互调。当然，也可以通过 HTTP 来实现，这样限制更少一些，但平台对应用的管控也会更弱。</p>
-
-<h3 id="toc_11">多租户</h3>
-
-<p>多租户支持主要目的是简化应用开发，让应用可以全心全意关注业务逻辑而不是关注租户相关逻辑，具体细节请参考<a href="/2014-05-30-cloud-app-platform-multitenancy.html">这里</a>。</p>
-
-<h3 id="toc_12">开放平台</h3>
-
-<p>前面我们提到过 SaaS 应该是可以接入其他 PaaS 应用的，这类应用我们可以认为是“外部应用”。既然是外部应用，那肯定是需要特定的接入规则，可以考虑参考行业标准规范。</p>
-
-<h4 id="toc_13">OAuth</h4>
-
-<p>通过该协议，SaaS 可以将服务（甚至是一些应用）暴露为 RESTful 接口给外部应用使用，这样可以充分利用平台的资源，吸引更多的应用进入到 SaaS 这个生态系统中。</p>
-
-<h3 id="toc_14">分润</h3>
-
-<p>最终买单的是用户，SaaS 平台和开发者是利益共同体，所以平台在指定规则时需要考虑好与开发者的分润。对于部署在 SaaS 内的应用和外部应用，分润规则应该是不一样的。下面是两种简单的方式：</p>
-
-<ul>
-<li>内部应用：通过平台提供的支付接口进行分润，应用好卖，平台跟着受益</li>
-<li>外部应用：应用支付给平台配额耗用费用，应用固定支付给平台其资源使用费用</li>
-</ul>
-
-<h3 id="toc_15">总结</h3>
-
-<p>SaaS 需要从至少两方面进行设计：基于特定的 PaaS；可以接入外部应用。自下而上、自上而下，包罗万象、井井有条。</p>
-
-<p>平台最终比拼的是应用资源而不是平台本身，尽可能吸引开发者是很重要的成功前提。要做到这一点，我们需要：</p>
-
-<ul>
-<li>垂直领域（例如协同办公）</li>
-<li>降低开发门槛（减少配置，轻量化 SDK）</li>
-<li>概念具象化（例如多租户）</li>
-<li>实现采用业界主流技术（Golang/Docker）</li>
-<li>支持多种编程语言</li>
-<li>活跃开发者社区</li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-07-22-saas-essay.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -547,167 +382,15 @@ println(counter.count) // the result is 20
 <li>多租户：可根据不同的用途分索引；可以同时操作多个索引</li>
 </ul>
 
-<h3 id="toc_2">集群</h3>
-
-<p>其中一个节点就是一个 ES 进程，多个节点组成一个集群。一般每个节点都运行在不同的操作系统上，配置好集群相关参数后 ES 会自动组成集群（节点发现方式也可以配置）。集群内部通过 ES 的选主算法选出主节点（目前版本 1.2 存在脑裂问题），而集群外部则是可以通过任何节点进行操作，无主从节点之分（对外表现对等/去中心化，有利于客户端编程，例如故障重连）。</p>
-
-<h3 id="toc_3">索引</h3>
-
-<p>“索引”有两个意思：</p>
-
-<ul>
-<li>作为动词，它指的是把一个文档“保存”到 ES 中的过程，索引一个文档后，我们就可以使用 ES 搜索到这个文档</li>
-<li>作为名词，它是指保存文档的地方，相当于一个数据库概念中的“库”</li>
-</ul>
-
-<p>为了方便理解，我们可以将 ES 中的一些概念对应到我们熟悉的关系型数据库上：</p>
-
-<table>
-<thead>
-<tr>
-<th>ES</th>
-<th>索引</th>
-<th>类型</th>
-<th>文档</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>DB</td>
-<td>库</td>
-<td>表</td>
-<td>行</td>
-</tr>
-</tbody>
-</table>
-
-<h3 id="toc_4">分片</h3>
-
-<p>ES 是一个分布式系统，我们一开始就应该以集群的方式来使用它。它保存索引时会选择适合的“主分片”（Primary Shard），把索引保存到其中（我们可以把分片理解为一块物理存储区域）。分片的分法是固定的，而且是安装时候就必须要决定好的（默认是 5），后面就不能改变了。</p>
-
-<p>既然有主分片，那肯定是有“从”分片的，在 ES 里称之为“副本分片”（Replica Shard）。副本分片主要有两个作用：</p>
-
-<p>高可用：某分片节点挂了的话可走其他副本分片节点，节点恢复后上面的分片数据可通过其他节点恢复<br/>
-负载均衡：ES 会自动根据负载情况控制搜索路由，副本分片可以将负载均摊</p>
-
-<h3 id="toc_5">一个示例</h3>
-
-<p>来个示例总结一下上面的内容（结合下面的图一起看）：</p>
-
-<ul>
-<li>3 个 ES 节点（es-58/59/60）组成一个集群</li>
-<li>搭建集群时使用默认的主分片数 5，shard0~shard4</li>
-<li>该集群内有加入两个索引 index1、index2</li>
-<li>这两个索引中分别“索引”（保存）了两个文档</li>
-<li>index1 索引中这个文档被 ES 自动保存到了分片 2 中，主分片在 es-58 节点，副本分片在 es-59 节点</li>
-<li>index2 索引中这个文档被 ES 自动保存到了分片 2 中，主分片在 es-59 节点，副本分片在 es-58 节点</li>
-</ul>
-
-<p><img src="https://bte68g.dm2301.livefilestore.com/y2pAJb557TDyzvbuqPlMN8lPnUt1XF_E34dXPY_g-9OMyI6tI8Yg416U4sbOHB0f-UnqvzArLcwORneU-CbSsPbONR3f6IGU2T6_DJzMQ2MPEM/shards.png?psid=1" alt="shards"/></p>
-
-<p>（该图是使用 ES 的 RESTful 接口获取的，后面会介绍常用接口）</p>
-
-<h3 id="toc_6">多租户</h3>
-
-<p>ES 的多租户简单的说就是通过多索引机制同时提供给多种业务使用，每种业务使用一个索引（关于多租户的详细定义与用途，可以参考这里）。前面我们提到过可以把索引理解为关系型数据库里的库，那多索引可以理解为一个数据库系统建立多个库给不同的业务使用。</p>
-
-<p>在实际使用时，我们可以通过每个租户一个索引的方式将他们的数据进行隔离，并且每个索引是可以单独配置参数的（可对特定租户进行调优），这在典型的多租户场景下非常有用：例如我们的一个多租户应用需要提供搜索支持，这时可以通过 ES 根据租户建立索引，这样每个租户就可以在自己的索引下搜索相关内容了。</p>
-
-<h3 id="toc_7">RESTful</h3>
-
-<p>这个特性非常方便，最关键的是 ES 的 HTTP 接口不只是可以进行业务操作（索引/搜索），还可以进行配置，甚至是关闭 ES 集群。下面我们介绍几个很常用的接口：</p>
-
-<ul>
-<li>/_cat/nodes?v：查集群状态</li>
-<li>/_cat/shards?v：查看分片状态</li>
-<li>/\({index}/\){type}/_search：搜索</li>
-</ul>
-
-<p>v 是 verbose 的意思，这样可以更可读（有表头，有对齐），_cat 是监测相关的 APIs，/_cat?help 来获取所有接口。\({index} 和 \){type} 分别是具体的某一索引某一类型，是分层次的。我们也可以直接在所有索引所有类型上进行搜索：/_search。</p>
-
-<h3 id="toc_8">官方术语表</h3>
-
-<p>最后，来份官方的术语表翻译，巩固一下理解：</p>
-
-<h4 id="toc_9">analysis 分析</h4>
-
-<p>分析是将文本（text）转化为查询词（term）的过程。使用不同的分析器，这三种短语：FOO BAR，Foo-Bar，foo,bar 都有可能被分解成查询词 foo 与 bar。这些查询词实际上将被存储在索引中。一次对 FoO:bAR 的全文查询（不是查询词查询）可能会被分析为为查询词 foo,bar，可以匹配上保存在索引中的查询词。这就是分析处理过程（包含了索引与搜索），它使得 es 可以进行全文查询。</p>
-
-<h4 id="toc_10">cluster 集群</h4>
-
-<p>一个或多个拥有同一个集群名称的节点组成了一个集群。每个集群都会自动选出一个主节点，如果该主节点故障，则集群会自动选出新的主节点来替换故障节点。</p>
-
-<h4 id="toc_11">document 文档</h4>
-
-<p>一个文档就是一个保存在 es 中的 JSON 文本，可以把它理解为关系型数据库表中的一行。每个文档都是保存在索引中的，拥有一种类型和 id。一个文档是一个 JSON 对象（一些语言中的 hash / hashmap / associative array）包含了 0 或多个字段（键值对）。原始的 JSON 文本在索引后将被保存在 _source 字段里，搜索完成后返回值中默认是包含该字段的。</p>
-
-<h4 id="toc_12">id</h4>
-
-<p>Id 是用于标识文档的，一个文档的索引/类型/id 必须是唯一的。文档 id 是自动生成的（如果不指定）。</p>
-
-<h4 id="toc_13">field 字段</h4>
-
-<p>一个文档包含了若干字段，或称之为键值对。字段的值可以是简单（标量）值（例如字符串、整型、日期），也可以是嵌套结构，例如数组或对象。一个字段类似于关系型数据库表中的一列。每个字段的映射都有一个字段类型（不要和文档类型搞混了），它描述了这个字段可以保存的值类型，例如整型、字符串、对象。映射还可以让我们定义一个字段的值如何进行分析。</p>
-
-<h4 id="toc_14">index 索引</h4>
-
-<p>一个索引类似关系型数据库中的一个数据库，它可以映射为多种类型。一个索引就是逻辑上的一个命名空间，对应到 1 或多个主分片上，可以拥有 0 个或多个副本分片。</p>
-
-<h4 id="toc_15">mapping 映射</h4>
-
-<p>一个映射类似于关系型数据库中的模式定义。每个索引都存在一个映射，它定义了该索引中的每一种类型，以及索引相关的配置。映射可以显示定义，或者在文档被索引时自动创建。</p>
-
-<h4 id="toc_16">node 节点</h4>
-
-<p>一个节点是集群中的一个 es 运行实例。测试时，多个节点可以同时启在同一个服务器上，生产环境一般是一个服务器上一个节点。节点启动时将使用单播（或者是组播）来发现和自己配置的集群名称相同的集群，并尝试加入到该集群中。</p>
-
-<h4 id="toc_17">primary shard 主分片</h4>
-
-<p>每个文档都会被保存在一个主分片上。当我们索引一个文档时，它将在一个主分片上进行索引，然后才放到该主分片的各副本分片上。默认情况下，一个索引有 5 个主分片。我们可以指定更少或更多的主分片来伸缩索引可处理的文档数。需要注意的是，一旦索引创建，就不能修改主分片个数。</p>
-
-<h4 id="toc_18">replica shard 副本分片</h4>
-
-<p>每个主分片可以拥有 0 个或多个副本分片。一个副本分片是主分片的一份拷贝，这样做有两个主要原因：</p>
-
-<p>故障转移：当主分片失效时，一个副本分片会被提升为主分片<br/>
-提高性能：获取与搜索请求可以被主分片或副本分片处理。默认情况下，每个主分片都有一个副本分片，副本分片的数量可以动态调整。在同一个节点上，副本分片和其主分片不会同时运行</p>
-
-<h4 id="toc_19">routing 路由</h4>
-
-<p>当我们索引一个文档时，它将被保存在一个主分片上，分片的选择是通过路由值哈希得到的。默认情况下，路由值来自于文档 id，如果该文档指定来了父文档，则路由值来自于父文档 id（这是为了确保子文档和父文档被保存在相同的分片上）。该值可以在索引时指定，也可以通过映射路由字段来指定。</p>
-
-<h4 id="toc_20">shard 分片</h4>
-
-<p>一个分片就是一个 Lucene 实例，它是 es 管理的底层“工作单元”。一个索引是逻辑上的一个命名空间，指向主分片和副本分片。索引的主分片和副本分片数量必须明确指定好，在应用代码使用时只需要处理和索引的交互，不会涉及到和分片的交互。Elasticsearch 会在集群中的所有节点上设置好分片，但节点失效或加入新节点时会自动将移动节点分片。</p>
-
-<h4 id="toc_21">source field 源字段</h4>
-
-<p>默认情况下，在获取和搜索请求返回值中的 _source 字段保存了源 JSON 文本，这使得我们可以直接在返回结果中访问源数据，而不需要根据 id 再发一次检索请求。注意：索引的 JSON 字符串将完整返回，无论是否是一个合法的 JSON。该字段的内容也不会描述数据如何被索引。</p>
-
-<h4 id="toc_22">term 查询词</h4>
-
-<p>一个查询词是一个被 es 索引的确切值。查询词 foo，Foo，FOO 是不同的。查询词可以使用查询词查询接口进行获取。</p>
-
-<h4 id="toc_23">text 文本</h4>
-
-<p>文本（或称之为全文）是普通的、非结构化的文本，例如本段话。默认情况下，文本将被分析为查询词，查询词将被保存在索引中。为能够进行全文搜索，文本字段在索引时将被分析为查询词，查询关键字在搜索时也将被分析为查询词，通过对比查询词是否相同而完成全文搜索。</p>
-
-<h4 id="toc_24">type 类型</h4>
-
-<p>一种类型类似于关系型数据库中的一张表。每种类型都有若干字段，可以用于指定给该类型文档。映射定义了该文档中的每个字段如何进行分析。</p>
-
-<h3 id="toc_25">参考</h3>
-
-<ul>
-<li><a href="http://www.elasticsearch.org/guide">Elasticsearch Guide</a></li>
-<li><a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/glossary.html#glossary-mapping">Elasticsearch Glossary of terms</a></li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-06-23-full-text-search-elasticsearch.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -730,214 +413,15 @@ abs(-42) == 42
 abs(42) == 42 
 </code></pre>
 
-<p>contains(sequence, element): 如果给定的序列（如数组）包含特定的元素，则返回true。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-contains(languages, &quot;Swift&quot;) == true 
-contains(languages, &quot;Java&quot;) == false 
-contains([29, 85, 42, 96, 75], 42) == true 
-</code></pre>
-
-<p>dropFirst(sequence): 返回一个去掉第一个元素的新序列（如数组）。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-var oldLanguages = dropFirst(languages) 
-equal(oldLanguages, [&quot;Objective-C&quot;]) == true
-</code></pre>
-
-<p>dropLast(sequence): 返回一个的新序列（如数组），该序列去掉作为参数传递给函数的最后一个元素。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-var newLanguages = dropLast(languages) 
-equal(newLanguages, [&quot;Swift&quot;]) == true
-</code></pre>
-
-<p>dump(object): 一个对象的内容转储到标准输出。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-dump(languages) 
-// Prints: 
-// ? 2 elements 
-// - [0]: Swift 
-// - [1]: Objective-C 
-</code></pre>
-
-<p>equal(sequence1, sequence2): 如果序列1和序列2包含相同的元素，则返回true。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-equal(languages, [&quot;Swift&quot;, &quot;Objective-C&quot;]) == true 
-var oldLanguages = dropFirst(languages) 
-equal(oldLanguages, [&quot;Objective-C&quot;]) == true 
-</code></pre>
-
-<p>filter(sequence, includeElementClosure): 返回序列的一个元素，这个元素满足includeElementClosure所指定的条件。</p>
-
-<pre><code>for i in filter(1...100, { $0 % 10 == 0 }) 
-{ 
-    // 10, 20, 30, ... 
-    println(i) 
-    assert(contains([10, 20, 30, 40, 50, 60, 70, 80, 90, 100], i)) 
-} 
-</code></pre>
-
-<p>find(sequence, element): 再给定的序列中返回一个指定的索引，如果在序列中没有找到这个元素就返回nil。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-find(languages, &quot;Objective-C&quot;) == 1 
-find(languages, &quot;Java&quot;) == nil 
-find([29, 85, 42, 96, 75], 42) == 2 
-</code></pre>
-
-<p>indices(sequence): 在指定的序列中返回元素的索引（零索引）。</p>
-
-<pre><code>equal(indices([29, 85, 42]), [0, 1, 2]) 
-for i in indices([29, 85, 42]) { 
-    // 0, 1, 2 
-    println(i) 
-} 
-</code></pre>
-
-<p>join(separator, sequence): 返回一个由给定的分隔符分离出来的序列的元素。</p>
-
-<pre><code>join(&quot;:&quot;, [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]) == &quot;A:B:C&quot; 
-var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-join(&quot;/&quot;, languages) == &quot;Swift/Objective-C&quot;
-</code></pre>
-
-<p>map(sequence, transformClosure): 如果transformClosure适用于所给序列中所有的元素，则返回一个新序列。</p>
-
-<pre><code>equal(map(1...3, { $0 * 5 }), [5, 10, 15]) 
-for i in map(1...10, { $0 * 10 }) { 
-    // 10, 20, 30, ... 
-    println(i) 
-    assert(contains([10, 20, 30, 40, 50, 60, 70, 80, 90, 100], i)) 
-} 
-</code></pre>
-
-<p>max(comparable1, comparable2, etc.): 返回函数所给参数中的最大值。</p>
-
-<pre><code>max(0, 1) == 1 
-max(8, 2, 3) == 8 
-</code></pre>
-
-<p>maxElement(sequence): 返回所给序列的同类元素中的最大元素。</p>
-
-<pre><code>maxElement(1...10) == 10 
-var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-maxElement(languages) == &quot;Swift&quot; 
-</code></pre>
-
-<p>minElements(sequence): 返回所给序列的同类元素中的最小元素。</p>
-
-<pre><code>minElement(1...10) == 1 
-var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-minElement(languages) == &quot;Objective-C&quot; 
-</code></pre>
-
-<p>reduce(sequence, initial, combineClosure): 从第一个初始值开始对其进行combineClosure操作，递归式地将序列中的元素合并为一个元素。</p>
-
-<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-reduce(languages, &quot;&quot;, { $0 + $1 }) == &quot;SwiftObjective-C&quot; 
-reduce([10, 20, 5], 1, { $0 * $1 }) == 1000 
- 
-reverse(sequence): 返回所给序列的倒序。
-equal(reverse([1, 2, 3]), [3, 2, 1]) 
-for i in reverse([1, 2, 3]) { 
-    // 3, 2, 1 
-    println(i) 
-} 
-</code></pre>
-
-<p>startsWith(sequence1, sequence2):如果序列1和序列2的起始元素相等，则返回true。</p>
-
-<pre><code>startsWith(&quot;foobar&quot;, &quot;foo&quot;) == true 
-startsWith(10..100, 10..15) == true 
-var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
-startsWith(languages, [&quot;Swift&quot;]) == true
-</code></pre>
-
-<p>如下列表为Swift中的74个内建函数。上文所描述的函数是我认为在日常开发中比较有用处的。当然我可能遗漏了一些常用函数。欢迎大家在评论中讨论，并且请用一个简短的代码段来展示如何使用该函数。</p>
-
-<pre><code>abs(...) 
-advance(...) 
-alignof(...) 
-alignofValue(...) 
-assert(...) 
-bridgeFromObjectiveC(...) 
-bridgeFromObjectiveCUnconditional(...) 
-bridgeToObjectiveC(...) 
-bridgeToObjectiveCUnconditional(...) 
-c_malloc_size(...) 
-c_memcpy(...) 
-c_putchar(...) 
-contains(...) 
-count(...) 
-countElements(...) 
-countLeadingZeros(...) 
-debugPrint(...) 
-debugPrintln(...) 
-distance(...) 
-dropFirst(...) 
-dropLast(...) 
-dump(...) 
-encodeBitsAsWords(...) 
-enumerate(...) 
-equal(...) 
-filter(...) 
-find(...) 
-getBridgedObjectiveCType(...) 
-getVaList(...) 
-indices(...) 
-insertionSort(...) 
-isBridgedToObjectiveC(...) 
-isBridgedVerbatimToObjectiveC(...) 
-isUniquelyReferenced(...) 
-join(...) 
-lexicographicalCompare(...) 
-map(...) 
-max(...) 
-maxElement(...) 
-min(...) 
-minElement(...) 
-numericCast(...) 
-partition(...) 
-posix_read(...) 
-posix_write(...) 
-print(...) 
-println(...) 
-quickSort(...) 
-reduce(...) 
-reflect(...) 
-reinterpretCast(...) 
-reverse(...) 
-roundUpToAlignment(...) 
-sizeof(...) 
-sizeofValue(...) 
-sort(...) 
-split(...) 
-startsWith(...) 
-strideof(...) 
-strideofValue(...) 
-swap(...) 
-swift_MagicMirrorData_summaryImpl(...) 
-swift_bufferAllocate(...) 
-swift_keepAlive(...) 
-toString(...) 
-transcode(...) 
-underestimateCount(...) 
-unsafeReflect(...) 
-withExtendedLifetime(...) 
-withObjectAtPlusZero(...) 
-withUnsafePointer(...) 
-withUnsafePointerToObject(...) 
-withUnsafePointers(...) 
-withVaList(...) 
-</code></pre>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-06-19-standard-functions-in-swift.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -997,28 +481,15 @@ withVaList(...)
 
 <p>这两者都是浏览器客户端的 MVW 框架，从使用上看对开发的要求是基本相近的，都需要开发者以 MVC 的视角去设计前端（而不是针对页面、DOM 进行实现），这和服务器端的设计思路非常类似，有助于复杂应用进行模块化开发。细节上 AngularJS 的设计也更贴近 Java 风格的开发者（比如依赖注入、路由 API 等）。</p>
 
-<h3 id="toc_2">AngularJS 使用须知</h3>
-
-<p>开发者在使用 AngularJS 时也需要使用和这个框架匹配的开发方式：</p>
-
-<ul>
-<li><p>非常适合于 SPA（Single Page-application），一个应用只有一个页面 （DOM），例如 Gmail</p></li>
-<li><p>标准分层（视图模版、控制器、服务），以“请求分发”为起点来规划模块</p></li>
-<li><p>优先使用 ng 模块实现需求（比如路由模块、动画模块），而不是使用其他库（jQuery）</p></li>
-</ul>
-
-<h3 id="toc_3">AngularJS 与 FreeMarker</h3>
-
-<p>在生成 ng 模版时服务器端最好也是用模版引擎（例如 FreeMarker）来处理，基于 HTTP 请求-响应的交互过程如下：</p>
-
-<p><img src="https://nxnzra.dm2301.livefilestore.com/y2pAxZ3JDqsFIyrTcTCzgBw90xE7g52aqcwGVfum49TAcr5QeONkzF1xGqCEPeQ5rOv1VTSLn-rRlI88e9n2nZZVyqqd0w_JrFctRJ6MwTVq9w/AngularJSFreemarker.png?psid=1" alt="AngularJS 与 FreeMarker"/></p>
-
-<p>P.S. 服务器端选择 Node 可能更适合。</p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-06-06-angularjs-and-emberjs.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1036,45 +507,15 @@ withVaList(...)
 
 <p>美国一名程序员看完了Swift的指南后，写出了自己对这个新编程语言的看法。以下为译文：</p>
 
-<h1 id="toc_0">Swift保障体系</h1>
-
-<ul>
-<li>Swift可供所有人使用；</li>
-<li>Swift语言继承了C语言以及Objective-C的特性，且克服了C语言的兼容性问题；Swift还采用安全编程模式，且加入多种新功能，使编程更简单、灵活；</li>
-<li>和许多其他的编程语言一样，Swift可被LLVM编译为本地代码，且它的运行速度特别快，可供很多原生设备使用。</li>
-</ul>
-
-<h1 id="toc_1">Swift功能特性</h1>
-
-<ul>
-<li>Swift中并没有加入宏系统；其协议和扩展都源自Objective-C；</li>
-<li>Swift采用var声明变量和let声明常量；结合if和let，可方便处理可空变量；</li>
-<li>单继承类显示重写和内容，外加多种接口；</li>
-<li>Lambdas表达式看起来和类Ruby块形式十分相似；</li>
-<li>Swift没有明确的指标，依赖像C#语言一样的二分法价值和引用类型；</li>
-<li>Swift是一个没有globs的基本模块系统，以进口或重命名分类，通过属性，支持重新导出功能；</li>
-<li>Swift支持本地类型推断、整理数值类型，具有更好的文字处理功能，但不支持隐式强制转换，因此所有的代码需要转化为显式类型；</li>
-<li>脚本语言支持词典文字，简单的脚本可做大规模的工作，可在多核计算机、集群、网格、云和超级计算机上运行。</li>
-</ul>
-
-<h1 id="toc_2">Swift的独特性</h1>
-
-<ul>
-<li>Swift支持默认检查算法功能；</li>
-<li>Swift使用[]操作符声明数组和字典，数组还有独特的延伸语义功能；但不清楚是否允许程序员自己执行迭代器协议；</li>
-<li>Swift看起来并不像是个表达式语言；</li>
-<li>参量可以双向接口，参数需要无敌的单元件；</li>
-<li>Swift使用class来创建类，类可包含字段和方法；</li>
-<li>Swift采用Objective-C的命名参数和动态对象模型，提供了对Cocoa框架和mix-and-match的互操作性。基于这些基础，Swift引入了很多新功能，如结合面向过程和面向对象。</li>
-<li>除了代数类型、选择类型和偶然会发生的“”runtime error外，Swift没设其他处理错误的讨论区。</li>
-</ul>
-
-<p>原文出自：<a href="http://graydon2.dreamwidth.org/5785.html">Swift</a></p>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-06-03-hello-swift.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1108,125 +549,15 @@ withVaList(...)
 <li>多客户的管理功能可以进行统一：开发者应该不用考虑客户管理功能，这部分应该是由云平台统一提供的</li>
 </ul>
 
-<h3 id="toc_2">多租户场景举例</h3>
-
-<p>假设我们要开发的服务是一个博客平台，这个服务是面向互联网用户的，每个互联网用户都是我们的客户（一个用户就是一个租户）。</p>
-
-<p>在不支持多租户的环境中，为了隔离每个用户的数据，至少我们在设计数据库表时会考虑大多数表都存在一个 user_id 字段，用于 CRUD 数据时使用该字段进行用户隔离。</p>
-
-<p>比如现在的业务是“发布文章”，需要将文章数据保存在 article 表中，在实现时实际上我们关注了两件事情：</p>
-
-<ul>
-<li>CRUD：这是业务逻辑实现的一部分</li>
-<li>用户隔离：需要加入 user_id，做业务关联</li>
-</ul>
-
-<p>1 是“纯”业务逻辑部分的实现，这是必须实现的；2 则是为了多用户博客平台而需要考虑的，这并不是博客平台本身的业务逻辑。这里如果能得到平台的多租户支持，就不用考虑第 2 点了，这样可以将注意力集中于第 1 点业务逻辑实现上，这是非常典型的一个多租户场景。</p>
-
-<h3 id="toc_3">多租户支持</h3>
-
-<p>我们可以这样理解多租户支持：</p>
-
-<ul>
-<li>从服务提供的角度看，我们开发的一个服务运行时可以同时提供给多个客户使用，并且客户之间的数据/状态是保持隔离的</li>
-<li>从服务使用的角度看，我和你可以作为不同的客户同时使用同一个运行的服务，此时我们使用该服务完成的业务是相互不影响的，就好像我们在使用自己独享的服务一样</li>
-</ul>
-
-<p>那么这个服务就是支持多“客户”的，即该服务支持多租户。这里的“服务”可以是应用，可以是 SaaS 平台，也可以是 PaaS 平台。不过按目前我们熟悉的云平台看，应用的多租户支持应该是最常规的，这是因为应用面向的是用户，这个群体是很庞大的。</p>
-
-<p>多租户支持从实现的角度看，“<a href="http://zh.wikipedia.org/wiki/%E5%A4%9A%E7%A7%9F%E6%88%B7">是一种软件架构技术</a>”，之所以强调它是属于架构层面是因为要实现它必须在做技术架构时就要将其考虑在内。</p>
-
-<h3 id="toc_4">一种租户模型</h3>
-
-<p>本文一开始我们提到使用“客户”来置换“租户”来理解租户的含义，再从“商业”这个方面来看的话，我们不难发现租户其实就是其云环境中的商业模式实现的一部分。商业模式是多样的，这意味着租户的划分也是多样的，这里我们描述其中一种可能的租户栈：</p>
-
-<ul>
-<li>应用程序是提供给用户使用的，对于应用来说，用户就是它的租户（这一点业界比较统一）</li>
-<li>SaaS 提供的服务是给应用开发商使用的，对于 SaaS 来说，应用开发商就是它的租户</li>
-<li>PaaS 提供的服务是给应用系统使用的，对于 PaaS 来说，相关应用的组合就是它的租户</li>
-</ul>
-
-<p>SaaS 和 PaaS 面向的是开发商、系统等非端用户角色，这一部分一般是由云平台开发者决定的（捆绑商业模式），特别是私有/企业云平台一般不会考虑形如“在 PaaS 平台上支持运行多个 SaaS 平台”这样的场景。所以下面我们更多的是围绕“应用对多租户支持”进行讨论。</p>
-
-<h3 id="toc_5">应用多租户</h3>
-
-<p>应用多租户的使用场景前面已经介绍过了，现在假设我们是一个云平台开发者，为了满足支持应用支持多租户的需求，在云平台中我们需要提供下面几个支持：</p>
-
-<ul>
-<li>租户管理：CRUD，统计</li>
-<li>租户隔离/共享的服务：队列、缓存、数据库等</li>
-<li>租户隔离的统计：日志、配额</li>
-</ul>
-
-<p>这些支持可以分为两类：</p>
-
-<ol>
-<li>租户的管理：不会直接面向应用的端用户，面向的是应用的运维，平台应该提供具体实现</li>
-<li>租户数据/状态的隔离：从请求开始就应该可以区分这个请求是来自于哪个租户，请求处理时在调用链路上也需要带上租户上下文，数据的存取是按照租户隔离的，调用平台提供的服务时也是租户隔离的</li>
-</ol>
-
-<p>第 1 点比较容易实现，这是一个业务模型方面的问题，可以根据业务域来抽象租户模型，比如企业应用一般是按照“组织机构”来区分租户的；</p>
-
-<p>第 2 点是一个纯技术的需求，需要在平台技术实现上支持按“租户”的运行时隔离，我们强调的是隔离，因为在实现时我们要达到的目标就是隔离，只不过这里是按租户（租户只是一个商业概念，技术层面我们最好能够将其进行抽象，尽量减小商业模式多样化对技术架构的冲击），我们可以将租户映射到一个抽象概念上，这个抽象概念可以实现我们的隔离需求。</p>
-
-<h3 id="toc_6">命名空间</h3>
-
-<p>前面我们讨论多租户支持都是自上而下的：从应用多租户需求到数据隔离实现；现在我们再换种视角，自下而上：先通过命名空间隔离数据，再将命名空间提供给应用多租户的实现使用。自下而上的目的主要是在平台内部，我们可以通过“命名空间”来进行数据/状态隔离的抽象，最终的理想情况是命名空间不仅能够支持应用多租户实现，还能够可选择性地暴露命名空间 APIs，让应用可以进行某些数据的隔离（比如缓存），方便业务实现。</p>
-
-<h3 id="toc_7">隔离的实现</h3>
-
-<p>租户请求从开始到结束平台都需要知晓这个请求映射的命名空间，从请求处理栈我们可以这样大致划分一下：</p>
-
-<ul>
-<li>负载均衡器（LB）</li>
-<li>应用容器（APP）</li>
-<li>平台服务接口（RPC）</li>
-<li>平台服务实现（DB/Cache/MQ....）</li>
-</ul>
-
-<p>在这个栈中每一层平台都是需要知道这个请求对应的命名空间的。平台可以提供一个统一登录的服务，将租户信息映射为命名空间并保存到用户会话中，这样每次该用户的请求：</p>
-
-<ul>
-<li>过 LB 时就可以区分出命名空间来</li>
-<li>在 APP 容器中可以通过会话</li>
-<li>RPC 时传递命名空间</li>
-<li>根据服务的不同进行命名空间实现（例如 DB 根据命名空间使用不同的 Schema，MQ 根据命名空间使用不同的队列）</li>
-</ul>
-
-<p>这里我们使用的隔离实现基本思路是“Shared application”，即多租户共享一个应用，对应一套基础设施（请参考：<a href="http://www.ibm.com/developerworks/cn/cloud/library/cl-tenantconversion/">将单租户应用程序转换为多租户应用程序</a>）。</p>
-
-<h3 id="toc_8">一种平台设计</h3>
-
-<p>前面谈了这么多，现在我们可以脑补出一种支持应用多租户的云平台：</p>
-
-<p><img src="https://01z42g.dm2302.livefilestore.com/y2pzWmlH7Wqj5s6IOAeiXKox3ekow6tL9P5WT-uZpFwuh0DsFxac7fikAg-Pmn4TYuWbSf-wS5DXNSuJcw2-BJfhvGJ-6Y_u8AdPesI00pTgI8/%E4%BA%91%E5%B9%B3%E5%8F%B0%E4%B9%8B%E5%A4%9A%E7%A7%9F%E6%88%B7.png?psid=1" alt="多租户云平台设计"/></p>
-
-<p>（这里的设计思路也包含了有的租户要求独享资源的场景）</p>
-
-<h3 id="toc_9">总结</h3>
-
-<ul>
-<li>租户和客户的概念类似</li>
-<li>对多租户的支持我们一般指的是应用对多租户的支持</li>
-<li>在技术层面支持多租户需要实现数据/状态隔离</li>
-<li>使用命名空间进行隔离实现抽象</li>
-<li>租户到命名空间的映射可由平台集成</li>
-</ul>
-
-<h3 id="toc_10">参考</h3>
-
-<ul>
-<li><a href="http://zh.wikipedia.org/wiki/%E5%A4%9A%E7%A7%9F%E6%88%B7">Wikipedia：多租户技术</a></li>
-<li><a href="http://wiki.mbalib.com/wiki/%E5%AE%A2%E6%88%B7">客户的概念</a></li>
-<li><a href="http://www.ibm.com/developerworks/cn/cloud/library/cl-tenantconversion/">将单租户应用程序转换为多租户应用程序</a></li>
-<li><a href="http://www.ibm.com/developerworks/cn/java/j-lo-javacloud/">云计算环境下的 JVM 虚拟化特性初探</a></li>
-<li><a href="https://developers.google.com/appengine/docs/java/multitenancy/">GAE 多租户支持</a></li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-05-30-cloud-app-platform-multitenancy.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  
@@ -1383,55 +714,15 @@ export PATH=$MONGO_HOME/bin:$PATH
 <li><p>Cobar 只检查 MySQL 主备异常，不关心主备之间的数据同步，因此用户需要在使用 Cobar 之前在 MySQL 主备上配置双向同步</p></li>
 </ol>
 
-<h3 id="toc_1">功能约束</h3>
-
-<ul>
-<li><p>不支持跨库情况下的 join、分页、排序、子查询操作</p></li>
-<li><p>SET 语句执行会被忽略，事务和字符集设置除外</p></li>
-<li><p>分库情况下，insert 语句必须包含拆分字段列名</p></li>
-<li><p>分库情况下，update 语句不能更新拆分字段的值</p></li>
-<li><p>不支持 SAVEPOINT 操作</p></li>
-<li><p>暂时只支持 MySQL 数据节点</p></li>
-<li><p>使用 JDBC 时，不支持 rewriteBatchedStatements=true 参数设置(默认为 false)</p></li>
-<li><p>使用 JDBC 时，不支持 useServerPrepStmts=true 参数设置(默认为 false)</p></li>
-<li><p>使用 JDBC 时，BLOB, BINARY, VARBINARY 字段不能使用 setBlob() 或 setBinaryStream() 方法设置参数</p></li>
-</ul>
-
-<h3 id="toc_2">Cobar 组件</h3>
-
-<ul>
-<li><p>Driver：MySQL JDBC 驱动的封装，实现对 Cobar Server 的负载均衡与高可用支持</p></li>
-<li><p>Server：请求处理（SQL 解析、路由、结果集合并）、集群</p></li>
-<li><p>Manager：Server 监控的 Web 应用</p></li>
-</ul>
-
-<h3 id="toc_3">结论</h3>
-
-<ul>
-<li><p>解决了大数据量下的透明水平分表</p></li>
-<li><p>必须使用封装过的 MySQL 驱动包 Cobar Driver，无框架要求</p></li>
-<li><p>后端对 MySQL 是直接面向二进制协议的</p></li>
-<li><p>基于 LL(2) 手写的 SQL 解析器</p></li>
-<li><p>支持弱一致性事务（多库并行执行/提交）</p></li>
-<li><p>不支持跨库 join、分页、排序、子查询、读写分离</p></li>
-<li><p>在 MySQL 实例上没有 agent</p></li>
-<li><p>MySQL 主从数据同步使用 MySQL 解决方案</p></li>
-<li><p>主异常时切换到从后主恢复，没有 failback，只能手动切换回主</p></li>
-<li><p>后端对 MySQL 有连接池</p></li>
-<li><p>支持跨地域</p></li>
-</ul>
-
-<h3 id="toc_4">参考</h3>
-
-<ul>
-<li><p><a href="https://github.com/alibaba/cobar/blob/master/doc/Cobar%20-%20Alibaba%20Open%20Sesame.pdf">Cobar 产品文档</a></p></li>
-<li><p><a href="https://github.com/alibaba/cobar/blob/master/doc/cobarSolution.ppt">阿里巴巴分布式数据库——原理、实现和应用</a></p></li>
-</ul>
 
 
 		</div>
 
-		
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-04-21-alibaba-cobar-survey.html#more">read more &rarr;</a>
+    	</footer>
+    	
 
 	</article>
  

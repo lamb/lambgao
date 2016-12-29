@@ -103,6 +103,8 @@ $(document).ready(function(event) {
 <li>其它选项</li>
 </ol>
 
+<span id="more"></span><!-- more -->
+
 <h3 id="toc_0">第一步  – 提高JVM栈内存Increase JVM heap memory</h3>
 
 <p>你使用过tomcat的话，简单的说就是“内存溢出”. 通常情况下，这种问题出现在实际的生产环境中.产生这种问题的原因是tomcat使用较少的内存给进程,通过配置TOmcat的配置文件(Windows 下的catalina.bat或Linux下的catalina.sh)可以解决这种问题.这种解决方法是通过增加JVM的栈内存实现的.也就是说，JVM通常不去调用垃圾回收器，所以服务器可以更多关注处理web请求，并要求尽快完成。要更改文件(catalina.sh) 位于”\tomcat server folder\bin\catalina.sh”，下面，给出这个文件的配置信息，</p>

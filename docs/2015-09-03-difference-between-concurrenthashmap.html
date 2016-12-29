@@ -95,6 +95,8 @@ $(document).ready(function(event) {
 
 <p>这篇文章是<a href="/2015-09-02-how-hashmap-works-in-java.html">HashMap的工作原理</a>以及<a href="/2015-09-02-difference-between-hashmap-and-hashtable.html">HashMap和Hashtable的区别</a>的后续。如果你已经读过的话，那么我相信你读完本篇之后会有所收获。</p>
 
+<span id="more"></span><!-- more -->
+
 <h3 id="toc_0">为什么我们需要ConcurrentHashMap和CopyOnWriteArrayList</h3>
 
 <p>同步的集合类（Hashtable和Vector），同步的封装类（使用Collections.synchronizedMap()方法和Collections.synchronizedList()方法返回的对象）可以创建出线程安全的Map和List。但是有些因素使得它们不适合高并发的系统。它们仅有单个锁，对整个集合加锁，以及为了防止ConcurrentModificationException异常经常要在迭代的时候要将集合锁定一段时间，这些特性对可扩展性来说都是障碍。</p>

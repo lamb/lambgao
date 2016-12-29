@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2016-12-29T10:42:17+08:00</updated>
+  <updated>2016-12-29T10:43:32+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -59,6 +59,8 @@
 <li>微服务架构是面向结果的。 微服务架构设计风格的产生并非是出于学术或为标准而标准的设计，而是在软件架构设计领域不断演进过程中，面对实际工业界所遇到问题，而出现的面向解决实际问题的架构设计风格。</li>
 <li>专注于服务的可替代性来设计。 微服务架构设计风格核心要解决的问题之一便是如何便利地在大型系统中进行系统组件的维护和替换，且不影响整体系统稳定性。</li>
 </ol>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_1">二、微服务的特征</h3>
 
@@ -124,6 +126,8 @@
 <p><a href="https://github.com/douban/rexxar-web">https://github.com/douban/rexxar-web</a> <br/>
 <a href="https://github.com/douban/rexxar-android">https://github.com/douban/rexxar-android</a> <br/>
 <a href="https://github.com/douban/rexxar-ios">https://github.com/douban/rexxar-ios</a></p>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_1">混合开发的注意点</h3>
 
@@ -357,6 +361,8 @@ class MyClass {
     var age: String?  // OK
 }
 </code></pre>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_1">为什么引入可选类型?</h3>
 
@@ -689,6 +695,8 @@ func foo(inout x:  Int)
 
 <p>一次事务每秒插入数据的对比，realm每秒可以插入9.4万条记录，在这个比较里纯SQLite的性能最好，每秒可以插入17.8万条记录。然而封装了SQLite的FMDB的成绩大概是realm的一半。</p>
 
+<span id="more"></span><!-- more -->
+
 <h3 id="toc_1">简单易用</h3>
 
 <p>实例代码语言是Objective‑C。<br/>
@@ -836,6 +844,8 @@ let specimens = Specimen.objectsWithPredicate(predicate).arraySortedByProperty(&
 LRU memory cache cleanup instead of reset on memory warning</p>
 
 <p>看到这个真是欲哭无泪啊。</p>
+
+<span id="more"></span><!-- more -->
 
 <p>再去看看SDWebImage的，有个人提问了：</p>
 
@@ -1043,6 +1053,8 @@ b = branch
 <p>我们常用的 Hash 算法主要就是 MD5 和 SHA，并且很多时候我们就是使用其中一种来加密用户密码的。<br/>
 以上两类哈希算法主要是用于校验文件/数字签名，但并不适合用来保护用户密码，虽然对于我们来说_感觉上_似乎起到了一定安全防护的效果，但其实效果很差，特别是 MD5，秒秒钟就可以找到碰撞值。</p>
 
+<span id="more"></span><!-- more -->
+
 <h3 id="toc_2">加盐</h3>
 
 <p>上面我们提到过，将用户明文直接哈希后保存并不是正确的姿势，那加盐后呢？</p>
@@ -1170,6 +1182,8 @@ if ([[UIApplication sharedApplication] canOpenURL:url])
     [[UIApplication sharedApplication] openURL:url];
 }
 </code></pre>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_2">跳到更多设置界面</h3>
 
@@ -1455,6 +1469,8 @@ Wi-Fi — prefs:root=WIFI
 <li>标签实体的管理/查询：负责标签实体的 CRUD</li>
 <li>标签关联的管理/查询：将外部业务实体与标签建立/删除关联，根据外部业务实体 id 查询标签集</li>
 </ul>
+
+<span id="more"></span><!-- more -->
 
 <h3 id="toc_0">RDB 实现</h3>
 
