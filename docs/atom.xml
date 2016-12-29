@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2016-12-29T16:45:36+08:00</updated>
+  <updated>2016-12-29T16:46:26+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -19,7 +19,7 @@
     <updated>2016-12-29T14:44:17+08:00</updated>
     <id>http://lambgao.com/2016-12-29-chrome-plugin.html</id>
     <content type="html"><![CDATA[
-<p>最近帮朋友做了一个Chrome插件，方便做一些批量的内容。对于Chrome插件有兴趣的同学可以看一下。</p>
+<p>最近帮朋友做了一个Chrome插件，方便做一些批量的动作。对于Chrome插件有兴趣的同学可以看一下。</p>
 
 <h3 id="toc_0">需求</h3>
 
@@ -149,9 +149,9 @@ function next() {
   
   <entry>
     <title type="html"><![CDATA[张小龙首次公开解读小程序：1月9号上线]]></title>
-    <link href="http://lambgao.com/2016-12-29-wechat-small-app.html"/>
+    <link href="http://lambgao.com/2016-12-28-wechat-small-app.html"/>
     <updated>2016-12-29T02:01:18+08:00</updated>
-    <id>http://lambgao.com/2016-12-29-wechat-small-app.html</id>
+    <id>http://lambgao.com/2016-12-28-wechat-small-app.html</id>
     <content type="html"><![CDATA[
 <p>只能说偏执的张小龙真的很厉害。</p>
 
