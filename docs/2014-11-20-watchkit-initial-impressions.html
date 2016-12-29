@@ -95,7 +95,7 @@ $(document).ready(function(event) {
 
 <p>总体而言，WatchKit第一版SDK提供的功能远远超出了我的期望。因为我原本以为第一版WatchKit可能侧重于对iOS Today Extension功能的延伸，而不是真正开发Watch App。所以当知道真相后，我即惊讶又感到高兴，第一版WatchKit并不是我所想的那样，它可以为Watch App创建全新的交互界面，而且可以通过iOS App Extension去控制他们。</p>
 
-<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/watchkit-initial-impressions-1.jpg" alt="pi" class="mw_img_center" style="width:1px;display: block; clear:both; margin: 0 auto;"/></p>
+<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/1.jpg" alt="pi" class="mw_img_center" style="width:1px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <p>所以我们能做的并不只是一个简单的所谓iOS Apple Watch Extension的玩意，而是有很多新的功能需要我们去挖掘。目前提供的比如特定的UI控制方式 、Glance、可自定义的Notification、和Handoff的深度结合、图片缓存等等，作为开发者，这些功能已经让我为之兴奋了。</p>
 
@@ -103,7 +103,7 @@ $(document).ready(function(event) {
 
 <p>WatchKit带给我的惊讶之一是它的架构。目前Watch App的运行是由两部分相互结合进行工作的:</p>
 
-<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/watchkit-initial-impressions-2.jpg" alt="pi" class="mw_img_center" style="width:2px;display: block; clear:both; margin: 0 auto;"/></p>
+<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/2.jpg" alt="pi" class="mw_img_center" style="width:2px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <ul>
 <li>你的Apple Watch主要包含用户界面元素文件（Storyboard文件和静态的图片文件）和处理用户的输入行为。并不会真正在Apple Watch中运行代码。换句话说，Apple Watch仅是一个“视图”容器。</li>
@@ -116,7 +116,7 @@ $(document).ready(function(event) {
 
 <p>一个令我惊讶的是Watch App的UI布局方式，我们不能再用AutoLayout进行布局了。取而代之的是一种新的布局方式Group，你需要将界面元素比如按钮、Label添加到Group中，然后Group会自动为你添加的界面元素在其内部进行布局。</p>
 
-<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/watchkit-initial-impressions-3.jpg" alt="pi" class="mw_img_center" style="width:3px;display: block; clear:both; margin: 0 auto;"/></p>
+<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/3.jpg" alt="pi" class="mw_img_center" style="width:3px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <p>你可以将一个Group嵌入到另一个Group中，用于实现较为复杂一点的界面布局，并在Group中还可以设置背景色、边距、圆角半径等属性。</p>
 
@@ -126,7 +126,7 @@ $(document).ready(function(event) {
 
 <p>Watch App中最酷的功能我觉得就是Glances和Notifications了。我个人认为，Apple Watch的应用中最有用的功能之一就是能让用户很方便的（比如一抬手）就能看到自己感兴趣的事物的提醒通知，比如有人在Twitter中提及到了你或者比特币现在的价位等等。</p>
 
-<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/watchkit-initial-impressions-4.jpg" alt="pi" class="mw_img_center" style="width:4px;display: block; clear:both; margin: 0 auto;"/></p>
+<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/4.jpg" alt="pi" class="mw_img_center" style="width:4px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <p>Glances和Notifications能为你带来什么呢？</p>
 
@@ -144,7 +144,7 @@ $(document).ready(function(event) {
 
 <p>举个例子，你们可以看看Apple的<a href="https://developer.apple.com/library/prerelease/ios/samplecode/Lister/Introduction/Intro.html">Lister example</a>示例，你会发现Apple通过360张图片来实现一个画圆的动画效果。</p>
 
-<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/watchkit-initial-impressions-5.jpg" alt="pi" class="mw_img_center" style="width:5px;display: block; clear:both; margin: 0 auto;"/></p>
+<p><img src="/resource/image/2014-11-20-watchkit-initial-impressions/5.jpg" alt="pi" class="mw_img_center" style="width:5px;display: block; clear:both; margin: 0 auto;"/></p>
 
 <p>这显然是一个灾难性的工作量，不过如果需要，也可以借助某些工具去生成一个动画需要的所有图片。不过，因为Apple Watch的容量很悠闲，所以你要谨慎加入帧动画，因为需要大量图片占用内存，除非有画龙点睛的动画，否则还是尽量少使用动画。</p>
 
