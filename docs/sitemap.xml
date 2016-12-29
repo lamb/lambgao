@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+  <loc>http://lambgao.com/</loc>
+  <lastmod>2016-12-29T09:54:05+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-12-29-wechat-small-app.html</loc>
+  <lastmod>2016-12-29T02:01:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-12-27-benefits-and-pitfalls-of-micro-service.html</loc>
+  <lastmod>2016-12-27T01:05:36+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-12-02-douban-rexxar.html</loc>
+  <lastmod>2016-12-02T01:13:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-10-31-close-wait-problem.html</loc>
+  <lastmod>2016-10-31T00:25:48+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-10-08-swift-sizeof-into-memorylayout.html</loc>
+  <lastmod>2016-10-08T00:42:41+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-09-21-xcode-eight-custom-environment-variables.html</loc>
+  <lastmod>2016-09-21T00:35:48+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-09-12-ios-ten-declare-intended.html</loc>
+  <lastmod>2016-09-12T00:32:14+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-08-10-swift-optional-type.html</loc>
+  <lastmod>2016-08-10T00:47:34+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-07-26-xcode-could-not-be-verified.html</loc>
+  <lastmod>2016-07-26T01:47:59+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-06-04-swift-noescape.html</loc>
+  <lastmod>2016-06-04T00:03:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-05-14-swift-inout.html</loc>
+  <lastmod>2016-05-14T01:19:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-05-11-sensitive-data-processing.html</loc>
+  <lastmod>2016-05-11T00:19:41+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-05-11-realm.html</loc>
+  <lastmod>2016-05-11T00:18:47+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-04-22-load-big-image.html</loc>
+  <lastmod>2016-04-22T01:56:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-03-29-gitconfig-alias.html</loc>
+  <lastmod>2016-03-29T01:50:52+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-02-24-secure-salted-password-hashing.html</loc>
+  <lastmod>2016-02-24T00:15:22+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2016-01-30-goto-settings.html</loc>
+  <lastmod>2016-01-30T01:32:41+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-12-18-carthage-decentralized-dependency-manager.html</loc>
+  <lastmod>2015-12-18T00:36:07+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-12-09-disable-browser-auto-fill-form-field.html</loc>
+  <lastmod>2015-12-09T00:34:09+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-12-01-tag.html</loc>
+  <lastmod>2015-12-01T00:30:04+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-11-19-understand-https.html</loc>
+  <lastmod>2015-11-19T00:17:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-10-19-www-domian-and-cookie-free.html</loc>
+  <lastmod>2015-10-19T00:07:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-10-09-php-asynchronous-http.html</loc>
+  <lastmod>2015-10-09T00:05:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-20-compile-go-cross-platform.html</loc>
+  <lastmod>2015-09-20T00:03:02+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-17-tvos-initial-impression.html</loc>
+  <lastmod>2015-09-17T23:46:33+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-03-difference-between-concurrenthashmap.html</loc>
+  <lastmod>2015-09-03T22:59:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-02-how-hashmap-works-in-java.html</loc>
+  <lastmod>2015-09-02T23:09:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-02-difference-between-hashmap-and-hashset.html</loc>
+  <lastmod>2015-09-02T23:03:27+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-09-02-difference-between-hashmap-and-hashtable.html</loc>
+  <lastmod>2015-09-02T23:01:13+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-08-27-why-character-array-is-better-than.html</loc>
+  <lastmod>2015-08-27T22:49:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-07-21-tomcat-performance-tuning.html</loc>
+  <lastmod>2015-07-21T22:33:51+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-07-12-ten-hibernate-interview-questions-answers-java-j2ee-senior.html</loc>
+  <lastmod>2015-07-12T22:39:49+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-06-27-improve-performance-java-database.html</loc>
+  <lastmod>2015-06-27T22:30:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-06-26-batching-select-statements-in-jdbc.html</loc>
+  <lastmod>2015-06-26T22:20:07+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-06-20-what-is-new-in-swift.html</loc>
+  <lastmod>2015-06-20T23:35:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-06-14-why-use-preparedstatement-in-java-jdbc.html</loc>
+  <lastmod>2015-06-14T17:42:22+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-05-23-masonry.html</loc>
+  <lastmod>2015-05-23T01:29:43+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-05-15-restful-using-spring-framework.html</loc>
+  <lastmod>2015-05-15T17:39:30+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html</loc>
+  <lastmod>2015-04-02T23:51:43+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-03-31-docker-inspect-template-magic-chinese.html</loc>
+  <lastmod>2015-03-31T23:39:43+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-03-08-auto-layout-drag-rebound.html</loc>
+  <lastmod>2015-03-08T00:00:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-03-07-auto-layout-three-equal-parts.html</loc>
+  <lastmod>2015-03-07T23:56:08+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-03-06-auto-layout-start-up.html</loc>
+  <lastmod>2015-03-06T23:43:00+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-03-03-golang-mysql-load-data-local-infile.html</loc>
+  <lastmod>2015-03-03T23:37:09+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-02-16-golang-get-user-home-dir.html</loc>
+  <lastmod>2015-02-16T23:34:06+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-02-10-java-web-framework-dev-fundamentals.html</loc>
+  <lastmod>2015-02-10T23:30:09+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2015-01-20-how-stable-are-your-unit-tests-best-practices-to-raise-test-automation-quality.html</loc>
+  <lastmod>2015-01-20T17:30:32+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-12-22-golang-linux-namespaces.html</loc>
+  <lastmod>2014-12-22T23:15:39+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-11-26-docker-first-step.html</loc>
+  <lastmod>2014-11-26T23:10:04+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-11-20-watchkit-initial-impressions.html</loc>
+  <lastmod>2014-11-20T23:25:58+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-10-21-swift-failable-initializers.html</loc>
+  <lastmod>2014-10-21T23:18:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-10-21-linux-kernel-network-turning.html</loc>
+  <lastmod>2014-10-21T23:08:57+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-10-08-tuple-in-swift.html</loc>
+  <lastmod>2014-10-08T23:11:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-09-18-write-doc-via-gitbook.html</loc>
+  <lastmod>2014-09-18T23:05:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-09-11-swift-final.html</loc>
+  <lastmod>2014-09-11T23:08:41+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-09-02-optionals-case-study.html</loc>
+  <lastmod>2014-09-02T22:53:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-09-01-closure-expressions-in-swift.html</loc>
+  <lastmod>2014-09-01T22:57:30+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-08-27-change-ubuntu-display-resolution.html</loc>
+  <lastmod>2014-08-27T23:02:01+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-08-18-swift-value-and-reference-types.html</loc>
+  <lastmod>2014-08-18T22:49:02+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-08-13-swift-nil-coalescing.html</loc>
+  <lastmod>2014-08-13T22:43:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-08-11-golang-ztree.html</loc>
+  <lastmod>2014-08-11T23:00:08+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-08-04-sso-via-cross-domain-cookie.html</loc>
+  <lastmod>2014-08-04T22:44:00+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-07-22-saas-essay.html</loc>
+  <lastmod>2014-07-22T22:50:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-06-30-swift-underline-sharp.html</loc>
+  <lastmod>2014-06-30T22:31:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-06-23-full-text-search-elasticsearch.html</loc>
+  <lastmod>2014-06-23T11:17:45+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-06-19-standard-functions-in-swift.html</loc>
+  <lastmod>2014-06-19T22:25:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-06-06-angularjs-and-emberjs.html</loc>
+  <lastmod>2014-06-06T18:52:27+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-06-03-hello-swift.html</loc>
+  <lastmod>2014-06-03T00:32:58+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-05-30-cloud-app-platform-multitenancy.html</loc>
+  <lastmod>2014-05-30T10:57:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-05-08-elegant-uninstall-default-git.html</loc>
+  <lastmod>2014-05-08T00:32:32+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-05-07-mac-launchd-conf.html</loc>
+  <lastmod>2014-05-07T00:31:56+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-05-06-system-health-status.html</loc>
+  <lastmod>2014-05-06T10:54:53+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-21-alibaba-cobar-survey.html</loc>
+  <lastmod>2014-04-21T18:38:49+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-10-javamail-smtp-163.html</loc>
+  <lastmod>2014-04-10T18:43:23+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-08-mongodb-2-6-0.html</loc>
+  <lastmod>2014-04-08T00:31:25+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-08-bye-windwos-xp.html</loc>
+  <lastmod>2014-04-08T00:30:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-07-mongodb-daemon-start-and-down.html</loc>
+  <lastmod>2014-04-07T00:30:25+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-05-can-break-wind-but-cannot-break-sb.html</loc>
+  <lastmod>2014-04-05T00:29:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-04-03-maven-jdocbook-plugin.html</loc>
+  <lastmod>2014-04-03T18:46:21+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-03-18-rabbitmq-network-partition.html</loc>
+  <lastmod>2014-03-18T18:26:13+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-03-11-node-invoke-java-via-hessian.html</loc>
+  <lastmod>2014-03-11T18:17:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-02-08-autoremove-logs.html</loc>
+  <lastmod>2014-02-08T18:17:45+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-01-22-backup-mysql-shell.html</loc>
+  <lastmod>2014-01-22T18:13:59+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-01-15-java-exec-utli.html</loc>
+  <lastmod>2014-01-15T18:12:02+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2014-01-14-grub-rescue.html</loc>
+  <lastmod>2014-01-14T18:07:56+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-12-17-building-android-projects-with-gradle.html</loc>
+  <lastmod>2013-12-17T17:26:29+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-11-06-evolution-of-service-management-process.html</loc>
+  <lastmod>2013-11-06T17:57:29+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-10-25-check-list.html</loc>
+  <lastmod>2013-10-25T17:50:23+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-10-12-activemq-optmization.html</loc>
+  <lastmod>2013-10-12T17:55:10+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-09-26-rabbitmq-clustering-ha.html</loc>
+  <lastmod>2013-09-26T17:36:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-08-13-quartz-quick-start.html</loc>
+  <lastmod>2013-08-13T17:08:17+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-07-29-android-simulator-genymotion.html</loc>
+  <lastmod>2013-07-29T18:02:45+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-07-19-jpa-and-cmt-why-catching-persistence-exception-is-not-enough.html</loc>
+  <lastmod>2013-07-19T17:02:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-06-10-netbeans-maven-jetty-plugin.html</loc>
+  <lastmod>2013-06-10T11:26:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-06-04-app-dev-accumulation.html</loc>
+  <lastmod>2013-06-04T11:23:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-05-18-jelly-bean-native-rtl.html</loc>
+  <lastmod>2013-05-18T15:59:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-05-16-android-studio.html</loc>
+  <lastmod>2013-05-16T16:52:45+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-04-17-mybatis-mysql-oracle-paging-plugin.html</loc>
+  <lastmod>2013-04-17T11:17:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-04-10-gae-java-sdk-1.7.7-release.html</loc>
+  <lastmod>2013-04-10T11:16:34+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-29-zookeeper-znode-type.html</loc>
+  <lastmod>2013-03-29T11:10:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-19-zoundry-raven.html</loc>
+  <lastmod>2013-03-19T11:08:44+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-18-xmpp-simple-irc-psyc.html</loc>
+  <lastmod>2013-03-18T11:00:44+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-13-irc-intro.html</loc>
+  <lastmod>2013-03-13T10:57:26+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-07-activemq-jdbc-master-slave.html</loc>
+  <lastmod>2013-03-07T10:51:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-03-05-hello-world.html</loc>
+  <lastmod>2013-03-05T15:36:51+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-02-22-log4j-2.html</loc>
+  <lastmod>2013-02-22T15:44:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-01-12-java-oom.html</loc>
+  <lastmod>2013-01-12T11:38:50+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2013-01-11-how-deep-unit-test.html</loc>
+  <lastmod>2013-01-11T13:05:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-12-26-building-mobile-applications.html</loc>
+  <lastmod>2012-12-26T23:59:26+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-12-03-java-objects-memory-structure.html</loc>
+  <lastmod>2012-12-03T23:21:51+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-12-01-eclipse-plugin.html</loc>
+  <lastmod>2012-12-01T22:50:33+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-11-29-sqlite-use-in-android.html</loc>
+  <lastmod>2012-11-29T22:43:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-11-22-inner-classes-static-and-non-static.html</loc>
+  <lastmod>2012-11-22T23:50:10+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-11-20-spring-environment-profile.html</loc>
+  <lastmod>2012-11-20T22:34:11+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-11-15-google-play-oauth.html</loc>
+  <lastmod>2012-11-15T22:25:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-10-11-small-test-node-core-module.html</loc>
+  <lastmod>2012-10-11T18:29:58+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-10-10-small-test-node-module.html</loc>
+  <lastmod>2012-10-10T18:28:07+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-10-09-small-test-hello-node.html</loc>
+  <lastmod>2012-10-09T18:26:57+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-10-08-small-test-node-introduction.html</loc>
+  <lastmod>2012-10-08T18:25:34+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-09-14-plsql-developer-oracle-min-client.html</loc>
+  <lastmod>2012-09-14T18:20:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-09-08-ten-jdbc-best-practices.html</loc>
+  <lastmod>2012-09-08T18:18:10+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-08-30-bae-sae-gae.html</loc>
+  <lastmod>2012-08-30T18:05:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-08-13-dispel-your-windjs's-doubts.html</loc>
+  <lastmod>2012-08-13T00:28:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-08-12-test-v8-delete.html</loc>
+  <lastmod>2012-08-12T00:27:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-07-22-what-is-solo.html</loc>
+  <lastmod>2012-07-22T00:26:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-06-16-java-atomic-conncurrent.html</loc>
+  <lastmod>2012-06-16T17:54:28+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-05-20-reset-weblogic-password.html</loc>
+  <lastmod>2012-05-20T17:51:13+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-05-12-server-push-based-on-pushlets.html</loc>
+  <lastmod>2012-05-16T17:40:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-05-07-web-message-push.html</loc>
+  <lastmod>2012-05-07T17:26:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-04-25-tapestry-defects.html</loc>
+  <lastmod>2012-04-25T17:23:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-03-31-how-to-skip-filters-in-java.html</loc>
+  <lastmod>2012-03-31T17:02:45+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-03-30-distributed-transaction-principle.html</loc>
+  <lastmod>2012-03-30T16:54:11+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-03-05-ziiiro-originality-watch.html</loc>
+  <lastmod>2012-03-05T00:25:53+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-02-03-multiple-inheritance.html</loc>
+  <lastmod>2012-02-03T16:48:09+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-01-29-review-fast-sort.html</loc>
+  <lastmod>2012-01-29T00:25:18+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2012-01-06-print-exception-log.html</loc>
+  <lastmod>2012-01-06T16:42:04+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-12-30-copyright.html</loc>
+  <lastmod>2011-12-30T15:38:39+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-11-16-hello-nodejs.html</loc>
+  <lastmod>2011-11-16T00:24:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-10-14-resolution-browse.html</loc>
+  <lastmod>2011-10-14T00:23:50+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-10-14-frequently-used-eclipse-plugins.html</loc>
+  <lastmod>2011-10-14T00:23:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-10-14-difference-between-different-android-sdk-versions.html</loc>
+  <lastmod>2011-10-14T00:22:40+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-10-14-android-source-download.html</loc>
+  <lastmod>2011-10-14T00:21:37+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-10-11-apache-http-mod_rewrite.html</loc>
+  <lastmod>2011-10-11T15:29:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-09-09-commons-configuration.html</loc>
+  <lastmod>2011-09-09T15:23:58+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-09-04-gae-blog.html</loc>
+  <lastmod>2011-09-04T15:17:46+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-09-03-transaction_isolation.html</loc>
+  <lastmod>2011-09-03T14:47:08+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-08-27-gae-will-support-servlet3.html</loc>
+  <lastmod>2011-08-27T14:36:06+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-08-06-storage-options-on-google-appengine.html</loc>
+  <lastmod>2011-08-06T14:27:33+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-07-28-java-7-technologies.html</loc>
+  <lastmod>2011-07-28T17:28:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-07-26-java-final-keyword.html</loc>
+  <lastmod>2011-07-26T17:15:55+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-07-14-maven-plugin.html</loc>
+  <lastmod>2011-07-14T17:06:57+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-06-18-svn-branch-merge.html</loc>
+  <lastmod>2011-06-18T16:53:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-06-01-steps-problem.html</loc>
+  <lastmod>2011-06-01T16:49:09+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-05-20-go-web-two.html</loc>
+  <lastmod>2011-05-20T16:45:37+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-05-20-go-web-one.html</loc>
+  <lastmod>2011-05-20T16:42:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-05-15-web-http-request-performance-optimization.html</loc>
+  <lastmod>2011-05-15T16:35:13+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-05-02-jpa-cache-cluster.html</loc>
+  <lastmod>2011-05-02T16:20:21+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-04-29-decimal-fractions.html</loc>
+  <lastmod>2011-04-29T00:20:53+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-03-25-android-suspend-opensource.html</loc>
+  <lastmod>2011-03-25T00:20:24+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-03-14-tomcat-jdk-welcome-page.html</loc>
+  <lastmod>2011-03-14T00:19:19+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2011-02-02-2010-summary.html</loc>
+  <lastmod>2011-02-02T00:16:36+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-27-android-3-is-coming.html</loc>
+  <lastmod>2010-12-27T00:13:23+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-25-android-go.html</loc>
+  <lastmod>2010-12-25T00:12:47+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-18-product-interaction-design-book-share.html</loc>
+  <lastmod>2010-12-18T00:11:43+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-16-see-or-not.html</loc>
+  <lastmod>2010-12-16T00:11:13+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-16-android-use-thread-problem.html</loc>
+  <lastmod>2010-12-16T00:10:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-15-js-test-network-speed.html</loc>
+  <lastmod>2010-12-15T00:09:39+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-14-if-i-lead-team.html</loc>
+  <lastmod>2010-12-14T00:08:56+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-12-math-analysis-tell-me-what.html</loc>
+  <lastmod>2010-12-12T00:08:26+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-12-03-tencent-cdc-dorado.html</loc>
+  <lastmod>2010-12-03T00:07:42+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-11-24-wulinwaizhuan-movie.html</loc>
+  <lastmod>2010-11-24T00:07:11+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-11-15-gae-transaction.html</loc>
+  <lastmod>2010-11-15T15:14:50+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-10-11-everyone-is-product-manager.html</loc>
+  <lastmod>2010-10-11T00:06:25+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-07-25-gathering-send-off-huier.html</loc>
+  <lastmod>2010-07-25T00:05:00+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-07-19-leave-chinasoft.html</loc>
+  <lastmod>2010-07-19T00:04:15+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-07-13-pay-attention-to-your-body.html</loc>
+  <lastmod>2010-07-13T00:03:36+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-07-05-graphics-card-burn-again.html</loc>
+  <lastmod>2010-07-05T00:02:54+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-06-28-join-foundamental-team.html</loc>
+  <lastmod>2010-06-28T00:02:02+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-06-26-so-near-so-far.html</loc>
+  <lastmod>2010-06-26T23:28:22+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-06-22-university-graduated.html</loc>
+  <lastmod>2010-06-22T23:19:31+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-06-13-graduation-thesis-a.html</loc>
+  <lastmod>2010-06-13T23:18:31+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2010-06-12-tencent-school-star.html</loc>
+  <lastmod>2010-06-12T22:43:28+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://lambgao.com/2008-08-08-hello-world.html</loc>
+  <lastmod>2008-08-08T17:52:03+08:00</lastmod>
+</url>
+
+
+
+
+</urlset>

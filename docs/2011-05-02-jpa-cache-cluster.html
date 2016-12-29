@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  JPA 缓存与应用集群 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">JPA 缓存与应用集群</h1>
+				<p class="meta"><time datetime="2011-05-02T16:20:21+08:00" pubdate data-updated="true">2011/5/2</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h3 id="toc_0">摘要</h3>
+
+<p>本文主要介绍了 JPA 缓存体系结构以及在集群环境下 JPA 二级缓存的问题及应对策略。</p>
+
+<h3 id="toc_1">JPA 缓存</h3>
+
+<p>JPA 缓存分为一级缓存（L1）与二级缓存（L2）。</p>
+
+<p>其中，一级缓存即实体管理器（EntityManager），主要负责实体状态管理。<br/>
+二级缓存即 EntityManagerFactory 缓存，主要负责缓存实体或数据行（例如 EclipseLink 缓存实体，Hibernate 缓存实体 Id 与数据行）。</p>
+
+<p>查询时，二级缓存可以有效缓解数据库压力，并有助于集合实体的初始化。</p>
+
+<p><img src="/resource/image/2011-05-02-jpa-cache-cluster/JPACache1.png" alt="JPA Cache"/></p>
+
+<span id="more"></span><!-- more -->
+
+<h3 id="toc_2">JPA 与应用集群</h3>
+
+<p>当应用运行在一个 JVM 里时，JPA 缓存是没有问题的。但如果进行应用集群，那么 L2 的更新机制将出现一致性问题。</p>
+
+<p><img src="/resource/image/2011-05-02-jpa-cache-cluster/JPACache2.png" alt="JPA Cache in Cluster"/> </p>
+
+<p>下面提供两个通用策略以及一个产品相关策略来解决这个问题。</p>
+
+<h3 id="toc_3">策略 1：禁用 L2 缓存</h3>
+
+<p>如果禁用二级缓存的话，</p>
+
+<p>所有节点的数据视图总是可以保证一致<br/>
+数据总是一致的<br/>
+每一次事务查询时都将从数据库获取数据构造实体<br/>
+不存在节点间消息<br/>
+应用占用内存上升，因为每次事务都要构造实体<br/>
+每次事务需要效率变低，因为需要构造实体<br/>
+性能瓶颈——数据库</p>
+
+<h3 id="toc_4">策略 2：L2 缓存同步</h3>
+
+<p><img src="/resource/image/2011-05-02-jpa-cache-cluster/JPACache3.png" alt="JPA Cache Coordination in Cluster"/></p>
+
+<p>如果进行 L2 缓存同步，</p>
+
+<p>所有节点的数据视图总是可以保证一致<br/>
+数据总是一致的<br/>
+事务查询尽量使用 L2 缓存的实体<br/>
+创建/更新/删除 实体时需要同步所有其他节点<br/>
+同步代价为 O(n2)——网络通讯与同步处理开销可能会超过缓存带来的好处<br/>
+<img src="/resource/image/2011-05-02-jpa-cache-cluster/Cache+Coordination.png" alt="Cache Cooradination"/>（Orz）</p>
+
+<p>L2 缓存大小受限于单个节点 JVM 内存堆大小<br/>
+主流 JPA 实现一般会提供 JMS、RMI、JGroups 来进行缓存同步。</p>
+
+<h3 id="toc_5">策略3：一致性数据层</h3>
+
+<p>这里所谓的“一致性数据层”就是指使用一个能够保证分布式时数据一致性的服务，用于替换 L2。</p>
+
+<p>例如组合使用 Oracle Coherence 与 TopLink Grid。</p>
+
+<h3 id="toc_6">结语</h3>
+
+<p>对于一个基于 JPA 的 Web 应用，我们必须注意 JPA 二级缓存在集群时的问题，这是可伸缩的基本点之一。</p>
+
+<p>为了解决 JPA 二级缓存不一致的问题，我们必须牺牲一定的应用性能，或是使用商业产品。</p>
+
+<h3 id="toc_7">反思</h3>
+
+<p>ORM 固然方便，但我认为它带来的问题远比解决的问题多，基于关系型数据库的应用还是 JDBC 直接。</p>
+
+<p>框架是为了简化代码，统一管理。但同时带来的限制也不容忽视。</p>
+
+<p>个人还是偏向于自造轮子，宁肯多写一些代码，也不愿被框架束缚。</p>
+
+<h3 id="toc_8">参考</h3>
+
+<ul>
+<li>Shaun Smith, TopLink Grid: Scaling JPA Application with Coherence, 2010</li>
+<li>Tom Pfaeffle, Oracle Fusion Middleware Integration Guide for Oracle TopLink with Coherence Grid, 11g Release 1 (11.1.1)  E16596-02, 2011-02</li>
+<li>Doug Clarke, Persistence Strategies for Java EE and WebLogic</li>
+<li><a href="http://www.eclipse.org/eclipselink/">EclipseLink</a></li>
+<li>Sandesh, <a href="http://www.google.com/url?sa=t&amp;source=web&amp;cd=1&amp;ved=0CBcQFjAA&amp;url=http%3A%2F%2Fsandeshudupa.blogspot.com%2F2010%2F11%2Ftoplink-cache-and-weblogic-cluster.html&amp;rct=j&amp;q=Toplink%20Cache%20and%20Weblogic%20Cluster%20&amp;ei=AQG1TYCgHYGKvQP74dCHBw&amp;usg=AFQjCNGmLKyS9DR16dY05Bqx2ExJ8FRKJg&amp;sig2=DfqZORIN0UgIhnFKShsPyw&amp;cad=rja">Toplink Cache and Weblogic Cluster</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2011-05-15-web-http-request-performance-optimization.html" 
+	        title="Previous Post: Web 应用性能优化——HTTP 请求数">&laquo; Web 应用性能优化——HTTP 请求数</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2011-04-29-decimal-fractions.html" 
+	        title="Next Post: 无限循环小数转化成分数（Java实现）">无限循环小数转化成分数（Java实现） &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

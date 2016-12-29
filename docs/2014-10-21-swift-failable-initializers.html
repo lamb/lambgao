@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Swift 可失败构造器（Failable Initializers） - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Swift 可失败构造器（Failable Initializers）</h1>
+				<p class="meta"><time datetime="2014-10-21T23:18:46+08:00" pubdate data-updated="true">2014/10/21</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>Xcode6.1中Swift的最新版本是1.1，在该版本中引入了一个新的特性：可失败构造器。通过构造器初始化实际上是给class或struct的每一个存储属性（参数）提供初始值，进行对象实例化的过程。在一些情况下，初始化的过程是有可能失败的。比如，实例化一个对象，在实例化的过程中需要访问资源文件，就像从文件中加载图片一样：</p>
+
+<pre><code>NSImage(contentsOfFile: &quot;swift.png&quot;)
+</code></pre>
+
+<p>如果该文件不存在或者因为某种原因不允许访问，那么NSImage的初始化过程就会失败。在Swift 1.1版本中，像这种情况可以通过可失败构造器进行捕获。如果在构造一个对象时使用可失败构造器，那么当对象构造成功时返回该对象，当对象构造失败时则返回nil。因此可以直接用条件判断语句使用可失败构造器来实例化对象：</p>
+
+<pre><code>if let image = NSImage(contentsOfFile: &quot;swift.png&quot;) {
+    // loaded the image successfully
+} else {
+    // could not load the image
+}
+</code></pre>
+
+<p>init初始化方法可以通过在init关键字后面加上?或!将其变为可失败初始化方法，这样就表示某对象的初始化方法会产生两种结果。比如，将Int类型的init初始化方法变为可失败初始化方法，然后执行String类型转换：</p>
+
+<pre><code>extension Int {
+    init?(fromString: String) { 
+        if let i = fromString.toInt() {
+            // Initialize
+            self = i
+        } else { 
+            // return nil, discarding self is implied
+            return nil
+        }
+    }
+}
+</code></pre>
+
+<p>在可失败构造器或可失败初始化方法中，一旦返回nil就代表构造失败或初始化失败，不会再返回其他的值。在上述的示例中，当String不能解析为Integer时会导致初始化失败，返回nil，否则返回解析成功后的值。</p>
+
+<p>可失败构造器/初始化方法解决了以前在Swift中只能通过工厂方法捕获构造或初始化失败情况的问题。比如，一个枚举，通过fromRaw工厂方法通过一个原始值来寻找它所对应的枚举成员，返回类型为可选枚举类型。即如果该原始值对应的枚举成员存在，那么返回该枚举成员，如果不存在则返回nil。现在，Swift编译器结合可失败构造器，通过可失败的初始化方法用switch语句判断原始值对应的枚举成员，如果没有对应的则返回nil：</p>
+
+<pre><code>enum Color : Int {
+    case Red = 0, Green = 1, Blue = 2
+
+    // implicitly synthesized
+    var rawValue: Int { /* returns raw value for current case */ }
+
+    // implicitly synthesized
+    init?(rawValue: Int) {
+        switch rawValue { 
+            case 0: self = .Red
+            case 1: self = .Green
+            case 2: self = .Blue
+            default: return nil
+        }
+    }
+}
+</code></pre>
+
+<p>使用可失败构造器可极大程度的统一Swift中的构造对象语法，消除了构造器与工厂方法之间混乱、重复的冗余语法，使Swift更加简洁。随着可失败构造器这一特性的加入，Swift将对大多数Cocoa中带NSError参数的工厂初始化方法进行调整，从而加强Swift中构造对象语法的统一性，给开发者带来更好的开发体验。</p>
+
+<p>原文地址：<a href="https://developer.apple.com/swift/blog/?id=17">Failable Initializers</a></p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-11-20-watchkit-initial-impressions.html" 
+	        title="Previous Post: WatchKit初探">&laquo; WatchKit初探</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-10-21-linux-kernel-network-turning.html" 
+	        title="Next Post: Linux 内核网络参数">Linux 内核网络参数 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

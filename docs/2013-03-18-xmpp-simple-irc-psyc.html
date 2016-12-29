@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  即时消息协议预研 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">即时消息协议预研</h1>
+				<p class="meta"><time datetime="2013-03-18T11:00:44+08:00" pubdate data-updated="true">2013/3/18</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>选取了主流的四种即时消息协议作为预研对象，分别描述了这四种消息技术的原理、适用场景以及限制。</p>
+
+<h3 id="toc_0">XMPP</h3>
+
+<p>XMPP（The Extensible Messaging and Presence Protocol，可扩展的消息通讯与呈现协议），前身是开源即时消息协议 <a href="http://www.jabber.org/">Jabber</a>，现在已经被 IETF 标准化（<a href="http://www.ietf.org/rfc/rfc3920.txt">RFC 3920</a>）。</p>
+
+<p>应用非常广泛，可选择的实现很多，<a href="http://www.igniterealtime.org/projects/openfire/">Openfire</a> 是目前比较成熟的。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pIDQtf-tFsJZ_2e0f4a6C02OuBYE5Qr2WpFLYgQoc_wXaRB_vz13zpAoNPkbaY7KD6Sr7bqPtYwldqB6lQTV6Gq758-fbIQl8/xmpp.gif?psid=1" alt="XMPP"/></p>
+
+<h3 id="toc_1">SIMPLE</h3>
+
+<p>SIMPLE（SIP for Instant Messaging and Presence Leveraging Extensions，基于 SIP 的即时消息与呈现扩展），IBM/微软主推的即时消息协议，虽然 Java 有相关 JSRs（164、165）定义了接口，但没有找到适合的实现。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1p4KVz3qLNvK7CoVUFkHOnnPMV0zNntw81J_c2uC5PDkoVycAhsBO-mFG_nbNwV1TNoPBO_UP6o738vPOvdVys_95bMuYHQanE/simple.png?psid=1" alt="SIMPLE"/></p>
+
+<p>各实体功能如下：</p>
+
+<ul>
+<li>Presence Service：接收、存储和分发 presence information。Presence Service 既可以是一个物理实体上的 server，也可以只是 presentity 和 watcher 之间的直接通信。在具体实现中前者比较常见，后者是 P2P 的模式</li>
+<li>Presentity：用于提供 presence information 给 Presence Service</li>
+<li>Watcher：向 Presence Service 请求获取 Presentity 的 presence information 或者自身的 watcher information</li>
+<li>Principal：指单个的人、程序或者设备，也可以是人、程序、设备的集合体。对于 Presence Service 来说，各个 Principal 是不同的</li>
+<li>Presence User Agent：为 Principal 提供手段来操作 0 个或者多个 Presentity，Principal 操作 Presence User Agent 改变 Presentity 的状态。是 Principal 和 Presentity 交互的 interface</li>
+<li>Watcher User Agent：类似 Presence User Agent，Principal 通过其来操作 0 个或多个 Watcher，Watcher 收到 Presentity 的新状态之后也通过 Watcher User Agent 呈现给 Principal</li>
+<li>Presence Protocol：定义了 Presentity 和 Presence Service，Watcher 和 Presence Service 之间交换消息的一组标准</li>
+<li>在具体的实现中最常见的是把 Presence Service 实现为一个 Presence Server，Presence User Agent 和 Presentity 组合在一起，Watcher 和 Watcher User Agent 组合在一起，由一个终端来同时支持这两种组合体，这样，一个终端就既能订阅别人的也能发布自己的 presence information</li>
+</ul>
+
+<h3 id="toc_2">IRC</h3>
+
+<p>IRC（Internet Relay Chat，互联网中继聊天协议），以服务器中转为原理进行消息转发，机制成熟稳定，应用广泛，可选择的实现较多。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pYk_HjXE41e-TbezFqQ9VdnWRBcaLlNfkC5_lIfnE7ZKOkLkV20-JdTwxV-3AIbyRetleM8LCZxXFOWV-WpaSmqbIaXbp03UN/irc.png?psid=1" alt="IRC"/></p>
+
+<p>A作为客户端连接到了服务器 S1 的 ChannelX 频道，B 作为客户端连接到了服务器 S2 的 ChannelX 频道，此时 A 发消息后通过 S1 转发给 S2，然后 S2 有把消息发送给了 B。</p>
+
+<p>其中频道是一个广播组，用户可以进入频道，也可以离开频道。当一个用户在频道里发消息时，频道里的其他所有用户都能够收到该消息。当第一个用户进入频道，频道被创建，当最后一个用户离开此频道时，频道被销毁。</p>
+
+<p>在 IRC 服务器网络中，频道由这些服务器共同维护，频道相当于一条通信管道，将所有开通此项频道的服务器贯穿起来，消息在这个管道中流通。</p>
+
+<h3 id="toc_3">PSYC</h3>
+
+<p>PSYC（Protocol for SYnchronous Conferencing，同步会话协议），设计用来取代 IRC，兼容 IRC/XMPP 客户端，据称其可以无限扩容，弥补 IRC/XMPP 中使用 s2s 后服务器网络拓扑膨胀时性能急剧下降的缺陷。</p>
+
+<p>比较新，应用较少，可选择的实现较少。<a href="http://about.psyc.eu/Comparison">http://about.psyc.eu/Comparison</a>。</p>
+
+<h3 id="toc_4">结论</h3>
+
+<p>可选择 XMPP 作为即时消息底层支持协议，Openfire 作为实现。</p>
+
+<p>在单机 Openfire 不能满足用户数时可考虑使用 Openfire Connection Manager 模块增加客户端连接数；配置 Openfire 集群增加整体容量。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2013-03-19-zoundry-raven.html" 
+	        title="Previous Post: Zoundry Raven: ’Nonetype’ object has no attribute ‘tagName’">&laquo; Zoundry Raven: ’Nonetype’ object has no attribute ‘tagName’</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2013-03-13-irc-intro.html" 
+	        title="Next Post: 互联网中继聊天协议（IRC）">互联网中继聊天协议（IRC） &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

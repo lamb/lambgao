@@ -1,0 +1,1598 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div class="blog-index">
+
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-08-bye-windwos-xp.html">再见Windows XP</a></h1>
+			<p class="meta"><time datetime="2014-04-08T00:30:55+08:00" 
+			pubdate data-updated="true">2014/4/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天（4月8日）微软将正式停止针对Windows XP的安全维护， 意味着这一服役长达13年之久的操作系统终于开始退出历史舞台了。Windows XP于2001年10月25日正式发布，相比其前一代操作系统Windows 2000和Windows Me，其全新的用户图形界面、简化的操作体验，使其快速抢占了市场。随后微软推出的Vista由于各种缺陷（耗资源、速度慢、兼容性差等），也无法成功替代XP，反而使得用户的XP情结更加根深蒂固，继而成为微软后续操作系统（Windows 7/8）推广的最大绊脚石。 </p>
+
+<p>我现在已经脱离Windows很久，但是还是要写篇文章纪念一下，因为80后谁敢拍着胸膛说我没用过Windows XP，谁敢说我没用过盗版XP。我用过，所以我要说“再见，Windows XP！”</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-07-mongodb-daemon-start-and-down.html">Mongdb后台daemon方式启动与停止</a></h1>
+			<p class="meta"><time datetime="2014-04-07T00:30:25+08:00" 
+			pubdate data-updated="true">2014/4/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在后台开启Mongdb服务可以使用--fork。启用fork必须要带上--logpath来指定日志输出目录。为了防止日志被覆盖可以开启--logappend。</p>
+
+<pre><code>mongod --fork --logpath /data/log/20140407.log --logappend
+</code></pre>
+
+<p>mongodb默认的数据保存路径是/data/db/，默认端口号为27017。如果想修改可以使用--dbpath和--port来修改</p>
+
+<pre><code>mongod --dbpath /mydata/ --port 20111
+</code></pre>
+
+<p>也可以把参数写入配置文件中，通过配置文件来启动。</p>
+
+<pre><code>mongod -f /data/conf/mongodb.conf
+</code></pre>
+
+<p>配置文件如下：</p>
+
+<pre><code>port = 27017
+dbpath = /data/db
+logpath = /data/log/20140407.log
+logappend = true
+fork = true
+</code></pre>
+
+<p>如果没有使用--fork，退出终端的时候mongodb会自动清理退出，把没有写好的数据写完成，并最终关闭数据文件。要注意的是这个过程会持续到所有操作都完成。如果使用--fork在后台运行mongdb服务，那么就要通过向服务器发送shutdownServer()消息来关闭。</p>
+
+<pre><code>use admin
+db.shutdownServer()
+</code></pre>
+
+<p>要注意的是，这个命令只允许在本地，或是一个经过认证的客户端。</p>
+
+<p>如果这是一个主从式的复制集群，在1.9.1版本后将按下面的步骤来关闭</p>
+
+<ul>
+<li>检查从Mongodb的数据更新时间</li>
+<li>如果所有的从Mongodb和主的时间差都超过10，这个时候不会关闭mongodb（在这种情况下面，我们可以通过配置timeoutSecs的方式来让从Mongodb完成数据的更新）</li>
+<li>如果其中有一个从Mongodb与主服务时间差在10秒内，那么主服务器将会关闭，并且等待从Mongodb更新完成并关闭。</li>
+</ul>
+
+<p>如果没有up-to-date 从Mongodb且你想强制关闭服务，可以通过添加force:true;命令如下：</p>
+
+<pre><code>db.adminCommand({shutdown : 1, force : true})
+or
+db.shutdownServer({force : true, timeoutsec : 5})
+</code></pre>
+
+<p>Window下面以后台服务的方式启动可以使用下面的命令添加服务，配置文件的内容同mac下的</p>
+
+<pre><code>sc create MongoDB binPath= &quot;\&quot;%MONGO_HOME%\bin\mongod.exe\&quot; --service --config=\&quot;%MONGO_HOME%\mongod.cfg\&quot;&quot; DisplayName= &quot;MongoDB&quot; start= &quot;auto&quot;
+</code></pre>
+
+<p>如果成功看到</p>
+
+<pre><code>[SC] CreateService SUCCESS
+</code></pre>
+
+<p>服务安装成功后可以使用命名启动也可以手动启动</p>
+
+<pre><code>net start MongoDB
+</code></pre>
+
+<p>想删除服务可以使用如下命令</p>
+
+<pre><code>sc delete &quot;MongoDB&quot;
+</code></pre>
+
+<p>单个进程打开的最大文件句柄数量限制的修改，在/etc/profile文件最下面添加命令</p>
+
+<pre><code>ulimit -n 1024
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-05-can-break-wind-but-cannot-break-sb.html">防风，但不防傻逼</a></h1>
+			<p class="meta"><time datetime="2014-04-05T00:29:46+08:00" 
+			pubdate data-updated="true">2014/4/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>耐不住毕业前的躁动与无聊，我前段时间养成了半夜在走廊和人抽烟聊天的习惯。有一次我偶然发现隔壁寝室的四个男生一人买了个zippo打火机，我虽然偶尔也抽烟，但用的都是一块钱一个偶尔死活打不着偶尔却能烧到头发的便宜货，因此对这种高端霸气上档次的东西心存敬畏与好奇，便借来把玩了一番。</p>
+
+<p>我打着了后弱弱问一哥们道：“这玩意防风么？”</p>
+
+<p>他点点头道：“嗯，zippo打火机都是防风的。”</p>
+
+<p>然后我“呼”的一声就把火给吹灭了，然后得意洋洋地把打火机在他前面晃了晃道：“你看，不防风吧。”</p>
+
+<p>他淡淡地说了句道：“防风，但不防傻逼。”</p>
+
+<p>当时虽然被周围一票人给笑了半天，但我自己也忍不住跟着笑了很久，倒不是我缺心眼听不懂好歹话或者是喜欢被人称作傻逼，而是我觉得这个说法真心很赞，光从这句回答本身的机智程度来看就足够给好评了，无论这个所指的对象是不是我，我都觉得很享受。</p>
+
+<p>后来有天我和一个朋友聊天的时候，他跟我说起他之前的一个经历。他之前在学校的学生会里工作，因为权利问题还有一些个人的矛盾和其中的一个同学搞得很僵，但他一直都处处让着那个同学，反倒是那个同学处处刁难他，还想方设法排挤孤立他。终于有一天他觉得呆不下去了，选择主动退出学生会，临走前他特意约了那个同学出来，给他道歉说之前都是自己的不对，希望他能够原谅自己。</p>
+
+<p>我听完后忍不住骂他实在是怂，整件事情他并没有做错什么，到头来不仅是你退出，还去给那个伤害你的人道歉，究竟是不是脑子搭错了。他只是淡淡的告诉我，有些事情冤冤相报何时了，他本来也没想争个啥，既然一山不容二虎不如就我退一步呗，我给他道歉其实是想告诉他，我不是一个喜欢认输的人，但对于没品的对手以及没意义的争斗，我就把这种满足感施舍给你可怜的虚荣心好了。</p>
+
+<p>他的这个回答让我再次想起了前些天在走廊里听到的那句话，作为zippo打火机，既然你标榜你是防风的，那就难免会有人用各种奇怪的方式来验证你究竟是不是能防风，能防什么样的风，也肯定会有人在弄灭你以后耀武扬威地向旁人得意地炫耀他的胜利以及你的无能。然而这时候的你，是满腔怒火要和那个人争一个高下，给他灌输所谓的防风的标准是什么，还是徒劳地努力改变自己，让自己变得不仅能防各种阴风台风龙卷风，还能防水防盗防学长呢。我觉得与其去和傻逼较劲，不如放自己一条生路，告诉他对不起这个打火机让你失望了，希望他能够找到更适合自己的点烟方式，无论是用火柴煤气灶还是氧气切割机。</p>
+
+<p>我越发觉得这是一个累心的年代，记得之前有人因为我转载的一张图片，声称要发微博让广大网民一起声讨我，我当时还可傻逼地写了一条很长的状态来解释缘由声明自己的立场，生怕自己被狂热的粉丝们人肉出来挂在城楼上晒成腊肉条。现在想想，无论是在网上和人吵个面红耳赤，还是急于在各种流言蜚语前证明自己的清白，都是一种自寻烦恼而自讨没趣的行为，还容易把自己的情商与智商拉到地平线以下。</p>
+
+<p>既然你愿意站得高，愿意把自己的想法拿出来分享，那么难免就会被人看到你的弱点，被不同居心的揣测或是针对，就像你说你是个防风的打火机，还是个颇有些出名的牌子，那么就避免不了有秀下限的人来试试你究竟是不是真的防风。然而当有人用极端手段或是错误的手段成功地挑战了你时，你究竟是怒不可遏地反过来挑战他的智商，维护自己那飘渺的尊严，还是一笑而过，让傻逼飞一会儿呢。</p>
+
+<p>我想绝大多数人都咽不下这一口气，也受不了这个委屈，然而为了变得更强大，很多时候我们需要这样的修炼，直到所有的质疑和否定相比起你的强大都变得微不足道的那一天。</p>
+
+<p>好吧，我终于还是用我最讨厌的文体写完了这篇文章，就为了这句最初用来形容我却让我爱得不行的一句话。</p>
+
+<p>“防风，但不防傻逼。”愿各位共勉。</p>
+
+<p>文/陈谌 <a href="http://site.douban.com/177678/widget/notes/10060932/note/273510395/?qq-pf-to=pcqq.discussion">原文链接</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-04-03-maven-jdocbook-plugin.html">maven-jdocbook-plugin 使用</a></h1>
+			<p class="meta"><time datetime="2014-04-03T18:46:21+08:00" 
+			pubdate data-updated="true">2014/4/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="http://www.docbook.org/">DocBook</a> 是一个文档工具，Spring、Hibernate 等开源项目都是用它来编写、生成多格式文档的。这里主要介绍在 maven 环境中使用 maven-jdocbook-plugin 插件来使用 DocBook。</p>
+
+<p>POM 中加入 jdocbook 插件：</p>
+
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.jboss.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-jdocbook-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.3.8&lt;/version&gt;
+    &lt;extensions&gt;true&lt;/extensions&gt;
+    &lt;configuration&gt;
+        &lt;masterTranslation&gt;zh-CN&lt;/masterTranslation&gt;
+        &lt;formats&gt;
+            &lt;format&gt;
+                &lt;formatName&gt;html&lt;/formatName&gt;
+            &lt;/format&gt;
+        &lt;/formats&gt;
+    &lt;/configuration&gt;
+
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss&lt;/groupId&gt;
+            &lt;artifactId&gt;jbossorg-docbook-xslt&lt;/artifactId&gt;
+            &lt;version&gt;1.1.1&lt;/version&gt;
+            &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss&lt;/groupId&gt;
+            &lt;artifactId&gt;jbossorg-jdocbook-style&lt;/artifactId&gt;
+            &lt;version&gt;1.1.1&lt;/version&gt;
+            &lt;type&gt;jdocbook-style&lt;/type&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;SDK_Manual_zh_CN&lt;/id&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;resources&lt;/goal&gt;
+                &lt;goal&gt;generate&lt;/goal&gt;
+            &lt;/goals&gt;
+
+            &lt;configuration&gt;
+                &lt;sourceDocumentName&gt;index.xml&lt;/sourceDocumentName&gt;
+                &lt;sourceDirectory&gt;${basedir}/src/main/docs&lt;/sourceDirectory&gt;
+                &lt;imageResource&gt;
+                    &lt;directory&gt;${basedir}/src/main/docs/images&lt;/directory&gt;
+                &lt;/imageResource&gt;
+                &lt;cssResource&gt;
+                    &lt;directory&gt;${basedir}/src/main/docs/css&lt;/directory&gt;
+                &lt;/cssResource&gt;
+
+                &lt;formats&gt;
+                    &lt;format&gt;
+                        &lt;formatName&gt;html&lt;/formatName&gt;
+                        &lt;stylesheetResource&gt;classpath:/xslt/org/jboss/xhtml.xsl&lt;/stylesheetResource&gt;
+                        &lt;finalName&gt;index.html&lt;/finalName&gt;
+                    &lt;/format&gt;
+                    &lt;format&gt;
+                        &lt;formatName&gt;html_single&lt;/formatName&gt;
+                        &lt;stylesheetResource&gt;classpath:/xslt/org/jboss/xhtml-single.xsl&lt;/stylesheetResource&gt;
+                        &lt;finalName&gt;index.html&lt;/finalName&gt;
+                    &lt;/format&gt;
+                &lt;/formats&gt;
+
+                &lt;options&gt;
+                    &lt;xincludeSupported&gt;true&lt;/xincludeSupported&gt;
+                &lt;/options&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+
+<p>还需要加入 JBoos 的 mvn 库：</p>
+
+<pre><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;jboss-public-repository-group&lt;/id&gt;
+        &lt;name&gt;JBoss Public Repository Group&lt;/name&gt;
+        &lt;url&gt;http://repository.jboss.org/nexus/content/groups/public/&lt;/url&amp;gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+</code></pre>
+
+<p>目录结构：</p>
+
+<p><img src="https://pyqdbw.dm2302.livefilestore.com/y2p1MpINCmrzVLlvjf6p8o1ZwxXXKvDtrJbOdqFMpz5Hwr08vSWTxR57tHzk-fp6j68eVJ4T33FseHLLoDiGvuB6NaFKjcU9F50vDXaVde2rH8/docbook.png?psid=1" alt="目录结构"/></p>
+
+<p>本文主要是参考 <a href="http://www.blogjava.net/kuuyee/archive/2009/07/27/288613.html">用maven-jdocbook-plugin简单配置docbook5.0环境</a> 所写，并修复了其中一些配置有误的地方。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-03-18-rabbitmq-network-partition.html">RabbitMQ 网络分区问题</a></h1>
+			<p class="meta"><time datetime="2014-03-18T18:26:13+08:00" 
+			pubdate data-updated="true">2014/3/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>RabbitMQ 集群的网络分区容错性并不是非常高，在网络经常发生分区时会有些问题，最明显的就是脑裂问题。</p>
+
+<p>官方文档是这样介绍的：</p>
+
+<p>RabbitMQ clusters do not tolerate network partitions well. If you are thinking of clustering across a WAN, don&#39;t. You should use <a href="https://www.rabbitmq.com/federation.html">federation</a> or the <a href="https://www.rabbitmq.com/shovel.html">shovel</a> instead.</p>
+
+<p>从中我们可以看出，在广域网环境下不应该使用集群，而应该使用 federation 或者 shovel 来解决。</p>
+
+<p>不过即使是在局域网环境下，网络分区也不可能完全避免，网络设备（比如中继设备、网卡）出现故障也会导致网络分区。</p>
+
+<p>Network partition detected</p>
+
+<p>Mnesia reports that this RabbitMQ cluster has experienced a network partition. This is a dangerous situation. RabbitMQ clusters should not be installed on networks which can experience partitions. </p>
+
+<p>当出现网络分区时，不同分区里的节点会认为不属于自身所在分区的节点都已经挂了，对 queue、exchange、binding 的操作仅对当前分区有效。在 RabbitMQ 的默认配置下，即使网络恢复了也不会自动处理网络分区带来的问题从而恢复集群。RabbitMQ（3.1+）会自动探测网络分区，并且提供了配置来解决这个问题。</p>
+
+<pre><code>[
+ {rabbit,
+  [{tcp_listeners,[5672]},
+   {cluster_partition_handling, ignore}]
+ }
+].
+</code></pre>
+
+<p>RabbitMQ 提供了三种配置：</p>
+
+<ol>
+<li>ignore：默认配置，发生网络分区时不作处理，当认为网络是可靠时选用该配置</li>
+<li>autoheal：各分区协商后重启客户端连接最少的分区节点，恢复集群（CAP 中保证 AP，有状态丢失）</li>
+<li>pause_minority：分区发生后判断自己所在分区内节点是否超过集群总节点数一半，如果没有超过则暂停这些节点（保证 CP，总节点数为奇数个）</li>
+</ol>
+
+<p>参考：</p>
+
+<ul>
+<li><a href="https://www.rabbitmq.com/partitions.html">RabbitMQ 官方文档</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Network_partition">网络分区</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Split-brain_(computing)">脑裂问题</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-03-11-node-invoke-java-via-hessian.html">Hessian 示例：Node 调用 Java</a></h1>
+			<p class="meta"><time datetime="2014-03-11T18:17:46+08:00" 
+			pubdate data-updated="true">2014/3/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Java 端作为服务提供者，基于 <a href="https://github.com/alibaba/dubbo">Dubbo</a> 实现服务并通过 Dubbo Hessian 扩展暴露服务；Node 端作为服务消费者，通过 <a href="https://github.com/villadora/node-hessian">node-hessian</a> 调用 Java 端的服务。</p>
+
+<h3 id="toc_0">Java 端</h3>
+
+<h4 id="toc_1">服务接口</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+public interface TestService {
+ 
+    /**
+     * 测试：无参，无返回值。
+     */
+    void test();
+     
+    /**
+     * 测试：原生类型参数与返回值。
+     * 
+     * @param i
+     * @return 
+     */
+    String test0(int i);
+     
+    /**
+     * 测试：无参，自定义类型返回值。
+     * 
+     * @return 
+     */
+    Result test1();
+     
+    /**
+     * 测试：自定义类型参数，无返回值。
+     * 
+     * @param arg 
+     */
+    void test2(Arg arg);
+     
+    /**
+     * 测试：自定义参数，自定义返回值。
+     * 
+     * @param arg
+     * @return 
+     */
+    Result test3(final Arg arg);
+}
+</code></pre>
+
+<h4 id="toc_2">自定义参数类</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+import java.io.Serializable;
+ 
+public class Arg implements Serializable {
+ 
+    private int i;
+ 
+    public int getI() {
+        return i;
+    }
+ 
+    public void setI(int i) {
+        this.i = i;
+    }
+ 
+}
+</code></pre>
+
+<h4 id="toc_3">自定义返回值类</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+import java.io.Serializable;
+ 
+public class Result implements Serializable {
+ 
+    private int i;
+ 
+    private String string;
+ 
+    public int getI() {
+        return i;
+    }
+ 
+    public void setI(int i) {
+        this.i = i;
+    }
+ 
+    public String getString() {
+        return string;
+    }
+ 
+    public void setString(String string) {
+        this.string = string;
+    }
+ 
+}
+</code></pre>
+
+<p>Dubbo 配置略。</p>
+
+<h3 id="toc_4">Node 端</h3>
+
+<h4 id="toc_5">node-hessian</h4>
+
+<p>安装 <a href="https://github.com/villadora/node-hessian">node-hessian</a>：</p>
+
+<pre><code>npm install hessian-proxy
+</code></pre>
+
+<h4 id="toc_6">调用服务接口</h4>
+
+<pre><code>var Proxy = require(&#39;hessian-proxy&#39;).Proxy;
+ 
+var proxy = new Proxy(&#39;http://127.0.0.1:9098/test-provider/provider/com.yuanxin.paas.ssb.TestService&#39;, &#39;&#39;, &#39;&#39;, proxy);
+ 
+proxy.invoke(&#39;test&#39;, null, function (err, reply) {
+    console.log(&#39;test: &#39; + reply);
+});
+ 
+proxy.invoke(&#39;test0&#39;, [25], function (err, reply) {
+    console.log(&#39;test0: &#39; + JSON.stringify(reply));
+})
+ 
+proxy.invoke(&#39;test1&#39;, null, function (err, reply) {
+    if (err) {
+        console.log(&#39;test1: &#39; + err);
+    }
+ 
+    console.log(&#39;test1: &#39; + JSON.stringify(reply));
+})
+ 
+var argForTest2 = {
+    i: 2
+};
+ 
+argForTest2.__type__ = &#39;com.yuanxin.paas.ssb.Arg&#39;;
+ 
+proxy.invoke(&#39;test2&#39;, [argForTest2], function (err, reply) {
+    if (err) {
+        console.log(&#39;test2: &#39; + err);
+    }
+ 
+    console.log(&#39;test2: &#39; + JSON.stringify(reply));
+})
+ 
+ 
+var argForTest3 = {
+    i: 3
+};
+ 
+argForTest3.__type__ = &#39;com.yuanxin.paas.ssb.Arg&#39;;
+ 
+proxy.invoke(&#39;test3&#39;, [argForTest3], function (err, reply) {
+    if (err) {
+        console.log(&#39;test3: &#39; + err);
+    }
+ 
+    console.log(&#39;test3: &#39; + JSON.stringify(reply));
+})
+</code></pre>
+
+<h3 id="toc_7">运行结果</h3>
+
+<h4 id="toc_8">Java 端</h4>
+
+<p><img src="https://oojduq.dm2304.livefilestore.com/y2py0LBG1b1FvLtEbu06GyRtHlJupy8dqaq_o0KNF5HoezRo2TvSMWc4OtrRZubhn9GRcUpZokO9ckrOfv5V8b8KoNLg8wQtZPKIickLNaTsuw/hessian-java.png?psid=1" alt="Java 端"/></p>
+
+<h4 id="toc_9">Node 端</h4>
+
+<p><img src="https://oojduq.dm2301.livefilestore.com/y2pxuLkG4il3ohi2PsC6XlEr0q2daXHtATcpiFAS05PlCJX3zzpOWlAS_IedLT5851lD6UoLCYHCwzrsV9ouLWzkA9mj8FwJaIXiYljHMNRhiY/hessian-node.png?psid=1" alt="Node 端"/></p>
+
+<h3 id="toc_10">总结</h3>
+
+<p>Dubbo 非常赞，提供了对 Hessian 原生协议的支持；Node 调用起来也非常简单，不过还是有几个点需要注意一下：</p>
+
+<ul>
+<li>接口方法不能重载（接口里的方法必须使用不同的方法名）</li>
+<li>自定义类型的命名空间服务端与消费端要一致（com.yuanxin.paas.ssb.Arg）</li>
+<li>服务端自定义类型需要实现序列化接口（java.io.Serializable）</li>
+<li>尽量使用简单的自定义类型结构（避免嵌套）</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-02-08-autoremove-logs.html">自动清理日志 Shell 脚本</a></h1>
+			<p class="meta"><time datetime="2014-02-08T18:17:45+08:00" 
+			pubdate data-updated="true">2014/2/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>以删除 Jetty 日志为例，仅保留最近 7 天的日志文件。</p>
+
+<pre><code>#!/bin/bash
+  
+# 要清理的目录，多个目录用空格分开
+dirs=(d-jetty/logs v-jetty/logs rhythm-jetty/logs symphony-jetty/logs) 
+  
+# 循环 dirs 数组
+for dir in ${dirs[*]}
+  do
+    # 删除目录下 7 天之前的日志文件
+    find $dir -mtime +7 -name *.log* | xargs rm
+  done
+</code></pre>
+
+<p>最后，加入 crontab，每天定时执行：</p>
+
+<pre><code>crontab -e
+</code></pre>
+
+<p>设置为凌晨 4 点执行：</p>
+
+<pre><code>* 4 * * * /root/clean_jetty_logs.sh
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-01-22-backup-mysql-shell.html">MySQL 自动备份 Shell 脚本</a></h1>
+			<p class="meta"><time datetime="2014-01-22T18:13:59+08:00" 
+			pubdate data-updated="true">2014/1/22</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>可以选择设置需要备份的库，自动备份压缩，自动删除 7 天前的备份，需要使用 crontab 定时执行。</p>
+
+<pre><code>#!/bin/bash
+
+# 要备份的数据库名，多个数据库用空格分开
+databases=(db1 db2 db3) 
+
+# 备份文件要保存的目录
+basepath=&#39;/root/backup/mysql/&#39;
+
+if [ ! -d &quot;$basepath&quot; ]; then
+  mkdir -p &quot;$basepath&quot;
+fi
+
+# 循环databases数组
+for db in ${databases[*]}
+  do
+    # 备份数据库生成SQL文件
+    /bin/nice -n 19 /usr/bin/mysqldump -uUSER -pPASSWORD --database $db &gt; $basepath$db-$(date +%Y%m%d).sql
+    
+    # 将生成的SQL文件压缩
+    /bin/nice -n 19 tar zPcf $basepath$db-$(date +%Y%m%d).sql.tar.gz $basepath$db-$(date +%Y%m%d).sql
+    
+    # 删除7天之前的备份数据
+    find $basepath -mtime +7 -name &quot;*.sql.tar.gz&quot; -exec rm -rf {} \;
+  done
+
+  # 删除生成的SQL文件
+  rm -rf $basepath/*.sql
+</code></pre>
+
+<p>其中备份目录、MySQL 口令需要配置。</p>
+
+<p>然后使用 crontab 设置该脚本定时执行：</p>
+
+<pre><code>crontab -e
+</code></pre>
+
+<p>设置为凌晨 3 点执行：</p>
+
+<pre><code>0 3 * * * /root/backup_mysql.sh
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-01-15-java-exec-utli.html">Java 执行命令</a></h1>
+			<p class="meta"><time datetime="2014-01-15T18:12:02+08:00" 
+			pubdate data-updated="true">2014/1/15</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Java 调用命令行有两种方式，ProcessBuilder 或 Runtime。</p>
+
+<p>在使用 Runtime 时，有两点需要注意：</p>
+
+<ol>
+<li>需要开启线程读取错误流，否则可能会造成进程阻塞</li>
+<li>执行带管道或重定向的命令时需要拆成多个命令执行</li>
+</ol>
+
+<pre><code>Execs.exec(new String[]{&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /proc/cpuinfo | grep &#39;model name&#39; | awk &#39;{ print $NF }&#39;&quot;});
+</code></pre>
+
+<p>细节请参考这个<a href="https://github.com/b3log/b3log-latke/blob/master/latke/src/main/java/org/b3log/latke/util/Execs.java">实现</a>。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2014-01-14-grub-rescue.html">Grub 恢复命令</a></h1>
+			<p class="meta"><time datetime="2014-01-14T18:07:56+08:00" 
+			pubdate data-updated="true">2014/1/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>重装 Win 后，MBR 被重置，会导致 Ubuntu 进不去，这里介绍一个恢复步骤。</p>
+
+<h4 id="toc_0">1. 从 LiveCD 进入</h4>
+
+<h4 id="toc_1">2. 找到已挂载好的原 Linux 根分区（/media/ubuntu/xxx）如果 /boot 是单独安装的，也需要挂载好。</h4>
+
+<h4 id="toc_2">3. 挂载虚拟文件系统</h4>
+
+<pre><code>sudo mount --bind /dev /media/ubuntu/xxx/dev
+sudo mount --bind /proc /media/ubuntu/xxx/proc
+sudo mount --bind /sys /media/ubuntu/xxx/sys
+</code></pre>
+
+<h4 id="toc_3">4. 为确保 grub 工具是从 LiveCD 执行的，挂在 /usr</h4>
+
+<pre><code>sudo mount --bind /usr/ /media/ubuntu/xxx/usr
+sudo chroot /media/ubuntu/xxx
+</code></pre>
+
+<h4 id="toc_4">5. 更新（创建） /boot/grub/grub.cfg</h4>
+
+<pre><code>sudo update-grub2
+</code></pre>
+
+<h4 id="toc_5">6. 重新安装 grub</h4>
+
+<pre><code>grub-install /dev/sd&lt;strong&gt;X&lt;/strong&gt;
+</code></pre>
+
+<p>注意：不要带分区号，可以用 sudo fdisk -l 查看</p>
+
+<h4 id="toc_6">7. 重启</h4>
+
+<pre><code>sudo reboot
+</code></pre>
+
+<h4 id="toc_7">8. 进入 Ubuntu 后执行</h4>
+
+<pre><code>sudu update-grub2
+</code></pre>
+
+<h4 id="toc_8">9. Done!</h4>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-12-17-building-android-projects-with-gradle.html">使用Gradle构建Android项目</a></h1>
+			<p class="meta"><time datetime="2013-12-17T17:26:29+08:00" 
+			pubdate data-updated="true">2013/12/17</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在最近的Google IO大会上我注意到Android Studio开发环境引起了大家的关注。我发现Eclipse经常会变慢而且健壮性不强，所以一个新的替代Android IDE是最受欢迎的消息。在仔细关注这次的发布时，我发现另一个亮点是基于Gradle的Android项目新的构建系统。因此我决定更仔细地了解Gradle。</p>
+
+<p>下面列举了一些使用Gradle构建Android项目的好处：</p>
+
+<ul>
+<li>在IDE环境和命令行下使用同一个构建系统</li>
+<li>改进的依赖关系管理</li>
+<li>更容易地集成到自动化构建系统</li>
+</ul>
+
+<p>一个额外的好处来自Android函数库包格式“aar”格式。以前，Android函数库通常需要被导入到IDE以此将App需要的资源加入编译。但是现在的Android函数库可以被直接包含，与“jar”文件被Java项目包含的方式类似。这项功能虽然出现已久，但确实非常受欢迎。</p>
+
+<p>下面是我一个项目的gradle构建脚本：</p>
+
+<pre><code>buildscript {
+    //定义一些项目需要的JAR函数库
+    LIBS_DIR = &quot;../../../libs&quot;
+ 
+    //需要从maven中央库得到gradle的android插件
+    repositories {
+        mavenCentral()
+    }
+ 
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:0.4.2&#39;
+    }
+}
+ 
+//声明项目是一个android构建
+apply plugin: &#39;android&#39;
+ 
+dependencies {
+    //同时用本地maven库查找依赖
+    repositories {
+        mavenLocal()
+    }
+ 
+    //下面是一些app需要的jar文件
+    compile files(&quot;${LIBS_DIR}/hiscore/hiscore.jar&quot;)
+    compile files(&quot;${LIBS_DIR}/GoogleAnalytics/libGoogleAnalytics.jar&quot;)
+ 
+    //这是一个我存放在本地maven仓库（使用“aar”格式）的android函数库
+    compile (&#39;com.mopub.mobileads:mopub-android-sdk:unknown&#39;)
+}
+ 
+//android构建的项目定义
+android {
+    compileSdkVersion 15
+    buildToolsVersion &quot;17.0.0&quot;
+ 
+    //下面的代码路径不是推荐的新项目结构
+    //我仍然使用的Eclipse风格结构
+    sourceSets {
+        main {
+            manifest.srcFile &#39;AndroidManifest.xml&#39;
+            java.srcDirs = [&#39;src&#39;]
+ 
+            resources.srcDirs = [&#39;src&#39;]
+            aidl.srcDirs = [&#39;src&#39;]
+ 
+            renderscript.srcDirs = [&#39;src&#39;]
+ 
+            res.srcDirs = [&#39;res&#39;]
+            assets.srcDirs = [&#39;assets&#39;]
+        }
+ 
+        instrumentTest.setRoot(&#39;tests&#39;)
+    }
+ 
+    //声明创建一个带签名的发布版本细节
+    signingConfigs {
+        release {
+            storeFile file(&quot;../keys/android.keystore&quot;)
+            storePassword &quot;######&quot;
+            keyAlias &quot;######&quot;
+            keyPassword &quot;######&quot;           
+        }
+    }
+ 
+    //声明此发布构建在签名之前需要运行proguard
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile(&#39;proguard-android.txt&#39;)
+            proguardFile &#39;proguard.cfg&#39;
+            signingConfig signingConfigs.release
+        }    
+    }    
+}
+</code></pre>
+
+<p>从命令行构建app可以运行下面的命令：</p>
+
+<pre><code>gradle assembleDebug    #debug构建
+gradle assembleRelease  #release构建
+</code></pre>
+
+<p>我以前用过Maven做了几个项目，发现用Maven来管理项目配置非常有用，尤其是在依赖管理方面。但是我发现Maven在某些情况下缺少灵活性，你不得不为某些特殊的情况进行自定义。理论上你可以编写自己的Maven插件，但实践起来大多数用户不会这么做通常他们会依赖现有的插件。所以我经常使用Ant而不是Maven，因为它在处理项目特殊操作，比如拷贝或修改代码文件时更加灵活。</p>
+
+<p>Gradle看上去在这两方面都做得很好：通过插件为绝大多数的常用情况提供了全面支持，管理依赖关系方面与Maven做得同样好；同时也提供了良好的灵活性，在需要修改构建脚本时可以自由地定制。</p>
+
+<p>我相信Gradle是构建Android应用的趋势。Gradle还提供了很多其他很赞的特性，例如构建“佐料（flavors）”等，本文没有涉及。我相信Google采用Gradle是在Android发展上的一个重要进步。现在，我会将其他的项目都转为使用Gradle。</p>
+
+<p>原文链接： <a href="http://spweblog.blogspot.com/2013/07/building-android-projects-with-gradle.html">spweblog.blogspot.com</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-11-06-evolution-of-service-management-process.html">服务治理过程演进</a></h1>
+			<p class="meta"><time datetime="2013-11-06T17:57:29+08:00" 
+			pubdate data-updated="true">2013/11/6</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><img src="http://img.my.csdn.net/uploads/201304/23/1366707908_4896.png" alt="Dubbo 服务治理"/></p>
+
+<p>在大规模服务化之前，应用可能只是通过RMI或Hessian等工具，简单的暴露和引用远程服务，通过配置服务的URL地址进行调用，通过F5等硬件进行负载均衡。</p>
+
+<h4 id="toc_0">(1) 当服务越来越多时，服务URL配置管理变得非常困难，F5硬件负载均衡器的单点压力也越来越大。</h4>
+
+<p>此时需要一个服务注册中心，动态的注册和发现服务，使服务的位置透明。</p>
+
+<p>并通过在消费方获取服务提供方地址列表，实现软负载均衡和Failover，降低对F5硬件负载均衡器的依赖，也能减少部分成本。</p>
+
+<h4 id="toc_1">(2) 当进一步发展，服务间依赖关系变得错踪复杂，甚至分不清哪个应用要在哪个应用之前启动，架构师都不能完整的描述应用的架构关系。</h4>
+
+<p>这时，需要自动画出应用间的依赖关系图，以帮助架构师理清理关系。</p>
+
+<ul>
+<li>静态依赖：通过 mvn 依赖生成</li>
+<li>动态依赖：通过运行时调用分析得出</li>
+</ul>
+
+<h4 id="toc_2">(3) 接着，服务的调用量越来越大，服务的容量问题就暴露出来，这个服务需要多少机器支撑？什么时候该加机器？</h4>
+
+<p>为了解决这些问题，第一步，要将服务现在每天的调用量，响应时间，都统计出来，作为容量规划的参考指标。</p>
+
+<p>其次，要可以动态调整权重，在线上，将某台机器的权重一直加大，并在加大的过程中记录响应时间的变化，直到响应时间到达阀值，记录此时的访问量，再以此访问量乘以机器数反推总容量。</p>
+
+<h4 id="toc_3">(4) 规模继续扩大，应用之间不再是扁平的对应关系，开始分层，比如核心数据层，业务集成层等，就算没有出现循环依赖，也不允许从低层向高层依赖，以免后续被逼循环依赖。</h4>
+
+<p>这时，需要在注册中心定义架构体系，列明有哪些层的定义，每个服务暴露或引用时，都必须声明自己应用属于哪一层，这样注册中心能更快的发现架构的腐化现象。</p>
+
+<h4 id="toc_4">(5) 服务多了，沟通成本也开始上升，调某个服务失败该找谁？服务的参数都有什么约定？</h4>
+
+<p>这时就需要登记每个服务都是谁负责的，并建立一个服务的文档库，方便检索。</p>
+
+<h4 id="toc_5">(6) 慢慢一些敏感数据也都服务化了，安全问题开始变得重要，谁能调该服务？如何授权？</h4>
+
+<p>这样的服务可能需要一个密码，访问时需带着此密码，但如果用密码，要改密码时，就会很不方便，所有的消费方都要改，所以动态生成令牌(Token)可能会更好，提供方将令牌告之注册中心，由注册中心决定是否告之消费方，这样就能在注册中心页面上做复杂的授权模型。</p>
+
+<h4 id="toc_6">(7) 就算是不敏感的服务，也不是能任意调用，比如某服务突然多了一个消费者，这个消费者的请求量直接把服务给拖跨了，其它消费者跟着一起故障。</h4>
+
+<p>首先服务提供方需要流控，当流程超标时，能拒绝部分请求，进行自我保护。</p>
+
+<p>其次，消费者上线前和提供者约定《服务质量等级协定(SLA)》，SLA包括消费者承诺每天调用量，请求数据量，提供方承诺响应时间，出错率等，将SLA记录在监控中心，定时与监控数据对比，超标则报警。</p>
+
+<p>(6)、(7)可通过路由扩展加入自己的复杂授权实现，黑/白名单+调用栈可实现某服务接口可调用其他服务接口的授权判断</p>
+
+<h4 id="toc_7">(8) 虽然有SLA约定，如果不能控制，就只是君子协定，如何确保服务质量？</h4>
+
+<p>比如：一个应用很重要，一个不那么重要，它们调用同一个服务，这个服务就应该向重要应用倾斜，而不是一视同仁，当支撑不住时，应限制不重要应用的访问，保障重要应用的可用，如何做到这一点呢。这时，就需要服务路由，控制不同应用访问不同机器，比如：<br/>
+应用分离：<br/>
+* consumer.application = foo =&gt; provider.host = 1,2,3<br/>
+* consumer.application != foo =&gt; provider.host = 5,6<br/>
+读写分离：<br/>
+* method.name = find<em>,get</em> =&gt; provider.host = 1,2,3<br/>
+* method.name != find<em>,get</em> =&gt; provider.host = 5,6</p>
+
+<h4 id="toc_8">(9) 服务上线后，需要验证服务是否可用，但因防火墙的限制，线下是不能访问线上服务的，不得不先写好一个测试Main，然后放到线上去执行，非常麻烦，并且容易忘记验证。</h4>
+
+<p>所以线上需要有一个自动运行的验证程序，用户只需在界面上填上要验证的服务方法，以及参数值和期望的返回值，当有一个服务提供者上线时，将自动运行该用例，并将运行结果发邮件通知负责人。</p>
+
+<h4 id="toc_9">(10) 服务应用和Web应用是有区别的，它是一个后台Daemon程序，不需要Tomcat之类的Web容器。但因公司之前以Web应用为主，规范都是按Web应用的，所以不得不把服务跑在一个根本用不上的Web容器里，而搭一个这样的Web工程也非常费事。</h4>
+
+<p>所以需要实现一个非Web的容器，只需简单的Main加载Spring配置即可，并提供Maven模板工程，只需mvn dubbo:generate 即可创建一个五脏俱全的服务应用。</p>
+
+<h4 id="toc_10">(11) 开发服务的人越来越多，更注重开发效率，IDE的集成支持必不可少。</h4>
+
+<p>通过插件，可以在Eclipse中直接运行服务，提供方可以直接填入测试数据测试服务，消费方可以直接Mock服务不依赖提供方开发。</p>
+
+<h4 id="toc_11">(12) 因为暴露服务很简单，服务的上线越来越随意，有时候负责服务化的架构师都不知道有人上线了某个服务，使得线上服务鱼龙混杂，甚至出现重复的服务，而服务下线比上线还困难。</h4>
+
+<p>需要一个新服务上线审批流程，必须经过服务化的架构师审批过了，才可以上线。</p>
+
+<p>而服务下线时，应先标识为过时，然后通知调用方尽快修改调用，直到没有人调此服务，才能下线。</p>
+
+<h4 id="toc_12">(13) 因服务接口设计的经验一直在慢慢的积累过程中，很多接口并不能一促而蹴，在修改的过程中，如何保证兼容性，怎么判断是否兼容？另外，更深层次的，业务行为兼容吗？</h4>
+
+<p>可以根据使用的协议类型，分析接口及领域模型的变更是否兼容，比如：对比加减字段，方法签名等。</p>
+
+<p>而业务上，可能需要基于自动回归测试用例，形成Technology Compatibility Kit (TCK)，确保兼容升级。</p>
+
+<h4 id="toc_13">(14) 随着服务的不停升级，总有些意想不到的事发生，比如cache写错了导致内存溢出，故障不可避免，每次核心服务一挂，影响一大片，人心慌慌，如何控制故障的影响面？服务是否可以功能降级？或者资源劣化？</h4>
+
+<p>应用间声明依赖强度，哪些功能强依赖，哪些弱依赖，然后基于依赖强度，计算出影响面，并定期测试复查，加强关键路径上的服务的优化和容错，清理不该在关键路径上的服务。</p>
+
+<p>提供容错Mock数据，Mock数据也应可以在注册中心在运行时动态下发，当某服务不可用时，用Mock数据代替，可以减少故障的发生，比如某验权服务，当验权服务全部挂掉后，直接返回false表示没有权限，并打印Error日志报警。</p>
+
+<p>另外，前端的页面也应采用Portal进行降级，当该Portal获取不到数据时，直接隐藏，或替换为其它模块展示，并提供功能开关，可人工干预是否展示，或限制多少流量可以展示。</p>
+
+<h4 id="toc_14">(15) 当已有很多小服务，可能就需要组合多个小服务的大服务，为此，不得不增加一个中间层，暴露一个新服务，里面分别调其它小服务，这样的新服务业务逻辑少，却带来很多开发工作量。</h4>
+
+<p>此时，需要一个服务编排引擎，内置简单的流程引擎，只需用XML或DSL声明如何聚合服务，注册中心可以直接下发给消费者执行聚合逻辑，或者部署通用的编排服务器，所有请求有编排服务器转发。</p>
+
+<h4 id="toc_15">(16) 并不是所有服务的访问量都大，很多的服务都只有一丁点访问量，却需要部署两台提供服务的机器，进行HA互备，如何减少浪费的机器。</h4>
+
+<p>此时可能需要让服务容器支持在一台机器上部署多个应用，可以用多JVM隔离，也可以用ClassLoader隔离。</p>
+
+<h4 id="toc_16">(17) 多个应用如果不是一个团队开发的，部署在一台机器上，很有可以误操作，停掉了别人的服务。</h4>
+
+<p>所以需要实现自动部署，所有的部署都无需人工干扰，最好是一键式部署。</p>
+
+<p>类似 xAE 的 Console*</p>
+
+<h4 id="toc_17">(18) 机器总是的闲时和忙时，或者冗余机器防灾，如何提高机器的利用率？</h4>
+
+<p>即然已经可以自动部署了，那根据监控数据，就可以实现资源调度，根据应用的压力情况，自动添加机器并部署。</p>
+
+<p>如果你的应用是国际化的，有中文站，美国站之类，因为时差，美国站的机器晚上闲的时候，可能正是中文站的白天忙时，可以通过资源调度，分时段自动调配和部署双方应用。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-10-25-check-list.html">检查表及总结 - 《代码大全》</a></h1>
+			<p class="meta"><time datetime="2013-10-25T17:50:23+08:00" 
+			pubdate data-updated="true">2013/10/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>为了更好的评估代码写的哪里有问题，我把《代码大全》里核心的部分checklist整理出来了，大家可以大概过一遍，不一定每写完一个程序都要一条一条的去检查，但心里应该有这么一张检查表，在写代码和review代码时自然而然的想起来。</p>
+
+<h3 id="toc_0">设计</h3>
+
+<ul>
+<li>设计是否经过多次迭代，并最终决定了最好的一个？</li>
+<li>是否同时使用自上而下和自下而上的方法来解决设计问题？</li>
+<li>类与类之间的交互关系是否已经设计为最小化？</li>
+<li>设计被划分为层次吗？</li>
+<li>你对把这一程序分解成为子程序，包和类的方式感到满意吗？</li>
+<li>程序是不是易于维护？</li>
+<li>设计是否精简？设计出来的每一个部分都绝对必要吗？</li>
+<li>整体而言，你的设计是否有助于最小化偶然性和本质性的复杂度吗？</li>
+</ul>
+
+<h3 id="toc_1">类的设计</h3>
+
+<ul>
+<li>你是否把程序中的类都看做是抽象数据类型了？是否从这个角度评估它们的接口了？</li>
+<li>类是否有一个中心目的？</li>
+<li>类的命名是否恰当？其名字是否表达了其中新目的？</li>
+<li>类的接口是否展现了一致的抽象？</li>
+<li>类的接口是否能让人清楚明白的知道如何用它？</li>
+<li>类的接口是否抽象，使你能不必顾虑他是如何实现其服务的？你能把类看做黑盒子吗？</li>
+<li>类提供的服务是否足够完整，让其它类无需动用其内部数据？</li>
+<li>是否已从类中去除无关信息？</li>
+<li>是否考虑过把类进一步分解？</li>
+<li>在修改类时是否维持了其接口的完整性？</li>
+<li>是否把成员的可访问性降到最小？</li>
+<li>是否避免暴露类的数据成员？</li>
+<li>类是否避免对其使用者，包括其派生类会如何使用它做了假设？</li>
+<li>类是否不依赖于其它类？它是松散耦合吗？</li>
+<li>继承是否只用来建立一个is a关系？派生类是否遵循了LSP原则。</li>
+<li>继承层次是否很浅？</li>
+<li>类中是否只有大约七个或者更少的成员？</li>
+<li>是否把类直接或者间接调用其他类的子程序的数量减到最少？</li>
+<li>类是否在绝对必要时才与其他类写作？</li>
+<li>是否在构造函数中初始化了所有的数据成员？</li>
+</ul>
+
+<h3 id="toc_2">子程序</h3>
+
+<ul>
+<li>创建子程序的理由充分吗？</li>
+<li>一个子程序中所有适合单独提出的部分是不是已经被提出到单独的子程序中了？</li>
+<li>过程的名字是否用了强烈、清晰的动词加宾语的词组，函数的名字是否描述了其返回值？</li>
+<li>子程序的名字是否描述它所作的全部事情？</li>
+<li>子程序是否具有强烈的功能上的内聚性？</li>
+<li>子程序之间是否有较松散的耦合？子程序与其它子程序之间的连接是否是最小的，明确的，可见的，灵活的？</li>
+<li>子程序的长度是否是由其功能和逻辑自然确定，而非遵循任何人为的编码标准？</li>
+<li>子程序的参数表是否表现出一种具有整体性且一致的抽象？</li>
+<li>子程序参数的排列顺序是否合理？是否与类似的子程序的参数排列相符？</li>
+<li>接口假定是否在文档中说明？</li>
+<li>子程序的参数是否没有超过7个？</li>
+<li>是否用到了每一个输入参数，是否用到了每一个输出参数？</li>
+<li>子程序是否避免了把输入参数用作工作变量？</li>
+<li>如果子程序是一个函数，那么它是否在所有可能的情况下都能返回一个合法的值？</li>
+</ul>
+
+<h3 id="toc_3">防御式编程</h3>
+
+<ul>
+<li>子程序是否保护自己免遭有害输入数据的破坏？</li>
+<li>你用断言来说明编程假定吗？其中包括了前条件和后条件了吗？</li>
+<li>断言是否只说明从来不应该发生的情况？</li>
+<li>你是否在架构或者高层设计中规定了一组特定的错误处理技术？</li>
+<li>你是否在架构或者高层设计中规定了是让错误处理更倾向于健壮性还是正确性？</li>
+<li>代码中用到辅助调试的代码了吗？</li>
+<li>在防御式编程时引入的代码量是否适宜，既不过多也不过少？</li>
+<li>你在项目中定义了一套标准化的异常处理方案吗？</li>
+<li>如果可能的话，是否在局部处理了错误而不是把它当成一个异常跑出去？</li>
+<li>所有异常是否都与抛出他们的子程序在同一抽象层次上？</li>
+<li>每个异常是否包含了关于异常发生的所有背景信息？</li>
+<li>代码中是否没有空的catch语句？</li>
+<li>检查有害输入数据的代码是否也检查了故意的缓冲区溢出，SQL注入，HTML注入，整数溢出及其他恶意输入数据？</li>
+<li>是否检查了所有的错误返回码？</li>
+<li>是否捕获了所有的异常？</li>
+<li>出错消息中是否避免出现有助于攻击者攻入系统所需的信息？</li>
+</ul>
+
+<h3 id="toc_4">伪代码</h3>
+
+<ul>
+<li>是否检查过已满足所有的先决条件？</li>
+<li>定义好这个类要解决的问题了吗？</li>
+<li>高层次的设计是否清晰？能给这个类和其中的每个子程序起一个好的名字吗？</li>
+<li>考虑过该如何测试这个类及其中的每个子程序吗？</li>
+<li>关于效率的问题，你主要从稳定的接口和可读的实现这两个角度考虑吗？还是主要从满足资源和速度的预期目标的角度考虑过呢？</li>
+<li>从标准库函数和其它代码库中寻找过可用的子程序或者组件吗？</li>
+<li>从参考书中查过有用的算法了吗？</li>
+<li>是否用详尽的伪代码设计好每一个子程序？</li>
+<li>你在脑海里检查过伪代码吗？这些伪代码容易理解吗？</li>
+<li>关注过那些可能让你重返设计的警告信息了吗？</li>
+<li>是否把伪代码正确的翻译成代码了？</li>
+<li>你反复使用伪代码编程过程了吗？</li>
+<li>在做出假定的时候有没有对它们加以说明？</li>
+<li>已经删除了那些冗余的注释了吗？</li>
+<li>你是否采取了几次迭代中最好的那个结果？还是在第一次迭代之后就停止了？</li>
+<li>你完全理解你的代码了吗？这些代码是否容易理解？</li>
+</ul>
+
+<h3 id="toc_5">变量</h3>
+
+<ul>
+<li>变量声明位置靠近变量第一次使用的位置吗？</li>
+<li>尽可能在变量声明的同时初始化变量吗？</li>
+<li>计数器和累加器经过适当初始化了吗？如果需要再一次使用，之前重新初始化了吗？</li>
+<li>适当的重新初始化“需要重复执行的代码里的变量”了吗？</li>
+<li>代码在通过编译器编译的时候是不是没有警告信息？你启用了所有可用的警告信息了吗？</li>
+<li>如果语言允许隐式声明，你为由此可能引发的问题做好补偿措施了吗？</li>
+<li>如果可能，所有变量都被定义为具有最小的作用域吗？</li>
+<li>各变量的引用点都尽可能集中在一起吗？对同一个变量的两次相邻引用，或者变量的整个生命期都这样做了吗？</li>
+<li>控制结构符合数据类型吗？</li>
+<li>所有声明的变量都用了吗？</li>
+<li>变量都在合适的时间绑定了吗？也就是说你有意识的在晚期绑定所带来的灵活性和增加复杂度之间做出平衡了吗？</li>
+<li>每个变量都有且仅有一项用途吗？</li>
+<li>每个变量的含义都很明确且没有隐含含义吗？</li>
+</ul>
+
+<h3 id="toc_6">变量命名</h3>
+
+<ul>
+<li>名字完整并且准确的表达了变量所代表的含义吗？</li>
+<li>名字足够长，可以让你无需苦苦思索吗？</li>
+<li>如果有计算限定符，它被放在名字后面吗？</li>
+<li>名字中用Count或者index来掉提Num了吗？</li>
+<li>循环小标的名字有意义吗？</li>
+<li>所有临时的变量都重新命名为更有意义的名字了吗？</li>
+<li>当布尔变量为真时，变量能准确表达其含义吗？</li>
+<li>枚举中的名字含有能够表示其类别的前缀或者后缀吗？</li>
+<li>具名常量是根据它所代表的抽象实体儿不是它所代表的数字来命名的吗？</li>
+<li>命名规则能够区分局部数据，类的数据和全局数据吗？</li>
+<li>规则能够区分类型名，具名常量，枚举类型和变量名吗？</li>
+<li>规则能够在编译器不强制检测只读参数的语言里表示出子程序的输入参数吗？</li>
+<li>规则能尽可能地与语言的标准规则兼容吗？</li>
+<li>名字为可读性而加以格式化了吗？</li>
+<li>是否避免只为了省一个字符而缩写的情况？</li>
+<li>所有单词的缩写方式都一致吗？</li>
+<li>名字能够读出来吗？</li>
+<li>避免使用容易被看错和读错的名字吗？</li>
+<li>在缩写对照表里对端名字做出说明了吗？</li>
+</ul>
+
+<h3 id="toc_7">基本数据类型</h3>
+
+<ul>
+<li>代码中避免使用神秘数值了吗？</li>
+<li>代码考虑了除零错误了吗？</li>
+<li>类型转换很明显吗？</li>
+<li>如果一条语句中存在两个不同类型的变量，那么这条语句会像你期望的那样求值吗？</li>
+<li>代码避免了混合类型比较吗？</li>
+<li>使用整数除法表达式能按预期的那样工作吗？</li>
+<li>整数表达式避免整数溢出问题了吗？</li>
+<li>代码避免了对数量级相差具体大浮点数做加减运算了吗？</li>
+<li>代码系统地阻止了舍入错误的发生吗？</li>
+<li>代码避免对浮点数值做等量比较了吗？</li>
+<li>代码避免使用神秘字符和字符串了吗？</li>
+<li>使用字符串时避免了off-bye-one错误了吗？</li>
+<li>程序用额外的布尔变量来说明条件判断了吗？</li>
+<li>程序用额外的布尔变量来简化条件判断了吗？</li>
+<li>程序用枚举类型而非具名常量来提高可读性和可修改行了吗？</li>
+<li>当变量不能用true和false表示的时候，程序用枚举类型来取代布尔变量了吗？</li>
+<li>针对枚举类型的才测试检测了非法数值了吗？</li>
+<li>把枚举类型的第一项条目保留为“非法的”了吗？</li>
+<li>具名常量使用一致吗？没有在某些位置使用具名常量又在其他位置使用文字量？</li>
+<li>所有的数组下标都没有超出数组边界吗？</li>
+<li>数组引用没有出现off-by-one的错误吗？</li>
+<li>所有的多维数组的下标顺序都正确吗？</li>
+<li>在嵌套循环里，把正确的变量用于数组下标来避免下标错乱吗？</li>
+</ul>
+
+<h3 id="toc_8">不常见的数据类型</h3>
+
+<ul>
+<li>你使用结构体而不是使用单纯的变量来组织和操作相关的数据吗？</li>
+<li>你考虑过创建一个类来代替使用结构体吗？</li>
+<li>所有的变量是否都是局部或者是类范围的？除非绝对有必要才是全局的？</li>
+<li>你对所有的全局变量都加以文档说明吗？</li>
+<li>避免使用伪全局数据，即被四处传递且含有杂乱数据的的巨大对象吗？</li>
+<li>用访问器子程序来取代全局数据了吗？</li>
+<li>把访问其子程序和数据组织到类里了吗？</li>
+<li>访问器子程序提供了一个在底层数据类型实现之上的抽象层吗？</li>
+<li>所有相关的访问器子程序都位于同一抽象层吗？</li>
+<li>把指针操作隔离在子程序里了吗？</li>
+<li>指针引用合法吗？或者指针有可能成为悬空指针吗？</li>
+<li>代码在使用指针之前检查它的有效性了吗？</li>
+<li>在使用指针所指向的变量之前检查其有效性了吗？</li>
+<li>指针用完后被设置为空了吗？</li>
+<li>就可读性而言，代码用了所有需要使用的指针变量了吗？</li>
+<li>链表中的指针是按正确的顺序加以释放的吗？</li>
+<li>程序分配了一片保留的内存后备区域，以便在耗尽内存的时候能够优雅地退出吗？</li>
+<li>是不是在没有其他方法可用的情况下最终才使用指针的？</li>
+</ul>
+
+<h3 id="toc_9">组织直线型代码</h3>
+
+<ul>
+<li>代码使得语句之间的依赖关系变得明显吗？</li>
+<li>子程序的名字使得依赖关系变得明显吗？</li>
+<li>子程序的参数使得依赖关系变得明显吗？</li>
+<li>如果依赖关系不明确，你是否用注释进行了说明？</li>
+<li>你用“内务管理变量”来检查代码中关键位置的顺序依赖关系了吗？</li>
+<li>代码容易按照自上而下的顺序阅读吗？</li>
+<li>相关的语句组织在一起吗？</li>
+<li>把相对独立的语句组放进各自的子程序里吗？</li>
+</ul>
+
+<h3 id="toc_10">使用条件语句</h3>
+
+<ul>
+<li>代码的正常路径清晰吗？</li>
+<li>if-then测试对等量分支的处理方式正确吗？</li>
+<li>使用了else字句并加以说明了吗？</li>
+<li>else字句用的对吗？</li>
+<li>用对了if和else字句，即没有把它们用反吗？</li>
+<li>需要执行的正常情况维护if而不是else字句里吗？</li>
+<li>if-then-else-if把复杂的判断封装到布尔函数里了吗？</li>
+<li>if-then-else-if先判断最常见的情况了吗？</li>
+<li>if-then-else-if判断包含所有的情况吗？</li>
+<li>if-then-else-if是最佳的实现吗？比Case语句还要好吗？</li>
+<li>case子句排序的有意义吗？</li>
+<li>case子句的每种情况操作简单吗？必要的时候调用了其它子程序了吗？</li>
+<li>case语句检测的是一个真实的变量，而不是为了滥用case语句而而刻意制造变量吗？</li>
+<li>默认字句用的合法吗？</li>
+<li>用默认字句来检测和报告意料之外的情况了吗？</li>
+<li>在c,c++和java里，每一个case的末尾有一个break吗？</li>
+</ul>
+
+<h3 id="toc_11">循环</h3>
+
+<ul>
+<li>在合适的情况下用while循环取代for循环了吗？</li>
+<li>循环是由内到外创建的吗？</li>
+<li>是从循环的头部进入循环的吗？</li>
+<li>初始化代码是直接位于循环前面吗？</li>
+<li>循环是无限循环或者事件循环吗？阿德结构是否清晰？</li>
+<li>避免使用像for i = 1 to 9999这样的代码吗？</li>
+<li>如果这是一个c++,c或java中的for循环，那么把循环头留给循环控制代码了吗？</li>
+<li>循环使用了{}及其等价物来括上循环体，以防止因修改不当而出错吗？</li>
+<li>循环体内有内容吗？他是非空的吗？</li>
+<li>把内务处理集中地放在循环开始或者循环结束处了吗？</li>
+<li>循环像定义良好的子程序那样只执行一件操作吗？</li>
+<li>循环短的足以一目了然吗？</li>
+<li>循环的嵌套层次不多于3层吗？</li>
+<li>把长循环的内容提取成单独的子程序吗？</li>
+<li>如果循环很长，那么它非常清晰吗？</li>
+<li>如果这是一个for循环，那么其中的代码有没有随意修改循环下标值？</li>
+<li>是否把重要的循环下标值保存在另外的变量里，而不是在循环体外使用该循环下标？</li>
+<li>循环下标是序数类型或者枚举类型，而不是浮点类型吗?</li>
+<li>循环下标的名字有意义吗？</li>
+<li>循环避免了下标串话问题吗？</li>
+<li>循环是在所有可能的条件下都能终止吗？</li>
+<li>如果建立了某种安全计数器标准，循环使用了安全计数器了吗？</li>
+<li>循环的退出条件清晰吗？</li>
+<li>如果使用了break或者continue，那么它们用对了吗？</li>
+<li>不常见的控制结构</li>
+<li>每一个子程序都仅在有必要的时候才使用return吗？</li>
+<li>使用return有助于增强可读性吗？</li>
+<li>递归子程序中包含了停止递归的代码吗？</li>
+<li>子程序用安全计数器来确保子程序能停下来吗？</li>
+<li>递归只位于一个子程序里面吗？</li>
+<li>子程序递归深度处于程序栈容量可以满足的限度内吗？</li>
+<li>递归是实现子程序的最佳方法吗？它要好于简单的迭代吗？</li>
+<li>是否在万不得已的时候才使用goto？如果用了goto，是否仅仅处于增强可读性和可维护性呢？</li>
+<li>如果处于效率因素而使用的goto，那么对这种效率上的提升做出衡量并且加以说明了吗？</li>
+<li>一个子程序里最多只用了一个goto标号吗？</li>
+<li>所有的goto都向前跳转，而不是向后跳转吗？</li>
+<li>所有的goto标号都用到了吗？</li>
+</ul>
+
+<h3 id="toc_12">表驱动法</h3>
+
+<ul>
+<li>你考虑过把表驱动法作为复杂逻辑的替代方案吗？</li>
+<li>你考虑过把表驱动法作为复杂继承结构的替代方案吗？</li>
+<li>你考虑过把表数据存储在外部并在运行期间读入，以便在不修改代码的情况下就可以改变这些数据吗？</li>
+<li>如果无法用一种简单的数组索引去访问表，那么你把机酸访问键值的功能提取成单独的子程序，而不是在代码中重复地计算键值吗？</li>
+</ul>
+
+<h3 id="toc_13">一般控制问题</h3>
+
+<ul>
+<li>表达式中用的是true和false，而不是1和0吗？</li>
+<li>布尔值和true以及false做比较是隐式进行的吗？</li>
+<li>对数值做比较是显式进行的吗？</li>
+<li>有没有通过增加新的布尔变量，使用布尔函数和决策表来简化表达式？</li>
+<li>布尔表达式是用肯定形式表达的吗？</li>
+<li>括号配对吗？</li>
+<li>在需要括号来明确的地方都使用括号了吗</li>
+<li>判断是按照数轴顺序编写了吗？</li>
+<li>如果适当的话，java中的判断用的是a.equals(b)方式，而没有用a==b方式吗？</li>
+<li>空语句表述得明显吗？</li>
+<li>用重新判断部分条件，转换成if-then-else或者case语句、把嵌套代码提取成单独的子程序、换成一种更面向对象的设计或者其他的改进方法来简化嵌套语句了吗？</li>
+<li>如果一个子程序的决策点超过10个，那么能提出不重新设计的理由吗？</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-10-12-activemq-optmization.html">ActiveMQ 优化</a></h1>
+			<p class="meta"><time datetime="2013-10-12T17:55:10+08:00" 
+			pubdate data-updated="true">2013/10/12</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">1. 启用 NIO Transport Connector</h3>
+
+<pre><code>&lt;transportConnectors&gt;
+   &lt;transportConnector name=&quot;nio&quot; uri=&quot;nio://localhost:62828&quot;/&gt;
+&lt;/transportConnectors&gt;
+</code></pre>
+
+<p>客户端也需要改为 nio。</p>
+
+<h3 id="toc_1">2. 目标策略</h3>
+
+<pre><code>&lt;destinationPolicy&gt;
+ &lt;policyMap&gt;
+  &lt;policyEntries&gt;
+   &lt;policyEntry queue=&quot;&gt;&quot;
+           optimizedDispatch=&quot;true&quot;
+           producerFlowControl=&quot;false&quot;
+           memoryLimit=&quot;128 mb&quot;&gt;
+        &lt;pendingSubscriberPolicy&gt;
+          &lt;vmCursor /&gt;
+        &lt;/pendingSubscriberPolicy&gt;
+   &lt;/policyEntry&gt;
+  &lt;/policyEntries&gt;
+ &lt;/policyMap&gt;
+&lt;/destinationPolicy&gt;
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-09-26-rabbitmq-clustering-ha.html">RabbitMQ 集群与高可用配置</a></h1>
+			<p class="meta"><time datetime="2013-09-26T17:36:16+08:00" 
+			pubdate data-updated="true">2013/9/26</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">集群概述</h3>
+
+<p>通过 Erlang 的分布式特性（通过 magic cookie 认证节点）进行 RabbitMQ 集群，各 RabbitMQ 服务为对等节点，即每个节点都提供服务给客户端连接，进行消息发送与接收。</p>
+
+<p>这些节点通过 RabbitMQ HA 队列（镜像队列）进行消息队列结构复制。本方案中搭建 3 个节点，并且都是磁盘节点（所有节点状态保持一致，节点完全对等），只要有任何一个节点能够工作，RabbitMQ 集群对外就能提供服务。</p>
+
+<h3 id="toc_1">环境</h3>
+
+<ul>
+<li>CentOS 6.4，64位</li>
+<li>RabbitMQ 3.1.5</li>
+<li>HAProxy 1.4.22</li>
+</ul>
+
+<p>RabbitMQ 集群安装在 3 个节点上：192.168.1.1、192.168.1.2、192.168.1.3；<br/>
+HAProxy 安装在 192.168.1.4 上，用于对外提供 RabbitMQ 均衡。</p>
+
+<p>所需安装包<a href="http://www.rabbitmq.com/download.html">下载</a>。</p>
+
+<h3 id="toc_2">配置步骤</h3>
+
+<ol>
+<li>安装 erlang、rabbitmq
+在 192.168.1.1、192.168.1.2、192.168.1.3 三个节点上安装，然后开启 RabbitMQ 监控插件：
+<code>
+rabbitmq-plugins enable rabbitmq_management
+</code></li>
+<li>修改 /etc/hosts
+加入集群 3 个节点的描述：</li>
+</ol>
+
+<pre><code>192.168.1.1 node1
+192.168.1.2 node2
+192.168.1.3 node3
+</code></pre>
+
+<ol>
+<li>设置 Erlang Cookie
+Erlang Cookie 文件：/var/lib/rabbitmq/.erlang.cookie。这里将 node1 的该文件复制到 node2、node3，由于这个文件权限是 400，所以需要先修改 node2、node3 中的该文件权限为 777：</li>
+</ol>
+
+<pre><code># chmod 777 /var/lib/rabbitmq/.erlang.cookie
+</code></pre>
+
+<p>然后将 node1 中的该文件拷贝到 node2、node3，最后将权限和所属用户/组修改回来：</p>
+
+<pre><code># chmod 400 /var/lib/rabbitmq/.erlang.cookie
+# chown rabbitmq /var/lib/rabbitmq/.erlang.cookie
+# chgrp rabbitmq /var/lib/rabbitmq/.erlang.cookie
+</code></pre>
+
+<ol>
+<li>使用 -detached 参数运行各节点</li>
+</ol>
+
+<pre><code># rabbitmqctl stop
+# rabbitmq-server -detached
+</code></pre>
+
+<ol>
+<li>组成集群
+将 node2、node3 与 node1 组成集群：</li>
+</ol>
+
+<pre><code>node2 # rabbitmqctl stop_app 
+node2 # rabbitmqctl join_cluster rabbit@node1
+node2 # rabbitmqctl start_app
+  
+node3 # rabbitmqctl stop_app 
+node3 # rabbitmqctl join_cluster rabbit@node1
+node3 # rabbitmqctl start_app
+</code></pre>
+
+<p>此时 node2 与 node3 也会自动建立连接；如果要使用内存节点，则可以使用<br/>
+node2 # rabbitmqctl join_cluster --ram rabbit@node1 加入集群。</p>
+
+<p>集群配置好后，可以在 RabbitMQ 任意节点上执行 rabbitmqctl cluster_status 来查看是否集群配置成功。</p>
+
+<ol>
+<li>设置镜像队列策略
+在任意一个节点上执行：</li>
+</ol>
+
+<pre><code># rabbitmqctl set_policy ha-all &quot;^&quot; &#39;{&quot;ha-mode&quot;:&quot;all&quot;}&#39;
+</code></pre>
+
+<p>将所有队列设置为镜像队列，即队列会被复制到各个节点，各个节点状态保持一直。</p>
+
+<p>完成这 6 个步骤后，RabbitMQ 高可用集群就已经搭建好了，最后一个步骤就是搭建均衡器。</p>
+
+<ol>
+<li>安装并配置 HAProxy
+在 192.168.1.4 上安装 HAProxy，然后修改 /etc/haproxy/haproxy.cfg：</li>
+</ol>
+
+<pre><code>listen rabbitmq_cluster 0.0.0.0:5672
+ 
+mode tcp
+balance roundrobin
+ 
+server   node1 192.168.1.1:5672 check inter 2000 rise 2 fall 3  
+server   node2 192.168.1.2:5672 check inter 2000 rise 2 fall 3
+server   node2 192.168.1.3:5672 check inter 2000 rise 2 fall 3
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+  
+	<div class="pagination">
+	 <a class="prev" href="all_6.html">&larr; Older</a> 
+<a href="archives.html">Blog Archives</a>
+	 <a class="next" href="all_4.html">Newer &rarr;</a>  
+	    
+	</div>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

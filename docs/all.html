@@ -62,16 +62,22 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:" />
+    <input type="hidden" name="q" value="site:lambgao.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
   
 <ul class="main-navigation">
 
-  <li id=""><a target="self" href="index.html">Home</a></li>
+  <li id=""><a target="_self" href="index.html">Home</a></li>
 
   <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
 
 </ul>
 
@@ -82,1212 +88,91 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2015-12-18-carthage-decentralized-dependency-manager.html">Carthage去中心化的Cocoa依赖管理器</a></h1>
-			<p class="meta"><time datetime="2015-12-18T00:36:07+08:00" 
-			pubdate data-updated="true">2015/12/18</time></p>
+		  	<h1 class="entry-title"><a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a></h1>
+			<p class="meta"><time datetime="2016-12-29T02:01:18+08:00" 
+			pubdate data-updated="true">2016/12/29</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p>说到 iOS 的依赖管理工具，大家一定首先想到的是 CocoaPods ，不错，CocoaPods 确实是一个很好依赖管理工具，已然成为了 Cocoa 依赖管理的标准，丰富的支持库、文档等等，CocoaPods 相关的文章有很多，这里就不一一赘述了。</p>
+		  	<p>只能说偏执的张小龙真的很厉害。</p>
 
-<p>今天要介绍的是一款新的依赖管理工具，名曰 “Carthage”，名字有点难理解，简单方便，完全独立，不修改 XCode 项目文件或配置。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-06-03-hello-swift.html">美国一名程序员对Swift语言的看法</a></h1>
-			<p class="meta"><time datetime="2014-06-03T00:32:58+08:00" 
-			pubdate data-updated="true">2014/6/3</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>近20年来，苹果一直把Objective-C作为主要的编程语言，而在今天举行的全球开发者大会上，苹果推出了一个全新的编程语言Swift。据悉，苹果此次发布的Swift兼容Objective-C语言，从其开发者指南中，我们看到Swift从Python和JavaScript中吸取了许多东西，从而让Swift更易读，或者说更为“口语化”。</p>
-
-<p>然而，对这类语法更为简洁的语言，许多人会质疑其运行效率。对此苹果指出，Swift在许多方面性能都比Objective-C好。</p>
-
-<p>美国一名程序员看完了Swift的指南后，写出了自己对这个新编程语言的看法。以下为译文：</p>
-
-<h1 id="toc_0">Swift保障体系</h1>
-
-<ul>
-<li>Swift可供所有人使用；</li>
-<li>Swift语言继承了C语言以及Objective-C的特性，且克服了C语言的兼容性问题；Swift还采用安全编程模式，且加入多种新功能，使编程更简单、灵活；</li>
-<li>和许多其他的编程语言一样，Swift可被LLVM编译为本地代码，且它的运行速度特别快，可供很多原生设备使用。</li>
-</ul>
-
-<h1 id="toc_1">Swift功能特性</h1>
-
-<ul>
-<li>Swift中并没有加入宏系统；其协议和扩展都源自Objective-C；</li>
-<li>Swift采用var声明变量和let声明常量；结合if和let，可方便处理可空变量；</li>
-<li>单继承类显示重写和内容，外加多种接口；</li>
-<li>Lambdas表达式看起来和类Ruby块形式十分相似；</li>
-<li>Swift没有明确的指标，依赖像C#语言一样的二分法价值和引用类型；</li>
-<li>Swift是一个没有globs的基本模块系统，以进口或重命名分类，通过属性，支持重新导出功能；</li>
-<li>Swift支持本地类型推断、整理数值类型，具有更好的文字处理功能，但不支持隐式强制转换，因此所有的代码需要转化为显式类型；</li>
-<li>脚本语言支持词典文字，简单的脚本可做大规模的工作，可在多核计算机、集群、网格、云和超级计算机上运行。</li>
-</ul>
-
-<h1 id="toc_2">Swift的独特性</h1>
-
-<ul>
-<li>Swift支持默认检查算法功能；</li>
-<li>Swift使用[]操作符声明数组和字典，数组还有独特的延伸语义功能；但不清楚是否允许程序员自己执行迭代器协议；</li>
-<li>Swift看起来并不像是个表达式语言；</li>
-<li>参量可以双向接口，参数需要无敌的单元件；</li>
-<li>Swift使用class来创建类，类可包含字段和方法；</li>
-<li>Swift采用Objective-C的命名参数和动态对象模型，提供了对Cocoa框架和mix-and-match的互操作性。基于这些基础，Swift引入了很多新功能，如结合面向过程和面向对象。</li>
-<li>除了代数类型、选择类型和偶然会发生的“”runtime error外，Swift没设其他处理错误的讨论区。</li>
-</ul>
-
-<p>原文出自：<a href="http://graydon2.dreamwidth.org/5785.html">Swift</a></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-05-08-elegant-uninstall-default-git.html">优雅的卸载Mac默认的Xcode附带的git</a></h1>
-			<p class="meta"><time datetime="2014-05-08T00:32:32+08:00" 
-			pubdate data-updated="true">2014/5/8</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>这里说的优雅的卸载其实不是真正的卸载，而是不用动Xcode附带的git，通过用户~/.bash_profile的文件来优雅的完成。仅仅需要在~/.bash_profile文件后追加如下的导出变量代码即可:</p>
-
-<pre><code>export GIT_HOME=/usr/local/git
-export PATH=$GIT_HOME/bin:$PATH
-</code></pre>
-
-<p>通git官网下载的mac安装包进行安装，git会被安装到</p>
-
-<pre><code>/usr/local/git
-</code></pre>
-
-<p>Xcode附带的git被安装到</p>
-
-<pre><code>/usr/bin
-</code></pre>
-
-<p>不必移动或者删除这里的git版本，仅仅需要更改一下用户下面的~/.bash_profile的文件即可优雅的解决git版本的问题.</p>
-
-<p>如果您非要卸载旧的也可以通过下面的命令来完成</p>
-
-<pre><code>sudo cd /usr/bin
-sudo mkdir old-git
-sudo mv git* old-git
-ln -s /usr/local/git ./
-</code></pre>
-
-<p>~/.bash_profile文件这个文件除了导出GIT_HOME，也会导出其他的HOME，下面是我常用的一些导出</p>
-
-<pre><code>export COCOS2DX_ROOT=/Users/Lamb/Applications/cocos2d/cocos2d-x-2.2.1
-export PATH=$COCOS2DX_ROOT:$PATH
-
-export NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
-export ANDROID_NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
-export ANDROID_SDK_ROOT=/Users/Lamb/Applications/android-sdk-macosx
-export PATH=$NDK_ROOT:$PATH
-export PATH=$ANDROID_NDK_ROOT:$PATH
-export PATH=$ANDROID_SDK_ROOT:$PATH
-
-export M2_HOME=/Users/Lamb/Applications/maven/apache-maven-3.2.1
-export PATH=$M2_HOME/bin:$PATH
-export GRADLE_HOME=/Users/Lamb/Applications/gradle/gradle-1.11
-export PATH=$GRADLE_HOME/bin:$PATH
-
-export MONGO_HOME=/Users/Lamb/Applications/mongodb/mongodb-osx-x86_64-2.6.1
-export PATH=$MONGO_HOME/bin:$PATH
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a></h1>
-			<p class="meta"><time datetime="2014-05-07T00:31:56+08:00" 
-			pubdate data-updated="true">2014/5/7</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在Mac下可以通过往/etc/launchd.conf文件中追加命令去来实现对一些环境变量的设置</p>
-
-<pre><code>setenv  HOME  /PATH
-</code></pre>
-
-<p>intellij idea下会默认去读取M2_HOME这个环境变量，可以往/etc/launchd.conf文件中追加命令</p>
-
-<pre><code>setenv M2_HOME /Users/Lamb/Applications/maven/apache-maven-3.2.1
-</code></pre>
-
-<p>mac下面安装了最新版本的jdk(如1.8)，但是运行eclipse和idea还是提示需要安装jre,如果点击同意会自动安装一个jre6，安装至下面的路径：</p>
-
-<pre><code>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-</code></pre>
-
-<p>但是其实不需要安装，只需要设置一下JAVA_HOME环境变量即可，安装最新版本的jdk会被安装至下面的路径：</p>
-
-<pre><code>/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
-</code></pre>
-
-<p>可以往/etc/launchd.conf文件中追加命令</p>
-
-<pre><code>setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
-</code></pre>
-
-<p>如果你安装了苹果提供的jre6，也就是想当于设置了JAVA_HOME为jre6，这样在运行java应用程序（如java ***）或者依赖于java的应用程序（如mvn ***）时，默认使用的是jre6，eclipse和idea的运行是没有问题的，但是运行maven命令行是有可能会出现错误。如果你的maven-compiler-plugin插件中的编译级别高于1.6，比如设置为1.8。但是运行mvn tomcat7:run时maven的jre版本却为1.6,相当于用jre6来运行1.8编译的代码，这肯定会出现一些问题的。这也可以通过上面重新设置JAVA_HOME来解决。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-08-mongodb-2-6-0.html">Mongdb2.6.0 一个新版本号</a></h1>
-			<p class="meta"><time datetime="2014-04-08T00:31:25+08:00" 
-			pubdate data-updated="true">2014/4/8</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>MongoDB 2.6 发布了，这是一个主要的发行版本，改进涉及到核心、存储、网络、查询和安全性等诸多方面。核心主要改进内容包括：</p>
-
-<ul>
-<li>聚合函数增强</li>
-<li>集成全文搜索</li>
-<li>改进插入和更新操作</li>
-<li>新的写操作协议</li>
-<li>Windows 下的 MSI 安装包</li>
-</ul>
-
-<h3 id="toc_0">聚合函数增强</h3>
-
-<ul>
-<li>现在db.collection.aggregate() 返回一个游标, 可以使用管道操作符来限制返回文档的数量</li>
-<li>聚合函数也可以使用explain来打印详细的查询信息来帮助分析了</li>
-<li>Aggregation can now use a more efficient external-disk-based sorting process.</li>
-<li>新的管道操作符\(out和\)redact </li>
-<li>New or modified operators:
-set expression operators
-\(let and \)map operators to allow for the use of variables
-\(literal operator and \)size operator
-$cond expression now accepts either an object or an array</li>
-</ul>
-
-<p>下面的略，有空再细看一下.</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-08-bye-windwos-xp.html">再见Windows XP</a></h1>
-			<p class="meta"><time datetime="2014-04-08T00:30:55+08:00" 
-			pubdate data-updated="true">2014/4/8</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>今天（4月8日）微软将正式停止针对Windows XP的安全维护， 意味着这一服役长达13年之久的操作系统终于开始退出历史舞台了。Windows XP于2001年10月25日正式发布，相比其前一代操作系统Windows 2000和Windows Me，其全新的用户图形界面、简化的操作体验，使其快速抢占了市场。随后微软推出的Vista由于各种缺陷（耗资源、速度慢、兼容性差等），也无法成功替代XP，反而使得用户的XP情结更加根深蒂固，继而成为微软后续操作系统（Windows 7/8）推广的最大绊脚石。 </p>
-
-<p>我现在已经脱离Windows很久，但是还是要写篇文章纪念一下，因为80后谁敢拍着胸膛说我没用过Windows XP，谁敢说我没用过盗版XP。我用过，所以我要说“再见，Windows XP！”</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-07-mongodb-daemon-start-and-down.html">Mongdb后台daemon方式启动与停止</a></h1>
-			<p class="meta"><time datetime="2014-04-07T00:30:25+08:00" 
-			pubdate data-updated="true">2014/4/7</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在后台开启Mongdb服务可以使用--fork。启用fork必须要带上--logpath来指定日志输出目录。为了防止日志被覆盖可以开启--logappend。</p>
-
-<pre><code>mongod --fork --logpath /data/log/20140407.log --logappend
-</code></pre>
-
-<p>mongodb默认的数据保存路径是/data/db/，默认端口号为27017。如果想修改可以使用--dbpath和--port来修改</p>
-
-<pre><code>mongod --dbpath /mydata/ --port 20111
-</code></pre>
-
-<p>也可以把参数写入配置文件中，通过配置文件来启动。</p>
-
-<pre><code>mongod -f /data/conf/mongodb.conf
-</code></pre>
-
-<p>配置文件如下：</p>
-
-<pre><code>port = 27017
-dbpath = /data/db
-logpath = /data/log/20140407.log
-logappend = true
-fork = true
-</code></pre>
-
-<p>如果没有使用--fork，退出终端的时候mongodb会自动清理退出，把没有写好的数据写完成，并最终关闭数据文件。要注意的是这个过程会持续到所有操作都完成。如果使用--fork在后台运行mongdb服务，那么就要通过向服务器发送shutdownServer()消息来关闭。</p>
-
-<pre><code>use admin
-db.shutdownServer()
-</code></pre>
-
-<p>要注意的是，这个命令只允许在本地，或是一个经过认证的客户端。</p>
-
-<p>如果这是一个主从式的复制集群，在1.9.1版本后将按下面的步骤来关闭</p>
-
-<ul>
-<li>检查从Mongodb的数据更新时间</li>
-<li>如果所有的从Mongodb和主的时间差都超过10，这个时候不会关闭mongodb（在这种情况下面，我们可以通过配置timeoutSecs的方式来让从Mongodb完成数据的更新）</li>
-<li>如果其中有一个从Mongodb与主服务时间差在10秒内，那么主服务器将会关闭，并且等待从Mongodb更新完成并关闭。</li>
-</ul>
-
-<p>如果没有up-to-date 从Mongodb且你想强制关闭服务，可以通过添加force:true;命令如下：</p>
-
-<pre><code>db.adminCommand({shutdown : 1, force : true})
-or
-db.shutdownServer({force : true, timeoutsec : 5})
-</code></pre>
-
-<p>Window下面以后台服务的方式启动可以使用下面的命令添加服务，配置文件的内容同mac下的</p>
-
-<pre><code>sc create MongoDB binPath= &quot;\&quot;%MONGO_HOME%\bin\mongod.exe\&quot; --service --config=\&quot;%MONGO_HOME%\mongod.cfg\&quot;&quot; DisplayName= &quot;MongoDB&quot; start= &quot;auto&quot;
-</code></pre>
-
-<p>如果成功看到</p>
-
-<pre><code>[SC] CreateService SUCCESS
-</code></pre>
-
-<p>服务安装成功后可以使用命名启动也可以手动启动</p>
-
-<pre><code>net start MongoDB
-</code></pre>
-
-<p>想删除服务可以使用如下命令</p>
-
-<pre><code>sc delete &quot;MongoDB&quot;
-</code></pre>
-
-<p>单个进程打开的最大文件句柄数量限制的修改，在/etc/profile文件最下面添加命令</p>
-
-<pre><code>ulimit -n 1024
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-05-can-break-wind-but-cannot-break-sb.html">防风，但不防傻逼</a></h1>
-			<p class="meta"><time datetime="2014-04-05T00:29:46+08:00" 
-			pubdate data-updated="true">2014/4/5</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>耐不住毕业前的躁动与无聊，我前段时间养成了半夜在走廊和人抽烟聊天的习惯。有一次我偶然发现隔壁寝室的四个男生一人买了个zippo打火机，我虽然偶尔也抽烟，但用的都是一块钱一个偶尔死活打不着偶尔却能烧到头发的便宜货，因此对这种高端霸气上档次的东西心存敬畏与好奇，便借来把玩了一番。</p>
-
-<p>我打着了后弱弱问一哥们道：“这玩意防风么？”</p>
-
-<p>他点点头道：“嗯，zippo打火机都是防风的。”</p>
-
-<p>然后我“呼”的一声就把火给吹灭了，然后得意洋洋地把打火机在他前面晃了晃道：“你看，不防风吧。”</p>
-
-<p>他淡淡地说了句道：“防风，但不防傻逼。”</p>
-
-<p>当时虽然被周围一票人给笑了半天，但我自己也忍不住跟着笑了很久，倒不是我缺心眼听不懂好歹话或者是喜欢被人称作傻逼，而是我觉得这个说法真心很赞，光从这句回答本身的机智程度来看就足够给好评了，无论这个所指的对象是不是我，我都觉得很享受。</p>
-
-<p>后来有天我和一个朋友聊天的时候，他跟我说起他之前的一个经历。他之前在学校的学生会里工作，因为权利问题还有一些个人的矛盾和其中的一个同学搞得很僵，但他一直都处处让着那个同学，反倒是那个同学处处刁难他，还想方设法排挤孤立他。终于有一天他觉得呆不下去了，选择主动退出学生会，临走前他特意约了那个同学出来，给他道歉说之前都是自己的不对，希望他能够原谅自己。</p>
-
-<p>我听完后忍不住骂他实在是怂，整件事情他并没有做错什么，到头来不仅是你退出，还去给那个伤害你的人道歉，究竟是不是脑子搭错了。他只是淡淡的告诉我，有些事情冤冤相报何时了，他本来也没想争个啥，既然一山不容二虎不如就我退一步呗，我给他道歉其实是想告诉他，我不是一个喜欢认输的人，但对于没品的对手以及没意义的争斗，我就把这种满足感施舍给你可怜的虚荣心好了。</p>
-
-<p>他的这个回答让我再次想起了前些天在走廊里听到的那句话，作为zippo打火机，既然你标榜你是防风的，那就难免会有人用各种奇怪的方式来验证你究竟是不是能防风，能防什么样的风，也肯定会有人在弄灭你以后耀武扬威地向旁人得意地炫耀他的胜利以及你的无能。然而这时候的你，是满腔怒火要和那个人争一个高下，给他灌输所谓的防风的标准是什么，还是徒劳地努力改变自己，让自己变得不仅能防各种阴风台风龙卷风，还能防水防盗防学长呢。我觉得与其去和傻逼较劲，不如放自己一条生路，告诉他对不起这个打火机让你失望了，希望他能够找到更适合自己的点烟方式，无论是用火柴煤气灶还是氧气切割机。</p>
-
-<p>我越发觉得这是一个累心的年代，记得之前有人因为我转载的一张图片，声称要发微博让广大网民一起声讨我，我当时还可傻逼地写了一条很长的状态来解释缘由声明自己的立场，生怕自己被狂热的粉丝们人肉出来挂在城楼上晒成腊肉条。现在想想，无论是在网上和人吵个面红耳赤，还是急于在各种流言蜚语前证明自己的清白，都是一种自寻烦恼而自讨没趣的行为，还容易把自己的情商与智商拉到地平线以下。</p>
-
-<p>既然你愿意站得高，愿意把自己的想法拿出来分享，那么难免就会被人看到你的弱点，被不同居心的揣测或是针对，就像你说你是个防风的打火机，还是个颇有些出名的牌子，那么就避免不了有秀下限的人来试试你究竟是不是真的防风。然而当有人用极端手段或是错误的手段成功地挑战了你时，你究竟是怒不可遏地反过来挑战他的智商，维护自己那飘渺的尊严，还是一笑而过，让傻逼飞一会儿呢。</p>
-
-<p>我想绝大多数人都咽不下这一口气，也受不了这个委屈，然而为了变得更强大，很多时候我们需要这样的修炼，直到所有的质疑和否定相比起你的强大都变得微不足道的那一天。</p>
-
-<p>好吧，我终于还是用我最讨厌的文体写完了这篇文章，就为了这句最初用来形容我却让我爱得不行的一句话。</p>
-
-<p>“防风，但不防傻逼。”愿各位共勉。</p>
-
-<p>文/陈谌 <a href="http://site.douban.com/177678/widget/notes/10060932/note/273510395/?qq-pf-to=pcqq.discussion">原文链接</a></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-08-13-dispel-your-windjs's-doubts.html">消除你对Wind.js的疑虑</a></h1>
-			<p class="meta"><time datetime="2012-08-13T00:28:55+08:00" 
-			pubdate data-updated="true">2012/8/13</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h3 id="toc_0">eval is (always) evil</h3>
-
-<p>eval大概也算是整个ECMAScript语言中最强大的一个方法，<br/>
-他就像是一个完整的ECMAScript解析器。你说它evil,我也承认这个<br/>
-方法会存在危险，有可能带来安全问题，特别是在用它执行用户输入<br/>
-数据的情况下。但Wind.js是用eval来运行已经“编译”后的代码，<br/>
-让你更舒服顺畅的来编写异步回调的代码。这些代码是你自己写的，<br/>
-所以不必担心代码注入、跨站脚本攻击这样的安全问题。没有这这个<br/>
-困扰和担忧，我相信eval应该是美好的。</p>
-
-<h3 id="toc_1">API太丑，eval为什么不封装？</h3>
-
-<p>通过eval执行的代码是被认为是包含该次调用的执行环境的一部分，<br/>
-因此被执行的代码具有与该执行环境有着相同的作用域链。</p>
-
-<pre><code>var Wind = require(&quot;wind&quot;);
-
-var msg = &#39;hello world&#39;;
-eval(&quot;console.log(msg)&quot;);//hello world
-
-var msg = &#39;hello world&#39;;
-var newFunc = eval(Wind.compile(&quot;async&quot;, function () { 
-    console.log(msg);
-}));
-newFunc().start();//hello world
-</code></pre>
-
-<p>变量msg是在eval外定义的，但eval中还是能够打印&quot;hello world&quot;。<br/>
-如果包装起来如法访问到msg这个变量。</p>
-
-<pre><code>var Wind = require(&quot;wind&quot;);
-
-var vm = require(&quot;vm&quot;);
-var sandbox = {
-      Wind: Wind,
-      console:console
-};
-
-function $async(fun){
-    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
-    return script.runInNewContext(sandbox);
-}
-
-var msg = &#39;hello world&#39;;
-var newFunc = $async(function () { 
-    console.log(msg);
-});
-newFunc().start();//[WARNING] An unhandled error occurred: ReferenceError: msg is not defined
-</code></pre>
-
-<p>上面的例子中看到我们使用vm模块对eval有一个简单的包装，可以直接<br/>
-使用$async方法来替换以前的写法。从打印信息中，你很容易看出访问<br/>
-不到msg这个参数。麻烦请注意一下调用script.runInNewContext()方法<br/>
-时传入了一个sandbox对象，这相当于往代码运行环境中添加上下文参数。<br/>
-如果sanbox这个参数不传递，运行上端代码会报ReferenceError: Wind <br/>
-is not defined的错误。这就是eval为什么无法包装的原因。</p>
-
-<p>如果你的代码不需要依赖上下文你可以用上述方法包装，例如这样：</p>
-
-<pre><code>var Wind = require(&quot;wind&quot;);
-
-var vm = require(&quot;vm&quot;);
-var sandbox = {
-      Wind: Wind,
-      console:console
-};
-
-function $async(fun){
-    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
-    return script.runInNewContext(sandbox);
-}
-
-var fib = $async(function () {
-
-    $await(Wind.Async.sleep(1000));
-    console.log(0);
-
-    $await(Wind.Async.sleep(1000));
-    console.log(1);
-
-    var a = 0, current = 1;
-    while (true) {
-        var b = a;
-        a = current;
-        current = a + b;
-
-        $await(Wind.Async.sleep(1000));
-        console.log(current);
-    }
-});
-
-fib().start();
-</code></pre>
-
-<h3 id="toc_2">Wind.js很重很慢不适合前端</h3>
-
-<p>Wind.js基础组件及异步运行库共计4K大小（Minified + GZipped），<br/>
-Wind.js完全不会给前端带来负担，给你带来顺畅舒服的异步编程体验。</p>
-
-<h3 id="toc_3">生成的代码看不懂，难以调试</h3>
-
-<p>Wind.js生产的代码也完全是Javascript代码，你无需为调试担忧。<br/>
-下面是一个例子，我相信你很容易就可以看懂。</p>
-
-<pre><code>// Original: 
-function () {
-
-    $await(Wind.Async.sleep(1000));
-    console.log(0);
-
-    $await(Wind.Async.sleep(1000));
-    console.log(1);
-
-    var a = 0, current = 1;
-    while (true) {
-        var b = a;
-        a = current;
-        current = a + b;
-
-        $await(Wind.Async.sleep(1000));
-        console.log(current);
-    }
-}
-
-// Windified: 
-/* async &lt;&lt; function () { */     (function () {
-                                     var _builder_$0 = Wind.builders[&quot;async&quot;];
-                                     return _builder_$0.Start(this,
-                                         _builder_$0.Delay(function () {
-/*     $await(Wind.Async.sleep(1000)); */    return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
-/*     console.log(0); */                        console.log(0);
-/*     $await(Wind.Async.sleep(1000)); */        return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
-/*     console.log(1); */                            console.log(1);
-/*     var a = 0, current = 1; */                    var a = 0, current = 1;
-                                                     return _builder_$0.While(function () {
-/*     while (true) { */                                 return true;
-                                                     },
-                                                         _builder_$0.Delay(function () {
-/*         var b = a; */                                     var b = a;
-/*         a = current; */                                   a = current;
-/*         current = a + b; */                               current = a + b;
-/*         $await(Wind.Async.sleep(1000)); */                return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
-/*         console.log(current); */                              console.log(current);
-                                                                 return _builder_$0.Normal();
-                                                             });
-                                                         })
-/*     } */                                          );
-                                                 });
-                                             });
-                                         })
-                                     );
-/* } */                          })
-</code></pre>
-
-<h3 id="toc_4">eval性能方面会有问题</h3>
-
-<p>有童鞋提出这方面的问题，但不知道提供什么样子的测试才能令人信服，从而消除疑虑，放心大胆的使用Wind.js。<br/>
-这个问题还在收集整理中...</p>
-
-<h3 id="toc_5">写在最后</h3>
-
-<p>在ADC被老赵的执着打动了，支持老赵从文档开始吧。<br/>
-如果你还有对Wind.js的任何疑虑都可以留言，这个文档的目的就是消除你对Wind.js的疑虑。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-08-12-test-v8-delete.html">v8 can not handle delete yet</a></h1>
-			<p class="meta"><time datetime="2012-08-12T00:27:15+08:00" 
-			pubdate data-updated="true">2012/8/12</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>v8 delete操作存在的这个问题</p>
-
-<p><img src="/resource/image/v8delete.jpeg" alt="有帮助的截图"/></p>
-
-<p>测试地址在这里， <a href="http://jsperf.com/test-v8-delete%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9C%A8node%E4%B8%AD%E6%B5%8B%E8%AF%95">http://jsperf.com/test-v8-delete，也可以用下面的代码在node中测试</a></p>
-
-<pre><code>var begin = new Date();
-function Foo() {}
-Foo.prototype.x = 1;
-Foo.prototype.y = 2;
-
-//delete Foo.prototype.y;
-
-var foo = new Foo();
-
-var result = 0;
-for (var i = 0; i &lt; 100000; i++) {
-    result = result + foo.x;
-}
-
-var end = new Date();
-console.log(end - begin);
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-07-22-what-is-solo.html">solo(独唱团)这是一个由Node构建的静态博客</a></h1>
-			<p class="meta"><time datetime="2012-07-22T00:26:24+08:00" 
-			pubdate data-updated="true">2012/7/22</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<ul>
-<li>这个静态博客是用markdown来写文章，通过皮肤模板可以build出html页面。</li>
-<li>你可以将他提交至GithubPages或者云端（七牛）或者一个Node服务器。</li>
-<li>这里有示例:<a href="http://jinyang.mynah.org/">Pages</a>  <a href="http://qiniu.mynah.org/">七牛</a></li>
-</ul>
-
-<h3 id="toc_0">为什么会有这样一个静态博客</h3>
-
-<ul>
-<li>以前的博客不方便添加自己的demo例子页面(前端开发的童鞋应该会有强烈的认同感)</li>
-<li>markdown语法简洁易用，所见即所得的html编辑器不好用也太重</li>
-<li>不依赖于数据库，所有的内容都是文本，方便管理和迁移</li>
-<li>不需要一个什么复杂的服务器，也不需要担心什么配额，可以托管html页面就可以</li>
-<li>不用为图片文件等外链来发愁，直接放到相应的目录下，一起上传即可</li>
-</ul>
-
-<h3 id="toc_1">如何部署</h3>
-
-<ul>
-<li>你可以在<a href="https://github.com/lambgao/solo">这里</a>找到他。</li>
-<li>如果你熟悉<a href="http://pages.github.com/">Github Pages</a>,可以直接Push到你的Pages仓库即可。</li>
-<li>如果有一个Node服务器，那么你可以部署至你的服务器,启动app.js即可。</li>
-<li>如果你有一个云端（七牛）服务，那么你可以上传至你的云端(运行lib/publish.js)。</li>
-</ul>
-
-<h3 id="toc_2">如何使用</h3>
-
-<ul>
-<li>你会发现根目录下md文件夹，这个里面存放的都是博客内容(markdown格式)。</li>
-<li>md下有article和page两个文件夹，从字面上就很容易理解，分别是文章和页面。</li>
-<li>md/article下面的文章在build之后会在article目录下生成同文件名的html页面</li>
-<li>md/page下面的页面在build之后会在根目录下生成同文件名的html页面</li>
-<li>运行lib/build.js来build页面(请先安装<a href="http://www.nodejs.org/">Node</a>,并安装依赖npm install)</li>
-</ul>
-
-<h3 id="toc_3">皮肤模板修改</h3>
-
-<ul>
-<li>你会发现根目录下skin文件夹,这个文件夹里面存放的都是皮肤模板(html文件)。</li>
-<li>上面提到了article和page两种页面，那么皮肤模板也提供了article.html和page.html两个模板文件。</li>
-<li>如果两个页面用到了共同的内容那么你可以把共同的内容提取出来放到skin/slot文件夹下。</li>
-<li>在模板文件中${slot}就可以将这个文件引入到当前模板文件中。</li>
-<li>${article}这个变量用于引入文章或者页面的内容，即md文件夹下生成的内容。</li>
-<li>根目录下你还会发现css、image、javascript文件夹，这些是存放模板使用到的静态文件</li>
-</ul>
-
-<h3 id="toc_4">有疑问或者...</h3>
-
-<ul>
-<li>如果你有疑问、建议、bug提交都可以找我。</li>
-<li>找我请这里新浪微博<a href="http://weibo.com/lambsand">@金氧</a>,或这里Github<a href="https://github.com/lamb">@lambgao</a></li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-03-05-ziiiro-originality-watch.html">ziiiro创意手表，大爱这个品牌</a></h1>
-			<p class="meta"><time datetime="2012-03-05T00:25:53+08:00" 
-			pubdate data-updated="true">2012/3/5</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><a href="http://www.ziiiro.com/">ziiiro</a>创意手表，大爱这个品牌<br/>
-<p><img src="http://www.ziiiro.com/images/products/ZIIIRO_Mercury_black_blue_big_1.png" alt="" width="361" height="500"></p></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-01-29-review-fast-sort.html">纪念大师，复习快排</a></h1>
-			<p class="meta"><time datetime="2012-01-29T00:25:18+08:00" 
-			pubdate data-updated="true">2012/1/29</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<pre><code>package com.test;
-
-public class Sort {
-    // 对R[low..high]快速排序
-    public static void QuickSort(Comparable[] data, int low, int high) { 
-        int pivotpos; // 划分后的基准记录的位置
-
-        if (low &lt; high) {// 仅当区间长度大于1时才须排序
-            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
-            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
-            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
-        }
-    } // QuickSort
-
-    private static int Partition(Comparable[] data, int i, int j) {
-        // 从数组两端交替地向中间扫描
-        Comparable pivotKey = data[i];
-        // 进行扫描的指针i,j;i从左边开始,j从右边开始
-        while (i &lt; j) {
-            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
-                j--;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素小的移动到左边
-                data[i] = data[j];
-                i++;
-            }// end if
-            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
-                i++;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素大的移动到右边
-                data[j] = data[i];
-                j--;
-            }// end if
-        }// end while
-        // 枢纽元素移动到正确位置
-        data[i] = pivotKey;
-        return i;
-    }
-
-    public static void main(String[] args) {
-        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
-        QuickSort(c, 0, c.length - 1);
-        for (Comparable data : c) {
-            System.out.println(data);
-        }
-    }
-}
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-11-16-hello-nodejs.html">Hello Node.js</a></h1>
-			<p class="meta"><time datetime="2011-11-16T00:24:46+08:00" 
-			pubdate data-updated="true">2011/11/16</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><img src="http://nodejs.org/logo.png" alt="nodejs" width="420" height="111"></p>
-
-<h1 id="toc_0">Node.js</h1>
-
-<p>这里是官网：<a href="http://nodejs.org">http://nodejs.org</a></p>
-
-<h1 id="toc_1">安装</h1>
-
-<p>要使用Node.js,首先需要进行安装。关于如何安装Node.js，这里就不赘述了，可以直接参考官方的安装指南。</p>
-
-<h1 id="toc_2">“Hello World”</h1>
-
-<p>好了，“废话”不多说了，马上开始我们第一个Node.js应用：“Hello World”。</p>
-
-<p>打开你最喜欢的编辑器，创建一个helloworld.js文件。我们要做就是向控制台或命令行输出“Hello World”，如下是实现该功能的代码：</p>
-
-<pre><code>console.log(&quot;Hello World&quot;);
-</code></pre>
-
-<p>保存该文件，并通过Node.js来执行：<br/>
-node helloworld.js<br/><br/>
-正常的话，就会在终端输出Hello World<br/>
-Hello world太简单？那来点复杂的！</p>
-
-<pre><code>var Buffer = require(&#39;buffer&#39;).Buffer,
-buf = new Buffer(256),
-len = buf.write(&#39;\u00bd + \u00bc = \u00be&#39;, 0);
-console.log(len + &quot; bytes: &quot; + buf.toString(&#39;utf8&#39;, 0, len));
-</code></pre>
-
-<p>不用管什么意思，拷贝执行，感受一下就可以！</p>
-
-<h1 id="toc_3">HTTP</h1>
-
-<p>如果启动一个http服务呢？嗯，很简单！来感受一下在浏览器中看到hello world。</p>
-
-<pre><code>var http = require(&#39;http&#39;);
-http.createServer(function (req, res) {
-  res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;});
-  res.end(&#39;Hello World &#39;);
-}).listen(80);
-console.log(&#39;Server is running&#39;);
-</code></pre>
-
-<h1 id="toc_4">END</h1>
-
-<p>入门结束</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-10-14-resolution-browse.html">各种分辨率一览，方便开发对应</a></h1>
-			<p class="meta"><time datetime="2011-10-14T00:23:50+08:00" 
-			pubdate data-updated="true">2011/10/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<ul>
-<li>QVGA = 320 * 240;</li>
-<li>WQVGA = 320 * 480;</li>
-<li>WQVGA2 = 400 * 240;</li>
-<li>WQVGA3 = 432 * 240;</li>
-<li>HVGA = 480 * 320;</li>
-<li>VGA = 640 * 480;</li>
-<li>WVGA = 800 * 480;</li>
-<li>WVGA2 = 768 * 480;</li>
-<li>FWVGA = 854 * 480;</li>
-<li>DVGA = 960 * 640;</li>
-<li>PAL = 576 * 520;</li>
-<li>NTSC = 486 * 440;</li>
-<li>SVGA = 800 * 600;</li>
-<li>WSVGA = 1024 * 576;</li>
-<li>XGA = 1024 * 768;</li>
-<li>XGAPLUS = 1152 * 864;</li>
-<li>HD720 = 1280 * 720;</li>
-<li>WXGA = 1280 * 768;</li>
-<li>WXGA2 = 1280 * 800;</li>
-<li>WXGA3 = 1280 * 854;</li>
-<li>SXGA = 1280 * 1024;</li>
-<li>WXGA4 = 1366 * 768;</li>
-<li>SXGAMINUS = 1280 * 960;</li>
-<li>SXGAPLUS = 1400 * 1050;</li>
-<li>WXGAPLUS = 1440 * 900;</li>
-<li>HD900 = 1600 * 900;</li>
-<li>WSXGA = 1600 * 1024;</li>
-<li>WSXGAPLUS = 1680 * 1050;</li>
-<li>UXGA = 1600 * 1200;</li>
-<li>HD1080 = 1920 * 1080;</li>
-<li>QWXGA = 2048 * 1152;</li>
-<li>WUXGA = 1920 * 1200;</li>
-<li>TXGA = 1920 * 1400;</li>
-<li>QXGA = 2048 * 1536;</li>
-<li>WQHD = 2560 * 1440;</li>
-<li>WQXGA = 2560 * 1600;</li>
-<li>QSXGA = 2560 * 2048;</li>
-<li>QSXGAPLUS = 2800 * 2100;</li>
-<li>WQSXGA = 3200 * 2048;</li>
-<li>QUXGA = 3200 * 2400;</li>
-<li>QFHD = 3840 * 2160;</li>
-<li>WQUXGA = 3840 * 2400;</li>
-<li>HD4K = 4096 * 2304;</li>
-<li>HXGA = 4096 * 3072;</li>
-<li>WHXGA = 5120 * 3200;</li>
-<li>HSXGA = 5120 * 4096;</li>
-<li>WHSXGA = 6400 * 4096;</li>
-<li>HUXGA = 6400 * 4800;</li>
-<li>SHV = 7680 * 4320;</li>
-<li>WHUXGA = 7680 * 4800;</li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-10-14-frequently-used-eclipse-plugins.html">Frequently Used Eclipse Plugins</a></h1>
-			<p class="meta"><time datetime="2011-10-14T00:23:19+08:00" 
-			pubdate data-updated="true">2011/10/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>m2eclipse Core    - <a href="http://m2eclipse.sonatype.org/sites/m2e">http://m2eclipse.sonatype.org/sites/m2e</a></p>
-
-<p>m2eclipse Extras - <a href="http://m2eclipse.sonatype.org/sites/m2e-extras">http://m2eclipse.sonatype.org/sites/m2e-extras</a></p>
-
-<p>Subclipse - <a href="http://subclipse.tigris.org/update_1.8.x">http://subclipse.tigris.org/update_1.8.x</a></p>
-
-<p>Android    - <a href="https://dl-ssl.google.com/android/eclipse/">https://dl-ssl.google.com/android/eclipse/</a></p>
-
-<p>ECLEMM   - <a href="http://update.eclemma.org/">http://update.eclemma.org/</a></p>
-
-<p>Google     - <a href="http://dl.google.com/eclipse/plugin/3.x">http://dl.google.com/eclipse/plugin/3.x</a></p>
-
-<p>EGit      - <a href="http://download.eclipse.org/egit/updates">http://download.eclipse.org/egit/updates</a></p>
-
-<p>WindowBuilder - <a href="http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x">http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x</a></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-10-14-difference-between-different-android-sdk-versions.html">Android SDK版本间的区别</a></h1>
-			<p class="meta"><time datetime="2011-10-14T00:22:40+08:00" 
-			pubdate data-updated="true">2011/10/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h1 id="toc_0">Android 1.0</h1>
-
-<ul>
-<li> 第一版商用操作系统</li>
-</ul>
-
-<h1 id="toc_1">Android 1.1</h1>
-
-<ul>
-<li> 更新了部分API，新增一些功能，修正了一些错误，同时增加com.google.android.maps包</li>
-</ul>
-
-<h1 id="toc_2">Android 1.5</h1>
-
-<ul>
-<li> 智能虚拟键盘</li>
-<li> 使用widgets实现桌面个性化</li>
-<li> 在线文件夹(Live Folder)快速浏览在线数据</li>
-<li> 视频录制和分享</li>
-<li> 图片上传</li>
-<li> 更快的标准兼容浏览器</li>
-<li> Voice search 语音搜索</li>
-<li> 立体声蓝牙和免提电话</li>
-</ul>
-
-<h1 id="toc_3">Android 1.6</h1>
-
-<ul>
-<li> 完全重新设计的Android Market，可以显示更多的屏幕截图</li>
-<li> 手势支持，可以让开发者生成针对某个应用程序的手势库</li>
-<li> 支持CDMA网络：中国电信的用户可以期待EVDO的Android手机了</li>
-<li> TXT-2-Speech，支持了更多语言的发音，包括英语、法语、德语、意大利语等</li>
-<li> 快速搜索框，可直接搜索括联系人，音乐，浏览历史，书签等手机内容</li>
-<li> 全新的拍照界面：新版相机程序启动速度快了39%，拍照间的延迟减少了28%</li>
-<li> 应用程序耗电查看：这下好了，哪个软件耗多少电，现在一见了然了</li>
-<li> 新增面向视觉或听觉困难人群的易用性插件</li>
-<li> linux内核升级到2.6.29</li>
-<li> 其他：支持更多的屏幕分辨率，如WVGA，QVGA等</li>
-</ul>
-
-<h1 id="toc_4">Android 2.0</h1>
-
-<ul>
-<li> 由于文件结构的改动优化，使得整个操作流畅性得到了很大的提升</li>
-<li> 自带的Chrome Lite浏览器现在加入了对双击屏幕进行缩放的支持</li>
-<li> 加强了网络社交功能，比如Facebook好友整合至联系人功能</li>
-<li> 强化了语音识别的搜索控制。整个系统多处都支持语音控制，并拥有独立的控制面板</li>
-<li> 谷歌地图服务更新，加入了全新的导航系统，甚至比转业的导航软件更为先进</li>
-<li> 加入了原生微软Exchange邮件服务支持</li>
-<li> 提供了多个不同帐户，统一的邮件收件箱</li>
-<li> 只需双击就能上传图片至YouTube</li>
-<li> 优化了驾车时的体验，新的“Car Home”应用程序为各功能提供了易于操作的快捷链接，还能方便地使用语音控制功能，便于用户驾车时使用</li>
-</ul>
-
-<h1 id="toc_5">Android 2.1</h1>
-
-<ul>
-<li> 可以同时绑定多个Google账号</li>
-<li> 无线控件里有了VPN设置</li>
-<li> 增加了连接到PC设置</li>
-<li> 增强了语言和声音的转换功能，并加入了文字到语音转换</li>
-<li> 全新的拨号界面，按键更大，更易于操作</li>
-<li> 更多桌面Widget</li>
-<li> 新的Google地图可以使用谷歌地图导航功能</li>
-<li> 新的浏览器版本，加强了稳定性和网页渲染能力</li>
-<li> 全局搜索功能加强</li>
-<li> 全新的Market程序，搜索更快布局更合理</li>
-</ul>
-
-<h1 id="toc_6">Android 2.2</h1>
-
-<ul>
-<li> 全面支持Flash 10.1</li>
-<li> 应用程序自动升级，让升级更加人性化</li>
-<li> 支持应用程序安装在外置内存上</li>
-<li> Linux内核将升级为最新的2.6.32版本，系统更加稳定</li>
-<li> 对系统性能进一步优化，让手机有更多的运行内存</li>
-<li> 增加了轨迹球LED指示灯变色这个新功能</li>
-<li> 增加了对3D性能的优化，3D性能更加强大</li>
-<li> FM功能也将在新系统中得到全面支持</li>
-</ul>
-
-<h1 id="toc_7">Android 2.3</h1>
-
-<ul>
-<li> 用户界面更美观</li>
-<li> 提升游戏体验</li>
-<li> 提升多媒体能力</li>
-<li> 增加官方进程管理</li>
-<li> 改善电源管理</li>
-<li> NFC近场通信</li>
-<li> 全局下载管理</li>
-<li> 全新虚拟键盘</li>
-<li> 原生支持前置前置摄像头</li>
-<li> SIP网络电话</li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-10-14-android-source-download.html">Android源码打包下载</a></h1>
-			<p class="meta"><time datetime="2011-10-14T00:21:37+08:00" 
-			pubdate data-updated="true">2011/10/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Android源码打包下载<br/>
-如果动手能力不强，不会自己build那到这里下载吧！<br/>
-<a href="http://rgruet.free.fr/public/">http://rgruet.free.fr/public/</a></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-04-29-decimal-fractions.html">无限循环小数转化成分数（Java实现）</a></h1>
-			<p class="meta"><time datetime="2011-04-29T00:20:53+08:00" 
-			pubdate data-updated="true">2011/4/29</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>如何精确的表达无限小数呢？这在计算机中是一个不可能完成的事情；但是无限循环小数是可以转化成分数，从而精确表达的；那问题来了，如何将无限循环小数转化成分数？例如0.（3），括号中是循环体，可以用1/3或3/9来表示。当然，我们想要的是分子分母不能再约分的最简分数。好吧：）来看看如何实现吧！</p>
-
-<pre><code>import java.math.*;
-
-public class Decimal2Fraction {
-    public String Repeating2Smallest(String repeating, String separate){
-        String separate_l = separate.substring(0,1);
-        String separate_r = separate.substring(1,2);
-        String separate_p = &quot;.&quot;;
-        int index_p = repeating.indexOf(separate_p);
-        int index_l = repeating.indexOf(separate_l);
-        int index_r = repeating.indexOf(separate_r);
-        BigInteger number = new BigInteger(repeating.substring(0,index_p));
-        int n = index_l-index_p-1;
-        BigInteger a = BigInteger.ZERO;
-        if(n&gt;0)a = new BigInteger(repeating.substring(index_p+1,index_l));
-        int m = index_r-index_l-1;
-        BigInteger b = BigInteger.ZERO;
-        if(m&lt;=0) return &quot;请输入正确的循环体&quot;;
-        if(m&gt;0)b= new BigInteger(repeating.substring(index_l+1,index_r));
-        BigInteger numerator = NumeratorFormula(n, m, a, b);
-        BigInteger denominator = DenominatorFormula(n , m);
-        BigInteger GCD = BigInteger.ZERO;
-        while(!GCD.equals(BigInteger.ONE)){
-            GCD = numerator.gcd(denominator);
-            numerator = numerator.divide(GCD);
-            denominator = denominator.divide(GCD);
-        }
-        return number+&quot; &quot;+numerator+&quot;/&quot;+denominator;
-    }
-    public BigInteger NumeratorFormula(int n,int m,BigInteger a,BigInteger b){
-        return BigInteger.TEN.pow(m).subtract(BigInteger.ONE).multiply(a).add(b);
-    }
-    public BigInteger DenominatorFormula(int n,int m){
-        return BigInteger.TEN.pow(m).subtract(BigInteger.ONE).multiply(BigInteger.TEN.pow(n));
-    }
-    public static void  Console(Object o){System.out.println(o.toString());}
-    public static void main(String[] args) {
-        Decimal2Fraction d2f = new Decimal2Fraction();
-        String s = &quot;0.2[22]&quot;;
-        Console(d2f.Repeating2Smallest(s,&quot;[]&quot;));
-    }
-
-}
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-03-25-android-suspend-opensource.html">Google宣布Android暂停开源</a></h1>
-			<p class="meta"><time datetime="2011-03-25T00:20:24+08:00" 
-			pubdate data-updated="true">2011/3/25</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>一向以大举开源旗帜的Google昨日做出了一项令人吃惊的决定，Android 3.0系统源代码将暂停开源。不久前以不开源为由在Chrome中停止支持H.264，今天却又闭源Android 3.0，怎么看都是只许州官放火不许百姓点灯。</p>
-
-<p>谷歌宣布Android 3.0暂停开源</p>
-
-<p>北京时间3月25日早间消息，谷歌周四宣布，将暂时不开放针对平板电脑设计的Android 3.0“蜂巢”操作系统的源代码。</p>
-
-<p>谷歌一名发言人表示，谷歌将“临时限制”对“蜂巢”系统代码的访问，主要原因是“谷歌尚未做好该系统被改变，或是针对不同产品进行定制的准备”。</p>
-
-<p>然而业内人士认为，谷歌封闭“蜂巢”系统是由于谷歌的合作伙伴不希望较小的竞争对手也可以利用这一系统。谷歌发言人表示：“Android 3.0‘蜂巢’系统是针对大屏幕尺寸设备重新设计的一款系统，在小部件、多任务、浏览、通知和个人定制等方面都有所改进。尽管我们很高兴向Android 平板电脑提供这些功能，但在将这款系统移植到手机等其他设备的过程中，我们还有更多工作要做。在此之前，我们决定不对‘蜂巢’开源。”</p>
-
-<p>谷歌的合作伙伴摩托罗拉已经发布了基于“蜂巢”系统的平板电脑Xoom，三星电子、戴尔、HTC和宏碁等厂商也将推出同类产品。</p>
-
-<p>谷歌此前一直标榜Android是一款开源的操作系统，但“蜂巢”却是在封闭状态下开发的。而即使这款操作系统最终开源，其中的一些部件，包括 Android电子市场和谷歌地图，仍将是谷歌私有的。谷歌目前也拥有Android的商标权。这意味着，手机厂商无法在不遵守谷歌规定的情况下开发 Android设备。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-03-14-tomcat-jdk-welcome-page.html">tomcat-5.5.33、jdk1.6.0_24访问不到欢迎页</a></h1>
-			<p class="meta"><time datetime="2011-03-14T00:19:19+08:00" 
-			pubdate data-updated="true">2011/3/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>今天下午碰到比较郁闷的问题，apache-tomcat-5.5.33、jdk1.6.0_24在win7下访问不到欢迎页；纠结了3个小时才发现是这两个版本存在兼容性问题，换用稍微低一点的jdk，不一定非要是1.5，具体是update_X的具体哪个版本真不清楚，如果你有兴趣可以自己试试，如果你还有兴趣可以告诉我一下。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-02-02-2010-summary.html">2010总结</a></h1>
-			<p class="meta"><time datetime="2011-02-02T00:16:36+08:00" 
-			pubdate data-updated="true">2011/2/2</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>一年又一年，一年又一年，一些理想，一些故事，一些回忆，一些感慨，一些是非，一些遗憾，看，又不小心搁置到了下一年，2010已经过去！</p>
-
-<h3 id="toc_0">　回到学校</h3>
-
-<p>回学校回了两次，一次是春节返校准备毕业设计，一次是实习返校答辩。<br/>
-去年春节后，还是继续回到学校，因为那时我还是一名学生，但是已经没有悠闲，更多的是就业的压力。很现实的事情摆在眼前，我要毕业了，我要有一份工作了。我喜欢计算机，对互联网不管是移动互联网还是互联网都一样的狂热，自然希望做一份自己的喜欢的工作。我的初始毕业论文题目是《基于移动最小二乘法的曲线曲面拟合》，这是多么让人悲剧的题目啊！我是一名数学专业的学生，但是出于对计算机的热爱，自学了很多计算机方面的知识。但是大学数学大家都懂的，纯数学的东西就是天书，像实变函数与泛函分析这样的课程能学好的一定不是“人”。导致悲剧发生的原因是因为一直身在校外没有和校内的老师及时联系到，以至选择的方面很窄。但是现在回想起来我感觉我非常幸运，因为这样才让我遇到周老师这样一位好老师，在我的毕业论文给予了我很大很大的帮助，非常感谢她！在新的一年里祝愿我从小到大的老师们身体健康工作顺利！<br/>
-上海中软资源、第一次、面试通过、签三方协议、实习，就这样回大连没多久就去了上海。但是这样一走就给我的毕业论文带来了困难，所以很果断的找老师帮助把毕业论文换成了计算机类自拟的题目《基于页面内容的搜索引擎的设计与实现》，这样就可以在上海工作的闲暇时间做自己擅长的方面的毕业设计。当然周老师在这期间也给了我很多很多的帮助。<br/>
-今年悲剧的事情之一就是毕业照没有赶上，打折机票已定不能退不能改签，但是幸好又补照了一次，但是人还是不全，在此给童鞋们致歉，深深的忏悔。<br/>
-回到学校，各种毕业材料填写、各种补；毕业论文那边也是各种材料各种文档补。答辩前两天，今年悲剧的事情之一又发生了，我的电脑显卡又烧掉了；答辩完去上海又烧了一次；幸好在保修期内，要不然就更悲剧了，鄙视联想，下次果断华硕。<br/>
-今年最悲剧的事情是毕业论文被评成A。还清楚的记得当时中午大一616宿舍吃散伙饭，突然收到老师短信说要我拿论文去找她签字。去了字没签，但是噩耗传来，论文要再次修改，因为我论文被评成了A等，学校要对A等的论文进行审查。传奇的妈总还搞了一个反抄袭的检测软件，我的论文被检测成悲剧，因为有关名词解释和定义都是百度谷歌来的。幸好我信妈总的意念是无比的坚定，信妈总，大家懂的！<br/>
-离别、吃饭、K歌、通宵，这些是在学校最后一段时光的有力的描述。楠哥最后的提议大手笔，貌似也没有吃回来。博博说，大后天你就去上海了，以后就没机会了。无奈被拖至合声通宵K歌。再见！</p>
-
-<h3 id="toc_1">　腾讯校园之星</h3>
-
-<p>在上海工作中的一个中午无意中发现腾讯的比赛，一个午休时间，2个小时，代码、文档统统搞定提交，成功入围，获得腾讯校园之星纪念T恤一件，手环被腾讯黑掉了。这个奖是在校外完成的，但是又是以学生身份完成的。</p>
-
-<h3 id="toc_2">　MSN Homepage Foundamental</h3>
-
-<p>当时还不知具体啥业务，和我同去上海8人（3个同班同学）。初到上海的时候一切都是新鲜的，只是不熟悉而已。第一次进入公司感觉什么都是那么陌生，幸好公司的制度管理非常的完善，很人性化的给我们每人都安排了一个带教。感谢Naico教会了我好多东西，他是我初入职场的第一个老师，非常阳光帅气的小伙子。还有Glen我的Leader，也给我了很多的帮助。Glen是非常好的一位领导，在他的手下感觉毫无压力，但是工作还是有条不紊的进行着。喜欢Glen的热情，还记得有次他兴致勃勃的把我们整个团队叫到“滕王阁”（这是个会议室，名字我貌似没有记错，感觉中软的这种细节的文化做的都很到位，其他会议室的名字还有如“长江”“黄山”等），自己热火朝天的讲讲半个点，由于我刚刚接触所以云里雾里；但是其他的前辈已经很熟悉了，看，春哥（Foundamental组的需要信的哥）都瞌睡了。<br/>
-在MSN组还是学习到了很多东西，不光是技术，js、jquery、xml、xsl、xslt、xpath，还有前端架构、数据采集等等非常前沿的知识，还有敏捷开发、团队协作等，这些都给我很大的帮助。</p>
-
-<h3 id="toc_3">　职业规划</h3>
-
-<p>程序员 -&gt; 项目经理 -&gt; 架构师</p>
-
-<p>程序员 -&gt; 项目经理 -&gt; 产品经理</p>
-
-<p>这是两条职业规划，这也是没有留在相对比较稳定的上海的原因。</p>
-
-<h3 id="toc_4">　AITP</h3>
-
-<p>这个项目离我的想象中的距离还差的太远太远。<br/>
-这个项目没有太多的教会我什么，但是引起了我的很多思考。关于团队、关于管理、关于开发、关于测试、关于其他......</p>
-
-<h3 id="toc_5">　B3LOG</h3>
-
-<p>关于GAE方面的学习也是源于上海工作的清闲，所以研究了一下搭建了第一版的博客，双重性格的矛盾兔斯基风格的博客。后来发现了B3LOG，很高兴加入了B3LOG，现在手上正在开发情侣博客中。喜欢开源、自由这种氛围，我会继续努力的。D、V、K、P，一起加油！B3LOG会更好！</p>
-
-<h3 id="toc_6">　想给父母说的话</h3>
+<p>小程序定义：</p>
 
 <ol>
-<li>注意身体！身体是革命的本钱！（老爸最常给我说的话）</li>
-<li>我们长大了，真的可以照顾自己，就让我们自己碰碰钉子吧。</li>
-<li>你们对我的期望好高，我总是达不到，觉得对不起你们。我希望你们能够接受一个平凡的我。看到我以尽力而为后，可否鼓励鼓励我？</li>
-<li>我不想做一个读书的机器，我想找到自己的兴趣希望你们能支持</li>
+<li>无需下载，用完即走</li>
+<li>没有入口，没有排序，没有推荐</li>
+<li>不能订阅</li>
+<li>不能通知</li>
+<li>不能分享到朋友圈，可以分享到聊天。协作式任务，小程序页，活的页面</li>
+<li>不能做游戏</li>
+<li>能被搜索到，但是是有限的搜索能力</li>
+<li>小程序和公众号没有关系，相互独立，但有个关联，就是可以互相跳转</li>
+<li>有周边推荐和提示，有哪些小程序可以用。</li>
 </ol>
 
-<h3 id="toc_7">　关于书</h3>
+<p>精简一点的定义：这也不行，那也不行 =。=|</p>
 
-<p>一年买了几本书，android，flex, 产品，编程之美等等屈指可数，感觉还是需要继续学习。所以做了个硬性的规定：保证每月至少一本书的阅读量，尽量提高阅读质量和效率。</p>
 
-<h3 id="toc_8">　2011的目标：</h3>
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a></h1>
+			<p class="meta"><time datetime="2016-12-27T01:05:36+08:00" 
+			pubdate data-updated="true">2016/12/27</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>微服务架构设计代表了一种架构设计思想，配合现在的容器技术（如 Docker），可在软件开发流程、部署、服务维护等各方面产生效率提升。</p>
+
+<p>但不一定所有的业务场景都适合微服务，有时候非常简单的业务场景下，微服务反而会降低效率。什么是微服务，其特性，好处及陷阱，是本文要讨论的内容。</p>
+
+<h3 id="toc_0">一、什么是微服务</h3>
+
+<p>微服务是一种软件架构风格，它是以专注于单一责任与功能的小型功能区块为基础，利用模组化的方式组合出复杂的大型应用程序，各功能区块使用与语言无关的 API（例如 REST）集相互通讯，且每个服务可以被单独部署，它具备以下三个核心特点：</p>
 
 <ol>
-<li>带一个项目，多学习管理等方面的知识</li>
-<li>扩展视野，深入学习</li>
-<li>B3LOG的开发投入、产品设计，还有很重要的策划推广</li>
-<li>属于自己的互联网产品</li>
-<li>属于自己的Android产品</li>
+<li>微服务为大型系统而生。随着业务的快速增长，会带来系统流量压力和复杂度的上升，系统的可维护性和可扩展性成为架构设计的主要考虑因素，微服务架构设计理念通过小而美的业务拆分，通过分而自治来实现复杂系统的优雅设计实现。</li>
+<li>微服务架构是面向结果的。 微服务架构设计风格的产生并非是出于学术或为标准而标准的设计，而是在软件架构设计领域不断演进过程中，面对实际工业界所遇到问题，而出现的面向解决实际问题的架构设计风格。</li>
+<li>专注于服务的可替代性来设计。 微服务架构设计风格核心要解决的问题之一便是如何便利地在大型系统中进行系统组件的维护和替换，且不影响整体系统稳定性。</li>
+</ol>
+
+<h3 id="toc_1">二、微服务的特征</h3>
+
+<ol>
+<li>每个微服务仅对单个业务负责，且为该业务的容量负责；</li>
+<li>每个微服务可以进行独立部署，即不需要依赖其它微服务及其相关资源，如数据库、内存缓存系统等；</li>
+<li>轻量级的通信协议，例如REST、STOMP、AMQP等；</li>
+<li>服务的可替代性，代表着每个微服务原则上都可以使用不同的语言、框架进行技术实现，且更换实现后的微服务对于整个业务系统不会造成影响；</li>
+<li>每个微服务拥有单独的数据存储；</li>
+<li>每个微服务由小团队维护，服务以业务来进行拆分后，每个微服务的维护工作将有人数不多的小团队进行维护；</li>
+</ol>
+
+<h3 id="toc_2">三、微服务带来的好处</h3>
+
+<ol>
+<li>独立的可扩展性，每个微服务都可以独立进行横向或纵向扩展，根据业务实际增长情况来进行快速扩展；</li>
+<li>独立的可升级性，每个微服务都可以独立进行服务升级、更新，不用依赖于其它服务，结合持续集成工具可以进行持续发布，开发人员就可以独立快速完成服务升级发布流程；</li>
+<li>易维护性，每个微服务的代码均只专注于完成该单个业务范畴的事情，因此微服务项目代码数量将减少至IDE可以快速加载的大小，这样可以提高了代码的可读性，进而可以提高研发人员的生产效率；</li>
+<li>语言无关性，研发人员可以选用自己最为熟悉的语言和框架来完成他们的微服务项目（当然，一般根据每个公司的实际技术栈需要来了），这样在面对新技术或新框架的选用时，微服务能够更好地进行快速响应；</li>
+<li>故障和资源的隔离性，在系统中出现不好的资源操作行为时，例如内存泄露、数据库连接未关闭等情况，将仅仅只会影响单个微服务；</li>
+<li>优化跨团队沟通，如果要完全实践微服务架构设计风格，研发团队势必会按照新的原则来进行划分，由之前的按照技能、职能划分的方式变为按照业务（单个微服务）来进行划分，如此这般团队里将有各个方向技能的研发人员，沟通效率上来说要优于之前按照技能进行划分的组织架构；</li>
+<li>原生基于“云”的系统架构设计，基于微服务架构设计风格，我们能构建出来原生对于“云”具备超高友好度的系统，与常用容器工具如Docker能够很方便地结合，构建持续发布系统与IaaS、PaaS平台对接，使其能够方便的部署于各类“云”上，如公用云、私有云以及混合云。</li>
+</ol>
+
+<h3 id="toc_3">四、避免微服务的陷阱</h3>
+
+<ol>
+<li>不要以微服务作为开始，在项目刚开始时，一般都还很小，不需要进行非常完整的业务拆分，如果采用“微服务”作为开始会有点杀鸡用牛刀的感觉，当然，你的项目非常之庞大的话，以“微服务”为始是个不错的选择；</li>
+<li>不要自己进行基础设施的管理，微服务意味着一堆的数据库、消息系统、数据缓存系统等，会带来相应的运维管理成本（这里的前提是，没有良好的自动化运维平台和工具），建议多使用IaaS、PaaS平台，部署发布与其对接；</li>
+<li>无DevOps、不微服务，如果研发团队不具备DevOps的理念并贯彻执行，仅想单独来实施微服务的话，在实施过程中会发现比之前的架构维护要困难些，主要原因是微服务需要持续集成、持续部署及监控等工具或系统的配合才能降低其带来的维护成本；</li>
+<li>不要创建过多的微服务，微服务的业务颗粒度一定要根据实际业务系统的现状及日后规划来制定，切记不要制定过细的拆分颗粒度；</li>
+<li>可能带来的延迟问题，由于服务拆分开来，部署到不同的平台或网络，可能会引起微服务间的调用延迟问题，服务间的调用延迟可能带来整体系统的响应缓慢问题；</li>
+<li>微服务不是银弹。</li>
 </ol>
 
 
@@ -1299,18 +184,120 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-27-android-3-is-coming.html">蜂窝Android3.0传说3月发布</a></h1>
-			<p class="meta"><time datetime="2010-12-27T00:13:23+08:00" 
-			pubdate data-updated="true">2010/12/27</time></p>
+		  	<h1 class="entry-title"><a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a></h1>
+			<p class="meta"><time datetime="2016-12-02T01:13:18+08:00" 
+			pubdate data-updated="true">2016/12/2</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p><img style="float: left;" src="http://dl.javaeye.com/upload/attachment/375335/af52b4ee-9b00-33d3-9e7b-a4e7233ed859.jpg" alt="" width="310" height="235"></p>
+		  	<p>前段时间，豆瓣将自己的混合开发框架Rexxar开源了。豆瓣可以说是在国内对HTML5实践最早的一批公司，早在2013年的时候他们就应用了当时还显得超前的Web Component概念开发了CardKit移动UI框架。在移动开发上，豆瓣也采用了混合开发的模式，Rexxar就是他们实践和思考的结晶。我采访了Rexxar的主要开发者之一郭麟，看看他们对混合开发的思考。</p>
 
-<p>无论是Chrome浏览器还是Android手机系统，Google均展示了其版本帝的频繁升级特征。特别是Android系统平台，今年就经历 了 Android 2.1、2.2、2.3三个大的版本，而且其保密工作也开始更加严格，下一个蜂窝版本现在还不清楚就是是2.4还是3.0。除了Android 2.4版在明年2月份MWC 2011移动通信世界大会中正式发布这一传闻版本之外，今天又有了新的消息出现，据说下一个版本为Android 3.0，将会在明年三月份发布。 <br/>
-消息来自于台湾电子时报，在报道微星、华硕等厂商将会CES 2011国际消费电子展中展示自己的平板机电脑，在谈及微星Android平板机的时候，他们称：“微星还将准备在Google于明年三月份发布 Android 3.0之后，在4月或者5月出售基于NVIDIA Tegra 2的平板机产品。” <br/>
-正如近期发布的Android2.3版姜饼系统一样，在发布之前都没确定其真正的版本号，下一代蜂窝系统也是这样，不过现在已经可以确定蜂窝系统将会针对平板机使用特征做出大量优化，<br/>
-并将对双核心处理器进行更好的支持。</p>
+<p>豆瓣使用混合开发的原因，是因为他们需要同时提供iOS、Android、移动Web版本的页面，相对于同时开发三个版本，使用混合开发显然可以在代码重用、开发成本和效率方面有很大的优势，在权衡性能体验的前提下，使用混合开发是非常现实的选择。</p>
+
+<h3 id="toc_0">Rexxar是什么</h3>
+
+<p>Rexxar是一个针对移动端的混合开发框架。支持Android、iOS和移动Web。</p>
+
+<p>Rexxar主要由三部分组成：</p>
+
+<p>Rexxar-web：前端代码库。包括一套打包、调试、发布工具，以及公共前端组件，和对Rexxar Container实现的Widget的调用。</p>
+
+<p>Rexxar-Router：路由表，将每个页面分配一个服务器端链接，以及一个本地URI，通过路由表来访问页面。</p>
+
+<p>Rexxar-container：增强版WebView，封装了一些Native API支持，包括OAuth授权、图片缓存等。</p>
+
+<p>Rexxar目前已经开源，并且分为3个项目，你可以只使用其中某个项目来开发对应平台的代码：</p>
+
+<p><a href="https://github.com/douban/rexxar-web">https://github.com/douban/rexxar-web</a> <br/>
+<a href="https://github.com/douban/rexxar-android">https://github.com/douban/rexxar-android</a> <br/>
+<a href="https://github.com/douban/rexxar-ios">https://github.com/douban/rexxar-ios</a></p>
+
+<h3 id="toc_1">混合开发的注意点</h3>
+
+<p>对于混合开发，很多团队都有过实践，从大家分享的内容来看，重点无非以下几类：</p>
+
+<ul>
+<li><p>增强WebView：原生WebView基本是PC平台浏览器内核的移植，但对于移动场景并不完全适合，各种硬件API得不到HTML5原生支持。因此对于WebView的种种Hack、增强应运而生，甚至出现了基于增强WebView提供第三方服务的。</p></li>
+<li><p>路由：应用内跳转由于加入了WebView而变得复杂起来，同时由于组件化、模块化带来的问题，路由也成为人们讨论的重点。</p></li>
+<li><p>缓存：移动网络条件差，为了用户体验，必须要做资源缓存和预加载。</p></li>
+<li><p>通信：即HTML5和Native之间的通信。利用系统提供的桥接API可以实现，不过在应用上还有着一些坑点和安全问题。</p></li>
+</ul>
+
+<p>这些问题大部分已经有了最佳实践，Rexxar就是其中一个解决方案。在混合开发中一般有两种方案：纯浏览器方案、前端模板渲染容器方案，Rexxar则处于两者之间。</p>
+
+<p>Rexxar的设计者对于Rexxar使用场景有明确的定义：页面是重度展示，并轻度交互的。所以，除了比较简单的应用之外，如果对使用体验有追求，大概很难仅仅用Rexxar，或者其他某种混合开发完成。</p>
+
+<p>对于扩展功能，Rexxar留出了清晰易用的接口。项目中也提供了几个扩展Rexxar功能的实例，文档也较为完整。郭麟他们在豆瓣App中其实也使用相同的接口做了一些扩展，只是由于这些扩展和豆瓣App的业务绑定较深，就没有放入Rexxar项目。</p>
+
+<p>Rexxar在客户端的实现其实就是一个定制了更多功能的WebView。而且，Rexxar使用的是系统的WebView。所以，它对App的体积没有影响。但是，同时使用很多个WebView带来的内存问题，Rexxar同样也有，这是需要注意的。</p>
+
+<p>Rexxar的Crash有两种：</p>
+
+<ul>
+<li><p>一种是JavaScript的错误，也就是应用逻辑的问题。这类错误他们在WebView中做了捕获，然后通过App的日志系统发回服务器。</p></li>
+<li><p>一种是WebView的Crash，这种错误WebView自己无法捕获，现在是通过fabric，Umeng这种原生的Crash收集系统收集。</p></li>
+</ul>
+
+<p>从上线了Rexxar之后，JavaScript，WebView相关错误日志和Crash报告是有增长的。所占的比例和Rexxar的页面数量相关，一直在变化，但都未超过10%。但由于豆瓣App中主要还是原生页面占大多数。所以，Rexxar带来的Crash所占的比例并不大。</p>
+
+<p>他们也正在研究，在移动环境下如何定位Rexxar页面的错误，如何调试，如何修正这些错误，并将其加入基础设施里面。</p>
+
+<h3 id="toc_2">为什么不用PhonGap/Cordova</h3>
+
+<p>在混合开发中早已有了很成熟的方案，就是PhoneGap和它的后继者Cordoba. 为什么豆瓣还要造自己的轮子呢？</p>
+
+<p>郭麟说，如果Hybrid方案定义为前端和原生技术的混合使用，那他们认为PhoneGap/Cordova严格来说不算是Hybrid方案，因为它的目标是全面使用前端技术开发移动应用，而不是前端和原生技术混合使用。但是，包括Cordova，还可以加上React Native，以及Rexxar的目标是一致的：使用前端技术来开发移动应用，提高工程效率。</p>
+
+<p>豆瓣实际上使用PhoneGap开发过一款移动App，并在AppStore上架了，这个应用叫豆瓣音乐人，因此，其实豆瓣对PhoneGap/Cordova已经有一定了解和使用经验。为何在开发豆瓣App时又造了一个叫Rexxar的“轮子”呢？这是因为，他们对PhoneGap/Cordova这个项目的理念并不完全赞同，Rexxar的出发点和PhoneGap/Cordova并不一样。</p>
+
+<p>PhoneGap/Cordova这个项目极具野心。它希望完全使用前端技术完成移动开发。所以，可以看到它尽力让前端技术完成尽量多的开发工作，只在前端无法直接调用的原生系统功能方面提供了前端可用的接口。主流的PhoneGap/Cordova项目将业务逻辑都实现在一个WebView中，目标是，让开发者只使用前端技术就可以完成一个移动应用的所有开发工作。这种做法需要有一个前提：前端技术可以解决移动开发的所有需求。他们认为PhoneGap/Cordova这个理念在现阶段有些过于理想化了，或者说过于激进了。</p>
+
+<p>Rexxar则相对实际，或者说保守一些。郭麟表示，他们仍然认为，<strong>现阶段，甚至在相当遥远的未来，移动开发中前端技术都不太可能完全代替原生技术</strong>。但同时也承认，移动开发中总是存在部分功能是适合使用前端技术完成的。在他们的认识中，前端技术和原生技术应该是共存的。移动开发中，前端技术不会完全代替原生技术；而有了前端技术的加入，移动开发的效率会提高。基于这种认识，豆瓣开发了Rexxar。</p>
+
+<p>可以看到，<strong>Rexxar立足于在一个原生项目使用前端技术，而不是整个项目都使用前端技术实现</strong>。他们甚至提供一个页面部分使用Rexxar完成，部分使用原生技术实现的方案。豆瓣希望借助前端技术优秀的排版能力、开发速度、通用性，来弥补原生开发在这方面的不足。在微信作为主要内容分享渠道的今天，这样做还带来了一个额外的好处，Rexxar页面可以平滑的使用在微信中。</p>
+
+<p>总结而言，如果Rexxar和PhoneGap/Cordova比较的话，大目标是一致的：使用前端技术开发移动应用。实现技术栈差不多：使用WebView，提供调用原生功能的接口。但是，出发点不一样。PhoneGap/Cordova致力于完全使用前端技术进行移动开发；Rexxar致力于在移动项目中部分使用前端技术。</p>
+
+<h3 id="toc_3">移动开发者要学习前端技术</h3>
+
+<p>目前，豆瓣移动团队大约有十多位客户端工程师，其中 iOS 和 Android 各一半。另有一位优秀的前端工程师专门支持豆瓣App中的混合开发，他负责Rexxar Web的开发，提供基础设施。同时如果有一些较复杂的业务要用Rexxar实现，他也会参与和指导业务开发。</p>
+
+<p>使用Rexxar这类混合开发技术，使得团队开发的技术栈向前端技术偏斜了。所以，较理想的配置是团队中加入较优秀的前端工程师，由他来处理基础设施的开发，和疑难问题的解决。同时，整个团队需要理解混合开发所带来的优势，认可这个开发方式的转变，并且愿意学习和调整自己的技术栈。</p>
+
+<p>在项目中，在合适的场景中，豆瓣会优先使用Rexxar。在团队中，他们鼓励非前端工程师学习和使用前端技术。为此，他们专门组织了关于前端技术内部培训，让有意愿的非前端工程师具有了可以使用前端技术进行日常开发的基本能力。在豆瓣App的日常开发中，大部分Rexxar页面都由客户端工程师完成，前端工程师会帮忙做Code Review和解决疑难问题。</p>
+
+<h3 id="toc_4">Rexxar与React Native</h3>
+
+<p>豆瓣在实际使用Rexxar的时候，使用React作为前端框架。对此郭麟解释道，Rexxar本身对前端框架的选择没有要求，只是他们选择了React来实现业务层，而当时React Native并未发布，经过对RN的了解后，他们并未否定使用RN的可能性。</p>
+
+<p>在他们看来，React Native同样是一种使用前端技术开发移动应用的技术方案，这和他们开发Rexxar的目的是一致的。只是，Rexxar仍然在停留在浏览器引擎中，而Facebook激进地脱离了沉重的浏览器引擎，架设了他们自己的Web通向Native的桥梁，这是一个很大胆的方案。</p>
+
+<p>在React Native发布后，他们马上就组织研究，并做了小范围的实践，也与同行做了交流。结论是，现阶段，React Native还稍显稚嫩。对于一些技术栈比较特别的团队，比如Web经验特别丰富，前端工程师特别优秀，但又缺乏客户端工程师的情况，React Native是一个快速切入移动应用市场的技术选择。但就豆瓣App的情况和React Native的现状而言，使用前端技术进行移动应用开发方面，他们还坚持留在WebView中，不会使用React Native。</p>
+
+<p>当然，React Native一直在发展和进步。如果，有一天React Native和React可以在代码级别移植，他们也许会尝试从WebView迁移到React Native。毕竟WebView的性能仍然弱于原生。</p>
+
+<h3 id="toc_5">总结与展望</h3>
+
+<p>豆瓣App和研发团队都经历了从小到大的发展过程。Rexxar是这个发展过程中，解决工程效率的一个方案。在豆瓣移动开发中使用Rexxar，确实在一定程度上提高了他们的开发效率。以前一个页面需要 iOS 和 Android 两位工程师各开发一遍，现在只需要一位工程师写一次前端代码，甚至还可以应用到移动 Web 站上去。前端技术开发界面方面开发方面也有效率上的优势。热部署能力，使他们规避了发布移动应用的审核过程，也让bug修复过程更便利。</p>
+
+<p>豆瓣将Rexxar这个项目开源，一方面，是因为提高移动开发的工程效率是一个普遍问题，而他们的实践结果也证明Rexxar确实帮助改善了工程效率。所以，他们认为Rexxar应该能给大家提供一些借鉴的方向。另一方面，是为了提高项目本身的质量，没有方案是完美的，Rexxar也还存在不少问题。开源这个项目，促使他们提高了整个项目的代码质量。同时，也更容易听到大家的意见和建议。</p>
+
+<p>虽然Rexxar仍然存在一些问题和使用上的限制。但是在有限的使用中，豆瓣App团队仍然收获不少。在未来他们会持续推动Rexxar在豆瓣移动开发中的使用。郭麟表示，对于Rexxar未来的发展，他们主要关注两个方面：</p>
+
+<ul>
+<li><p>一方面是基础设施，比如，如何在产品中，更好地监控Rexxar页面出现的问题，如何调试和解决Rexxar页面出现的bug。如果希望在大型项目中使用Rexxar，这些基础设施是应该配备的；</p></li>
+<li><p>另一方面是性能，Rexxar仍然跑在浏览器引擎中。浏览器引擎这个中间层提高了工程效率，但也因为性能问题局限了其使用范围。所以，他们会花一些精力提高Rexxar的运行效率。比如，Rexxar的iOS版一直在关注从UIWebView迁移到WKWebView的可能性。</p></li>
+</ul>
+
+<p>参考文章：</p>
+
+<ul>
+<li><a href="http://lincode.github.io/Hybrid-Rexxar">豆瓣混合开发实践</a></li>
+<li><a href="Rexxar%20http://lincode.github.io/Rexxar-OpenSource">豆瓣的混合开发框架</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA3ODg4MDk0Ng==&amp;mid=2651112821&amp;idx=1&amp;sn=2987ba2c9d68e3982e795d9eeb15f82b">豆瓣App的模块化实践</a> </li>
+<li><a href="https://www.douban.com/note/347692465/">《CardKit &amp; DOMO UI - 移动时代技术与设计的十字路口》技术篇</a> </li>
+<li><a href="http://www.infoq.com/cn/news/2013/10/douban-artist-PhoneGap-practice">豆瓣音乐人app的PhoneGap实践</a></li>
+</ul>
 
 
 		</div>
@@ -1321,21 +308,42 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-25-android-go.html">Android, GO!</a></h1>
-			<p class="meta"><time datetime="2010-12-25T00:12:47+08:00" 
-			pubdate data-updated="true">2010/12/25</time></p>
+		  	<h1 class="entry-title"><a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a></h1>
+			<p class="meta"><time datetime="2016-10-31T00:25:48+08:00" 
+			pubdate data-updated="true">2016/10/31</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p>Android 的 Dalvik 虚拟机运行的不是 Java 程序，可以说 Dalvik 完全可以运行其它语言开发的程序，但是 Google 为了吸引 Java 程序员，允许 程序员使用 Android 的SDK 将 Java 代码转换成 Dalvik 可以运行的代码。它是如何实现的呢？Google 在开发 Android 的时候，雇佣了 Sun 的一些程序员，利用 Harmony 中的开源 Java 库来实现 Java 程序的转换，避开了授权费用。这意味着开发者可以使用 Java 语言为非 Java 平台开发程序，Android 的火爆发展不能给 Sun 带来商业利益，而且可能造成平台分裂。</p>
+		  	<h3 id="toc_0">问题场景</h3>
 
-<p>开源领袖Ricard Stallman 早就指出Java 是“带着镣铐的自由”（Free but shackled），警告开发者谨防 Java 陷阱。此后，Sun 开源了大部分的 Java 实现代码，因此 Java 陷阱已经可以避免，但仍然要注意使用完全自由的平台，因为并非所有的平台都是自由的。 </p>
+<p>服务器出现大量 TCP 连接状态为 CLOSE_WAIT，将系统资源耗尽，导致业务处理失败。</p>
 
-<p>如果 Google 收购 Sun，将 Java 收归己有，或者当初与 Sun 达成协议，也许今天情形会不同。或着当初开发 Android 的时候，Google 应该培育自己的 Go 语言，而不是急于利用现有的 Java 开发者队伍。Java 关于开放的说法只是一个假象，而如今 Java 易手，一切都改变了。 </p>
+<h3 id="toc_1">处理方式</h3>
 
-<p>很难想象 Google 会放弃 Android 系统，问题是如何发展它。Java 将逐步脱离开源社区，沦为 Oracle 的生财之道，这是一个利益当头、注重企业而不考虑个人开发者的公司，与 Java 的纠缠不清只能带来更多的麻烦。</p>
+<p>重启导致问题的进程，释放 TCP 连接后服务恢复正常。</p>
 
-<p>现有的智能手机平台中，Java 已经不是开发者的首选，iOS，MeeGo 都有自己的开发环境，WebOS 不需要 Java 实现，而 RIM 也在逐渐抛弃 Java，转向 Adobe AIR，这意味着 Java 在手机市场的空间在逐步缩小。讽刺的是，现在 Android 的飞速发展反而有利于 Java 语言在手持领域的地位。如果 Google 抛弃 Java，是否 Java 将只能在低端机之间苟延残喘，逐渐消亡呢？相信随着 Web 开发技术的进步，HTML/CSS/Javascript这样的网络开发环境将成为网络应用的首选，而底层应用开发将会是 C/C++的天下。 </p>
+<p>调整服务器网络参数：</p>
+
+<ul>
+<li>net.ipv4.tcp_keepalive_time=600，tcp 连接空闲 10 分钟后发送探测包，默认是 7200 秒（两小时）</li>
+<li>net.ipv4.tcp_keepalive_intvl=15，每次探测包间隔 15 秒，默认是 75 秒</li>
+<li>net.ipv4.tcp_keepalive_probes=5，一共发送 5 次探测包，默认是 9 次</li>
+</ul>
+
+<p>让内核尽快检测出空闲连接并释放。</p>
+
+<h3 id="toc_2">分析</h3>
+
+<p>服务器环境是 Java、Tomcat。服务端在收到客户端 FIN 包后进入 CLOSE_WAIT，但服务端没有发送 FIN 包，具体原因没有查明。猜测的原因是</p>
+
+<ul>
+<li>服务端的业务处理阻塞，导致发送不了 FIN 包</li>
+<li>网络问题导致依赖的基础库 bug</li>
+</ul>
+
+<p>附：TCP 连接状态图</p>
+
+<p><img src="/resource/image/2016-10-31-close-wait-problem/8b538e707e964084a2161844efb023ea-tcp.jpg" alt="8b538e707e964084a2161844efb023ea-tcp.jpg"/></p>
 
 
 		</div>
@@ -1346,25 +354,28 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-18-product-interaction-design-book-share.html">产品交互设计方面的书籍分享</a></h1>
-			<p class="meta"><time datetime="2010-12-18T00:11:43+08:00" 
-			pubdate data-updated="true">2010/12/18</time></p>
+		  	<h1 class="entry-title"><a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a></h1>
+			<p class="meta"><time datetime="2016-10-08T00:42:41+08:00" 
+			pubdate data-updated="true">2016/10/8</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p>最近买了一本书《锦绣蓝图:怎样规划令人流连忘返的网站(第2版)》，但是在卓越上浏览书《UCD火花集——有效的互联网产品设计 交互》的时候发现这样一条评论，感觉还是很不错的，与大家分享！列出的书确实不错，会慢慢一一拜读，认真学习！</p>
+		  	<p>sizeof这个方法名直接取自C语言，但是实际上LLVM中并没有一个函数叫sizeof。而且sizeof的使用范围很窄，不像map，filter这种经常会全局用到。所以重新定义了一个结构体 MemoryLayout来实现原来sizeof的功能，使用上也有变化。</p>
 
-<p>评论如下：</p>
+<p>主要有两种方式，一种是直接通过泛型参数从静态变量获取：</p>
 
-<p>一本讲交互设计用户体验的书能做成这样真是不容易啊，稍微有点信息架构和用户体验概念的人都不至于把这本书做成这样，这也直接说明国内在交互设计方面实在 是水平太低了，不过低不是问题，我们可以慢慢追赶，但我非常诚恳的建议想读这本书的朋友，如果你希望通过本书学到什么有价值的东西，那最好放弃，我建议业 内人士还是老老实实地从下面的几本书开始阅读（别怕厚，这方面的书都是图，看的速度会快很多）： </p>
+<pre><code>let stringSize = MemoryLayout&lt;String&gt;.size
+</code></pre>
 
-<p>-《Web信息架构：设计大型网站》 <br/>
--《About face 3.0》 <br/>
--《网站交互设计模式》<br/>
--《锦绣蓝图:怎样规划令人流连忘返的网站（第2版）》 <br/>
--《Web导航设计》 <br/>
--《瞬间之美——web界面设计如何让用户心动》 <br/>
--《设计心理学》（唐纳德 A 诺曼）</p>
+<p>也可以通过调用静态方法获取</p>
+
+<pre><code>let stringValue = &quot;A&quot;
+let varSize = MemoryLayout.size(ofValue: stringValue)
+</code></pre>
+
+<p>两者都会得到正确的结果。</p>
+
+<p>除了sizeof, MemoryLayout还可以获取stride， alignment。</p>
 
 
 		</div>
@@ -1375,45 +386,20 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-16-see-or-not.html">见与不见 十诫诗</a></h1>
-			<p class="meta"><time datetime="2010-12-16T00:11:13+08:00" 
-			pubdate data-updated="true">2010/12/16</time></p>
+		  	<h1 class="entry-title"><a href="2016-09-21-xcode-eight-custom-environment-variables.html">Xcode 8:在Active Compilation Conditions中自定义环境变量</a></h1>
+			<p class="meta"><time datetime="2016-09-21T00:35:48+08:00" 
+			pubdate data-updated="true">2016/9/21</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p>见与不见<br/>
-你见，或者不见我 <br/>
-我就在那里<br/>
-不悲不喜<br/>
-你念，或者不念我<br/>
-情就在那里<br/>
-不来不去<br/>
-你爱，或者不爱我<br/>
-爱就在那里<br/>
-不增不减<br/>
-你跟，或者不跟我<br/>
-我的手就在你手里<br/>
-不舍不弃<br/>
-来我的怀里<br/>
-或者<br/>
-让我住进你的心里<br/>
-默然　相爱<br/>
-寂静　欢喜</p>
+		  	<p>在Xcode 7我们在 OTHER_SWIFT_FLAGS中配置环境变量。但是有一个不爽的地方就是需要在自定义的变量前增加“-D”后才能使用。</p>
 
-<p>十诫诗</p>
+<pre><code>#if MYFLAG
+// 逻辑判断
+#endif
+</code></pre>
 
-<p>第一最好不相见，如此便可不相恋。<br/>
-第二最好不相知，如此便可不相思。<br/>
-第三最好不相伴，如此便可不相欠。<br/>
-第四最好不相惜，如此便可不相忆。<br/>
-第五最好不相爱，如此便可不相弃。<br/>
-第六最好不相对，如此便可不相会。<br/>
-第七最好不相误，如此便可不相负。<br/>
-第八最好不相许，如此便可不相续。<br/>
-第九最好不相依，如此便可不相偎。<br/>
-第十最好不相遇，如此便可不相聚。<br/>
-但曾相见便相知，相见何如不见时。<br/>
-安得与君相诀绝，免教生死作相思。</p>
+<p>现在在Xcode 8中新增了一个SWIFT_ACTIVE_COMPILATION_CONDITIONS选项，现在直接在里面添加就可以啦！在代码中的使用逻辑和之前一样。</p>
 
 
 		</div>
@@ -1424,34 +410,23 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-16-android-use-thread-problem.html">Android中使用Thread线程会遇到哪些问题？</a></h1>
-			<p class="meta"><time datetime="2010-12-16T00:10:15+08:00" 
-			pubdate data-updated="true">2010/12/16</time></p>
+		  	<h1 class="entry-title"><a href="2016-09-12-ios-ten-declare-intended.html">兼容iOS 10：配置获取隐私数据权限声明</a></h1>
+			<p class="meta"><time datetime="2016-09-12T00:32:14+08:00" 
+			pubdate data-updated="true">2016/9/12</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<p>很多初入Android或Java开发的新手对Thread、Looper、Handler和Message仍然比较迷惑，衍生的有 HandlerThread、java.util.concurrent、Task、AsyncTask由于目前市面上的书籍等资料都没有谈到这些问题， 今天就这一问题做更系统性的总结.</p>
+		  	<p>iOS 10的一大变化是更强的隐私数据保护。在文档中是这么描述的：</p>
 
-<p>Android开发过程中为什么要线程能？</p>
+<p>You must statically declare your app’s intended use of protected data classes by including the appropriate purpose string keys in your Info.plist file.</p>
 
-<p>我们创建的 Service、Activity以及Broadcast均是一个主线程处理，这里我们可以理解为UI线程.但是在操作一些耗时操作时，比如I/O读写的 大文件读写，数据库操作以及网络下载需要很长时间，为了不阻塞用户界面，出现ANR的响应提示窗口，这个时候我们可以考虑使用Thread线程来解决.</p>
+<p>简单的说访问用户数据都需要现在Info.plist中声明，否则会crash。<br/>
+这些用户数据包括：</p>
 
-<p>Android中使用Thread线程会遇到哪些问题？</p>
+<p>Contacts, Calendar, Reminders, Photos, Bluetooth Sharing, Microphone, Camera, Location, Health, HomeKit, Media Library, Motion, CallKit, Speech Recognition, SiriKit, TV Provider.</p>
 
-<p>对于从事过J2ME开发的程序员来说Thread比较简单，直接匿名创建重写run方法，调用start方法执行即可.或者从Runnable接口继 承，但对于Android平台来说UI控件都没有设计成为线程安全类型，所以需要引入一些同步的机制来使其刷新，这点Google在设计Android时 倒是参考了下Win32的消息处理机制.</p>
-
-<ol>
-<li><p>对于线程中的刷新一个View为基类的界面，可以使用postInvalidate（）方法在线程中来处理，其中还提供了一些重写方法比如 postInvalidate（int left，int top，int right，int bottom） 来刷新一个矩形区域，以及延时执行，比如postInvalidateDelayed（long delayMilliseconds）或postInvalidateDelayed（long delayMilliseconds，int left，int top，int right，int bottom） 方法，其中第一个参数为毫秒，如下：</p></li>
-<li><p>当然推荐的方法是通过一个Handler来处理这些，可以在一个线程的run方法中调用handler对象的 postMessage或sendMessage方法来实现，Android程序内部维护着一个消息队列，会轮训处理这些，如果你是Win32程序员可以 很好理解这些消息处理，不过相对于Android来说没有提供 PreTranslateMessage这些干涉内部的方法.</p></li>
-<li><p>Looper又是什么呢？ ，其实Android中每一个Thread都跟着一个Looper，Looper可以帮助Thread维护一个消息队列，昨天的问题 Can&#39;t create handler inside thread 错误 一文中提到这一概念，但是Looper和Handler没有什么关系，我们从开源的代码可以看到Android还提供了一个Thread继承类 HanderThread可以帮助我们处理，在HandlerThread对象中可以通过getLooper方法获取一个Looper对象控制句柄，我们 可以将其这个Looper对象映射到一个Handler中去来实现一个线程同步机制，Looper对象的执行需要初始化Looper.prepare方法 就是昨天我们看到的问题，同时推出时还要释放资源，使用Looper.release方法.</p></li>
-</ol>
-
-<p>4.Message 在Android是什么呢？ 对于Android中Handler可以传递一些内容，通过Bundle对象可以封装String、Integer以及Blob二进制对象，我们通过在线 程中使用Handler对象的 sendEmptyMessage或sendMessage方法来传递一个Bundle对象到Handler处理器.对于Handler类提供了重写方法 handleMessage（Message msg） 来判断，通过msg.what来区分每条信息.将Bundle解包来实现Handler类更新UI线程中的内容实现控件的刷新操作.相关的Handler 对象有关消息发送sendXXXX相关方法如下，同时还有postXXXX相关方法，这些和Win32中的道理基本一致，一个为发送后直接返回，一个为处 理后才返回 ：</p>
-
-<ol>
-<li><p>java.util.concurrent对象分析，对于过去从事Java开发的程序员不会对Concurrent对象感到陌生吧，他是JDK 1.5以后新增的重要特性作为掌上设备，我们不提倡使用该类，考虑到Android为我们已经设计好的Task机制，我们这里Android开发网对其不 做过多的赘述，相关原因参考下面的介绍：</p></li>
-<li><p>在Android中还提供了一种有别于线程的处理方式，就是Task以及AsyncTask，从开源代码中可以看到是针对Concurrent的封装，开 发人员可以方便的处理这些异步任务，具体的Android123在以前的文章中有详细解释，可以使用站内搜索来了解更多.</p></li>
-</ol>
+<p>10之前只需要获取位置时配置，现在更严格了，比如需要调用相册访问权限，也需要在Info.plist中配置privacy。<br/>
+好在这些key的名字在Xcode 8中已经有了自动补全。添加一个属性，输入Privacy后就会出现自动提示，后面填的string会在弹出用户允许时展示在描述里。描述一定要填写，如果描述空着提交AppStore时会拒绝。</p>
 
 
 		</div>
@@ -1462,44 +437,695 @@ public class Decimal2Fraction {
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-15-js-test-network-speed.html">javascript网络测速</a></h1>
-			<p class="meta"><time datetime="2010-12-15T00:09:39+08:00" 
-			pubdate data-updated="true">2010/12/15</time></p>
+		  	<h1 class="entry-title"><a href="2016-08-10-swift-optional-type.html">Swift中的可选类型(Optional Type)</a></h1>
+			<p class="meta"><time datetime="2016-08-10T00:47:34+08:00" 
+			pubdate data-updated="true">2016/8/10</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<pre><code>//图片大小  单位kb
-var filesize = 126.0 
-var sum=0;
-var n=0;
-var starttime;
-$(document).ready(function(){
-    timedCount();
-    });
-function getVelocity(timestamp) {
-    var endtime = new Date();
-    var speed = formatFloat(Math.round(filesize * 1024) / (endtime - starttime),2);    //得到网速 kb/s  
-    sum+=speed;n++;
-    var averagespeed=formatFloat(sum/n,2);
-    $(&quot;.speed&quot;).val(speed);
-    $(&quot;.averagespeed&quot;).val(averagespeed);
-    $(&quot;#&quot;+timestamp).remove();          
+		  	<h3 id="toc_0">Optional Type总览</h3>
+
+<p>什么是optional? Swift中声明的一个变量时, 默认情况下它是non-optional的, 即必须赋予这个变量一个非空的值. 如果给non-optional类型的变量赋值nil, 编译器就会报错。</p>
+
+<pre><code>var string1: String = &quot;This is string1&quot; // OK
+string1 = nil  // Nil cannot be assigned to type &#39;String&#39;
+- Swift中, 当声明一个类的属性时, 属性默认也是non-optional的
+swift
+class MyClass {
+    var name: String = &quot;Lv&quot;
+    var age: String  // Class &#39;MyClass&#39; has no initializers
 }
-function timedCount()
-{      
-    var nowtime = new Date();
-    var timestamp = nowtime.getTime();
-    var imgsrc = &quot;http://hiphotos.baidu.com/baidu/pic/item/da6c6827187c9620908f9d2b.jpeg?timestamp=&quot;+timestamp;
-    var imgtag = &quot;&lt;img id=&quot;&quot;+timestamp+&quot;&quot; src=&quot;http://lamb.b3log.org/&quot;+imgsrc+&quot;&quot; alt=&quot;&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;&quot;;
-    //alert(imgtag);
-    starttime = new Date();
-    $(imgtag).appendTo(&quot;body&quot;);
-    var testspeed = setTimeout(&quot;timedCount()&quot;,1000)
+</code></pre>
+
+<p>对于之前使用Objective-C的同学来说, 这样的错误可能会让你们有些惊讶, 因为在Objective-C中, 当把nil赋值给一个变量或者声明一个没有初始值的属性时, 编译器都不会报错.</p>
+
+<pre><code>NSString *string1 = @&quot;This is string1&quot;;
+string1 = nil;
+class MyClass {
+    NSString *name = @&quot;Lv&quot;
+    NSString *age;
 }
-function formatFloat(src, pos)
+</code></pre>
+
+<p>然而并不意味着在Swift中不能声明一个没有初始值的属性. Swift中引入了可选类型(optional type)来解决这一问题. 它的定义是通过在类型生命后加加一个<code>?</code>操作符完成的.</p>
+
+<pre><code>class MyClass {
+    var name: String?  // OK
+    var age: String?  // OK
+}
+</code></pre>
+
+<h3 id="toc_1">为什么引入可选类型?</h3>
+
+<p>Swift是一门安全的编程语言. 正如苹果所言, 可选类型就是证明Swift是一门安全的编程语言的一个小例子. 如上面的例子所示, Swift的可选类型提供了在编译阶段就检查一些可能在运行时才会出现的常见错误的机制. 下面通过下面的例子更好的诠释一下可选类型的威力.</p>
+
+<p>考虑下面一个Objective-C中的方法</p>
+
+<pre><code>- (NSString *)findStockCode:(NSString *)company {
+    if ([company isEqualToString:@&quot;Apple&quot;]) {
+        return @&quot;AAPL&quot;;
+    } else if ([company isEqualToString:@&quot;Google&quot;]) {
+        return @&quot;GOOG&quot;;
+    }
+    return nil;
+}
+</code></pre>
+
+<p>通过<code>findStockCode:</code>方法可以传入公司的名字,然后得到对应公司的股票代码. 为了方便演示, 这里只返回Apple和Google的代码, 对于其他的传入参数, 统统返回nil.<br/>
+假设在同一个类中调用<code>findStockCode:</code>方法:</p>
+
+<pre><code>NSString *stockCode = [self findStockCode:@&quot;Facebook&quot;]; // nil is returned
+NSString *text = @&quot;Stock Code - &quot;;
+NSString *message = [text stringByAppendingString:stockCode]; // runtime error
+NSLog(@&quot;%@&quot;, message);
+</code></pre>
+
+<p>上面的代码是可以编译通过的, 但是因为传入了&quot;Facebook&quot;导致返回值是nil, 当代码开始运行后, 程序就会报错了.<br/>
+当使用Swift中的可选类型时, 上面在运行时才会出现的错误在编译阶段就会报错. 如果使用Swift的代码重写上面的例子,代码如下:</p>
+
+<pre><code>func findStockCode(company: String) -&gt; String? {
+   if (company == &quot;Apple&quot;) {
+      return &quot;AAPL&quot;
+   } else if (company == &quot;Google&quot;) {
+      return &quot;GOOG&quot;
+   }
+   return nil
+}
+var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+let message = text + stockCode  // compile-time error
+print(message)
+</code></pre>
+
+<p>stockCode被定义成可选类型. 这就意味着它要么是一个String, 要么就是nil. 因为编译器在编译阶段就检测到了潜在的错误(可选类型的值没有被解包: value of optional type String? is not unwrapped)并且提示你去改正, 这段代码就不能够被执行.<br/>
+从这个例子中可以看到, Swift的可选类型加强了对空值的检查, 并且在编译阶段就给开发者提供了可能的错误信息. 很明显, 可选类型的引入可以让代码的质量变得更好.</p>
+
+<h3 id="toc_2">解包可选类型(Unwrapping Optionals)</h3>
+
+<p>如何让上面的代码正常运行? 很明显, 这里需要判断stockCode是否为空. 代码如下:</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+if stockCode {
+    let message = text + stockCode!
+    print(message)
+}
+</code></pre>
+
+<p>像在Objective-C中一样, 还是使用if来判断stockCode中是否有值. 一旦确定stockCode中肯定有值时, 将一个感叹号(!)加在可选类型变量名后面来解包这个可选类型的变量. 在Swift中, 这叫做硬解包. 即直接在可选类型后面加一个感叹号来表示它肯定有值.<br/>
+上面的例子中, 我们只是自己知道stockCode肯定有值, 所以才直接硬解包了stockCode变量. 但是万一有时候我们的感觉是错的, 那程序在运行时可能会出现严重的错误. 所以Swift中是推荐先检查可选类型是否有值, 然后再进行解包的!</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+let message = text + stockCode!  // runtime error
+</code></pre>
+
+<p>以上代码在编译阶段不会报错.因为使用了硬解包, 编译器认为可选类型是有值的, 所以编译是通过的. 当代码运行起来时, 知名的错误将会出现: <code>fatal error: Can’t unwrap Optional.None</code></p>
+
+<h3 id="toc_3">可选绑定(Optional Binding)</h3>
+
+<p>与硬解包不同, 可选绑定(Optional Binding)是一种更简单更推荐的方法来解包一个可选类型. 使用可选绑定来检查可选类型的变量有值还是没值. 如果有值, 解包它并且将值传递给一个常量或者变量.<br/>
+再多的言语描述也不如直接上代码来的实际! 将上面的代码改成可选绑定的代码如下:</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+if let tempStockCode = stockCode {
+    let message = text + tempStockCode
+    print(message)
+}
+</code></pre>
+
+<p>if let<code>或者</code>if var`是可选绑定的两个关键字. 使用自然语言来描述上面这段代码的话, 意思就是如果stockCode有值,解包它,并且将它的值赋值给tempStockCode, 然后执行下面的条件语句; 如果stockCode为空, 直接跳过条件语句块.</p>
+
+<p>上面的代码可以简化如下:</p>
+
+<pre><code>let text = &quot;Stock Code - &quot;
+if var stockCode = findStockCode(&quot;Apple&quot;) {
+    let message = text + stockCode
+    print(message)
+}
+</code></pre>
+
+<p>这里stockCode不再是可选类型, 所以不需要使用<code>!</code>来解包. 如果findStockCode:方法返回值是nil, 那么程序并不会执行条件语句块中的代码.</p>
+
+<h3 id="toc_4">可选链式调用(Optional Chaining)</h3>
+
+<p>在解释optional chaining之前, 先来修改一下上面的例子. 这里重新创建一个名为Stock的类, 包含两个可选类型的属性code和price. <code>findStockCode:</code>方法直接返回Stock类的对象, 而不再是String.</p>
+
+<pre><code>class Stock {
+    var code: String?
+    var price: Double?
+}
+func findStockCode(company: String) -&gt; Stock? {
+    if (company == &quot;Apple&quot;) {
+        let aapl: Stock = Stock()
+        aapl.code = &quot;AAPL&quot;
+        aapl.price = 90.32
+        return aapl
+    } else if (company == &quot;Google&quot;) {
+        let goog: Stock = Stock()
+        goog.code = &quot;GOOG&quot;
+        goog.price = 556.36
+        return goog
+    }
+    return nil
+}
+</code></pre>
+
+<p>改写了创建类的代码, 相应的调用代码也需要修改. 这里调用findStockCode:方法得到一个Stock对象, 然后计算买100股股票所需的价格.</p>
+
+<pre><code>if let stock = findStockCode(&quot;Apple&quot;) {
+    if let sharePrice = stock.price {
+        let totalCost = sharePrice * 100
+        print(totalCost)
+    }
+}
+</code></pre>
+
+<p>这里因为findStockCode:方法的返回值类型是可选类型, 所以使用if let进行可选绑定, 又因为price属性也是可选类型, 所以再使用一个if let来判断是否有值.</p>
+
+<p>上面的代码是一段正确的代码. 但是可以通过使用可选链式调用(Optional Chaining)来简化上面的代码, 毕竟上面是使用了两个if let的. 可选链式调用使我们能够通过<code>?.</code>链接多个可选类型. 示例代码如下:</p>
+
+<pre><code>if let sharePrice = findStockCode(&quot;Apple&quot;)?.price {
+    let totalCost = sharePrice * 100
+    print(totalCost)
+}
+</code></pre>
+
+<p>可选链式调用提供了另外一种方法获得price的值. 现在的代码看起来更加简洁. 这里只是对可选链式调用(Optional Chaining)做了简要介绍, 详细的介绍请阅读<a href="https://developer.apple.com/library/prerelease/ios/documentation/swift/conceptual/swift_programming_language/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-XID_312">苹果官方文档</a>。</p>
+
+<h3 id="toc_5">Swift和Objective-C的互通性</h3>
+
+<p>Swift的可选类型是非常强大的. 尽管可能需要花一段时间熟悉它的语法.</p>
+
+<p>Swift的设计是本着可以和Objective-C的API交互的原则. 当你想和UIKit或者其他框架的API交互时, 你肯定得需要可选类型. 下面是一些在实现table view时遇见的可选类型.</p>
+
+<pre><code>func numberOfSectionsInTableView(tableView: UITableView?) -&gt; Int {
+   // Return the number of sections.
+   return 1
+}
+func tableView(tableView: UITableView?, numberOfRowsInSection section: Int) -&gt; Int {
+   // Return the number of rows in the section.
+   return recipes.count
+}
+func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -&gt; UITableViewCell! {
+   let cell = tableView.dequeueReusableCellWithIdentifier(&quot;Cell&quot;, forIndexPath: indexPath) as UITableViewCell
+   cell.textLabel.text = recipes[indexPath.row]
+   return cell
+}
+</code></pre>
+
+<h3 id="toc_6">总结</h3>
+
+<p>理解可选类型的工作原理是非常重要的，在Swift中可选类型允许开发者能够在代码的编译阶段就发现一些潜在的问题, 从而确保在代码真正运行时能更安全. 一旦等你习惯了它的语法, 你必将会爱上可选类型这个新引入的概念。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-07-26-xcode-could-not-be-verified.html">Xcode真机调试报错：The Application Could Not Be Verified.</a></h1>
+			<p class="meta"><time datetime="2016-07-26T01:47:59+08:00" 
+			pubdate data-updated="true">2016/7/26</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天真机调试的时候遇到这个错误：</p>
+
+<p>The application could not be verified.</p>
+
+<p>这还是第一次遇到，应该是手机上的app的证书跟现在的证书不一致导致。</p>
+
+<p>解决方法有两个</p>
+
+<h3 id="toc_0">xcode中切换证书：</h3>
+
+<p>你手机上的app用的是哪个证书，你现在还用那个证书运行。</p>
+
+<h3 id="toc_1">删除手机上的app</h3>
+
+<p>直接删除手机上的app，再运行就可以啦！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-06-04-swift-noescape.html">Swift中被忽略的@noescape</a></h1>
+			<p class="meta"><time datetime="2016-06-04T00:03:16+08:00" 
+			pubdate data-updated="true">2016/6/4</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>这里需要先介绍一下escape的概念。当一个闭包当做一个参数传进函数里，这个闭包是在这个函数执行完后执行的，这个时候我们就说这个闭包从函数逃出来了（escape）。这种场景很常见，比如我们进行一个异步的请求，请求时会传入一个handler，比如当请求成功后执行达到回调的目的。</p>
+
+<p>众所周知swift的内存管理是引用计数。闭包里用到的数据都需要捕捉到闭包里，保证闭包执行时这些数据不会被释放还在内存里。Xcode为了让我们意识到闭包里用到的对象其实已经被retain了，就要求我们访问当前属性时显示声明self。<br/>
+这个时候如果新手就很容易犯引用循环的错误。闭包retain了self，self如果又持有retain了闭包。最后就谁都释放不了，内存就泄露了。</p>
+
+<p>这是swift中默认闭包的使用场景。<br/>
+但是这里是有另外一种可能，假设有一个闭包是传入用于sort用的，或者比如作为map参数的闭包。当这行代码执行完成时，这个闭包也就使用完了，之后不会再被执行。这个情况下，闭包就不必再持有里面用到的对象。<br/>
+这就是非escape闭包。</p>
+
+<p>swift里针对非escape用@noescape表示。<br/>
+比如map函数就使用了：</p>
+
+<pre><code>func map&lt;T&gt;(@noescape transform: (Self.Generator.Element) throws -&gt; T) rethrows -&gt; [T]
+</code></pre>
+
+<p>这样标记之后能看到的好处就是这个闭包里如果再使用self的属性不需要加self.了。对于编译器而言，在知道是noescape闭包后可以进行一些内存的优化。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-05-14-swift-inout.html">Swift 3：inout 关键字位置的变化</a></h1>
+			<p class="meta"><time datetime="2016-05-14T01:19:18+08:00" 
+			pubdate data-updated="true">2016/5/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>inout 关键字可以用于将参数修饰为可修改，并且将修改会回传。这次 Swift 3 中对这个关键字也做了一些修改，咱们一起来kan&#39;k吧。</p>
+
+<p>在 Swift 中，如果我们希望一个函数可以修改它的参数变量的值，我们可以使用 inout 关键词。这个相当于编程语言概念中所谓的传址调用。 具体代码中就是这样的例子：</p>
+
+<pre><code>func foo(inout x:  Int) {
+
+    x = 2
+
+}
+
+var x = 5
+foo(&amp;x)
+print(x) // 2
+</code></pre>
+
+<p>在这个例子中， foo 函数的参数 x, 使用了 inout 修饰，这样我们在后面的调用中，将变量 x 传递给这个函数后，这个变量中的值也会被这个函数内部改变。 这个就是 inout 的基本作用了。</p>
+
+<p>在 Swift 3.0 中，有一个 <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0031-adjusting-inout-declarations.md">SE-0031</a> 的提案，就是改变 inout 这个关键词的位置的。</p>
+
+<p>当前的语法中，inout 的位置是在参数标签的位置上，也就是这个例子中的：</p>
+
+<pre><code>func foo(inout x:  Int)
+</code></pre>
+
+<p>inout 关键字位于参数标签 x 的前面。 而 Swift 3.0 以后，这个关键词的位置就会在参数类型前面了：</p>
+
+<pre><code>func foo(x: inout Int)
+</code></pre>
+
+<p>这个提案中也解释了这样做的好处。首先这样做之后参数标签就不和修饰关键字发生混淆，比如避免了这样的情况：</p>
+
+<pre><code>func foo(inOut x:  Int)
+func foo(inout x:  Int)
+</code></pre>
+
+<p>第一行的 inout 的大小写错误，所以它不是关键字。但这时编译器不会报错，因为 inOut 这时候作为了外部参数标签(Swift 的参数标签分为外部标签和内部标签，这个例子中外部标签是 inOut，所以我们在外部调用这个函数的时候就是这个语法 foo(inOut:),而函数内部还是用内部标签 x 来引用这个参数)。</p>
+
+<p>除了避免混淆之外，inout 的位置移动后还有一点需要大家注意的。按照提案中的意思，就是以前版本的遗留代码中的 inout，很可能会变成参数标签，也就是这样：</p>
+
+<pre><code>func foo(inout x:  Int)
+</code></pre>
+
+<p>比如之前我们的 foo 函数这样定义，但 Swift 3.0 之后， 这里的 inout 并不是关键字，而变成这个参数的外部标签了。所以这一点还是很值得注意的。</p>
+
+<p>最后提案中还说了一句，这样修改后能够更好的和 Rust 语言的模式相匹配。并且说在后续的版本中会更多的引入到 Swift 语言中。</p>
+
+<p>总体来说呢，这个改动不算大，但多多少少会对我们已有的代码造成一些影响。 inout 这个关键字大家应该多少都会用到过。所以在 Swift 3.0 更新后，也需要注意下这个问题。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-05-11-sensitive-data-processing.html">敏感数据处理</a></h1>
+			<p class="meta"><time datetime="2016-05-11T00:19:41+08:00" 
+			pubdate data-updated="true">2016/5/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">背景</h3>
+
+<p>大多数应用或多或少都会涉及到敏感数据处理，比如用户的手机号、身份证号，甚至银行卡账号。作为应用的开发者，如何 安全地 维护这些敏感数据呢？</p>
+
+<p>这里讨论的安全不是指服务器如何保护，而是在数据库层面做敏感数据的分离：</p>
+
+<ul>
+<li>业务库中不保存敏感数据，只保存混淆过的数据，比如电话字段保存的是 133****9961，在数据层面就进行脱敏</li>
+<li>敏感数据统一保存在另一个库中，有应用调用一个服务来建立原值和混淆值的映射关系</li>
+<li>业务库中因为保存的是脱敏过的数据，通过只读复制镜像可以很方便地提供给其他服务使用，比如 OLAP</li>
+<li>除了技术开发上方便，运维上也方便了很多，降低了敏感数据被暴露到外部的可能性</li>
+</ul>
+
+<h3 id="toc_1">技术设计</h3>
+
+<p>提供服务接口给应用存取敏感数据，本质上是一个 KV 存取服务。</p>
+
+<p><img src="/resource/image/2016-05-11-sensitive-data-processing/4910a7b5389945cc870dcc8f9cbfaf88.png" alt="4910a7b5389945cc870dcc8f9cbfaf88"/></p>
+
+<p>一些细节：</p>
+
+<ul>
+<li>表 protyle 的 domain 字段用于标识该记录的作用域，在一个作用域上相同的值要保证唯一</li>
+<li>表 protyle 的 hash 字段值是 SHA-512(domain/value) 的结果，用于唯一性校验</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-05-11-realm.html">移动端数据库新王者：realm</a></h1>
+			<p class="meta"><time datetime="2016-05-11T00:18:47+08:00" 
+			pubdate data-updated="true">2016/5/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">介绍</h3>
+
+<p><a href="https://realm.io/cn/">realm</a>是一个跨平台移动数据库引擎，支持iOS、OS X（Objective‑C和Swift）以及Android。<br/>
+2014年7月发布。由YCombinator孵化的创业团队历时几年打造，是第一个专门针对移动平台设计的数据库。目标是取代SQLite。<br/>
+为了彻底解决性能问题，核心数据引擎用C++打造，并不是建立在SQLite之上的ORM。如果对数据引擎实现想深入了解可以查看：Realm 核心数据库引擎探秘。因此得到的收益就是比普通的ORM要快很多，甚至比单独无封装的SQLite还要快。<br/>
+因为是ORM，本身在设计时也针对移动设备（iOS、Android），所以非常简单易用，学习成本很低。</p>
+
+<p>碾压级性能<br/>
+数据引自：introducing-realm<br/>
+每秒能在20万条数据中进行查询后count的次数。realm每秒可以进行30.9次查询后count。</p>
+
+<p>在20万条中进行一次遍历查询，数据和前面的count相似：realm一秒可以遍历20万条数据31次，而coredata只能进行两次查询。</p>
+
+<p>一次事务每秒插入数据的对比，realm每秒可以插入9.4万条记录，在这个比较里纯SQLite的性能最好，每秒可以插入17.8万条记录。然而封装了SQLite的FMDB的成绩大概是realm的一半。</p>
+
+<h3 id="toc_1">简单易用</h3>
+
+<p>实例代码语言是Objective‑C。<br/>
+Realm对象和其他对象没有太大区别，只是需要继承RLMObject</p>
+
+<pre><code>@interface Dog : RLMObject
+@property NSString *name;
+@property NSInteger age;
+@end
+
+Dog *mydog = [[Dog alloc] init];
+</code></pre>
+
+<p>存储起来也非常简单，获取数据库实例，在一个事务中进行写入。</p>
+
+<pre><code>RLMRealm *realm = [RLMRealm defaultRealm];
+
+[realm transactionWithBlock:^{
+    [realm addObject:mydog];
+}];
+</code></pre>
+
+<p>方便的查询，可以在一个查询结果中再进行查询。查询的条件有着丰富的支持。</p>
+
+<pre><code>RLMResults *r = [Dog objectsWhere:@&quot;age &gt; 8&quot;];
+
+// Queries are chainable
+r = [r objectsWhere:@&quot;name contains &#39;Rex&#39; AND  name BEGINSWITH &#39;大&#39;&quot;];
+</code></pre>
+
+<h3 id="toc_2">zero-copy和懒加载</h3>
+
+<p>在通常的数据库中，数据大多数时间都静静地呆在硬盘当中。当你访问 NSManagedObject 对象中的某个属性的时候，Core Data 会将这个请求转换为一组 SQL 语句，如果还未连接数据库的话则创建一个数据库连接，然后将这个 SQL 语句发送给硬盘，执行检索，从匹配检索的结果中读取所有的数据，然后将它们放到内存当中（也就是内存分配）。然而，这时候你需要对其格式进行反序列化(deserialize)，因为硬盘上存储的格式不能直接在内存中使用，这意味着你需要调整位，以便 CPU 能够对其进行处理。<br/>
+然而Realm跳过了整个拷贝数据到内存的过程，称之为zero-copy。做到这点是因为文件始终是内存映射的，无论文件是或否在内存当中，你都能够访问文件的任何内容。关于核心文件格式的重要一点就是，确保硬盘上的文件格式都是内存可读的，这样就无需执行任何反序列化操作了。<br/>
+这样就带来了一个问题，难道数据全加载到内存里了？所以这里懒加载应运而生，比如在查询到一组数据后，只有当你真正访问对象的时候才真正加载进来。</p>
+
+<h3 id="toc_3">VS SQLite</h3>
+
+<p>SQLite第一个版本发布于2000年，至今已16年。以当今的角度来看，它的编程抽象程度非常低。业务上我们其实只想把这些对象存进去，可以查询出来。<br/>
+即便已经是封装过的<a href="https://github.com/ccgus/fmdb">FMDB</a>，要写这样的代码心里也依旧难受:</p>
+
+<pre><code>FMDatabase *db = [FMDatabase databaseWithPath:@&quot;/tmp/tmp.db&quot;];
+if (![db open]) {
+    [db release];
+    return;
+}
+
+NSString *sql = @&quot;create table bulktest1 (id integer primary key autoincrement, x text);&quot;
+                 &quot;create table bulktest2 (id integer primary key autoincrement, y text);&quot;
+                 &quot;create table bulktest3 (id integer primary key autoincrement, z text);&quot;
+                 &quot;insert into bulktest1 (x) values (&#39;XXX&#39;);&quot;
+                 &quot;insert into bulktest2 (y) values (&#39;YYY&#39;);&quot;
+                 &quot;insert into bulktest3 (z) values (&#39;ZZZ&#39;);&quot;;
+
+success = [db executeStatements:sql];
+
+sql = @&quot;select count(*) as count from bulktest1;&quot;
+       &quot;select count(*) as count from bulktest2;&quot;
+       &quot;select count(*) as count from bulktest3;&quot;;
+
+success = [self.db executeStatements:sql withResultBlock:^int(NSDictionary *dictionary) {
+    NSInteger count = [dictionary[@&quot;count&quot;] integerValue];
+    XCTAssertEqual(count, 1, @&quot;expected one record for dictionary %@&quot;, dictionary);
+    return 0;
+}];
+
+[db close];
+</code></pre>
+
+<p>VS CoreData</p>
+
+<p>详细的比较推荐看这篇：<a href="http://iiiyu.com/2016/01/19/CoreData-VS-Realm/">CoreData VS Realm</a>。<br/>
+下面给出一个查询的比较：</p>
+
+<pre><code>// Core Data
+let fetchRequest = NSFetchRequest(entityName: &quot;Specimen&quot;)
+let predicate = NSPredicate(format: &quot;name BEGINSWITH [c]%@&quot;, searchString)
+fetchRequest.predicate = predicate
+let sortDescriptor = NSSortDescriptor(key: &quot;name&quot;, ascending: true)
+fetchRequest.sortDescriptors = [sortDescriptor]
+let error = NSError()
+let results = managedObjectContext?.executeFetchRequest(fetchRequest, error:&amp;error)
+</code></pre>
+
+<p>Realm则简单的多：</p>
+
+<pre><code>// Realm
+let predicate = NSPredicate(format: &quot;name BEGINSWITH [c]%@&quot;, searchString);
+let specimens = Specimen.objectsWithPredicate(predicate).arraySortedByProperty(&quot;name&quot;, ascending: true)
+</code></pre>
+
+<h3 id="toc_4">总结一下Realm对CoreData</h3>
+
+<h4 id="toc_5">优势：</h4>
+
+<ul>
+<li>不需要架构Context那种烦人的东西，CoreData 是一个博大精深的技术，不要妄想几天之内可以用的很溜。</li>
+<li>支持 NSPredicate，从 CoreData 转过来并没有太多的不适应。</li>
+<li>CoreData多个持久化文件很麻烦，Realm轻松支持这个功能</li>
+</ul>
+
+<h4 id="toc_6">劣势：</h4>
+
+<p>是会增加应用大概1MB的体积。CoreData原生支持，不会增加App体积。</p>
+
+<h3 id="toc_7">需要知道的一些问题</h3>
+
+<p>其实我自己觉得这些是可以接受的问题。技术很多时候就是权衡，为了达到一些目的，总是要牺牲掉一些东西。</p>
+
+<h4 id="toc_8">所有的存储对象需要继承RealmObject</h4>
+
+<p>比如我现在的项目的数据从网络请求回来都会继承自己写的一个方便解析的基类，在这里就需要做出一些适应。<br/>
+但是该问题在swift中是不存在的。因为swift是天生的面向协议编程范式。</p>
+
+<h4 id="toc_9">不能自定义getter、setter</h4>
+
+<p>realm会自动生成getter、setter，如果自定义getter、setter存储就会有影响。如果要规避这个问题，可以通过设置这个对象的忽略属性。<br/>
+比如有个属性id，需要自定义setter。可以在对象属性里把id设置为忽略属性，这样realm就不会为它自动生成getter、setter，但是也不会把id存入数据库。接着自定义一个用于存储的属性比如realm_id。在id的setter中可以把把值也赋给realm_id。<br/>
+这个问题在swift中也是不存在的，因为swfit中使用的是willset、didset这种通知机制。</p>
+
+<h4 id="toc_10">查询的结果不是数组</h4>
+
+<p>为了能够支持查询结果的链式查询，realm自定义了一个集合类型。可以枚举，但是不是熟悉的数组了。又因为realm的懒加载机制，所以不建议在数据层把这个枚举转成数组类型。这样的缺点就是上层知道了数据的存储逻辑。严格的说这里不应该让上层知道。但是这样设计也许是为了方便上层进行再次检索，realm有着优越的查询性能。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2016-04-22-load-big-image.html">解决MWPhotoBrowser中的SDWebImage加载大图导致的内存警告问题</a></h1>
+			<p class="meta"><time datetime="2016-04-22T01:56:38+08:00" 
+			pubdate data-updated="true">2016/4/22</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="https://github.com/mwaterfall/MWPhotoBrowser.git">MWPhotoBrowser</a>是一个非常不错的照片浏览器，在github的star接近3000个。</p>
+
+<p>MWPhotoBrowser来加载小图1M以下的都应该不会有内存警告的问题。如果遇到大图，3M、4M、5M的大图，很有可能导致内存警告。最近我就遇到这个问题，很是头疼。来回滑动查看照片内存飙到100M以上。</p>
+
+<p>网上查了很多资料，都没有解决问题。</p>
+
+<p>我们来看一下MWPhotoBrowser，其实MWPhotoBrowser用的是<a href="https://github.com/rs/SDWebImage.git">SDWebImage</a>来下载图片的。</p>
+
+<p>在github看到SDWebImage的介绍，后面说到：</p>
+
+<p>Future Enhancements<br/>
+LRU memory cache cleanup instead of reset on memory warning</p>
+
+<p>看到这个真是欲哭无泪啊。</p>
+
+<p>再去看看SDWebImage的，有个人提问了：</p>
+
+<p>How to disable &quot;memory cache&quot;?  I don&#39;t want memory cache,  it used a lot of memory and got memory waring easily,  disk is enough for me...</p>
+
+<p>有人回答：</p>
+
+<p>There is no way to disable the memory cache. But the cache is designed to flush itself when you get a memory warning, so you shouldn&#39;t need to worry it.</p>
+
+<p>说的是SDWebImage遇到内存警告会自动释放内存，但是这还是解决不了问题，加载大图的时候，内存会突然蹦到100多M，在4s及以下的手机上跑，再就挂了。</p>
+
+<p>还是没有解决内存警告的问题。怎么办呢？</p>
+
+<p>我是这么解决的：</p>
+
+<p>SDWebImage有一个SDWebImageDownloaderOperation类来执行下载操作的。里面有个下载完成的方法：</p>
+
+<pre><code>- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+   SDWebImageDownloaderCompletedBlock completionBlock = self.completedBlock;
+   @synchronized(self) {
+       CFRunLoopStop(CFRunLoopGetCurrent());
+       self.thread = nil;
+       self.connection = nil;
+       [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+   }
+
+   if (![[NSURLCache sharedURLCache] cachedResponseForRequest:_request]) {
+       responseFromCached = NO;
+   }
+
+   if (completionBlock)
+   {
+       if (self.options &amp; SDWebImageDownloaderIgnoreCachedResponse &amp;&amp; responseFromCached) {
+           completionBlock(nil, nil, nil, YES);
+       }
+       else {
+           UIImage *image = [UIImage sd_imageWithData:self.imageData];
+           NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
+           image = [self scaledImageForKey:key image:image];
+
+           // Do not force decoding animated GIFs
+           if (!image.images) {
+               image = [UIImage decodedImageWithImage:image];
+           }
+           if (CGSizeEqualToSize(image.size, CGSizeZero)) {
+               completionBlock(nil, nil, [NSError errorWithDomain:@&quot;SDWebImageErrorDomain&quot; code:0 userInfo:@{NSLocalizedDescriptionKey : @&quot;Downloaded image has 0 pixels&quot;}], YES);
+           }
+           else {
+               completionBlock(image, self.imageData, nil, YES);
+           }
+       }
+   }
+   self.completionBlock = nil;
+   [self done];
+}
+</code></pre>
+
+<p>其中，UIImage *image = [UIImage sd_imageWithData:self.imageData];就是将data转换成image。</p>
+
+<p>再看看sd_imageWithData:这个方法：</p>
+
+<pre><code>+ (UIImage *)sd_imageWithData:(NSData *)data {
+   UIImage *image;
+   NSString *imageContentType = [NSData sd_contentTypeForImageData:data];
+   if ([imageContentType isEqualToString:@&quot;image/gif&quot;]) {
+       image = [UIImage sd_animatedGIFWithData:data];
+   }
+#ifdef SD_WEBP
+   else if ([imageContentType isEqualToString:@&quot;image/webp&quot;])
+   {
+       image = [UIImage sd_imageWithWebPData:data];
+   }
+#endif
+   else {
+       image = [[UIImage alloc] initWithData:data];
+       UIImageOrientation orientation = [self sd_imageOrientationFromImageData:data];
+       if (orientation != UIImageOrientationUp) {
+           image = [UIImage imageWithCGImage:image.CGImage
+                                       scale:image.scale
+                                 orientation:orientation];
+       }
+   }
+
+
+   return image;
+}
+</code></pre>
+
+<p>这个方法在UIImage+MultiFormat里面，是UIImage的一个类别处理。这句话很重要image = [[UIImage alloc] initWithData:data]; SDWebImage把下载下来的data直接转成image，然后没做等比缩放直接存起来使用。所以，我们只需要在这边做处理即可：</p>
+
+<p>UIImage+MultiFormat添加一个方法：</p>
+
+<pre><code>+(UIImage *)compressImageWith:(UIImage *)image
 {
-     return Math.round(src*Math.pow(10, pos))/Math.pow(10, pos);
+   float imageWidth = image.size.width;
+   float imageHeight = image.size.height;
+   float width = 640;
+   float height = image.size.height/(image.size.width/width);
+
+   float widthScale = imageWidth /width;
+   float heightScale = imageHeight /height;
+
+   // 创建一个bitmap的context
+   // 并把它设置成为当前正在使用的context
+   UIGraphicsBeginImageContext(CGSizeMake(width, height));
+
+   if (widthScale &gt; heightScale) {
+       [image drawInRect:CGRectMake(0, 0, imageWidth /heightScale , height)];
+   }
+   else {
+       [image drawInRect:CGRectMake(0, 0, width , imageHeight /widthScale)];
+   }
+
+   // 从当前context中创建一个改变大小后的图片
+   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+   // 使当前的context出堆栈
+   UIGraphicsEndImageContext();
+
+   return newImage;
+
 }
+</code></pre>
+
+<p>然后在：image = [[UIImage alloc] initWithData:data];下面调用以下：</p>
+
+<pre><code>if (data.length/1024 &gt; 1024) {
+    image = [self compressImageWith:image];
+}
+</code></pre>
+
+<p>当data大于1M的时候做压缩处理。革命尚未成功，还需要一步处理。在SDWebImageDownloaderOperation的connectionDidFinishLoading方法里面的：</p>
+
+<pre><code>  UIImage *image = [UIImage sd_imageWithData:self.imageData];
+
+  //将等比压缩过的image在赋在转成data赋给self.imageData
+  NSData *data = UIImageJPEGRepresentation(image, 1);
+  self.imageData =  [NSMutableData dataWithData:data];
 </code></pre>
 
 
@@ -1511,451 +1137,46 @@ function formatFloat(src, pos)
  
 	<article>
 		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-14-if-i-lead-team.html">如果我来带团队</a></h1>
-			<p class="meta"><time datetime="2010-12-14T00:08:56+08:00" 
-			pubdate data-updated="true">2010/12/14</time></p>
+		  	<h1 class="entry-title"><a href="2016-03-29-gitconfig-alias.html">gitconfig配置别名alias</a></h1>
+			<p class="meta"><time datetime="2016-03-29T01:50:52+08:00" 
+			pubdate data-updated="true">2016/3/29</time></p>
 		 </header>
 	  	<div class="entry-content">
 		  	
-		  	<ol>
-<li>计划执行：计划安排得当，不要老加班，不要老是现实和计划不匹配。不要做到哪儿计划就推后到哪儿。</li>
-<li>研发成果：成功产出几个重影响力级别的、完整成块的、有成就感自豪感的产品或项目</li>
-<li>团队氛围：这个团队每个人都相处的很融洽</li>
-<li>团队协作：每个人都能找到自己擅长并喜欢做的事情。团队允许发出不同声音，不打击不反击。团队允许各种性格和背景的人都能存在并融洽存在。</li>
-<li>团队协作：团队不要造成老是关键几个人忙死，其他人都在等这几个关键人完成核心事情后才能工作</li>
-<li>团队氛围：团队有向往的发展愿景，有积极向上、努力拼搏的精神</li>
-<li>团队氛围：团队有鼓励创新思考、尝试创新的机会和时间耐心</li>
-<li>能力提升：部门经理注重团队每个成员的能力随时随地的指导、培养、给机会、给鼓励，给与做事方向和方法上的指导，给与心态上的主动慰问、沟通、倾听、理解、疏导</li>
-<li>团队分享：部门经理注重团队成员之间的经验分享、每个人都在研究什么产出什么都在干什么的信息同步分享，产出成果大家共享，每个项目后的总结、交流、反思</li>
-<li>方法论研发：积极探索研究更简化、更快速准确、更有效果提升开发效率、开发质量，缩短开发周期，降低开发难度、开发成本的分析方法、设计方法、架构方法、自动化工具、测试方法。</li>
-<li>上下游协作：积极探索研究上下游紧密协作方法：让上下游分工明确，目标一致；让上游产出就是下游输入；让上下游计划、进展、变更、异常信息互相透明；</li>
-</ol>
+		  	<p>git有一些命令如：git pull 、 git push等等，这些命令可以设置alias，也就是缩写。如：git pull 是 git pl， git push 是 git ps。可以根据个人习惯进行修改。</p>
 
-<p>团队满意度、团队幸福感，皆来自于此。</p>
+<p>修改别名alias步骤如下：</p>
 
+<p>1,进入根目录</p>
 
-		</div>
+<p><code>$ cd</code></p>
 
-		
+<p>2,查看根目录下面的文件</p>
 
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-12-math-analysis-tell-me-what.html">数学分析告诉了我什么</a></h1>
-			<p class="meta"><time datetime="2010-12-12T00:08:26+08:00" 
-			pubdate data-updated="true">2010/12/12</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>我是一名数学类专业的学生！但是对互联网狂热，有激情有梦想！<br/>
-数学类课程的学习，不仅仅给了我缜密的逻辑、透彻的分析等等，还告诉了我...<br/>
-1. 人生的痛苦在于追求错误的东西。所谓追求错误的东西，就是你在无限趋近于它的时候，才猛然发现，你和它是不连续的。<br/>
-2. 人和人就像数轴上的有理数点，彼此可以靠得很近很近，但你们之间始终存在隔阂。<br/>
-3. 人是不孤独的，正如数轴上有无限多个有理点，在你的任意一个小邻域内都可以找到你的伙伴。但人又是寂寞的，正如把整个数轴的无理点标记上以后，就一个人都见不到了。<br/>
-4. 人和命运的关系就像F(x)=x与G(x)=x<sup>2的关系。一开始，你以为命运是你的无穷小量。随着年龄的增长，你才发现你用尽全力也赶不上命运的步伐。这时候，若不是以一种卑微的姿态走下去，便是结束自己的生命。</sup><br/>
-5. 零点存在定理告诉我们，哪怕你和他站在对立面，只要你们的心还是连续的，你们就能找到你们的平衡点。<br/>
-6. 人生是一个级数，理想是你渴望收敛到的那个值。不必太在意，因为我们要认识到有限的人生刻画不出无穷的级数，收敛也只是一个梦想罢了。不如脚踏实地，经营好每一天吧。<br/>
-7. 有限覆盖定理告诉我们，一件事情如果是可以实现的，那么你只要投入有限的时间和精力就一定可以实现。至于那些在你能力范围之外的事情，就随他去吧。<br/>
-8. 痛苦的回忆是可以缩小的，但不可能消亡。区间套最后套出的那一个点在整个区间上微不足道，但一定是存在的，而且刻骨铭心。<br/>
-9. 我们曾有多少的理想和承诺，在经历几次求导的考验之后就面目全非甚至荡然无存？有没有那么一个誓言，叫做f(x)=e<sup>x？</sup><br/>
-10. 幸福是可积的，有限的间断点并不影响它的积累。所以，乐观地面对人生吧~<br/>
-11.r=a(1-cosθ) 我写的这个函数，谁能看得懂呢？</p>
+<p><code>$ ls -la</code></p>
 
+<p>查看一下有没有.gitconfig文件。</p>
 
-		</div>
+<p>3，编辑.gitconfig</p>
 
-		
+<p><code>$ vi .gitconfig</code></p>
 
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-03-tencent-cdc-dorado.html">Dorado简单、小巧、高效、专为设计而生</a></h1>
-			<p class="meta"><time datetime="2010-12-03T00:07:42+08:00" 
-			pubdate data-updated="true">2010/12/3</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Dorado简单、小巧、高效、专为设计而生。<br/>
-<img title="点击下载Dorado" src="http://cdc.tencent.com/wp-content/uploads/2010/12/dorado-header.jpg" width="477" height="264" /><br/>
-简介：</p>
+<p>添加如下：</p>
 
-<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/11.png" alt="Dorado"/></p>
-
-<p>设计稿尺寸标注与取色专用工具，适用于设计、界面开发与网页前端</p>
-
-<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/22.png" alt="Dorado"/></p>
-
-<p>安装包仅700KB，全绿色</p>
-
-<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/3.png" alt="Dorado"/></p>
-
-<p>独有的双模式切换可支持双屏显示器，一面设计，一面标注</p>
-
-<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/4.png" alt="Dorado"/></p>
-
-<p>在全新S3D图像引擎技术下，支持PSD、PNG 、BMP、GIF、JPG、JPEG、JPE、JFIF、TIF、TIFF、EMF等17种图片格式文件</p>
-
-<p><img src="http://cdc.tencent.com/wp-content/uploads/2010/11/5.png" alt="Dorado"/></p>
-
-<p>支持图像的复制、粘贴、导出，工具全键盘操作更是不在话下</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-11-24-wulinwaizhuan-movie.html">电影版《武林外传》相当期待</a></h1>
-			<p class="meta"><time datetime="2010-11-24T00:07:11+08:00" 
-			pubdate data-updated="true">2010/11/24</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>《武林外传》相当期待，预告片已发<br/>
-<embed src="http://player.youku.com/player.php/sid/XMjIzMjE1MjU2/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-10-11-everyone-is-product-manager.html">人人都是产品经理</a></h1>
-			<p class="meta"><time datetime="2010-10-11T00:06:25+08:00" 
-			pubdate data-updated="true">2010/10/11</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>《人人都是产品经理》，这是最近读的一本书，也是这本书，我发现自己身上已经有了做产品的职业病，下面这些是书的开头的一段话，我自己也扪心自问过，现在一条一条回答一下。</p>
-
-<h3 id="toc_0">是谁？每次K 歌都对着点歌面板评头论足。</h3>
-
-<p>一直埋怨K歌的点歌板不方便，自己给它设计很多功能。比如用会员登录，可以收藏本次没有唱完歌的列表，以便下次继续；<br/>
-可以去网上搜索新歌播放，KTV的歌实在是太陈旧了。（版权问题先忽略）</p>
-
-<h3 id="toc_1">是谁？逛超市时总在想“这个商品能解决什么需求？</h3>
-
-<p>每次买东西前都仔细分析这个商品，可以解决什么需求，设计这个商品的人是想给用户带来什么样的方便，有其他可以替代的同类的商品吗。</p>
-
-<h3 id="toc_2">是谁？会给自己的个人发展做战略规划。</h3>
-
-<p>我喜欢计算机，对互联网狂热，理想就是做出亿万人使用的互联网应用。虽然学习数学类专业（信息与计算科学），但是把课余的大部分时间都用来学习了WEB开发方面的知识，这也就导致了毕业论文也是计算机方面（搜索引擎）。因为出于真心的热爱，所以感到非常快乐。在大一就给制定计划，毕业以后从事计算机和互联网相关的工作。校内的实践活动，只要和计算机有关肯定少不了我的。慢慢对WEB的了解越来越深，对自己的职业规划是，从底层的程序员做起，慢慢向管理层次发展，项目经理、系统分析、架构师这些都是我的职业目标。有了实际的工作经验后，发现好的产品要有好的设计，也需要好的创意，产品经理才符合我一直不变的理想。</p>
-
-<h3 id="toc_3">是谁？一定要在自己的婚礼中讲一个PPT。</h3>
-
-<p>未婚。整个婚礼写个需求文档，写策划报告等等，婚礼结束讲所有文档打包命名V1.0，相信不会有升级的版本。</p>
-
-<h3 id="toc_4">是谁？会拿用户调研的方法与亲朋好友交流。</h3>
-
-<p>最近对电子商务和社交网络突发奇想，并召集同学想实现自己想法。由于需要调研，以至于不管是真实碰面还是在QQ、MSN上都是追着朋友询问有关淘宝和人人相结合的有关问题。</p>
-
-<h3 id="toc_5">是谁？装修房子的时候抢着当项目经理。</h3>
-
-<p>还没买房。但是我会的。老婆家人是老板与用户，我要满足这些用户的需求，设计出满意的装修方案，效果图DEMO、“功能点”、预算等等都不能少。</p>
-
-<h3 id="toc_6">是谁？看电视广告总想在几十秒中提炼出三大卖点。</h3>
-
-<p>广告是在推广产品，其实广告也是一个产品。如何在短时间内展示自己的优点，非常的难。广告上聚集了大量的设计创意，看创意广告也变成我的爱好之一。</p>
-
-<h3 id="toc_7">是谁？会给自己的孩子设计各种“功能点”。</h3>
-
-<p>未婚，孩子更没有。感觉这个更走火入魔，但愿我不要变成这样。不要给子女设计他的未来，应该完全根据他的兴趣来挖掘，发挥自己最大的潜能和创意。中国的应试教育，教呆了好多人。中国缺少创新，中国现在很多成功的应用都是抄袭外国的创意，真心的希望中国可以多多出现“中国创造”。</p>
-
-<h3 id="toc_8">是谁？访问任何网站都能一下子挑出好几个Bug。</h3>
-
-<p>这个早已经成为我的职业病，无论用什么新的应用或者产品，都会不自觉的测试一下各种的功能点，分析一下，寻找Bug。</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-07-25-gathering-send-off-huier.html">大连小聚黑鱼两斤半嘎嘎爽</a></h1>
-			<p class="meta"><time datetime="2010-07-25T00:05:00+08:00" 
-			pubdate data-updated="true">2010/7/25</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>由于巩的周六加班，吃饭小聚为我接风改在了今天周天。<br/>
-昨天和以前616宿舍的室友还有高志坤钟凤文他们一起小聚了一下。<br/>
-十点去了黑石礁，想办张移动的电话卡，<br/>
-老是上海的卡比较闹心，漫游太贵;<br/>
-但是非常悲剧的是营业厅没有号，没办法办。<br/>
-然后巩、会儿、大芳买了扑克去蜀味风情里打扑克等大丑和博博。<br/>
-捞了一条两斤半的黑鱼，烧了汤，挺爽。<br/>
-这家饭店的菜做的还不错，凉菜素菜很清爽，肉菜也不是很腻挺入味。<br/>
-菜的价格也是不菲的。黑鱼就 90 块钱，感觉还是比较贵的。<br/>
-但是味道确实不错。白云没来，没吃着。<br/>
-下次聚会还是会选择去这里的，因为还送了一百元的代金券。<br/>
-下午，我们去了星海公园。<br/>
-没有地方坐，无奈花了60元坐在卖海鲜的地方，打了一下午扑克。<br/>
-60块一壶茶，喝得我们平均去了厕所3躺，我是去了五躺。<br/>
-下次来星海还是准备好泳裤，直接去洗澡，又省钱又爽。<br/>
-大连，我胡汉三又回来了！嘎嘎！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-07-19-leave-chinasoft.html">今天辞职，准备回大连</a></h1>
-			<p class="meta"><time datetime="2010-07-19T00:04:15+08:00" 
-			pubdate data-updated="true">2010/7/19</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>今天，给Leader头儿说了自己想法，头儿说：“支持你！”<br/>
-Naico说：“你早该走了！”</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-07-13-pay-attention-to-your-body.html">朋友们，注意身体</a></h1>
-			<p class="meta"><time datetime="2010-07-13T00:03:36+08:00" 
-			pubdate data-updated="true">2010/7/13</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>老爸常给我说：“身体是革命的本钱”。<br/>
-健康是第一位的。<br/>
-从昨天晚上到今天，<br/>
-我灰常灰常的不舒服，又吐又泄。<br/>
-朋友们，在外一定要注意身体。<br/>
-祝我的朋友们及其在家为我们担心的父母们身体健康！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-07-05-graphics-card-burn-again.html">显卡又又...又烧了</a></h1>
-			<p class="meta"><time datetime="2010-07-05T00:02:54+08:00" 
-			pubdate data-updated="true">2010/7/5</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>我的笔记本显卡又又又烧了。<br/>
-联想，让我太失望了！<br/>
-上周六送修的，今天拿回来，不知道可以用多久。<br/>
-这次修的速度，才2天就搞定了。<br/>
-他们说，主板换了。<br/>
-我又问，这主板又不能是全新的。<br/>
-他说，不是，是预留的新的。<br/>
-这不是也是新的嘛？就是放的时间长一点而已。<br/>
-这些电器不受潮，又不会发霉变质掉。<br/>
-真搞不懂！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-06-28-join-foundamental-team.html">真正进入项目小组Foundamental</a></h1>
-			<p class="meta"><time datetime="2010-06-28T00:02:02+08:00" 
-			pubdate data-updated="true">2010/6/28</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>今天是带教结束的日子。<br/>
-我被正式分进了项目小组Foundamental。<br/>
-到目前为止还不知道这个组具体干什么的，<br/>
-继续学习，继续努力吧！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-06-26-so-near-so-far.html">这么近，那么远... ...</a></h1>
-			<p class="meta"><time datetime="2010-06-26T23:28:22+08:00" 
-			pubdate data-updated="true">2010/6/26</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>小的时候，我很喜欢美术，<br/>
-但是我生在江苏的一个小镇，在我家这边认为学美术是成绩不好才会去学。<br/>
-我家这边学美术去高考被看成成绩不好考大学的一种捷径，<br/>
-因为文化分不要高分，美术只要花钱去学一年的补习班就行。<br/>
-小时候的我，还不知道这个可以自己选。<br/>
-直到现在，我对美术也是很感兴趣。<br/>
-所以，我对页面的美观要求一般都是很高，希望越好看越好。<br/>
-Web，我也是灰常灰常我喜欢的，嘎嘎！<br/>
-对于我现在的工作，我是灰常的喜欢。<br/>
-感觉程序员也应该去学习一些美术、设计方面的知识，<br/>
-这样写的出的代码也会更漂亮更优雅，嘎嘎！<br/>
-我还在努力ing,这么近，那么远... ...<br/>
-<embed src="http://player.youku.com/player.php/sid/XMTg0MTEzNDIw/v.swf" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-06-22-university-graduated.html">离别 吃饭 K歌 通宵 再见</a></h1>
-			<p class="meta"><time datetime="2010-06-22T23:19:31+08:00" 
-			pubdate data-updated="true">2010/6/22</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>离别 吃饭 K歌 通宵 再见<br/>
-楠哥的大手笔，貌似没有吃回来。<br/>
-博博说，大后天你就去上海了，以后就没机会了。<br/>
-无奈被拖至合声K歌，通宵的。<br/>
-再见喽！但愿以后还有机会聚会！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-06-13-graduation-thesis-a.html">灰常灰常的不幸，毕业论文被评成A</a></h1>
-			<p class="meta"><time datetime="2010-06-13T23:18:31+08:00" 
-			pubdate data-updated="true">2010/6/13</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>昨天中午大一616宿舍吃散伙饭，<br/>
-突然收到老师短信说要我拿论文去找她签字。<br/>
-去了字没签，但是噩耗传来，论文要再次修改，<br/>
-因为我论文被评成了A等，<br/>
-学校要对A等的论文进行审查。<br/>
-大妈还搞了一个反抄袭的检测软件，<br/>
-我的论文被检测成悲剧。<br/>
-今天修改一天，效果甚微，可以说基本没有结果。<br/>
-现在头疼，论文看都不想看一眼，哪个大神来救救我吧！</p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-06-12-tencent-school-star.html">入围腾讯校园之星优秀作品</a></h1>
-			<p class="meta"><time datetime="2010-06-12T22:43:28+08:00" 
-			pubdate data-updated="true">2010/6/12</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>业余时间参加了一个比赛，入围腾讯校园之星优秀作品</p>
-
-<p>看看作品：<a href="http://113.105.93.40:8080/LambSousou/">点这里</a><br/>
-投我一票：<a href="http://labs.soso.com/app.q?app=innovation&amp;type=2&amp;%20id=15">点这里</a></p>
-
-
-		</div>
-
-		
-
-	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2008-08-08-hello-world.html">你好，世界</a></h1>
-			<p class="meta"><time datetime="2008-08-08T17:52:03+08:00" 
-			pubdate data-updated="true">2008/8/8</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>我的第一篇文章sslfalfjslfjwieifslfsjl我的第一篇文章sslfalfjslfjwieifslfsjl就是雷锋精神疗法时间方式累计发生了减法所肩负历史交锋历史手机发了手机发了时间烦死了方式解决方式累计发生了房间睡懒觉烦死了烦诶飞机上了飞机我的第一篇文章sslfalfjslfjwieifslfsjl我就放了是否就是雷锋精神了方式jlwieifjjfls三级分类收集方式</p>
-
-<p><a href="/resource/book/test.pdf">下载 PDF</a></p>
-
-<pre><code>package com.test;
-
-public class Sort {
-    // 对R[low..high]快速排序
-    public static void QuickSort(Comparable[] data, int low, int high) {
-        int pivotpos; // 划分后的基准记录的位置
-
-        if (low &lt; high) {// 仅当区间长度大于1时才须排序
-            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
-            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
-            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
-        }
-    } // QuickSort
-
-    private static int Partition(Comparable[] data, int i, int j) {
-        // 从数组两端交替地向中间扫描
-        Comparable pivotKey = data[i];
-        // 进行扫描的指针i,j;i从左边开始,j从右边开始
-        while (i &lt; j) {
-            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
-                j--;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素小的移动到左边
-                data[i] = data[j];
-                i++;
-            }// end if
-            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
-                i++;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素大的移动到右边
-                data[j] = data[i];
-                j--;
-            }// end if
-        }// end while
-        // 枢纽元素移动到正确位置
-        data[i] = pivotKey;
-        return i;
-    }
-
-    public static void main(String[] args) {
-        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
-        QuickSort(c, 0, c.length - 1);
-        for (Comparable data : c) {
-            System.out.println(data);
-        }
-    }
-
-}
+<pre><code>[alias]
+co = checkout
+ci = commit
+st = status
+pl = pull
+ps = push
+dt = difftool
+l = log --stat
+cp = cherry-pick
+ca = commit -a
+b = branch
 </code></pre>
+
+<p>具体可以根据个人习惯进行添加修改。</p>
 
 
 		</div>
@@ -1965,7 +1186,7 @@ public class Sort {
 	</article>
   
 	<div class="pagination">
-	
+	 <a class="prev" href="all_1.html">&larr; Older</a> 
 <a href="archives.html">Blog Archives</a>
 	 
 	    
@@ -1988,31 +1209,31 @@ public class Sort {
 	  
 	      
 		      <li class="post">
-		        <a href="2015-12-18-carthage-decentralized-dependency-manager.html">Carthage去中心化的Cocoa依赖管理器</a>
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2014-06-03-hello-swift.html">美国一名程序员对Swift语言的看法</a>
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2014-05-08-elegant-uninstall-default-git.html">优雅的卸载Mac默认的Xcode附带的git</a>
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a>
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  
 	      
 		      <li class="post">
-		        <a href="2014-04-08-mongodb-2-6-0.html">Mongdb2.6.0 一个新版本号</a>
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

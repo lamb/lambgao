@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  分布式事务原理 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">分布式事务原理</h1>
+				<p class="meta"><time datetime="2012-03-30T16:54:11+08:00" pubdate data-updated="true">2012/3/30</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>分布式事务原理</p>
+
+<p>Distributed Computing, Architecture Design, Database 2012-03-30<br/>
+本文是对分布式事务原理、规范的科普，主要围绕两阶段提交协议展开。最后描述了在应用框架层面模拟两阶段提交协议的简化设计。</p>
+
+<h3 id="toc_0">1 事务/分布式事务</h3>
+
+<h4 id="toc_1">1.1 事务</h4>
+
+<p>事务是数据库从一个稳定状态变迁到另一个稳定状态的保证，具备 <a href="http://zh.wikipedia.org/wiki/ACID">ACID</a> 这 4 个特性：</p>
+
+<ul>
+<li>原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚到事务开始前的状态。</li>
+<li>一致性（Consistency）：在事务开始之前和事务结束以后，数据库的完整性限制没有被破坏。</li>
+<li>隔离性（Isolation）：两个事务的执行是互不干扰的，两个事务时间不会互相影响。</li>
+<li>持久性（Durability）：在事务完成以后，该事务对数据库所作的更改便持久地保存在数据库之中，并且是完全的。</li>
+</ul>
+
+<p>例如应用程序需要更新多条相关数据时就需要进行事务处理。</p>
+
+<h4 id="toc_2">1.2 分布式事务与 XA 规范</h4>
+
+<p>分布式事务是指会涉及到操作多个数据库的事务，同样必须保证 ACID。<br/>
+其就是将对同一库事务的概念扩大到了对多个库的事务：对同一库的 SQL 操作对应了分布式事务中对一个库的事务。</p>
+
+<p><a href="http://zh.wikipedia.org/wiki/X/Open_XA">X/Open XA</a> 定义了分布式事务处理的规范，并由数据库厂商在驱动层面进行实现。XA 规范的基础是两阶段提交协议，并定义了分布式事务处理所涉及的角色：<br/>
+* 应用程序（AP）<br/>
+* 事务管理器（TM）<br/>
+* 资源管理器（RM）<br/>
+* 通信资源管理器（CRM）</p>
+
+<p>可以这样认为，事务管理器即事务处理中间件（分布式事务处理系统）；资源管理器即各个数据库。</p>
+
+<h3 id="toc_3">2 两阶段提交协议</h3>
+
+<p>两阶段提交协议（<a href="http://en.wikipedia.org/wiki/2PC">Two-phase commit protocol</a>, 2PC）将一次分布式事务处理划分为两个阶段：预提交阶段（也称为准备阶段或投票阶段），提交阶段。</p>
+
+<h4 id="toc_4">2.1 预提交阶段</h4>
+
+<p>这是两阶段提交协议的第一个阶段，分布式事务处理系统咨询各个资源管理器是否可以提交本地事务，各个资源管理器会把这个咨询过程写入日志，以便进行回滚或提交。</p>
+
+<p>当一个数据库接收到咨询后，它会将需要执行的操作写入日志，禁止其他写入操作（锁定资源）。</p>
+
+<p>如果分布式事务中某数据库预提交失败或提交失败，那该数据库会根据日志进行自身的操作回滚，并解锁。</p>
+
+<p>2.2 提交阶段</p>
+
+<p>分布式事务处理系统对各个资源管理器下达提交/回滚的指令，使整个分布式事务结束。</p>
+
+<p>当一个数据库接受到提交/回滚指令时，它将根据第一阶段的日志进行提交/回滚处理。</p>
+
+<p>两阶段提交协议可以在数据库层面通过驱动支持，也可以在应用框架中按照其原理进行设计实现。</p>
+
+<h3 id="toc_5">3 分布式事务应用框架</h3>
+
+<p>使用数据库驱动方式实现两阶段事务有两个不足：</p>
+
+<ul>
+<li>随着分布式事务的参与者增多，效率会明显降低</li>
+<li>对应用开发者透明，调试不便</li>
+<li>必须依赖数据库，不是所有数据库都实现了 XA 规范</li>
+</ul>
+
+<h4 id="toc_6">3.1 角色</h4>
+
+<ul>
+<li>发起者：分布式事务发起者，需要提供回查恢复接口。</li>
+<li>参与者：参与到分布式事务的其他系统，提供提交/回滚接口。这里的提交/回滚接口即是对数据库数据的 SQL 操作。</li>
+<li>活动管理器：负责管理分布式事务（活动、操作）。</li>
+<li>定时器：触发对分布式事务活动的捞取，以备回查恢复。</li>
+</ul>
+
+<h4 id="toc_7">3.2 交互时序</h4>
+
+<p>两阶段提交时序：</p>
+
+<p><img src="/resource/image/2012-03-30-distributed-transaction-principle/dts1.png" alt="两阶段提交时序"/></p>
+
+<p>因为系统在上述交互中不是绝对可靠的，所以需要一定的方式进行事务状态恢复，保证所有参与者最终一致。<br/>
+回查恢复时序：</p>
+
+<p><img src="/resource/image/2012-03-30-distributed-transaction-principle/dts2.png" alt="回查恢复时序"/></p>
+
+<h4 id="toc_8">3.3 关键点</h4>
+
+<p>参与者提供的提交/回滚接口必须满足幂等性，即定时触发重复调用提交/回滚时不会重复操作同一资源<br/>
+根据发起者生成 txId，回查恢复时根据 txId 调用发起者回查恢复接口<br/>
+活动管理器与发起者同库/不同库时，事务活动、操作状态变迁的不同处理<br/>
+事务内调用操作的顺序<br/>
+定时任务定时间隔/重试次数</p>
+
+<h3 id="toc_9">参考</h3>
+
+<ul>
+<li><a href="http://qify.iteye.com/blog/315619">分布式事务、XA事务、两阶段提交</a></li>
+<li><a href="http://rdc.taobao.com/blog/cs/?p=1183">淘宝核心团队博客：事务和两阶段提交</a></li>
+<li><a href="http://scriptogr.am/kimiazhu/post/a-simple-design-of-distributed-transaction-system">简化的分布式事务框架设计</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-03-31-how-to-skip-filters-in-java.html" 
+	        title="Previous Post: 如何跳过过滤器处理？">&laquo; 如何跳过过滤器处理？</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-03-05-ziiiro-originality-watch.html" 
+	        title="Next Post: ziiiro创意手表，大爱这个品牌">ziiiro创意手表，大爱这个品牌 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

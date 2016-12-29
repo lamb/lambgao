@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  使用 GitBook 写文档 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">使用 GitBook 写文档</h1>
+				<p class="meta"><time datetime="2014-09-18T23:05:19+08:00" pubdate data-updated="true">2014/9/18</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>最近发现很多技术书籍都放在 GitBook 上提供给人们阅读，刚好 Wide 也需要写文档，索性就尝试使用 GitBook 来做。</p>
+
+<h3 id="toc_0">GitBook 简介</h3>
+
+<p>GitBook 是一个通过 Git 和 Markdown 来撰写书籍的工具，最终可以生成 3 种格式：</p>
+
+<ul>
+<li>静态站点：包含了交互功能（例如搜索、书签）的站点</li>
+<li>PDF：PDF 格式的文件</li>
+<li>eBook：ePub 格式的电子书文件</li>
+</ul>
+
+<p>GitBook 是免费且开源的，项目地址：<a href="https://github.com/GitbookIO/gitbook">https://github.com/GitbookIO/gitbook</a></p>
+
+<h4 id="toc_1">Git 方式</h4>
+
+<p>GitBook 使用 Git 进行写作内容管理。</p>
+
+<ul>
+<li>从用户的角度看，这样能够方便地进行多人协作（连程序源代码都能管好，书籍自然不在话下），还不用学习额外概念或用法</li>
+<li>从设计实现的角度看，这样能够合理利用已有工具（不重复造轮）满足产品需求，甚至扩展性更好（Git 相关服务能够利用的太多了）</li>
+</ul>
+
+<p>正所谓：“人法地，地法天，天法道，道法自然”啊。</p>
+
+<h4 id="toc_2">Markdown</h4>
+
+<p>GitBook 不只是利用了 Git，目前非常流行的 Markdown 也被运用其中。</p>
+
+<p>使用 Markdown 最大的好处就是简单：</p>
+
+<ul>
+<li>语法简单，并且能够形象地表达出意图（例如无序列表使用 * ，强调使用 ** ，一个 # 表示 H1、两个 # 表示 H2）</li>
+<li>不干扰写作者：语法标记在视觉上对写作者的负面影响不大（不像 HTML 满屏的 &lt;&gt;）</li>
+</ul>
+
+<p>总之，Markdown 就是能够让写作者更专注于内容创作。</p>
+
+<p>不过 GitBook 不只是简单地使用 Markdown，使用 Markdown 编写的内容只是源格式，最终的目标格式可以为 PDF、ePub 等。</p>
+
+<h3 id="toc_3">静态站点</h3>
+
+<p>在本地编写完内容后我们需要将内容提交到 GitBook 上进行书籍的构建。GitBook 会将书籍构建为 4 种格式（JSON、ePub、PDF、Website）。 其中我们最常用的应该是静态站点，这样能够方便传播。</p>
+
+<h3 id="toc_4">客户端编辑器</h3>
+
+<p>可以使用 GitBook 的官方编辑器来进行写作、发布等管理，非常方便。</p>
+
+<h3 id="toc_5">其他</h3>
+
+<p>GitBook 还有很多功能，例如：</p>
+
+<ul>
+<li>自定义静态站点域名</li>
+<li>多语言支持</li>
+<li>书籍私有</li>
+<li>自定义封面（弄个漂亮的书皮吧）</li>
+<li>交互式练习、提问（这个用于写问答类书籍或习题类书籍会很有用）</li>
+</ul>
+
+<h3 id="toc_6">题外话</h3>
+
+<p>GitHub、GitBook、GitXXX 都很流行啊，为什么呢？</p>
+
+<p>Git 已经不只是一个版本控制系统了，它的分布式协作方式正在潜移默化地影响着很多程序的设计，最终影响了很多在线服务的提供方式。这样一种私有-公有可控的网络信息架构是非常值得我们学习并实践的，这样架构的各类产品将越来越多。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-10-08-tuple-in-swift.html" 
+	        title="Previous Post: Swift中的元组（Tuples）">&laquo; Swift中的元组（Tuples）</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-09-11-swift-final.html" 
+	        title="Next Post: Swift中的final修饰符">Swift中的final修饰符 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

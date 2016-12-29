@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  台阶问题 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">台阶问题</h1>
+				<p class="meta"><time datetime="2011-06-01T16:49:09+08:00" pubdate data-updated="true">2011/6/1</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>该程序给出了使用递归方式以及使用迭代方式两种算法实现。该两种实现都基于如下推导：</p>
+
+<ul>
+<li>当 m = n, n != 1 时，f(n) = 2(n-1)
+即 f(n) 为 二项式 (a+b)n 展开式各项系数之和，推导如下：
+设楼梯有 n 级，某人一步最多迈 m(m=n) 级，使用“隔板法”（共 n-1 个空位）可得 f(n) = ∑n=1nCnn-1 = 2n-1。</li>
+<li>当 m &lt;=n 时，f(n) = 2<em>f(n-1) - f(n-m-1)
+即 f(n) = f(n-1) + f(n-2) + ... + f(n-m) 代入 n 后的递推式，推导如下：
+归纳可得 f(n) 为先上 1 步、2 步、...、m 步走法只和：f(n) = f(n-1) + f(n-2) + ... + f(n-m)。
+逐步代入展开：f(n) = (f(n-2) + f(n-3) + ... + f(n-m-1))+ f(n-2) + ... + f(n-m)，即（展开 f(n-1)）... =&gt; f(n) = 2</em>f(n-1) - f(n-m-1)。</li>
+</ul>
+
+<p>f(n) 可根据 m 分三类情况求解：</p>
+
+<ul>
+<li>当 m = 1 时，有且仅有 1 种走法，f(n)=1</li>
+<li>当 m &lt;= n 时，f(n) = 2*(f(n-1) - f(n-m-1)，特别地，</li>
+<li>当 m = n 时，f(n) = 2n-1</li>
+</ul>
+
+<p>足见，程序员绝对需要一定的数学知识。</p>
+
+<span id="more"></span><!-- more -->
+
+<pre><code>package steps;
+ 
+/**
+ * 台阶问题：
+ * 某楼梯有 n(n&gt;=1) 级台阶，某人一步最多迈 m(n&gt;=m&gt;=1)级，
+ * 求有多少种不同的上楼方案 f(n)。
+ *
+ * &lt;p&gt;
+ *   该程序给出了{@linkplain #f(int) 使用递归方式}以及{@linkplain #f_(int)
+ *   使用迭代方式}两种算法实现。该两种实现都基于如下推导：
+ *   &lt;/p&gt;&lt;ul&gt;
+ *     &lt;li&gt;当 m = n, n != 1 时，f(n) = 2&lt;sup&gt;(n-1)&lt;/sup&gt;&lt;/li&gt;
+ *     即 f(n) 为 二项式 (a+b)&lt;sup&gt;n&lt;/sup&gt; 展开式各项系数之和，推导如下：
+ *     设楼梯有 n 级，某人一步最多迈 m(m=n) 级，使用“隔板法”（共 n-1 个空位）可得
+ *     f(n) = ∑&lt;sub&gt;n=1&lt;/sub&gt;&lt;sup&gt;n&lt;/sup&gt;C&lt;sub&gt;n&lt;/sub&gt;&lt;sup&gt;n-1&lt;/sup&gt; =
+ *     2&lt;sup&gt;n-1&lt;/sup&gt;。
+ *     &lt;li&gt;当 m &lt;=n 时，f(n) = 2*f(n-1) - f(n-m-1)&lt;/li&gt;
+ *     即 f(n) = f(n-1) + f(n-2) + ... + f(n-m) 代入 n 后的递推式，推导如下：
+ *     归纳可得 f(n) 为先上 1 步、2 步、...、m 步走法只和：f(n) = f(n-1) + f(n-2)
+ *     + ... + f(n-m)。逐步代入展开：f(n) = (f(n-2) + f(n-3) + ...
+ *     + f(n-m-1))+ f(n-2) + ... + f(n-m)，即（展开 f(n-1)）... =&gt; f(n) = 2*f(n-1)
+ *     - f(n-m-1)。
+ *   &lt;/ul&gt;
+ * &lt;p&gt; &lt;/p&gt;
+ *
+ * &lt;p&gt;
+ * f(n) 可根据 m 分三类情况求解：
+ *   &lt;/p&gt;&lt;ul&gt;
+ *     &lt;li&gt;当 m = 1 时，有且仅有 1 种走法，f(n)=1&lt;/li&gt;
+ *     &lt;li&gt;当 m &lt;= n 时，f(n) = 2*(f(n-1) - f(n-m-1)，特别地，&lt;/li&gt;
+ *     &lt;li&gt;当 m = n 时，f(n) = 2&lt;sup&gt;n-1&lt;/sup&gt;&lt;/li&gt;
+ *   &lt;/ul&gt;
+ * &lt;p&gt; &lt;/p&gt;
+ *
+ * @author &lt;a href=&quot;mailto:DL88250@gmail.com&quot;&gt;Liang Ding&lt;/a&gt;
+ * @version 1.0.0.2, Mar 14, 2011
+ */
+public final class Main {
+ 
+    /**
+     * 一步最多迈 {@value #M} 级。
+     */
+    private static final int M = 20;
+    /**
+     * 楼梯共有 {@value #N} 级台阶。
+     */
+    private static final int N = 30;
+    /**
+     * 保存中间计算结果 f(0)...f(N)。
+     */
+    private static final long[] F = new long[N + 1];
+ 
+    /**
+     * 检查给定的 {@linkplain #N N} 与 {@linkplain #M M} 是否满足：
+     * &lt;ul&gt;
+     *   &lt;li&gt;N &gt;= 1&lt;/li&gt;
+     *   &lt;li&gt;M &gt;= 1&lt;/li&gt;
+     *   &lt;li&gt;N &gt;= M&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    private static void check() {
+        if (N &lt; 1) {
+            throw new IllegalArgumentException(&quot;N must larger or equal than 1&quot;);
+        }
+ 
+        if (M &lt; 1) {
+            throw new IllegalArgumentException(&quot;M must larger or equal than 1&quot;);
+        }
+ 
+        if (M &gt; N) {
+            throw new IllegalArgumentException(&quot;N must larger or equal than M&quot;);
+        }
+    }
+ 
+    /**
+     * 主程序入口。
+     *
+     * @param args 指定的参数（将被忽略）
+     */
+    public static void main(final String[] args) {
+        check();
+ 
+        if (1 == M) {
+            // 有且仅有 1 种走法
+            System.out.println(&quot;f(n)=1&quot;);
+            return;
+        }
+ 
+        init();
+        long start = System.currentTimeMillis();
+        f(N);
+        long used = System.currentTimeMillis() - start;
+        System.out.println(&quot;Recursively, f(n)=&quot; + F[N] + &quot;, used &quot; + used
+                           + &quot; millis&quot;);
+ 
+        init();
+        long start2 = System.currentTimeMillis();
+        f_(N);
+        long used2 = System.currentTimeMillis() - start2;
+        System.out.println(&quot;Iteratively, f(n)=&quot; + F[N] + &quot;, used &quot; + used2
+                           + &quot; millis&quot;);
+    }
+ 
+    /**
+     * 初始化 F[0]...F[M]。
+     */
+    private static void init() {
+        F[0] = 1;
+        F[1] = 1;
+        F[2] = 2;
+ 
+        for (int n = 3; n &lt;= M; n++) {
+            F[n] = 1 &lt;&lt; (n - 1);
+        }
+    }
+ 
+    /**
+     * 迭代求 f(n)，计算结果保存在 F[n] 中。
+     * &lt;p&gt;
+     * 时间复杂度：
+     *   &lt;/p&gt;&lt;ul&gt;
+     *     &lt;li&gt;最坏 O(n)，当 m == 1 时 &lt;/li&gt;
+     *     &lt;li&gt;最好 O(1)，当 n == M 时&lt;/li&gt;
+     * &lt;p&gt; &lt;/p&gt;
+     * @param n 指定的 n
+     */
+    public static void f_(final int n) {
+        for (int i = 3; i &lt;= N; i++) {
+            if (i &lt;= M) {
+                continue; // F[0]...F[M] 已在初始化中求出。
+            }
+ 
+            // 开始迭代求解， f(n)= 2 * f(n-1) - f(n-M-1)
+            F[i] = 2 * F[i - 1] - F[i - M - 1];
+        }
+    }
+ 
+    /**
+     * 递归求 f(n)，计算结果保存在 F[n] 中，时间复杂度为 O(2^n)。
+     *
+     * @param n 指定的 n
+     * @return F[n]
+     */
+    public static long f(final int n) {
+        // F[0]...F[M] 已在初始化中求出。
+        if (0 == n || 1 == n) {
+            return F[0];
+        }
+ 
+        if (2 == n) {
+            return F[2];
+        }
+ 
+        if (M &gt;= n) {
+            return F[n];
+        }
+ 
+        // 开始递归求解， f(n）= 2 * f(n-1) - f(n-M-1)
+        F[n] = 2 * f(n - 1) - f(n - M - 1);
+ 
+        return F[n];
+    }
+ 
+    private Main() {
+    }
+}
+</code></pre>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2011-06-18-svn-branch-merge.html" 
+	        title="Previous Post: SVN 分支更新与合并">&laquo; SVN 分支更新与合并</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2011-05-20-go-web-two.html" 
+	        title="Next Post: Go Web 开发（二）">Go Web 开发（二） &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

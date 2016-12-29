@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  美国一名程序员对Swift语言的看法 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">美国一名程序员对Swift语言的看法</h1>
+				<p class="meta"><time datetime="2014-06-03T00:32:58+08:00" pubdate data-updated="true">2014/6/3</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>近20年来，苹果一直把Objective-C作为主要的编程语言，而在今天举行的全球开发者大会上，苹果推出了一个全新的编程语言Swift。据悉，苹果此次发布的Swift兼容Objective-C语言，从其开发者指南中，我们看到Swift从Python和JavaScript中吸取了许多东西，从而让Swift更易读，或者说更为“口语化”。</p>
+
+<p>然而，对这类语法更为简洁的语言，许多人会质疑其运行效率。对此苹果指出，Swift在许多方面性能都比Objective-C好。</p>
+
+<p>美国一名程序员看完了Swift的指南后，写出了自己对这个新编程语言的看法。以下为译文：</p>
+
+<h1 id="toc_0">Swift保障体系</h1>
+
+<ul>
+<li>Swift可供所有人使用；</li>
+<li>Swift语言继承了C语言以及Objective-C的特性，且克服了C语言的兼容性问题；Swift还采用安全编程模式，且加入多种新功能，使编程更简单、灵活；</li>
+<li>和许多其他的编程语言一样，Swift可被LLVM编译为本地代码，且它的运行速度特别快，可供很多原生设备使用。</li>
+</ul>
+
+<h1 id="toc_1">Swift功能特性</h1>
+
+<ul>
+<li>Swift中并没有加入宏系统；其协议和扩展都源自Objective-C；</li>
+<li>Swift采用var声明变量和let声明常量；结合if和let，可方便处理可空变量；</li>
+<li>单继承类显示重写和内容，外加多种接口；</li>
+<li>Lambdas表达式看起来和类Ruby块形式十分相似；</li>
+<li>Swift没有明确的指标，依赖像C#语言一样的二分法价值和引用类型；</li>
+<li>Swift是一个没有globs的基本模块系统，以进口或重命名分类，通过属性，支持重新导出功能；</li>
+<li>Swift支持本地类型推断、整理数值类型，具有更好的文字处理功能，但不支持隐式强制转换，因此所有的代码需要转化为显式类型；</li>
+<li>脚本语言支持词典文字，简单的脚本可做大规模的工作，可在多核计算机、集群、网格、云和超级计算机上运行。</li>
+</ul>
+
+<h1 id="toc_2">Swift的独特性</h1>
+
+<ul>
+<li>Swift支持默认检查算法功能；</li>
+<li>Swift使用[]操作符声明数组和字典，数组还有独特的延伸语义功能；但不清楚是否允许程序员自己执行迭代器协议；</li>
+<li>Swift看起来并不像是个表达式语言；</li>
+<li>参量可以双向接口，参数需要无敌的单元件；</li>
+<li>Swift使用class来创建类，类可包含字段和方法；</li>
+<li>Swift采用Objective-C的命名参数和动态对象模型，提供了对Cocoa框架和mix-and-match的互操作性。基于这些基础，Swift引入了很多新功能，如结合面向过程和面向对象。</li>
+<li>除了代数类型、选择类型和偶然会发生的“”runtime error外，Swift没设其他处理错误的讨论区。</li>
+</ul>
+
+<p>原文出自：<a href="http://graydon2.dreamwidth.org/5785.html">Swift</a></p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-06-06-angularjs-and-emberjs.html" 
+	        title="Previous Post: AngularJS 与 EmberJS">&laquo; AngularJS 与 EmberJS</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-05-30-cloud-app-platform-multitenancy.html" 
+	        title="Next Post: 云平台之多租户">云平台之多租户 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

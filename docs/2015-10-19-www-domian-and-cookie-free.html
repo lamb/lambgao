@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  www 开头的域名和 Cookie-free - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">www 开头的域名和 Cookie-free</h1>
+				<p class="meta"><time datetime="2015-10-19T00:07:55+08:00" pubdate data-updated="true">2015/10/19</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>Cookie-free, Cookie, www, SEO, 性能优化, 域名 2015-10-19<br/>
+本文我们会探索两个问题：</p>
+
+<ul>
+<li>网站是应该选择 www 开头的域名作为用户入口还是应该使用不带 www 的域名（裸域）？</li>
+<li>Cookie-free 是什么？为什么很重要？</li>
+</ul>
+
+<h3 id="toc_0">www 开头的域名</h3>
+
+<p>国内外大多数知名站点都是使用带 www 的二级域名作为用户入口，其中有通过 301 将裸域重定向到 www 二级域名的，也有通过 302 的（较少）。</p>
+
+<p>为什么这些大站（流量大/子域名众多）都要使用带 www 的域名呢，主要原因应该有以下几点：</p>
+
+<ul>
+<li>对用户来说识别度高，带了 www 后（即使不加 http://）用户就知道这是一个可以用浏览器打开的 URL</li>
+<li>避免将 Cookie 设置在裸域上（后面我们会讨论这样做的坏处）</li>
+<li>在其他地方引用带 www 的 URL 更容易被识别（比如会自动加上链接）</li>
+</ul>
+
+<p>以上主要是对大站来说，我们经常使用的小站（流量小/子域名较少）入口很多是不带 www 的（两者都允许以及类似 Twitter 这样的个例除外），这样做原因应该主要只有一点：</p>
+
+<ul>
+<li>域名更短，突出简约的个性，特别是一些个性后缀的域名不带 www 时更有利于用户记忆</li>
+</ul>
+
+<h3 id="toc_1">301 or 302</h3>
+
+<p>无论我们选择带 www 的域名作为用户入口还是选择裸域，都需要做跳转。这个时候是选择使用 301 永久跳转还是使用 302 临时跳转呢？</p>
+
+<p>从大多数网站来看，<strong>选择 301 永久跳转的居多</strong>，主要原因是 SEO：</p>
+
+<p><em>302重定向很容易被搜索引擎误认为是利用多个域名指向同一网站，那么你的网站就会被封掉，罪名是“利用重复的内容来干扰Google搜索结果的网站排名”。因为302重定向经常被用于做url劫持，黑帽seo技术中，而且百度在处理302重定向技术还不成熟，经常将它纳入到黑帽seo的范畴中，而google对这方面识别处理就完善了许多。所以302重定向在现阶段的搜索引擎技术中，还是容易导致网站降权的，尽量不用。但从seo、网站优化方面来说是弊大于利。<a href="http://baike.baidu.com/view/2453504.htm">302 重定向 - 百度百科</a></em></p>
+
+<h3 id="toc_2">Cookie 规则</h3>
+
+<p>我们先简单明确一下 Cookie 在浏览器上的规则，以域名 lambgao.com 为例：</p>
+
+<ul>
+<li>domain=.lambgao.com 时，Cookie 对裸域 lambgao.com 以及所有子域名 **.lambgao.com 是可用的</li>
+<li>domain=lambgao.com 时效果同上</li>
+<li>domain=lambgao.com 时对于非 lambgao.com 的其他域名无效</li>
+<li>**.lambgao.com 可以将 Cookie 设置在裸域上</li>
+<li>**.lambgao.com 不可以在其他子域上设置 Cookie</li>
+</ul>
+
+<p>具体细节请参考 <a href="http://tools.ietf.org/html/rfc6265">RFC 6265</a>。</p>
+
+<p>遵守了以上规则后，我们来看看“从输入 URL 到页面加载完成的过程中都发生了什么事情？”</p>
+
+<ul>
+<li><a href="http://fex.baidu.com/blog/2014/05/what-happen">以计算机组成原理和网络通信的视角</a></li>
+<li><a href="http://www.cnblogs.com/wenanry/archive/2010/02/25/1673368.html">以应用层协议和 Web 开发者的视角</a></li>
+</ul>
+
+<p>我们这里的重点是返回 HTML 到浏览器后开始加载静态资源（js/css/images），此时浏览器会根据规则带上 Cookie 发送这些请求。很显然，这样会<strong>占用</strong>___额外的___<strong>网络带宽</strong>，因为每个静态资源的请求都会带上 Cookie 数据，特别是当 Cookie 较大的时候。</p>
+
+<h3 id="toc_3">Cookie-free 域名</h3>
+
+<p>Cookie-free 域名指的是请求时不发送 Cookie 的域名，要解决前面我们提到的静态资源请求时带 Cookie 的方法就是使用 Cookie-free 域名来 serve 静态资源文件。</p>
+
+<p>这个方法是最目前最普遍和有效的做法，大多数站点都是使用了和用户入口所在主域名完全独立的另一个域名来提供静态资源：</p>
+
+<ul>
+<li>无论用户入口是 lambgao.com 还是 <a href="http://www.lambgao.com%EF%BC%8C%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%A6%82%E6%9E%9C%E6%94%BE%E5%9C%A8%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%9F%9F%E5%90%8D%E4%B8%8A%EF%BC%88%E6%AF%94%E5%A6%82">www.lambgao.com，静态资源如果放在另一个域名上（比如</a> static.xxx.com），那么浏览器在请求这些静态资源时都不会带上 Cookie</li>
+<li>static.xxx.com 可以非常方便的做 CDN 加速，因为都是静态资源，不需要配置复杂的匹配策略或重写规则</li>
+</ul>
+
+<p>另外，Cookie 最好只设置在当前域名下，不要设置在裸域上，避免不必要的“污染”。当然， 有的场景下，“污染”是为了以最简单的方式实现某些特性，比如多个子站通过裸域会话追踪的 Cookie 实现会话共享。</p>
+
+<h3 id="toc_4">结论</h3>
+
+<ul>
+<li>尽量以 www 作为站的用户入口，避免将 Cookie 设置在裸域上</li>
+<li>尽量考虑 Cookie-free 问题，使用其他域名进行静态资源 Serve 是最好选择</li>
+</ul>
+
+<p>如果以上两点在站点初期都没有考虑好，那也不用担心。因为我们自己的站点一般达不到“大站”的量级，但此时我们依然需要：</p>
+
+<ul>
+<li>尽量安全地使用 Cookie，避免混乱和漏洞（比如子站 A 漏洞会影响子站 B）</li>
+<li>做好 Cache 控制（200 cache），减少不必要请求的发送</li>
+</ul>
+
+<h3 id="toc_5">参考</h3>
+
+<ul>
+<li><a href="http://www.zhihu.com/question/20414602">为什么越来越多的网站域名不加 ‘www’ 前缀？</a></li>
+<li><a href="https://developer.yahoo.com/performance/rules.html#cookie_free">Best Practices for Speeding Up Your Web Site</a></li>
+<li><a href="http://stackoverflow.com/questions/1062963/how-do-browser-cookie-domains-work">How do browser cookie domains work?</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2015-11-19-understand-https.html" 
+	        title="Previous Post: 理解 HTTPS 原理，SSL/TLS 协议">&laquo; 理解 HTTPS 原理，SSL/TLS 协议</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2015-10-09-php-asynchronous-http.html" 
+	        title="Next Post: PHP 异步 HTTP 与 NGINX 499">PHP 异步 HTTP 与 NGINX 499 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

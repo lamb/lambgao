@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Hessian 示例：Node 调用 Java - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Hessian 示例：Node 调用 Java</h1>
+				<p class="meta"><time datetime="2014-03-11T18:17:46+08:00" pubdate data-updated="true">2014/3/11</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>Java 端作为服务提供者，基于 <a href="https://github.com/alibaba/dubbo">Dubbo</a> 实现服务并通过 Dubbo Hessian 扩展暴露服务；Node 端作为服务消费者，通过 <a href="https://github.com/villadora/node-hessian">node-hessian</a> 调用 Java 端的服务。</p>
+
+<h3 id="toc_0">Java 端</h3>
+
+<h4 id="toc_1">服务接口</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+public interface TestService {
+ 
+    /**
+     * 测试：无参，无返回值。
+     */
+    void test();
+     
+    /**
+     * 测试：原生类型参数与返回值。
+     * 
+     * @param i
+     * @return 
+     */
+    String test0(int i);
+     
+    /**
+     * 测试：无参，自定义类型返回值。
+     * 
+     * @return 
+     */
+    Result test1();
+     
+    /**
+     * 测试：自定义类型参数，无返回值。
+     * 
+     * @param arg 
+     */
+    void test2(Arg arg);
+     
+    /**
+     * 测试：自定义参数，自定义返回值。
+     * 
+     * @param arg
+     * @return 
+     */
+    Result test3(final Arg arg);
+}
+</code></pre>
+
+<h4 id="toc_2">自定义参数类</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+import java.io.Serializable;
+ 
+public class Arg implements Serializable {
+ 
+    private int i;
+ 
+    public int getI() {
+        return i;
+    }
+ 
+    public void setI(int i) {
+        this.i = i;
+    }
+ 
+}
+</code></pre>
+
+<h4 id="toc_3">自定义返回值类</h4>
+
+<pre><code>package com.yuanxin.paas.ssb;
+ 
+import java.io.Serializable;
+ 
+public class Result implements Serializable {
+ 
+    private int i;
+ 
+    private String string;
+ 
+    public int getI() {
+        return i;
+    }
+ 
+    public void setI(int i) {
+        this.i = i;
+    }
+ 
+    public String getString() {
+        return string;
+    }
+ 
+    public void setString(String string) {
+        this.string = string;
+    }
+ 
+}
+</code></pre>
+
+<p>Dubbo 配置略。</p>
+
+<h3 id="toc_4">Node 端</h3>
+
+<h4 id="toc_5">node-hessian</h4>
+
+<p>安装 <a href="https://github.com/villadora/node-hessian">node-hessian</a>：</p>
+
+<pre><code>npm install hessian-proxy
+</code></pre>
+
+<h4 id="toc_6">调用服务接口</h4>
+
+<pre><code>var Proxy = require(&#39;hessian-proxy&#39;).Proxy;
+ 
+var proxy = new Proxy(&#39;http://127.0.0.1:9098/test-provider/provider/com.yuanxin.paas.ssb.TestService&#39;, &#39;&#39;, &#39;&#39;, proxy);
+ 
+proxy.invoke(&#39;test&#39;, null, function (err, reply) {
+    console.log(&#39;test: &#39; + reply);
+});
+ 
+proxy.invoke(&#39;test0&#39;, [25], function (err, reply) {
+    console.log(&#39;test0: &#39; + JSON.stringify(reply));
+})
+ 
+proxy.invoke(&#39;test1&#39;, null, function (err, reply) {
+    if (err) {
+        console.log(&#39;test1: &#39; + err);
+    }
+ 
+    console.log(&#39;test1: &#39; + JSON.stringify(reply));
+})
+ 
+var argForTest2 = {
+    i: 2
+};
+ 
+argForTest2.__type__ = &#39;com.yuanxin.paas.ssb.Arg&#39;;
+ 
+proxy.invoke(&#39;test2&#39;, [argForTest2], function (err, reply) {
+    if (err) {
+        console.log(&#39;test2: &#39; + err);
+    }
+ 
+    console.log(&#39;test2: &#39; + JSON.stringify(reply));
+})
+ 
+ 
+var argForTest3 = {
+    i: 3
+};
+ 
+argForTest3.__type__ = &#39;com.yuanxin.paas.ssb.Arg&#39;;
+ 
+proxy.invoke(&#39;test3&#39;, [argForTest3], function (err, reply) {
+    if (err) {
+        console.log(&#39;test3: &#39; + err);
+    }
+ 
+    console.log(&#39;test3: &#39; + JSON.stringify(reply));
+})
+</code></pre>
+
+<h3 id="toc_7">运行结果</h3>
+
+<h4 id="toc_8">Java 端</h4>
+
+<p><img src="https://oojduq.dm2304.livefilestore.com/y2py0LBG1b1FvLtEbu06GyRtHlJupy8dqaq_o0KNF5HoezRo2TvSMWc4OtrRZubhn9GRcUpZokO9ckrOfv5V8b8KoNLg8wQtZPKIickLNaTsuw/hessian-java.png?psid=1" alt="Java 端"/></p>
+
+<h4 id="toc_9">Node 端</h4>
+
+<p><img src="https://oojduq.dm2301.livefilestore.com/y2pxuLkG4il3ohi2PsC6XlEr0q2daXHtATcpiFAS05PlCJX3zzpOWlAS_IedLT5851lD6UoLCYHCwzrsV9ouLWzkA9mj8FwJaIXiYljHMNRhiY/hessian-node.png?psid=1" alt="Node 端"/></p>
+
+<h3 id="toc_10">总结</h3>
+
+<p>Dubbo 非常赞，提供了对 Hessian 原生协议的支持；Node 调用起来也非常简单，不过还是有几个点需要注意一下：</p>
+
+<ul>
+<li>接口方法不能重载（接口里的方法必须使用不同的方法名）</li>
+<li>自定义类型的命名空间服务端与消费端要一致（com.yuanxin.paas.ssb.Arg）</li>
+<li>服务端自定义类型需要实现序列化接口（java.io.Serializable）</li>
+<li>尽量使用简单的自定义类型结构（避免嵌套）</li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-03-18-rabbitmq-network-partition.html" 
+	        title="Previous Post: RabbitMQ 网络分区问题">&laquo; RabbitMQ 网络分区问题</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-02-08-autoremove-logs.html" 
+	        title="Next Post: 自动清理日志 Shell 脚本">自动清理日志 Shell 脚本 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

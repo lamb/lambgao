@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  小试Node Node模块 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">小试Node Node模块</h1>
+				<p class="meta"><time datetime="2012-10-10T18:28:07+08:00" pubdate data-updated="true">2012/10/10</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>模块是Node的基本单位，让我们从模块开始深入了解Node。</p>
+
+<h3 id="toc_0">3.1　CommonJS规范</h3>
+
+<p>JavaScript是一门强大的面向对象的语言，但是JavaScript的标准定义是为了构建基于浏览器的应用程序，它没有一个用于更广泛的应用程序的标准库。CommonJS（官方主页 <a href="http://www.commonjs.org">http://www.commonjs.org</a> ）定义了很多用于普通应用程序（主要指非浏览器应用）使用的API，从而弥补了这个空白。</p>
+
+<p>CommonJS是一种规范，内容包括模块、二进制、编码、文件、系统、断言、套接字、事件队列等。Node是CommonJS的一种实现，但是只实现了它的部分规范。CommonJS有很多实现，如SeaJS、CouchDB和RequireJS等。这些项目大部分也只实现了CommonJS的部分规范（可以在这里查看某个项目的实现部分 <a href="http://www.commonjs.org/impl/">http://www.commonjs.org/impl/</a> ）。</p>
+
+<p>先简要说明一下CommonJS规范对模块的定义。每个模块都有对应的标识符，而标识符有两种：相对标识符与绝对标识符。模块的上下文中有require、exports两个变量。模块的加载是通过模块中的require函数完成，参数是模块的标识符，返回值是被加载模块向外exports导出的属性或方法。</p>
+
+<h3 id="toc_1">3.2　第一个 Node模块</h3>
+
+<p>Node有一个简明的模块加载系统。一个文件就可以被作为一个模块使用，比如，在foo.js文件中加载同一目录下的circle.js模块。</p>
+
+<p>circle.js：</p>
+
+<pre><code>var PI = Math.PI;
+
+exports.area = function (r) {
+  return PI * r * r;
+};
+
+exports.circumference = function (r) {
+  return 2 * PI * r;
+};
+</code></pre>
+
+<p>foo.js：</p>
+
+<pre><code>var circle = require(&#39;./circle.js&#39;);
+console.log( &#39;The area of a circle of radius 4 is &#39;+ circle.area(4));
+</code></pre>
+
+<p>Node模块的定义和使用都非常的简单，只需调用require方法加载模块即可。在foo.js文件中调用require方法完成对circle.js的加载，这样就可以在foo.js文件中使用circle.js文件中定义并exports导出的函数了。这里require的参数是一个相对路径定义的模块标识符。使用相对路径定义的模块的标识符以“./”或者“../”开头，前者表示当前文件夹，后者表示上级文件夹。使用绝对路径定义的模块的标识符以“/”开头，这种方法定义的标识符和文件系统的根目录相关。</p>
+
+<h3 id="toc_2">3.3　模块的分类和加载</h3>
+
+<p>Node模块可以分成两类，一类为核心模块，一类为文件模块。<br/>
+核心模块在Node源代码编译的时候已经被编译成了二进制可执行文件。核心模块的源代码在Node源代码的lib文件夹中可以找到。调用require函数加载模块时，核心模块总是优先被加载。核心模块的模块标识符就是模块名，前面米有路径。例如，require(&#39;http&#39;)总是返回核心模块HTTP模块。核心模块的说明文档可以在官网上面很容易被找到。</p>
+
+<p>文件模块是动态加载的，加载速度较核心模块较慢。文件模块包含三种文件，扩展名分别为.js、.json和.node。文件模块的模块标识符是使用相对路径或者绝对路径定义的模块标识符。如果模块标识符不包含文件的扩展名，显然这样Node无法找到确切的文件，Node将依次将.js、.json、.node三种扩展名添加上再进行加载。例如执行require(&#39;./circle&#39;)时首先查找当前目录circle文件，然后再尝试circle.js文件，加载成功即返回。.js文件被视为JavaScript文本文件，通过核心模块fs模块被读取后编译并执行；.json文件被视为JSON文本文件，读取后会调用JSON.parse被解析加载；.node被视为已编译的C/C++插件模块，通过dlopen方法进行加载。</p>
+
+<p>如果传递给require函数的模块标识符不以“/”、“./”或“../”开头，也不是核心模块名，这时Node会从当前模块所在的目录下的node_modules这个文件夹下查找文件尝试加载。如果还是没有找到，那么Node会跳到上层目录完成同样的动作，知道模块被找到，或者到达根目录为止。例如，如果在文件&#39;/home/ry/projects/foo.js&#39;中调用require(&#39;bar.js&#39;)，Node会在下列位置查找，顺序如下：</p>
+
+<pre><code>/home/ry/projects/node_modules/bar.js
+/home/ry/node_modules/bar.js
+/home/node_modules/bar.js
+/node_modules/bar.js
+</code></pre>
+
+<p>Node允许用户在独立的文件夹中方便的组织程序，为这个文件夹指定一个单一的入口后可以把这个文件夹当作模块被加载。有三种方式可以将文件夹作为require函数的参数。第一种方式是在该文件夹中创建package.json文件，指定一个main模块，一个简单的package.json文件会是这样：</p>
+
+<pre><code>{ &quot;name&quot; : &quot;some-library&quot;,
+  &quot;main&quot; : &quot;./lib/some-library.js&quot; }
+</code></pre>
+
+<p>如果此文件位于./some-library文件夹，加载这个文件夹可以调用require(&#39;./some-library&#39;)，这时会尝试加载./some-library/lib/some-library.js。如果Node在该文件夹下没有找到package.json这个文件，那么Node将依次尝试加载改文件夹下的index.js或index.node文件。例如，如果上面的例子找不到package.json，那么会依次尝试加载：</p>
+
+<pre><code>./some-library/index.js
+./some-library/index.node
+</code></pre>
+
+<p>除了上述的查找目录，Node还会去全局的模块目录查找。如果在系统的环境变量中添加了NODE_PATH，Node会去NODE_PATH 设置的目录中去查找。NODE_PATH 配置的目录为绝对路径，允许多个，用冒号:隔开（Windows下使用分号;）。如果模块还没有找到，Node还会从下面的目录查找：</p>
+
+<pre><code>$HOME/.node_modules
+$HOME/.node_libraries
+$PREFIX/lib/node
+</code></pre>
+
+<p>\(HOME是用户主目录，\)PREFIX是Node安装目录的前缀。</p>
+
+<p>Node模块在首次加载成功后会被缓存起来，这意味着同一模块每次调用require方法得到的是完全相同的对象。</p>
+
+<h3 id="toc_3">3.4　NPM Node包管理器</h3>
+
+<p>NPM（Node  Package Manager），是一个Node包管理工具。NPM可以帮助你很方便的进行包的下载、安装和管理。NPM的实现大部分也遵循CommonJS规范中对包的定义（ <a href="http://wiki.commonjs.org/wiki/Packages/1.0">http://wiki.commonjs.org/wiki/Packages/1.0</a> ）。</p>
+
+<p>一个NPM包有如下结构：<br/>
+* package.json文件位于包顶级目录下，记录包的相关信息；<br/>
+* bin目录下存放C/C++扩展编译后的二进制文件；<br/>
+* lib目录下存放JavaScript代码文件。<br/>
+* doc目录下存放文档；<br/>
+* test目录下存放测试代码。</p>
+
+<p>一个基本的package.json文件是这样的：</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;chapter3&quot;, 
+  &quot;version&quot;: &quot;0.0.0&quot;,
+  &quot;main&quot;: &quot;./index.js&quot;, 
+  &quot;dependencies&quot;: {
+    &quot;pinyin&quot;: &quot;0.0.1&quot;
+  }
+}
+</code></pre>
+
+<p>name是包名，在NPM库中是唯一的；version是用于标识包的版本，通常为x.y.z；dependencies用于声明需要的依赖。其他字段的说明可以在CommonJS规范中对包的定义的文档中查看。</p>
+
+<h3 id="toc_4">3.5　NPM常用命令介绍</h3>
+
+<p>NPM通过使用npm命令来完成对包的管理操作，这些命令涉及到一个Node包整个生命周期的每一个操作，包括发布、下载、使用或者移除等。</p>
+
+<p>npm install packageName<br/>
+安装一个指定包名的Node包到当前文件夹。<br/>
+npm install -g packageName<br/>
+安装一个指定包名的Node包到Node的安装目录。<br/>
+npm install<br/>
+如果命令中不指定包名，则在当前文件中中寻找package.json文件读取dependencies的值进行安装。<br/>
+npm uninstall packageName<br/>
+卸载一个指定包名的Node包。<br/>
+npm update packageName<br/>
+更新一个指定包名的Node包。<br/>
+npm adduser<br/>
+在NPM仓库上注册一个账号，需要填写用户名、密码和电子邮件地址。<br/>
+npm init<br/>
+初始化一个Node包，根据输入的内容创建一个package.json文件。<br/>
+npm publish<br/>
+发布一个Node包。<br/>
+npm unpublish<br/>
+移除一个Node包。<br/>
+npm search packageName<br/>
+查找一个指定包名的Node包。<br/>
+npm help <command><br/>
+获取npm的帮助信息。</p>
+
+<p>以上仅仅只介绍了一些相对比较常用的命令，其他命令及详细使用说明可以使用help命令查看，或者在NPM的官方网站（ <a href="http://npmjs.org/">http://npmjs.org/</a> ）查看。NPM除了提供search命令用来查找Node包，NPM也提供了网页的形式（ <a href="http://search.npmjs.org/">http://search.npmjs.org/</a> ）供访问。现在通过NPM发布的Node包的数量已经达到一万多。如果你开发了一个Node包，非常期待你发布到NPM上去，为Node平台添砖加瓦。</p>
+
+<h3 id="toc_5">3.6　依赖的问题</h3>
+
+<h4 id="toc_6">3.6.1  循环依赖</h4>
+
+<p>循环依赖，是指两个文件互引用对方。例如a.js文件中require b.js文件，而b.js文件中又require a.js文件，这样造成一个死循环。让我们来看一下的代码：<br/>
+ a.js：</p>
+
+<pre><code>console.log(&#39;a starting&#39;);
+exports.done = false;
+var b = require(&#39;./b.js&#39;);
+console.log(&#39;in a, b.done = %j&#39;, b.done);
+exports.done = true;
+console.log(&#39;a done&#39;);
+</code></pre>
+
+<p>b.js：</p>
+
+<pre><code>console.log(&#39;b starting&#39;);
+exports.done = false;
+var a = require(&#39;./a.js&#39;);
+console.log(&#39;in b, a.done = %j&#39;, a.done);
+exports.done = true;
+console.log(&#39;b done&#39;);
+</code></pre>
+
+<p>main.js：</p>
+
+<pre><code>console.log(&#39;main starting&#39;);
+var a = require(&#39;./a.js&#39;);
+var b = require(&#39;./b.js&#39;);
+console.log(&#39;in main, a.done=%j, b.done=%j&#39;, a.done, b.done);
+
+</code></pre>
+
+<p>当main.js加载a.js时，a.js也会加载b.js。在这个时候b.js也会反过来加载a.js。为了防止这样一个死循环，a.js返回了一个未完成的exports对象给b.js。当b.js加载完成，它会将它的exports对象返回给a.js，然后a.js会继续完成加载。运行main.js输出如下：</p>
+
+<pre><code>main starting 
+a starting 
+b starting 
+in b, a.done = false 
+b done 
+in a, b.done = true 
+a done 
+in main, a.done=true, b.done=true 
+</code></pre>
+
+<h4 id="toc_7">3.6.1  传递依赖</h4>
+
+<p>传递依赖，是指重复的间接依赖。Node对模块有缓存机制，Node是靠模块的路径来判断是否已经被加载的，当这个模块的路径变了，就会被重新加载。当然在我们自己的应用中不会把一个文件拷贝成双份放到两个不同的目录然后去使用，这种重复加载的情况完全可以避免。但是当Node包出现传递依赖的时候，就会出现模块被重复加载。例如，一个项目同时依赖mine包和express包，express也依赖mine包，使用NPM安装包后文件目录结构如下：</p>
+
+<pre><code>./node_modules
+├── mime
+└── express
+    └── node_modules
+        └── mime
+</code></pre>
+
+<p>从目录上可以看到mime包出现了两次，可以说有两个完全相同的包，这个包中的模块会被重复加载两次，产生了两个模块的实例。</p>
+
+<p>如果你对Maven很熟悉，你会知道Maven在处理传递依赖的版本确定规则为：深度越浅，越被优先选择；若两个依赖包处于依赖树的同一层则优先选择排列在前面的。Node中的包是以文件夹的形式存在的，所以不会存在同一层中存在相同的包。当两个依赖包处于不同层时，Maven不管两个包的版本只会选择深度较浅的那个依赖包，也就是说只会选择一个版本。Node则不然，Node会产生两个不同的实例，会多版本共存。如果你想避免这种重复加载，你可以手动删除深度较深的包，只保留在公共路径上的包。</p>
+
+<p>当嵌套依赖关系的层次很深时，文件的查找列表可能会变的很长。因此Node在查找时进行如下优化：/node_modules不会附加到一个以/node_modules结尾的文件夹后面。例如，如果在文件&#39;/home/ry/projects/foo/node_modules/bar/node_modules/baz/quux.js&#39;中调用require函数时，会搜索如下目录：</p>
+
+<pre><code>/home/ry/projects/foo/node_modules/bar/node_modules/baz/node_modules/
+/home/ry/projects/foo/node_modules/bar/node_modules/node_modules/
+/home/ry/projects/foo/node_modules/bar/node_modules/
+/home/ry/projects/foo/node_modules/node_modules/
+/home/ry/projects/foo/node_modules/
+/home/ry/projects/node_modules/
+/home/ry/node_modules/
+/home/node_modules/
+/node_modules/
+</code></pre>
+
+<h3 id="toc_8">3.7　小结</h3>
+
+<p>我们在这一章学习了Node的模块和包，具体内容如下：<br/>
+* CommonJS是一种规范，Node是CommonJS的一种实现； <br/>
+* Node模块可以分成两类，一类为核心模块，一类为文件模块；<br/>
+* NPM，是一个Node包管理工具，过使用npm命令来完成对包的管理操作；<br/>
+* Node模块存在循环依赖和传递依赖这两种问题，在使用中需要注意。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-10-11-small-test-node-core-module.html" 
+	        title="Previous Post: 小试Node 核心模块">&laquo; 小试Node 核心模块</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-10-09-small-test-hello-node.html" 
+	        title="Next Post: 小试Node Hello Node">小试Node Hello Node &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

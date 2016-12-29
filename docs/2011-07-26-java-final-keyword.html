@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  再识 Java 的 final 关键字 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">再识 Java 的 final 关键字</h1>
+				<p class="meta"><time datetime="2011-07-26T17:15:55+08:00" pubdate data-updated="true">2011/7/26</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>在 Java 中，我们一般用 final 关键字来定义类字段常量，防止类继承、方法覆写。但其实我们也应该尽可能地使用 final 关键字来修饰方法参数与局部变量。</p>
+
+<p>因为这样做可以使代码更易读，能让阅读者清楚地知道该参数/变量是不会在被重赋值的，也可以让编译器更好地帮助我们优化生成的字节码。</p>
+
+<span id="more"></span><!-- more -->
+
+<h4 id="toc_0">代码可读性</h4>
+
+<p>方法的输入参数是不应该被重新赋值的，细节见重构 Remove Assignments to Parameters。</p>
+
+<p>对于局部变量也应该尽可能地使用 final 来修饰，例如折半查找返回中间索引的方法（摘自 Sun JDK）：</p>
+
+<pre><code>private static &lt;T&gt;
+    int indexedBinarySearch(List&lt;? extends Comparable&lt;? super T&gt;&gt; list, T key)
+    {
+        int low = 0;
+        int high = list.size()-1;
+ 
+        while (low &lt;= high) {
+            int mid = (low + high) &gt;&gt;&gt; 1;
+            Comparable&lt;? super T&gt; midVal = list.get(mid);
+            int cmp = midVal.compareTo(key);
+ 
+            if (cmp &lt; 0)
+                low = mid + 1;
+            else if (cmp &gt; 0)
+                high = mid - 1;
+            else
+                return mid; // key found
+        }
+        return -(low + 1);  // key not found
+    }
+</code></pre>
+
+<p>其中 mid 标记了中间值索引，midValue 是中间值，cmp 是中间值与待查找值 key 的比较结果，这三个变量在 while 迭代中都是不会被重新赋值的。</p>
+
+<p>另外，入参也没有在方法内部被重赋值。所以改成下面这样是更好的选择：</p>
+
+<pre><code>private static &lt;T&gt;
+    int indexedBinarySearch(final List&lt;? extends Comparable&lt;? super T&gt;&gt; list, final T key)
+    {
+        int low = 0;
+        int high = list.size()-1;
+ 
+        while (low &lt;= high) {
+            final int mid = (low + high) &gt;&gt;&gt; 1;
+            final Comparable&lt;? super T&gt; midVal = list.get(mid);
+            final int cmp = midVal.compareTo(key);
+ 
+            if (cmp &lt; 0)
+                low = mid + 1;
+            else if (cmp &gt; 0)
+                high = mid - 1;
+            else
+                return mid; // key found
+        }
+        return -(low + 1);  // key not found
+    }
+</code></pre>
+
+<p>这样能够给予代码阅读者更多的上下文信息，能更精确地表达实现语义，也有利于避免实现时由于疏忽造成的错误。</p>
+
+<p>当然，有人也许会说太多 final 会造成视觉干扰，影响阅读。其实，这只是个视觉习惯而已 ;-)</p>
+
+<h4 id="toc_1">编译内联优化</h4>
+
+<p>通常，编译器会内联常量表达式，比如方法：</p>
+
+<pre><code>private void test() {
+    long i = 88250;
+    long j = 219;
+ 
+    long k = i + j;
+ 
+    System.out.println(k);
+}
+</code></pre>
+
+<p>编译生成的字节码：</p>
+
+<pre><code>private void test();
+ Code:
+  0:   ldc2_w  #2; //long 88250l
+  3:   lstore_1
+  4:   ldc2_w  #4; //long 219l
+  7:   lstore_3
+  8:   lload_1
+  9:   lload_3
+  10:  ladd
+  11:  lstore  5
+  13:  getstatic       #6; //Field java/lang/System.out:Ljava/io/PrintStream;
+  16:  lload   5
+  18:  invokevirtual   #7; //Method java/io/PrintStream.println:(J)V
+  21:  return
+</code></pre>
+
+<p>很显然，long i = 88250，long j = 219 以及 long k = i + j 这三句语句可以写为常量表达式。改写后的 test 方法：</p>
+
+<pre><code>private void test() {
+    final long i = 88250;
+    final long j = 219;
+ 
+    final long k = i + j;
+ 
+    System.out.println(k);
+}
+</code></pre>
+
+<p>编译生成的字节码：</p>
+
+<pre><code>private void test();
+ Code:
+  0:   getstatic       #2; //Field java/lang/System.out:Ljava/io/PrintStream;
+  3:   ldc2_w  #3; //long 88469l
+  6:   invokevirtual   #5; //Method java/io/PrintStream.println:(J)V
+  9:   return
+</code></pre>
+
+<p>从上面我们可以看出，编译器生成字节码时做了内联处理，即</p>
+
+<ul>
+<li>在引用某常量的地方进行值替换</li>
+<li>移除原常量</li>
+</ul>
+
+<p>当然，除了上面提到的使用 final 修饰变量外，<a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#8.1.1.2">final 也可用于类</a>、<a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#8.4.3.3">方法</a>和<a href="http://java.sun.com/docs/books/jls/third_edition/html/classes.html#8.3.1.2">字段</a>。</p>
+
+<p>修饰方法时要注意内联条件，不是加了 final 编译器就一定会对该方法进行内联，因为至少要考虑<a href="http://java.sun.com/docs/books/jls/third_edition/html/binaryComp.html#44871">二进制兼容性</a>。</p>
+
+<h4 id="toc_2">结论</h4>
+
+<p>final 关键字能更有效地表达设计与实现意图，能够有助于减少编码错误，所以我们应该尽可能地使用 final。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://java.sun.com/docs/books/jls/third_edition/html/j3TOC.html">The Java Language Specification, Third Edition</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Dependency_inversion_principle">DIP, Dependency Inversion Principle</a></li>
+<li>Robert Simmons Jr. 2004, The Final Story, Hardcore Java</li>
+<li>重构——改善既有代码的设计</li>
+<li>敏捷软件开发——原则、模式与实践</li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2011-07-28-java-7-technologies.html" 
+	        title="Previous Post: Java 7 的新特性一览表">&laquo; Java 7 的新特性一览表</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2011-07-14-maven-plugin.html" 
+	        title="Next Post: Maven 插件访问项目类路径">Maven 插件访问项目类路径 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

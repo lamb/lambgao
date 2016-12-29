@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  JDBC批处理Select语句 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">JDBC批处理Select语句</h1>
+				<p class="meta"><time datetime="2015-06-26T22:20:07+08:00" pubdate data-updated="true">2015/6/26</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>在<a href="/2015-06-14-why-use-preparedstatement-in-java-jdbc.html">上一篇文章</a>中提到了PreparedStatement的局限性：PreparedStatement不允许一个占位符（？）设置多个值，本文试图从其它角度来解决该问题。</p>
+
+<p>在网络上开销最昂贵的资源就是客户端与服务器往返的请求与响应，JDBC中类似的一种情况就是对数据库的调用，如果你在做数据插入、更新、删除操作，可以使用executeBatch()方法减少数据库调用次数，如：</p>
+
+<pre><code>Statement pstmt = conn.createStatement();
+pstmt.addBatch(&quot;insert into settings values(3,&#39;liu&#39;)&quot;);
+pstmt.addBatch(&quot;insert into settings values(4,&#39;zhi&#39;)&quot;);
+pstmt.addBatch(&quot;insert into settings values(5,&#39;jun&#39;)&quot;);
+pstmt.executeBatch();
+</code></pre>
+
+<p>但不幸的是对于批量查询，JDBC并没有内建（built-in）的方法，而且JDBC执行批处理的时候也不能有SELECT语句，如：</p>
+
+<pre><code>Statement pstmt = conn.createStatement();
+pstmt.addBatch(&quot;select * from settings&quot;);
+pstmt.executeBatch();
+</code></pre>
+
+<p>会抛出异常：</p>
+
+<pre><code>Exception in thread &quot;main&quot; java.sql.BatchUpdateException: Can not issue SELECT via executeUpdate().
+    at com.mysql.jdbc.Statement.executeBatch(Statement.java:961)
+    at test.SelectBatchTest.test2(SelectBatchTest.java:49)
+    at test.SelectBatchTest.main(SelectBatchTest.java:12)
+</code></pre>
+
+<p>假设你想从一系列指定的id列表中获取名字，逻辑上，我们要做的事情看起来应该是：</p>
+
+<pre><code>PreparedStatement stmt = conn.prepareStatement(
+    &quot;select id, name from users where id in (?)&quot;);
+stmt.setString(&quot;1,2,3&quot;);
+</code></pre>
+
+<p>但是这样做并不能得到预期的结果，JDBC只允许你用单个的字面值来替换“？” JDBC之所以这么做是有必要的，因为如果SQL自身可以改变的话，JDBC驱动就没法预编译SQL语句了，另一方面它还能防止SQL注入攻击。</p>
+
+<p>但有四种可替代的实现方法可供选择：</p>
+
+<ol>
+<li>分别对每个id做查询</li>
+<li>一个查询做完所有事</li>
+<li>使用存储过程</li>
+<li>分批处理</li>
+</ol>
+
+<h3 id="toc_0">方法一： 分别对每个id做查询</h3>
+
+<p>假设有100个id，那么就有100次数据库调用：</p>
+
+<pre><code>PreparedStatement stmt = conn.prepareStatement(
+    &quot;select id, name from users where id = ?&quot;);
+for ( int i=0; i &lt; 100; i++ ) {
+  stmt.setInt(i);  // or whatever values you are trying to query by
+ 
+  // execute statement and get result
+}
+</code></pre>
+
+<p>这种方法写起来非常简单，但是性能非常慢，数据库往返要处理100次。</p>
+
+<h3 id="toc_1">方法二：一个查询完成所有事</h3>
+
+<p>在运行时，你可以使用一个循环来构建如下SQL语句：</p>
+
+<pre><code>PreparedStatement stmt = conn.prepareStatement(
+    &quot;select id, name from users where id in (?, ?, ?)&quot;);
+stmt.setInt(1);
+stmt.setInt(2);
+stmt.setInt(3);
+</code></pre>
+
+<p>这种方案从代码相比第一种方法算是第二简单的，它解决了来回多次请求数据库的问题，但是如果每次请求参数的个数不一样时预处理语句就必须重新编译，由于每次SQL字面值不匹配，因此如果分别用10个id、3个id、100个，这样会在缓存中产生三个预处理语句。除了重新编译预处理语句之外，先前缓存池中的预处理语句将被移除（受限于缓存池大小），进而导致重新编译已编译过的语句。最后，这种查询方式在内存溢出或磁盘分页操作时查询会占用很长时间。</p>
+
+<p>该方案的另一种变体就是在SQL语句中硬编码：</p>
+
+<pre><code>PreparedStatement stmt = conn.prepareStatement(
+    &quot;select id, name from users where id in (1, 2, 3)&quot;);
+</code></pre>
+
+<p>这样方式甚至更差，而且没有任何机会对SQL语句重用，至少用“？”还可以对使用相同数量参数的SQL语句进行重用。</p>
+
+<pre><code>PreparedStatement stmt = conn.prepareStatement(
+   &quot;select id, name from users where id in (?) ; &quot;  
+   + &quot;select id, name from users where id in (?); &quot;
+   + &quot;select id, name from users where id in (?)&quot;);
+stmt.setInt(1);
+stmt.setInt(2);
+stmt.setInt(3);
+</code></pre>
+
+<p>这种方法的优点就是每次查询模版语句都一样，数据库不需要每次计算执行路径。然而，从数据库驱动的角度来说SQL每次都不一样，预处理语句每次必须预处理保存在缓存中。而且不是所有数据库系统都支持分号间隔的多个SQL语句的</p>
+
+<h3 id="toc_2">方法三：使用存储过程</h3>
+
+<p>存储过程执行在数据库系统中，因此它可以做很多查询而不需要太多网络负载，存储过程可以收集所有结果一次性返回。这是一种速度很快的解决方案。但是它对数据库的依赖比较强，不能随意的切换数据库系统，否则需要重写存储过程而且需要你分离应用服务器与数据库服务器之间的逻辑。如果应用架构已经使用了存储过程，无疑这是只最佳方案。</p>
+
+<h3 id="toc_3">方法四：分批处理</h3>
+
+<p>批量查询是方案一和方案二的折衷选择，它预先确定一批查询参数的常量，然后用这些参数构建一批查询。因为这只会涉及到有限个查询，所以它有预处理语句的优势（预编译不会与缓存中的预处理发生碰撞）。批处理多个值在相同的查询保留了服务器来回请求最小化的优势。最后你可以通过控制批处理的上限来避免大查询的内存问题。如果你有很关键的查询对性能方面有要求又不想用存储过程，那么这是一种很好的解决办法，现在我们通过一个例子说明：</p>
+
+<pre><code>public static final int SINGLE_BATCH = 1;
+public static final int SMALL_BATCH = 4;
+public static final int MEDIUM_BATCH = 11;
+public static final int LARGE_BATCH = 51;
+</code></pre>
+
+<p>第一件要做的事是你要衡量有多少批处理以及每个批处理的大小。（注意：在真实的代码中，这些值应该写在一个配置文件中而不是采取硬编码的形式，也就是说，你可以在运行时试验并改变批处理的大小）不管真正的批处理大小是多大，你总需要一个单个的批处理—大小为1的批处理（SINGLE_BATTCH）。这样如果有人请求的就是一个值或者在一个很大的查询中最后有遗留下来的单个值都能派上用场。对于批处理的大小，使用素数会更好些。换句话说，大小不应该可以相互的整除或者被相同的数整除。请求数的最大值将有最少的服务器往返。批处理的大小的数量和真正的大小是基于配置变化的。需要注意的是：大的批处理大小不应该太大否则你将遇到内存麻烦。同时最小批处理的大小应该很小，你可能会使用这个来做很多次的查询。</p>
+
+<pre><code>while ( totalNumberOfValuesLeftToBatch &gt; 0 ) {
+</code></pre>
+
+<p>按如下方式重复操作直到推出循环。</p>
+
+<pre><code>int batchSize = SINGLE_BATCH;
+if ( totalNumberOfValuesLeftToBatch &gt;= LARGE_BATCH ) {
+  batchSize = LARGE_BATCH;
+} else if ( totalNumberOfValuesLeftToBatch &gt;= MEDIUM_BATCH ) {
+  batchSize = MEDIUM_BATCH;
+} else if ( totalNumberOfValuesLeftToBatch &gt;= SMALL_BATCH ) {
+  batchSize = SMALL_BATCH;
+}
+totalNumberOfValuesLeftToBatch -= batchSize;
+</code></pre>
+
+<p>这种方案在这里是查找到最大的批处理大小，可能这个最大值比我们实际要查询的值稍大。举例说明：假设查询有75个参数，那么首先选择51个元素（LARGE_BATCH），现在还剩24个待查询，然后接着用11个元素的查询（MEDIUM_BATCH）。现在还有13个值，因为仍然大于11，再做一次11个元素的查询，现在只剩下2个值，它少于那个最小的批处理4（SMALL_BATCH），所以做两次单查询。总共5次往返用了3次预处理在缓存中。这是一个很重要的改进比单独地坐75次单查询。</p>
+
+<pre><code>StringBuilder inClause = new StringBuilder();
+boolean firstValue = true;
+for (int i=0; i &lt; batchSize; i++) {
+  inClause.append(&#39;?&#39;);
+  if ( firstValue ) {
+    firstValue = false;
+  } else {
+    inClause.append(&#39;,&#39;);
+  }
+}
+PreparedStatement stmt = conn.prepareStatement(
+    &quot;select id, name from users where id in (&quot; + inClause.toString() + &#39;)&#39;);
+</code></pre>
+
+<p>现在已经构建了一个真实的预处理语句，由于一直用相同的方式构建的查询，驱动注意到SQL是相同的。（注意：如果你还没有用Java5，使用StringBuffer替换StringBuilder才能正常编译），返回id很重要这样有利于查找哪个名字对应哪个id。</p>
+
+<pre><code>for (int i=0; i &lt; batchSize; i++) {
+  stmt.setInt(i);  // or whatever values you are trying to query by
+}
+</code></pre>
+
+<p>设置合适的值数量去查询，包括其他搜索条件查询。仅仅只要把这些参数在之举参数之后。在这种情况你可以最终当前的索引。</p>
+
+<p>从这点来看，你仅仅只是执行查询返回了结果，在第一次尝试的时候，你应该关注一下性能的提升，根据具体情况调整优化批处理的大小（batch size）。</p>
+
+<p>正如那句名言所说：“过早的优化是万恶之源”，批处理应该是用于解决性能问题。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2015-06-27-improve-performance-java-database.html" 
+	        title="Previous Post: JDBC性能小贴">&laquo; JDBC性能小贴</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2015-06-20-what-is-new-in-swift.html" 
+	        title="Next Post: Swift 2.0初探">Swift 2.0初探 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  诊断Java.lang.OutOfMemoryError（OOM） - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">诊断Java.lang.OutOfMemoryError（OOM）</h1>
+				<p class="meta"><time datetime="2013-01-12T11:38:50+08:00" pubdate data-updated="true">2013/1/12</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>在跟踪性能问题时，堆内存是首先应该被监控的最重要的组件之一。一旦堆内存的实际使用量超过其所允许的堆空间，就会产生堆内存压力。而这将导致频繁的全面垃圾回收事件，垃圾回收将窃取CPU周期，轻则导致响应时间延迟，重则导致必须重新启动Java虚拟机才能解决的内存溢出错误。</p>
+
+<h3 id="toc_0">内存溢出错误（OOM）</h3>
+
+<p>当我运行应用时，出现了如下异常：</p>
+
+<ul>
+<li>java.lang.OutOfMemoryError: GC overhead limit exceeded[7,9]</li>
+<li>java.lang.OutOfMemoryError: Java heap space</li>
+</ul>
+
+<p>第一条信息意味着，出于某种原因，垃圾收集器每次执行都花费了大量时间但只回收了很少量的内存，当我删除了如下代码后：</p>
+
+<pre><code>System.gc();
+</code></pre>
+
+<p>第一条信息消失了，取而代之的，系统出现了第二条信息。很明显堆内存空间依然存在问题。下面是我调查问题的步骤：</p>
+
+<ol>
+<li>添加下面的Java启动参数</li>
+<li>-Xloggc:gc.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps
+
+<ul>
+<li>系统会生成gc.log文件</li>
+</ul></li>
+<li>-XX:+HeapDumpOnOutOfMemoryError
+
+<ul>
+<li>系统会生成堆内存转储文件</li>
+</ul></li>
+<li>分析日志文件:</li>
+<li>使用常规的文本编辑器查看gc.log 文件。</li>
+<li>使用 Eclipse Memory Analyzer 查看 堆内存转储文件 (例如, java_xxx.hprof)</li>
+</ol>
+
+<p>请注意，本文所讨论的所有虚拟机参数都是基于Hotspot虚拟机的。</p>
+
+<p>Java命令行参数说明:</p>
+
+<ul>
+<li>-XX:+PrintGCDetails
+
+<ul>
+<li>打印更多的关于垃圾收集的信息。</li>
+</ul></li>
+<li>-XX:+PrintGCTimeStamps
+
+<ul>
+<li>打印从HotSpot 虚拟机开始执行直至垃圾收集事件发生所花费的时间（以秒为单位）。</li>
+</ul></li>
+<li>-Xloggc:gc.log
+
+<ul>
+<li>在每次垃圾收集时打印堆内存以及垃圾收集的信息。</li>
+</ul></li>
+</ul>
+
+<p>在JDeveloper中可以按照如下方式设定：</p>
+
+<ol>
+<li>右键选择你的项目（例如ViewController），显示出菜单</li>
+<li>选择Project Properties…</li>
+<li>选择Run/Debug/Profile</li>
+<li>选择你Run Configuration(例如, Default)</li>
+<li>点击Edit按钮</li>
+<li>在Java虚拟机参数栏位设定 -Xloggc:gc.log -XX:-PrintGCDetails</li>
+</ol>
+
+<p>运行你的应用并重现内存溢出异常，系统将会生成日志文件gc.log，<br/>
+我的是在如下目录：</p>
+
+<pre><code>…/system11.1.1.5.37.60.13/DefaultDomain
+</code></pre>
+
+<p>因为我的Web应用是部署在集成的WLS中，并且通过DefaultDomain来执行。<br/>
+所以，想要理解gc.log文件的格式，请参考关联阅读[5,15]。</p>
+
+<p>不过，gc.log文件并不能真正的帮到我们，因为他只是简要的打印了堆内存问题，</p>
+
+<p>但并没有指出问题出在哪。<br/>
+接下来我要做的是添加如下参数，并重新执行服务。<br/>
+<strong>-XX:+HeapDumpOnOutOfMemoryError</strong><br/>
+当服务发生堆内存错误时，会生成java_pid30835.hprof文件。</p>
+
+<h3 id="toc_1">Eclise内存分析器（Eclipse Memory Analyzer）</h3>
+
+<p>堆内存转储文件由HPROF（堆内存和CPU分析工具）生成，堆内存转储文件是2进制格式的，因此必须使用Eclpse Memory Analyzer 来查看。</p>
+
+<p>你可以通过Eclipse Update manager 来安装Eclipse MAT，选择”General Purpose Tools “并安装”Memory Analyser (Incubation)”以及”Memory Analyser (Charts)”。</p>
+
+<p>安装之后，双击堆内存转储文件并且选择”Leak Suspects Report”</p>
+
+<p>Eclipse MAT会显示图表以及问题的嫌疑人：</p>
+
+<h3 id="toc_2">调整堆内存空间</h3>
+
+<p>如果你观察到垃圾收集日志文件中有内存溢出错误，那么可以尝试将Java堆内存空间调整为你能够分配给Java虚拟机的物理内存空间的80%，基于具体是老年代空间还是永久代空间发生内存溢出，你可以像这样调整内存空间。</p>
+
+<ul>
+<li>针对老年代发生内存溢出
+
+<ul>
+<li>increase -Xms and -Xmx</li>
+</ul></li>
+<li>针对永久代发生内存溢出
+
+<ul>
+<li>increase -XX:PermSize and -XX:MaxPermSize</li>
+</ul></li>
+</ul>
+
+<p>参考文献：</p>
+
+<ul>
+<li><a href="http://www.vogella.de/articles/Eclipse/article.html#updatemanager">Eclipse Update Manager</a></li>
+<li><a href="http://www.vogella.de/articles/EclipseMemoryAnalyser/article.html">Eclipse Memory Analyzer</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html">Java Hotspot VM Options</a></li>
+<li><a href="http://xmlandmore.blogspot.com/2011/04/integrated-weblogic-server-wls.html">Integrated WebLogic Server (WLS)</a></li>
+<li><a href="http://java.sun.com/docs/hotspot/gc1.4.2/example.html">Diagnosing a Garbage Collection problem</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/faq-140837.html">Frequently Asked Questions about Garbage Collection</a></li>
+<li><a href="http://stackoverflow.com/questions/1393486/what-means-the-error-message-java-lang-outofmemoryerror-gc-overhead-limit-excee">GC Overhead Limit Exceeded</a></li>
+<li><a href="http://java.sun.com/developer/technicalArticles/Programming/HPROF.html">HPROF: A Heap/CPU Profiling Tool in J2SE 5.0</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/gc-tuning-6-140523.html#par_gc.oom">Java SE 6 HotSpottm Virtual Machine Garbage Collection Tuning</a></li>
+<li>Java Performance by Charlie Hunt and Binu John</li>
+<li><a href="http://xmlandmore.blogspot.com/2012/01/understanding-garbage-collection.html">Understanding Garbage Collection</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html">Java HotSpot VM Options</a></li>
+<li><a href="http://www.tagtraum.com/gcviewer.html">GCViewer</a> (a free open source tool)</li>
+<li><a href="http://xmlandmore.blogspot.com/2012/03/understanding-garbage-collector-output.html">Understanding Garbage Collector Output of Hotspot VM</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2013-02-22-log4j-2.html" 
+	        title="Previous Post: Log4j 2 介绍">&laquo; Log4j 2 介绍</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2013-01-11-how-deep-unit-test.html" 
+	        title="Next Post: 单元测试要做多深？——测试驱动开发（TDD)引发的争论">单元测试要做多深？——测试驱动开发（TDD)引发的争论 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

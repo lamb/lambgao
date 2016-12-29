@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  JPA与CMT – 为什么单纯捕捉持久化异常是不够的？ - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">JPA与CMT – 为什么单纯捕捉持久化异常是不够的？</h1>
+				<p class="meta"><time datetime="2013-07-19T17:02:55+08:00" pubdate data-updated="true">2013/7/19</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>在EJB和JPA架构中使用CMT（容器控制事务）是很简单的。只要定义一些注解来标示事务边界（或使用默认），无需再手动使用开始、提交或回滚操作。在EJB的业务方法中唯一回滚事务的方法就是抛出非应用异常（或者使用rollback=true标注应用异常）。看起来很简单：如果在某些操作中有可能会抛出一个异常，但你不希望事务回滚只需要捕获异常就可以了。你能够在同一个仍然活动的事务中再次重试这个不稳定的操作。</p>
+
+<p>对于用户组件抛出的应用异常来说是完全成立的。问题是从其他组件抛出的异常会怎么样？比如JPA的EntityManager抛出的一个PersistenceException？这就是撰写本文的原因。</p>
+
+<h3 id="toc_0">我们想要实现什么</h3>
+
+<p>想象一下如下场景：你有一个名为E的实体。包括如下属性：</p>
+
+<ul>
+<li>id–主键,</li>
+<li>name– 可读的实体名称,</li>
+<li>content– 一些存放字符串的随意字段 – 用于模拟“高级属性”例如在持久化/更新时计算的字段并且可能导致错误的。</li>
+<li>code– 保存OK 或者ERROR字符串 – 定义高级属性是否成功保存。</li>
+</ul>
+
+<p>希望持久化E。假设E的基础属性一直都能成功持久化。而高级属性，需要一些附加计算或操作可能会导致例如数据库抛出的违反约束。当这样的情况发生后，你仍然希望E能够持久化到数据库中（只是基础属性填充，code字段设置为ERROR）<br/>
+换句话说你可能希望：</p>
+
+<ul>
+<li>持久化E的基本属性</li>
+<li>尝试更新高级属性</li>
+<li>若步骤2中抛出了PersistenceException – 捕获该异常并设置‘code’属性为ERROR并且清除所有高级属性（因为会引发异常）</li>
+<li>更新E</li>
+</ul>
+
+<h3 id="toc_1">普通解决方案</h3>
+
+<p>在EJB代码中展示你可能会如何执行（假设为默认的事务属性（TransactionAttributes））</p>
+
+<pre><code>public void mergeEntity() {
+ MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ 
+ em.persist(entity);
+ 
+ // This will raise DB constraint violation
+ entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+ // We don&#39;t need em.merge(entity) - our entity is in managed mode.
+ 
+ try{
+ em.flush(); // Force the flushing to occur now, not during method commit.
+ }catch(PersistenceException e) {
+ // Clear the properties to be able to persist the entity.
+ entity.setContent(&#39;&#39;);
+ entity.setCode(&#39;ERROR&#39;);
+ 
+ // We don&#39;t need em.merge(entity) - our entity is in managed mode.
+ }
+ }
+</code></pre>
+
+<h3 id="toc_2">示例中有什么问题？</h3>
+
+<p>捕获EntityManager 抛出的PersistenceException 不能够阻止事务回滚。这不像不捕捉EJB中的异常会使得事务回滚，而是EntityManager 抛出的非应用程序异常会将事务标记为回滚。更不用说资源内部可能会标记事务为回滚。意味着实际上你的程序并不能真正控制事务的行为。同时，作为事务回滚的结果，我们的实体被转移至游离（detached ）状态。因此，在方法的最后 em.merge(entity)这样的方法还是需要的。</p>
+
+<h3 id="toc_3">有效方案</h3>
+
+<p>该如何应对事务自动回滚呢？因为我们使用CMT，所以我们唯一的方法就是定义另一个业务方法开始一个全新的事务，并且将所有可能导致异常的操作在那里执行。这样的话即使PersistenceException 被抛出（并且捕获）它只会标注当前新事务回滚，我们的主事务是不会有影响的。如下可以看到一些样例代码（为了简洁去除了日志代码）：</p>
+
+<pre><code>public void mergeEntity() {
+ 
+MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ 
+em.persist(entity);
+ 
+try{
+self.tryMergingEntity(entity);
+}catch(UpdateException ex) {
+entity.setContent(&#39;&#39;);
+entity.setCode(&#39;ERROR&#39;);
+}
+}
+ 
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+public void tryMergingEntity(finalMyEntity entity) throws UpdateException {
+entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+em.merge(entity);
+ 
+try{
+em.flush();
+}catch(PersistenceException e) {
+thrownewUpdateException();
+}
+}
+</code></pre>
+
+<p>注意：<br/>
+更新异常（UpdateExceptionis ）也是继承自Exception类的应用异常（所以默认是rollback=false）。用于表示更新动作失败。作为一个可选方式，你可以将 tryMergingEntity(-)方法的返回值由void转为boolean。用这个boolean结果来表示更新动作成功与否。</p>
+
+<p>Self在我们的EJB中是对自身的引用。这在EJB容器代理中是一个必须步骤，使得被调用的方法能够使用@TransactionAttribute，作为一个可选方式，可以使用SessionContext#getBusinessObject(clazz).tryMergingEntity(entity).</p>
+
+<p>em.merge(entity) 方法是很关键的。我们在tryMergingEntity(-)方法中开启一个新事务，所以实体不会存在于持久化上下文中。<br/>
+方法中无需再有其他的更新或刷新操作了。CMT的常规特性确保了事务不会被回滚，这意味着实体的所有改动都会在事务提交时自动刷新。<br/>
+我们再次强调一下底线：捕获异常并不意味着你当前的事务不会被标记为回滚。PersistenceException 并发应用程序异常，但无论是你否捕捉都会导致你的事务回滚。</p>
+
+<h3 id="toc_4">JTA BMT解决方案</h3>
+
+<p>一直以来我们都讨论的是CMT。那JTA BMT呢？找到下面代码中展示如何使用BMT处理这个问题作为奖励吧：</p>
+
+<pre><code>public void mergeEntity() throws Exception {
+ utx.begin();
+ MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ em.persist(entity);
+utx.commit();
+ 
+ utx.begin();
+ entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+ em.merge(entity);
+ 
+ try{
+ em.flush();
+ }catch(PersistenceException e) {
+ utx.rollback();
+ 
+utx.begin();
+ entity.setContent(&#39;&#39;);
+ entity.setCode(&#39;ERROR&#39;);
+ 
+ em.merge(entity);
+ utx.commit();
+ }
+ }
+</code></pre>
+
+<p>使用JTA BMT我们能够在一个方法中处理所有的问题。是因为我们能够控制事务何时开始与提交/回滚（查看上述代码中的utx.begin()/commit()/rollback()）。然而结果还是一样的，在抛出PersistenceException 之后，我们的事务还是被标记为回滚，你可以使用UserTransaction#getStatus() 来查看并且与常量Status.STATUS_MARKED_ROLLBACK进行比较。</p>
+
+<p>原文地址：<a href="http://piotrnowicki.com/2013/03/jpa-and-cmt-why-catching-persistence-exception-is-not-enough/">JPA and CMT -- Why Catching Persistence Exception is Not Enough?</a></p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2013-07-29-android-simulator-genymotion.html" 
+	        title="Previous Post: 快到极致的Android模拟器——Genymotion">&laquo; 快到极致的Android模拟器——Genymotion</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2013-06-10-netbeans-maven-jetty-plugin.html" 
+	        title="Next Post: NetBeans 中使用 maven-jetty-plugin 运行与调试 web 项目">NetBeans 中使用 maven-jetty-plugin 运行与调试 web 项目 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

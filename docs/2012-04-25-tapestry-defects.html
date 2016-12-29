@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  吐槽 Tapestry - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">吐槽 Tapestry</h1>
+				<p class="meta"><time datetime="2012-04-25T17:23:46+08:00" pubdate data-updated="true">2012/4/25</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h4 id="toc_0">组件化</h4>
+
+<p>组件是 Tapestry 中的核心概念，将页面模版与 Java 类做对应。在运行时框架管理组件生命周期与行为，最后输出 HTML 到客户端。</p>
+
+<p>Tapestry 组件化所要达到的目标是使 Java 程序员更容易理解页面构成，使应用开发周期缩短。</p>
+
+<p>但这样的组件化思想有个根本性的问题：不同编程模型在做映射的时候存在不匹配问题，与 ORM 的<a href="http://www.hudong.com/wiki/%E9%98%BB%E6%8A%97%E4%B8%8D%E5%8C%B9%E9%85%8D">“阻抗不匹配”</a>类似。</p>
+
+<h4 id="toc_1">模版</h4>
+
+<p>从输出展现上看，前端与后端的分离是必须的。前端程序员主要使用 HTML/CSS/JS 进行开发，不关注后端的组件构成。在页面布局设计上面是以展现结构进行模块化，比如分为页头、侧边栏、页脚、主体等。各部分的展现在运行时通过模版引擎即可完成组合，后端也只需要往不同模版组装填充对应数据，后端对应页面的组件化方式就显得多余了，并且处理过程繁琐，性能低下。</p>
+
+<h4 id="toc_2">IoC</h4>
+
+<p>对象状态管理是面向对象设计中比较复杂的一个问题。IoC 主要是为了帮助应用开发者管理对象，降低实现难度。但从实践出发，应用在设计的时候一般不会考虑使用 IoC 管理域对象，而只是使用 IoC 管理服务。这样的话其实使用 IoC 意义也不是很大了，工厂方法已经足够。</p>
+
+<p>现在，随着分布式技术的普遍使用，JVM 内存领域对象必须做到最小化，以规避状态同步带来的复杂度和性能问题，目前的 IoC 容器并不能做到这一点。</p>
+
+<h4 id="toc_3">总结</h4>
+
+<ul>
+<li>组件化模型存在问题</li>
+<li>模版功能单一，只是为了辅助组件化</li>
+<li>IoC 实践意义不大</li>
+<li>多客户端视图渲染不宜扩展</li>
+<li>过于依赖 HTTP 会话</li>
+<li>版本不向后兼容</li>
+</ul>
+
+<p>框架是程序的半成品，其目的是为了降低开发难度，缩短开发周期。从某些方面上看，也是为了限制开发者，做到全局上的实现统一。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-05-07-web-message-push.html" 
+	        title="Previous Post: 消息推送技术">&laquo; 消息推送技术</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-03-31-how-to-skip-filters-in-java.html" 
+	        title="Next Post: 如何跳过过滤器处理？">如何跳过过滤器处理？ &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

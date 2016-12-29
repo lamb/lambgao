@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Mongdb后台daemon方式启动与停止 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Mongdb后台daemon方式启动与停止</h1>
+				<p class="meta"><time datetime="2014-04-07T00:30:25+08:00" pubdate data-updated="true">2014/4/7</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>在后台开启Mongdb服务可以使用--fork。启用fork必须要带上--logpath来指定日志输出目录。为了防止日志被覆盖可以开启--logappend。</p>
+
+<pre><code>mongod --fork --logpath /data/log/20140407.log --logappend
+</code></pre>
+
+<p>mongodb默认的数据保存路径是/data/db/，默认端口号为27017。如果想修改可以使用--dbpath和--port来修改</p>
+
+<pre><code>mongod --dbpath /mydata/ --port 20111
+</code></pre>
+
+<p>也可以把参数写入配置文件中，通过配置文件来启动。</p>
+
+<pre><code>mongod -f /data/conf/mongodb.conf
+</code></pre>
+
+<p>配置文件如下：</p>
+
+<pre><code>port = 27017
+dbpath = /data/db
+logpath = /data/log/20140407.log
+logappend = true
+fork = true
+</code></pre>
+
+<p>如果没有使用--fork，退出终端的时候mongodb会自动清理退出，把没有写好的数据写完成，并最终关闭数据文件。要注意的是这个过程会持续到所有操作都完成。如果使用--fork在后台运行mongdb服务，那么就要通过向服务器发送shutdownServer()消息来关闭。</p>
+
+<pre><code>use admin
+db.shutdownServer()
+</code></pre>
+
+<p>要注意的是，这个命令只允许在本地，或是一个经过认证的客户端。</p>
+
+<p>如果这是一个主从式的复制集群，在1.9.1版本后将按下面的步骤来关闭</p>
+
+<ul>
+<li>检查从Mongodb的数据更新时间</li>
+<li>如果所有的从Mongodb和主的时间差都超过10，这个时候不会关闭mongodb（在这种情况下面，我们可以通过配置timeoutSecs的方式来让从Mongodb完成数据的更新）</li>
+<li>如果其中有一个从Mongodb与主服务时间差在10秒内，那么主服务器将会关闭，并且等待从Mongodb更新完成并关闭。</li>
+</ul>
+
+<p>如果没有up-to-date 从Mongodb且你想强制关闭服务，可以通过添加force:true;命令如下：</p>
+
+<pre><code>db.adminCommand({shutdown : 1, force : true})
+or
+db.shutdownServer({force : true, timeoutsec : 5})
+</code></pre>
+
+<p>Window下面以后台服务的方式启动可以使用下面的命令添加服务，配置文件的内容同mac下的</p>
+
+<pre><code>sc create MongoDB binPath= &quot;\&quot;%MONGO_HOME%\bin\mongod.exe\&quot; --service --config=\&quot;%MONGO_HOME%\mongod.cfg\&quot;&quot; DisplayName= &quot;MongoDB&quot; start= &quot;auto&quot;
+</code></pre>
+
+<p>如果成功看到</p>
+
+<pre><code>[SC] CreateService SUCCESS
+</code></pre>
+
+<p>服务安装成功后可以使用命名启动也可以手动启动</p>
+
+<pre><code>net start MongoDB
+</code></pre>
+
+<p>想删除服务可以使用如下命令</p>
+
+<pre><code>sc delete &quot;MongoDB&quot;
+</code></pre>
+
+<p>单个进程打开的最大文件句柄数量限制的修改，在/etc/profile文件最下面添加命令</p>
+
+<pre><code>ulimit -n 1024
+</code></pre>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-04-08-bye-windwos-xp.html" 
+	        title="Previous Post: 再见Windows XP">&laquo; 再见Windows XP</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-04-05-can-break-wind-but-cannot-break-sb.html" 
+	        title="Next Post: 防风，但不防傻逼">防风，但不防傻逼 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

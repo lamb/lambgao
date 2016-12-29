@@ -1,0 +1,942 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div class="blog-index">
+
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-01-06-print-exception-log.html">记录异常日志的7条规则</a></h1>
+			<p class="meta"><time datetime="2012-01-06T16:42:04+08:00" 
+			pubdate data-updated="true">2012/1/6</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>最近一直在帮忙调试一些让人头大的bug问题，这才意识到如何记录异常日志对于简化调试的重要性，我总结了几点记录异常日志的最佳实践发表在此。</p>
+
+<h4 id="toc_0">1、记录技术性异常而不是用户异常</h4>
+
+<p>用户异常（如：“登录用户名已经存在”）除了显示给用户，要么什么都别管，要么根本就不是异常（“用户尚未认证”）。技术性异常（如：“文件存储不够，没法订阅此产品”）才是你需要调试而为此做出反应的，如果你记录所有事情很有可能因日志实体太长而不能真正有意义的反映到你所记录异常日志中。你应该查明日志文件中的每个异常找到其原因（“是bug吗”），过多的异常将使你草率地对待异常（“额，仅仅是一个普通异常”）。</p>
+
+<h4 id="toc_1">2、把数据存储在异常中以便更易于记录</h4>
+
+<p>“没法收取账户费用“这样的异常你应该存储异常的上下文,就像Junit所做的（“期望…但是得到…”）以便更易于调试。CannotChargeMoneyAccountExceptionMoney（moneyInAccount, Money toCharge, Account account）这段子句可以理解为：“尝试收取账户1234567890 20EUR，但是只有10EUR可用”相对于“扣除失败”，这使得在之后有意义的方式记录异常变得更简单。</p>
+
+<h4 id="toc_2">3、记录异常的描述信息</h4>
+
+<p>糟糕的例子来自于Sun：ClassCastException不能显示什么类你想要转换。 现在甚至可以发现：</p>
+
+<pre><code>final String s = &quot;Hello&quot;;
+final int x = (Integer) s;
+</code></pre>
+
+<p>在编译时就告诉你：</p>
+
+<pre><code>T.java:4: inconvertible types
+found   : java.lang.String
+required: java.lang.Integer
+          final Integer x = (Integer) s;
+</code></pre>
+
+<p>在运行期间Java抛出的异常<br/>
+<code><br/>
+Exception in thread &quot;main&quot; java.lang.ClassCastException:<br/>
+java.lang.String cannot be cast to java.lang.Integer<br/>
+</code><br/>
+这样显得比前者要好</p>
+
+<h4 id="toc_3">4、输出导致异常的原因</h4>
+
+<p>如果在异常中有一个包装的方式作为异常的起因，那么记录所有的原因。一些日志框架已经帮你这样做了，有些还没有，因此要确保异常的所有原因记录在日志文件中，保证所有相关的堆栈追踪信息的开始处记录在你的文件中，而不是杂乱无章的。</p>
+
+<h4 id="toc_4">5、选择合理的日志级别</h4>
+
+<p>如果你的异常危急的，记录它为Level.CRITICAL，如果你需要确定危急对你来说意味着什么（通常意味着金钱损失），例如如果一个预定功能失效，或者由于技术问题用户不能注册，然后你就有一个危急问题需要解决。 监控日志文件中危急的异常，因为你正在蒙受着损失。拥有你自己的异常实现isCritical()或者CRITICALException接口，用封装类以及正确的日志级别记录异常到文件中。如果你的日志框架找不到合理的级别，那么创建它。</p>
+
+<h4 id="toc_5">6、不要记录后又重新向外抛出</h4>
+
+<p>记录日志后重新抛出异常是一个异常反模式(anti-pattern)。</p>
+
+<pre><code>catch (NoUserException e) {
+       LOG.error(&quot;No user available&quot;, e);
+       throw new UserServiceException(&quot;Nouseravailable&quot;, e);
+}
+</code></pre>
+
+<p>不要这么做，你的日志文件包含相同的异常好几次在堆栈级别上，记住仅仅记录一次。</p>
+
+<h4 id="toc_6">7、不要使用System.out或者System.err记录</h4>
+
+<p>使用日志框架，它可以比你处理得更好</p>
+
+<p>希望这些规则在处理异常日志时能帮助到你，能使你更容易调试。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-12-30-copyright.html">国际友人版权</a></h1>
+			<p class="meta"><time datetime="2011-12-30T15:38:39+08:00" 
+			pubdate data-updated="true">2011/12/30</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>早上<a href="http://www.lyzane.com/">胸毛</a>的博客有一<a href="http://www.zoltanhosszu.com/">国际友人</a>留言：</p>
+
+<p>I would love if you didn&#39;t steal my design. This is not for sale, it was developed and designed by myself and you are not allowed to use it.</p>
+
+<p>当时胸毛正在用的博客皮肤就是来自该国际友人的设计，原作者找上门来了。V 在移植修改的时候没有联系上原作者，不过 footer 部分是加了原作者的链接的。</p>
+
+<p>D刚联系了国际友人，邮件如下：</p>
+
+<hr/>
+
+<p>Hi, Zoltán.</p>
+
+<p>I am the main author of the blogging program &#39;B3log Solo&#39;, I am very sorry to hear about:</p>
+
+<p>I would love if you didn&#39;t steal my design. This is not for sale, it was developed and designed by myself and you are not allowed to use it.</p>
+
+<p><a href="http://www.lyzane.com/articles/2011/10/31/1320050478439.html#1325149459876">http://www.lyzane.com/articles/2011/10/31/1320050478439.html#1325149459876</a></p>
+
+<p>To respect the original designer of this theme, we had listed you at the footer part of the theme.</p>
+
+<p>The blogging program is an open source project hosted at Google Code (<a href="http://code.google.com/p/b3log-solo">http://code.google.com/p/b3log-solo</a>), and it totally free to everybody, <br/>
+I wish you can contribute this design to us, could you? Maybe you can join our team to make some wonderful designs for more peoples.</p>
+
+<p>If you even stick to it, we will remove this theme since the next release (Feb 19, 2012) of B3log Solo.</p>
+
+<p>Anyway, thank you ;-)</p>
+
+<hr/>
+
+<p>希望他能同意我们使用，不然这个皮肤要下线了 ;-(</p>
+
+<p>另一面，也请在中国混 IT 的同僚们再次注意：虽然我们是在中国，但不要忽视版权。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-11-16-hello-nodejs.html">Hello Node.js</a></h1>
+			<p class="meta"><time datetime="2011-11-16T00:24:46+08:00" 
+			pubdate data-updated="true">2011/11/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><img src="https://nodejs.org/static/images/logo.svg" alt="nodejs" width="420" height="111"></p>
+
+<h1 id="toc_0">Node.js</h1>
+
+<p>这里是官网：<a href="http://nodejs.org">http://nodejs.org</a></p>
+
+<h1 id="toc_1">安装</h1>
+
+<p>要使用Node.js,首先需要进行安装。关于如何安装Node.js，这里就不赘述了，可以直接参考官方的安装指南。</p>
+
+<h1 id="toc_2">“Hello World”</h1>
+
+<p>好了，“废话”不多说了，马上开始我们第一个Node.js应用：“Hello World”。</p>
+
+<p>打开你最喜欢的编辑器，创建一个helloworld.js文件。我们要做就是向控制台或命令行输出“Hello World”，如下是实现该功能的代码：</p>
+
+<pre><code>console.log(&quot;Hello World&quot;);
+</code></pre>
+
+<p>保存该文件，并通过Node.js来执行：<br/>
+node helloworld.js<br/><br/>
+正常的话，就会在终端输出Hello World<br/>
+Hello world太简单？那来点复杂的！</p>
+
+<pre><code>var Buffer = require(&#39;buffer&#39;).Buffer,
+buf = new Buffer(256),
+len = buf.write(&#39;\u00bd + \u00bc = \u00be&#39;, 0);
+console.log(len + &quot; bytes: &quot; + buf.toString(&#39;utf8&#39;, 0, len));
+</code></pre>
+
+<p>不用管什么意思，拷贝执行，感受一下就可以！</p>
+
+<h1 id="toc_3">HTTP</h1>
+
+<p>如果启动一个http服务呢？嗯，很简单！来感受一下在浏览器中看到hello world。</p>
+
+<pre><code>var http = require(&#39;http&#39;);
+http.createServer(function (req, res) {
+  res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;});
+  res.end(&#39;Hello World &#39;);
+}).listen(80);
+console.log(&#39;Server is running&#39;);
+</code></pre>
+
+<h1 id="toc_4">END</h1>
+
+<p>入门结束</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-resolution-browse.html">各种分辨率一览，方便开发对应</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:23:50+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ul>
+<li>QVGA = 320 * 240;</li>
+<li>WQVGA = 320 * 480;</li>
+<li>WQVGA2 = 400 * 240;</li>
+<li>WQVGA3 = 432 * 240;</li>
+<li>HVGA = 480 * 320;</li>
+<li>VGA = 640 * 480;</li>
+<li>WVGA = 800 * 480;</li>
+<li>WVGA2 = 768 * 480;</li>
+<li>FWVGA = 854 * 480;</li>
+<li>DVGA = 960 * 640;</li>
+<li>PAL = 576 * 520;</li>
+<li>NTSC = 486 * 440;</li>
+<li>SVGA = 800 * 600;</li>
+<li>WSVGA = 1024 * 576;</li>
+<li>XGA = 1024 * 768;</li>
+<li>XGAPLUS = 1152 * 864;</li>
+<li>HD720 = 1280 * 720;</li>
+<li>WXGA = 1280 * 768;</li>
+<li>WXGA2 = 1280 * 800;</li>
+<li>WXGA3 = 1280 * 854;</li>
+<li>SXGA = 1280 * 1024;</li>
+<li>WXGA4 = 1366 * 768;</li>
+<li>SXGAMINUS = 1280 * 960;</li>
+<li>SXGAPLUS = 1400 * 1050;</li>
+<li>WXGAPLUS = 1440 * 900;</li>
+<li>HD900 = 1600 * 900;</li>
+<li>WSXGA = 1600 * 1024;</li>
+<li>WSXGAPLUS = 1680 * 1050;</li>
+<li>UXGA = 1600 * 1200;</li>
+<li>HD1080 = 1920 * 1080;</li>
+<li>QWXGA = 2048 * 1152;</li>
+<li>WUXGA = 1920 * 1200;</li>
+<li>TXGA = 1920 * 1400;</li>
+<li>QXGA = 2048 * 1536;</li>
+<li>WQHD = 2560 * 1440;</li>
+<li>WQXGA = 2560 * 1600;</li>
+<li>QSXGA = 2560 * 2048;</li>
+<li>QSXGAPLUS = 2800 * 2100;</li>
+<li>WQSXGA = 3200 * 2048;</li>
+<li>QUXGA = 3200 * 2400;</li>
+<li>QFHD = 3840 * 2160;</li>
+<li>WQUXGA = 3840 * 2400;</li>
+<li>HD4K = 4096 * 2304;</li>
+<li>HXGA = 4096 * 3072;</li>
+<li>WHXGA = 5120 * 3200;</li>
+<li>HSXGA = 5120 * 4096;</li>
+<li>WHSXGA = 6400 * 4096;</li>
+<li>HUXGA = 6400 * 4800;</li>
+<li>SHV = 7680 * 4320;</li>
+<li>WHUXGA = 7680 * 4800;</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-frequently-used-eclipse-plugins.html">Frequently Used Eclipse Plugins</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:23:19+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>m2eclipse Core    - <a href="http://m2eclipse.sonatype.org/sites/m2e">http://m2eclipse.sonatype.org/sites/m2e</a></p>
+
+<p>m2eclipse Extras - <a href="http://m2eclipse.sonatype.org/sites/m2e-extras">http://m2eclipse.sonatype.org/sites/m2e-extras</a></p>
+
+<p>Subclipse - <a href="http://subclipse.tigris.org/update_1.8.x">http://subclipse.tigris.org/update_1.8.x</a></p>
+
+<p>Android    - <a href="https://dl-ssl.google.com/android/eclipse/">https://dl-ssl.google.com/android/eclipse/</a></p>
+
+<p>ECLEMM   - <a href="http://update.eclemma.org/">http://update.eclemma.org/</a></p>
+
+<p>Google     - <a href="http://dl.google.com/eclipse/plugin/3.x">http://dl.google.com/eclipse/plugin/3.x</a></p>
+
+<p>EGit      - <a href="http://download.eclipse.org/egit/updates">http://download.eclipse.org/egit/updates</a></p>
+
+<p>WindowBuilder - <a href="http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x">http://dl.google.com/eclipse/inst/d2wbpro/beta/3.x</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-difference-between-different-android-sdk-versions.html">Android SDK版本间的区别</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:22:40+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h1 id="toc_0">Android 1.0</h1>
+
+<ul>
+<li> 第一版商用操作系统</li>
+</ul>
+
+<h1 id="toc_1">Android 1.1</h1>
+
+<ul>
+<li> 更新了部分API，新增一些功能，修正了一些错误，同时增加com.google.android.maps包</li>
+</ul>
+
+<h1 id="toc_2">Android 1.5</h1>
+
+<ul>
+<li> 智能虚拟键盘</li>
+<li> 使用widgets实现桌面个性化</li>
+<li> 在线文件夹(Live Folder)快速浏览在线数据</li>
+<li> 视频录制和分享</li>
+<li> 图片上传</li>
+<li> 更快的标准兼容浏览器</li>
+<li> Voice search 语音搜索</li>
+<li> 立体声蓝牙和免提电话</li>
+</ul>
+
+<h1 id="toc_3">Android 1.6</h1>
+
+<ul>
+<li> 完全重新设计的Android Market，可以显示更多的屏幕截图</li>
+<li> 手势支持，可以让开发者生成针对某个应用程序的手势库</li>
+<li> 支持CDMA网络：中国电信的用户可以期待EVDO的Android手机了</li>
+<li> TXT-2-Speech，支持了更多语言的发音，包括英语、法语、德语、意大利语等</li>
+<li> 快速搜索框，可直接搜索括联系人，音乐，浏览历史，书签等手机内容</li>
+<li> 全新的拍照界面：新版相机程序启动速度快了39%，拍照间的延迟减少了28%</li>
+<li> 应用程序耗电查看：这下好了，哪个软件耗多少电，现在一见了然了</li>
+<li> 新增面向视觉或听觉困难人群的易用性插件</li>
+<li> linux内核升级到2.6.29</li>
+<li> 其他：支持更多的屏幕分辨率，如WVGA，QVGA等</li>
+</ul>
+
+<h1 id="toc_4">Android 2.0</h1>
+
+<ul>
+<li> 由于文件结构的改动优化，使得整个操作流畅性得到了很大的提升</li>
+<li> 自带的Chrome Lite浏览器现在加入了对双击屏幕进行缩放的支持</li>
+<li> 加强了网络社交功能，比如Facebook好友整合至联系人功能</li>
+<li> 强化了语音识别的搜索控制。整个系统多处都支持语音控制，并拥有独立的控制面板</li>
+<li> 谷歌地图服务更新，加入了全新的导航系统，甚至比转业的导航软件更为先进</li>
+<li> 加入了原生微软Exchange邮件服务支持</li>
+<li> 提供了多个不同帐户，统一的邮件收件箱</li>
+<li> 只需双击就能上传图片至YouTube</li>
+<li> 优化了驾车时的体验，新的“Car Home”应用程序为各功能提供了易于操作的快捷链接，还能方便地使用语音控制功能，便于用户驾车时使用</li>
+</ul>
+
+<h1 id="toc_5">Android 2.1</h1>
+
+<ul>
+<li> 可以同时绑定多个Google账号</li>
+<li> 无线控件里有了VPN设置</li>
+<li> 增加了连接到PC设置</li>
+<li> 增强了语言和声音的转换功能，并加入了文字到语音转换</li>
+<li> 全新的拨号界面，按键更大，更易于操作</li>
+<li> 更多桌面Widget</li>
+<li> 新的Google地图可以使用谷歌地图导航功能</li>
+<li> 新的浏览器版本，加强了稳定性和网页渲染能力</li>
+<li> 全局搜索功能加强</li>
+<li> 全新的Market程序，搜索更快布局更合理</li>
+</ul>
+
+<h1 id="toc_6">Android 2.2</h1>
+
+<ul>
+<li> 全面支持Flash 10.1</li>
+<li> 应用程序自动升级，让升级更加人性化</li>
+<li> 支持应用程序安装在外置内存上</li>
+<li> Linux内核将升级为最新的2.6.32版本，系统更加稳定</li>
+<li> 对系统性能进一步优化，让手机有更多的运行内存</li>
+<li> 增加了轨迹球LED指示灯变色这个新功能</li>
+<li> 增加了对3D性能的优化，3D性能更加强大</li>
+<li> FM功能也将在新系统中得到全面支持</li>
+</ul>
+
+<h1 id="toc_7">Android 2.3</h1>
+
+<ul>
+<li> 用户界面更美观</li>
+<li> 提升游戏体验</li>
+<li> 提升多媒体能力</li>
+<li> 增加官方进程管理</li>
+<li> 改善电源管理</li>
+<li> NFC近场通信</li>
+<li> 全局下载管理</li>
+<li> 全新虚拟键盘</li>
+<li> 原生支持前置前置摄像头</li>
+<li> SIP网络电话</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-14-android-source-download.html">Android源码打包下载</a></h1>
+			<p class="meta"><time datetime="2011-10-14T00:21:37+08:00" 
+			pubdate data-updated="true">2011/10/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Android源码打包下载<br/>
+如果动手能力不强，不会自己build那到这里下载吧！<br/>
+<a href="http://rgruet.free.fr/public/">http://rgruet.free.fr/public/</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-10-11-apache-http-mod_rewrite.html">Apache URL 重写小记</a></h1>
+			<p class="meta"><time datetime="2011-10-11T15:29:38+08:00" 
+			pubdate data-updated="true">2011/10/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>示例虚拟主机配置：</p>
+
+<pre><code>&lt;VirtualHost *&gt;
+    ServerName me.test.net
+    DocumentRoot /home/admin/build/test-htdocs/htdocs
+
+    RewriteEngine on
+    RewriteRule ^/$ /a/b/index.html [R,L]
+    RewriteRule ^/([A-Za-z0-9]+)$ http://127.0.0.1/a/b/c?p=$1 [P,E=Host:me.test.net]
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<p>配置了一个虚拟主机来进行对二级域名 me.test.net 的请求处理：</p>
+
+<h4 id="toc_0">第 1 条重写规则</h4>
+
+<p>访问 me.test.net 的请求将重定向（R，302）到 <a href="http://me.test.net/a/b/index.html">http://me.test.net/a/b/index.html</a> ，并且<br/>
+如果这条重写规则命中，则不再匹配后面的重写规则（L）。</p>
+
+<h4 id="toc_1">第 2 条重写规则</h4>
+
+<p>访问 me.test.net/xxx 匹配正则（([A-Za-z0-9]+)）的请求将被代理（P，同时必须已经启用 mod_proxy 模块）<br/>
+到 <a href="http://127.0.0.1/a/b/c?p=xxx">http://127.0.0.1/a/b/c?p=xxx</a> ，E 表示设定环境变量 Host = me.test.net。</p>
+
+<h4 id="toc_2">详细内容可参考</h4>
+
+<ul>
+<li><a href="http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html#RewriteRule">Apache Module mod_rewrite</a></li>
+<li><a href="http://www.phpchina.com/manual/apache/mod/mod_rewrite.html#RewriteRule">Apache模块 mod_rewrite</a></li>
+</ul>
+
+<p>其中，以下细节需要注意：</p>
+
+<ul>
+<li>[R,L] 重写规则标记分割符&#39;,&#39;前后不能有空格</li>
+<li>[P] 强制代理模块处理时必须是一个有效的 URL，例如 http://hostname，且其中的 hostname 代理模块必须能够处理，上面的例子就是使用了环境变量 Host=me.test.net 进行了补充</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-09-09-commons-configuration.html">Commons Configuration 1.7 发布</a></h1>
+			<p class="meta"><time datetime="2011-09-09T15:23:58+08:00" 
+			pubdate data-updated="true">2011/9/9</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><img src="http://commons.apache.org/images/commons-logo.png" alt="Apache Commons Logo"/><br/>
+Commons Configuration 1.7 发布了，Commons Configuration是一个java应用程序的配置管理类库。可以从properties或者xml文件中加载软件的配置信息，用来构建支撑软件运行的基础环境。在一些配置文件较多较的复杂的情况下，使用该配置工具比较可以简化配置文件的解析和管理。也提高了开发效率和软件的可维护性。</p>
+
+<p>新版本包含了很多bug的修复，详细改进记录请看：<a href="http://commons.apache.org/configuration/changes-report.html">http://commons.apache.org/configuration/changes-report.html</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-09-04-gae-blog.html">GAE 博客程序推荐</a></h1>
+			<p class="meta"><time datetime="2011-09-04T15:17:46+08:00" 
+			pubdate data-updated="true">2011/9/4</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>列出还在开发维护的活跃博客。其中有的是开源的，有的不是。</p>
+
+<ul>
+<li><p><a href="http://xuming.net/">徐明的博客</a>（<a href="http://micolog.xuming.net/zh-cn">Micolog</a>，开源，GAE/Python）</p></li>
+<li><p><a href="http://www.keakon.net/">keakon的涂鸦馆</a>（<a href="https://bitbucket.org/keakon/doodle/">Doodle</a>，开源，GAE/Python）</p></li>
+<li><p><a href="http://www.yoyolg.com/">yoyo的博客</a>（yoyo，GAE/Java）</p></li>
+<li><p><a href="http://iunbug.appspot.com/">i, unbug</a>（GAE/Java）</p></li>
+<li><p><a href="http://88250.b3log.org/">简约设计の艺术</a>（<a href="http://code.google.com/p/b3log-solo/">B3log Solo</a>，开源，GAE/Java）</p></li>
+</ul>
+
+<p>其中使用最广泛的是 Micolog，开发活跃度最高的是 B3log Solo ;-)</p>
+
+<p>性能上面表现最好的应该是 Doodle，的确很快，细节很好。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-09-03-transaction_isolation.html">GAE 事务隔离</a></h1>
+			<p class="meta"><time datetime="2011-09-03T14:47:08+08:00" 
+			pubdate data-updated="true">2011/9/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h4 id="toc_0">一致性</h4>
+
+<p>GAE 上的事务隔离是快照隔离。在事务开启后，可以把事务中操作的实体组看作是该实体组在数据存储中的一个带有版本的快照。</p>
+
+<p>事务中的所有操作都将只针该快照进行，并且事务中的查询操作只能获取到事务开启时快照中的实体。这一点<a href="/2010-11-15-gae-transaction.html">前面已经提到过</a> ;-)</p>
+
+<p>快照隔离的最终目的就是乐观并发控制，保证一致性。</p>
+
+<h4 id="toc_1">可用性</h4>
+
+<p>GAE 一直在限制事务内只能操作同一个实体组是有原因的。同一实体组将被存储在同一 Google 分布式存储单元中，如果事务中</p>
+
+<p>同时操作多个实体组，失败的可能性会增加很多。所以为了保证可用性，才做出了这个限制。</p>
+
+<p>不过这个限制即将为可选的，SDK 1.5.3 里面已经加入了<a href="http://code.google.com/appengine/docs/java/javadoc/com/google/appengine/api/datastore/TransactionOptions.html">事务配置</a>，可以让事务操作多个实体组。不过目前经测试，1.5.3 里面还不可用。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://code.google.com/appengine/docs/java/datastore/transactions.html">Google App Engine Transactions</a></li>
+<li><a href="http://code.google.com/appengine/articles/transaction_isolation.html">Transaction Isolation in App Engine</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-08-27-gae-will-support-servlet3.html">GAE Java 将支持 Servlet 3</a></h1>
+			<p class="meta"><time datetime="2011-08-27T14:36:06+08:00" 
+			pubdate data-updated="true">2011/8/27</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="http://jcp.org/en/jsr/detail?id=315">Servlet 3.0 规范</a>发布快两年了，不过目前大多数 Servlet 容器以及应用还是基于 Servlet 2.5。</p>
+
+<p>GAE 开发团队已经接受了 Servlet 3.0 特性支持，大家可以标星这个 <a href="http://code.google.com/p/googleappengine/issues/detail?id=3091">issue</a> 进行进展关注。</p>
+
+<p>就像该 issue 中一兄台<a href="http://code.google.com/p/googleappengine/issues/detail?id=3091#c17">说的</a>，“即使不能实现所有 Servlet 3.0 特性，但实现部分也可以摆脱对一些 MVC 框架的严重依赖。”</p>
+
+<p>比较期待 GAE 支持 Servlet annotations 以及 pluggability。特别是插件支持，能让应用更容易扩展。</p>
+
+<p>P.S. 这里已经提案了 Servlet 3.1 ：<a href="http://jcp.org/en/jsr/summary?id=340">JSR 340</a></p>
+
+<p>广告：</p>
+
+<p>GAE/J 框架 <a href="http://latke.googlecode.com/">Latke</a> 已经实现了应用层次的<a href="https://docs.google.com/document/pub?id=15H7Q3EBo-44v61Xp_epiYY7vK_gPJLkQaT7T1gkE64w">插件支持</a>，大家可以试试哦 ;-)</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-08-06-storage-options-on-google-appengine.html">GAE 数据保存方式</a></h1>
+			<p class="meta"><time datetime="2011-08-06T14:27:33+08:00" 
+			pubdate data-updated="true">2011/8/6</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>GAE 为应用提供了多种保存数据的方式，例如大家熟知的 Datastore，不过也有一些方式大家不太熟悉。本文将尽量全地列出所有 GAE 上保存数据的方式，并分别描述其优势与劣势，以便开发者更明晰地进行选择。</p>
+
+<h3 id="toc_0">Datastore</h3>
+
+<p>大家最熟悉、使用最广泛的保存数据的方式自然是 Datastore 了。Datastore 是 GAE 的非关系型数据库，它提供了健壮、持久的存贮，也提供了最具灵活性性的数据存取操作。</p>
+
+<h4 id="toc_1">优势</h4>
+
+<p>持久 - 保存在 datastore 里的数据是持久的。<br/>
+读写 - 应用能够读写保存在 datastore 里的数据，并且 datastore 提供了事务机制以保证完整性。<br/>
+全局一致 - 所有应用实例拥有同一个 datastore 视图。<br/>
+灵活 - 通过查询（Query）与索引提供了多种获取数据的方式。</p>
+
+<h4 id="toc_2">劣势</h4>
+
+<p>延迟 - datastore 是把数据保存在磁盘上，并提供了可靠保证，写操作必须确保数据已经被保存才返回（译注：异步 API 呢？），读操作不得不经常从磁盘取回数据（译注：底层如何进行缓存的呢？）</p>
+
+<h3 id="toc_3">Memcache</h3>
+
+<p>Memcache 是大家最熟悉的“二级”存储机制，它缓存数据以避免重复进行代价高（译注：例如 CPU、API 耗时特别高的调用）的操作。Memcache 常作为其他 APIs 的缓存层，例如 datastore，缓存某种数据源生成的结果集。</p>
+
+<h4 id="toc_4">优势</h4>
+
+<p>快 - 毫秒级别的存取操作（译注：1-4 毫秒，还是比较慢的-_-b）。<br/>
+全局一致 - 所有应用实例拥有同一个 memcache 视图。Memcache 提供了操作数据的原子操作，保证完整性（译注：对象序列化）。</p>
+
+<h4 id="toc_5">劣势</h4>
+
+<p>不可靠 - 数据可能随时被丢弃（译注：GAE 默认会尽可能长时间地持有缓存项）。</p>
+
+<h3 id="toc_6">Blobstore</h3>
+
+<p>Blobstore 提供了便捷高效保存用户上传的大数据的方法。</p>
+
+<h4 id="toc_7">优势</h4>
+
+<p>支持大文件 - 2GB（译注：没有在现在的官方文档里找到根据。另外，30 秒的请求限制能传 2G？-_-b）。<br/>
+不用自己处理 blob。<br/>
+提供了高性能的 blobs 存取，特别是对图片。<br/>
+应用能够向读取本地文件一样读取 blob。</p>
+
+<h4 id="toc_8">劣势</h4>
+
+<p>只读 - 应用不能自行创建 blobs，也不能修改已上传的 blobs。<br/>
+需要要付费才能使用 blobstore。</p>
+
+<h3 id="toc_9">实例内存</h3>
+
+<p>应用实例也能通过类成员（译注：Java 里是类字段）或 globals（译注：貌似是 Python 里的概念）在本地（译注：该实例 JVM）内存中缓存数据。这个方式提供了最快的存取速度，但却有一些不利的方面。</p>
+
+<h4 id="toc_10">优势</h4>
+
+<p>快 - 能有多快有多快，因为数据保存在正在访问的同一个进程中。<br/>
+方便 - 不需要 GAE APIs。<br/>
+灵活 - 能够保存任何格式的数据，没有序列化/反序列化限制。</p>
+
+<h4 id="toc_11">劣势</h4>
+
+<p>不可靠 - 实例可能在任何时间被启动或关闭，所以应用只应该用这种方式来进行缓存数据（译注：应用实例的 JVM 内存不是跨实例的哦，所以这种方式缓存的数据可能会有一致性问题，见下点）。<br/>
+不全局一致 - 每个应用实例都拥有自己的运行环境，自己的本地变量。对某一实例中的变量修改并不会影响其他实例。<br/>
+容量限制 - 实例的内存使用是有大小限制的。</p>
+
+<h3 id="toc_12">本地文件</h3>
+
+<p>应用可以使用标准文件系统 APIs 来读取随应用一起上传的文件。</p>
+
+<h4 id="toc_13">优势</h4>
+
+<p>快 - 读取本地文件只需要访问应用实例运行的机器磁盘，延迟与 Memcache 接近。<br/>
+可靠 - 只要应用在服务，就能够读取到文件。<br/>
+灵活 - 能够使用任何格式的文件。</p>
+
+<h4 id="toc_14">劣势</h4>
+
+<p>只读 - 应用不能修改文件；这些文件的内容在部署的时候就已经确定了。<br/>
+容量限制 - 单个文件最大 10MB，应用所有文件大小总和必须小于 150MB。</p>
+
+<h3 id="toc_15">任务队列负荷（Payloads）</h3>
+
+<p>虽然这不是传统意义上的存贮，但任务队列是能够保存持有一定的数据的。</p>
+
+<h4 id="toc_16">优势</h4>
+
+<p>快 - 任务运行时发送 payloads，获取这些数据不用调用额外的 API。<br/>
+如果使用得到，可以不用保存任务数据（译注：？）。</p>
+
+<h4 id="toc_17">劣势</h4>
+
+<p>意图单一 - payloads 是提供给任务队列任务的数据存贮。<br/>
+容量限制 - 任务最大大小 10KB（译注：现在 Push 队列是 100KB，Pull 队列是 1MB），包含了负荷数据。</p>
+
+<h3 id="toc_18">结论</h3>
+
+<p>GAE 提供了多种数据存储机制，我们得在应用场景下选择适当的存储方式。通常，较好的方案是组合使用这些数据保存方式，例如 datastore 与 memcache，本地文件与实例内存。</p>
+
+<p>注：</p>
+
+<ol>
+<li>原文中的链接是 GAE/Python 版的，译文中的链接是 GAE/Java 版的</li>
+<li>“优势”/“劣势”这两个词可能翻译不当....</li>
+</ol>
+
+<p>附上原文（<a href="http://blog.notdot.net/2010/11/Storage-options-on-App-Engine">Storage options on App Engine</a>）</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-07-28-java-7-technologies.html">Java 7 的新特性一览表</a></h1>
+			<p class="meta"><time datetime="2011-07-28T17:28:19+08:00" 
+			pubdate data-updated="true">2011/7/28</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>官方说是 7月28日 正式发布 Java 7 ，正常的话我们应该在 7月29日 看到这个版本。很快了，就两天时间。</p>
+
+<p>发布之前让我们先来看看 Java 7 都有什么新特性吧。</p>
+
+<p>Java 7 的技术：<a href="http://docs.oracle.com/javase/7/docs/technotes/guides/desc_jdk_structure.html">Description of Java Conceptual Diagram</a></p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2011-07-28-java-7-technologies.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2011-07-26-java-final-keyword.html">再识 Java 的 final 关键字</a></h1>
+			<p class="meta"><time datetime="2011-07-26T17:15:55+08:00" 
+			pubdate data-updated="true">2011/7/26</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在 Java 中，我们一般用 final 关键字来定义类字段常量，防止类继承、方法覆写。但其实我们也应该尽可能地使用 final 关键字来修饰方法参数与局部变量。</p>
+
+<p>因为这样做可以使代码更易读，能让阅读者清楚地知道该参数/变量是不会在被重赋值的，也可以让编译器更好地帮助我们优化生成的字节码。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2011-07-26-java-final-keyword.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+  
+	<div class="pagination">
+	 <a class="prev" href="all_10.html">&larr; Older</a> 
+<a href="archives.html">Blog Archives</a>
+	 <a class="next" href="all_8.html">Newer &rarr;</a>  
+	    
+	</div>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  solo(独唱团)这是一个由Node构建的静态博客 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">solo(独唱团)这是一个由Node构建的静态博客</h1>
+				<p class="meta"><time datetime="2012-07-22T00:26:24+08:00" pubdate data-updated="true">2012/7/22</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<ul>
+<li>这个静态博客是用markdown来写文章，通过皮肤模板可以build出html页面。</li>
+<li>你可以将他提交至GithubPages或者云端（七牛）或者一个Node服务器。</li>
+<li>这里有示例:<a href="http://jinyang.mynah.org/">Pages</a>  <a href="http://qiniu.mynah.org/">七牛</a></li>
+</ul>
+
+<h3 id="toc_0">为什么会有这样一个静态博客</h3>
+
+<ul>
+<li>以前的博客不方便添加自己的demo例子页面(前端开发的童鞋应该会有强烈的认同感)</li>
+<li>markdown语法简洁易用，所见即所得的html编辑器不好用也太重</li>
+<li>不依赖于数据库，所有的内容都是文本，方便管理和迁移</li>
+<li>不需要一个什么复杂的服务器，也不需要担心什么配额，可以托管html页面就可以</li>
+<li>不用为图片文件等外链来发愁，直接放到相应的目录下，一起上传即可</li>
+</ul>
+
+<h3 id="toc_1">如何部署</h3>
+
+<ul>
+<li>你可以在<a href="https://github.com/lambgao/solo">这里</a>找到他。</li>
+<li>如果你熟悉<a href="http://pages.github.com/">Github Pages</a>,可以直接Push到你的Pages仓库即可。</li>
+<li>如果有一个Node服务器，那么你可以部署至你的服务器,启动app.js即可。</li>
+<li>如果你有一个云端（七牛）服务，那么你可以上传至你的云端(运行lib/publish.js)。</li>
+</ul>
+
+<h3 id="toc_2">如何使用</h3>
+
+<ul>
+<li>你会发现根目录下md文件夹，这个里面存放的都是博客内容(markdown格式)。</li>
+<li>md下有article和page两个文件夹，从字面上就很容易理解，分别是文章和页面。</li>
+<li>md/article下面的文章在build之后会在article目录下生成同文件名的html页面</li>
+<li>md/page下面的页面在build之后会在根目录下生成同文件名的html页面</li>
+<li>运行lib/build.js来build页面(请先安装<a href="http://www.nodejs.org/">Node</a>,并安装依赖npm install)</li>
+</ul>
+
+<h3 id="toc_3">皮肤模板修改</h3>
+
+<ul>
+<li>你会发现根目录下skin文件夹,这个文件夹里面存放的都是皮肤模板(html文件)。</li>
+<li>上面提到了article和page两种页面，那么皮肤模板也提供了article.html和page.html两个模板文件。</li>
+<li>如果两个页面用到了共同的内容那么你可以把共同的内容提取出来放到skin/slot文件夹下。</li>
+<li>在模板文件中${slot}就可以将这个文件引入到当前模板文件中。</li>
+<li>${article}这个变量用于引入文章或者页面的内容，即md文件夹下生成的内容。</li>
+<li>根目录下你还会发现css、image、javascript文件夹，这些是存放模板使用到的静态文件</li>
+</ul>
+
+<h3 id="toc_4">有疑问或者...</h3>
+
+<ul>
+<li>如果你有疑问、建议、bug提交都可以找我。</li>
+<li>找我请这里新浪微博<a href="http://weibo.com/lambsand">@金氧</a>,或这里Github<a href="https://github.com/lamb">@lambgao</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-08-12-test-v8-delete.html" 
+	        title="Previous Post: v8 can not handle delete yet">&laquo; v8 can not handle delete yet</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-06-16-java-atomic-conncurrent.html" 
+	        title="Next Post: Java 原子操作与并发">Java 原子操作与并发 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

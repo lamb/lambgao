@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  记录异常日志的7条规则 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">记录异常日志的7条规则</h1>
+				<p class="meta"><time datetime="2012-01-06T16:42:04+08:00" pubdate data-updated="true">2012/1/6</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>最近一直在帮忙调试一些让人头大的bug问题，这才意识到如何记录异常日志对于简化调试的重要性，我总结了几点记录异常日志的最佳实践发表在此。</p>
+
+<h4 id="toc_0">1、记录技术性异常而不是用户异常</h4>
+
+<p>用户异常（如：“登录用户名已经存在”）除了显示给用户，要么什么都别管，要么根本就不是异常（“用户尚未认证”）。技术性异常（如：“文件存储不够，没法订阅此产品”）才是你需要调试而为此做出反应的，如果你记录所有事情很有可能因日志实体太长而不能真正有意义的反映到你所记录异常日志中。你应该查明日志文件中的每个异常找到其原因（“是bug吗”），过多的异常将使你草率地对待异常（“额，仅仅是一个普通异常”）。</p>
+
+<h4 id="toc_1">2、把数据存储在异常中以便更易于记录</h4>
+
+<p>“没法收取账户费用“这样的异常你应该存储异常的上下文,就像Junit所做的（“期望…但是得到…”）以便更易于调试。CannotChargeMoneyAccountExceptionMoney（moneyInAccount, Money toCharge, Account account）这段子句可以理解为：“尝试收取账户1234567890 20EUR，但是只有10EUR可用”相对于“扣除失败”，这使得在之后有意义的方式记录异常变得更简单。</p>
+
+<h4 id="toc_2">3、记录异常的描述信息</h4>
+
+<p>糟糕的例子来自于Sun：ClassCastException不能显示什么类你想要转换。 现在甚至可以发现：</p>
+
+<pre><code>final String s = &quot;Hello&quot;;
+final int x = (Integer) s;
+</code></pre>
+
+<p>在编译时就告诉你：</p>
+
+<pre><code>T.java:4: inconvertible types
+found   : java.lang.String
+required: java.lang.Integer
+          final Integer x = (Integer) s;
+</code></pre>
+
+<p>在运行期间Java抛出的异常<br/>
+<code><br/>
+Exception in thread &quot;main&quot; java.lang.ClassCastException:<br/>
+java.lang.String cannot be cast to java.lang.Integer<br/>
+</code><br/>
+这样显得比前者要好</p>
+
+<h4 id="toc_3">4、输出导致异常的原因</h4>
+
+<p>如果在异常中有一个包装的方式作为异常的起因，那么记录所有的原因。一些日志框架已经帮你这样做了，有些还没有，因此要确保异常的所有原因记录在日志文件中，保证所有相关的堆栈追踪信息的开始处记录在你的文件中，而不是杂乱无章的。</p>
+
+<h4 id="toc_4">5、选择合理的日志级别</h4>
+
+<p>如果你的异常危急的，记录它为Level.CRITICAL，如果你需要确定危急对你来说意味着什么（通常意味着金钱损失），例如如果一个预定功能失效，或者由于技术问题用户不能注册，然后你就有一个危急问题需要解决。 监控日志文件中危急的异常，因为你正在蒙受着损失。拥有你自己的异常实现isCritical()或者CRITICALException接口，用封装类以及正确的日志级别记录异常到文件中。如果你的日志框架找不到合理的级别，那么创建它。</p>
+
+<h4 id="toc_5">6、不要记录后又重新向外抛出</h4>
+
+<p>记录日志后重新抛出异常是一个异常反模式(anti-pattern)。</p>
+
+<pre><code>catch (NoUserException e) {
+       LOG.error(&quot;No user available&quot;, e);
+       throw new UserServiceException(&quot;Nouseravailable&quot;, e);
+}
+</code></pre>
+
+<p>不要这么做，你的日志文件包含相同的异常好几次在堆栈级别上，记住仅仅记录一次。</p>
+
+<h4 id="toc_6">7、不要使用System.out或者System.err记录</h4>
+
+<p>使用日志框架，它可以比你处理得更好</p>
+
+<p>希望这些规则在处理异常日志时能帮助到你，能使你更容易调试。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-01-29-review-fast-sort.html" 
+	        title="Previous Post: 纪念大师，复习快排">&laquo; 纪念大师，复习快排</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2011-12-30-copyright.html" 
+	        title="Next Post: 国际友人版权">国际友人版权 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

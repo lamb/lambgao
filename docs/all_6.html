@@ -1,0 +1,1532 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div class="blog-index">
+
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-08-13-quartz-quick-start.html">Quartz快速入门</a></h1>
+			<p class="meta"><time datetime="2013-08-13T17:08:17+08:00" 
+			pubdate data-updated="true">2013/8/13</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">下载和安装</h3>
+
+<p>首先，下载最近的最稳定的<a href="http://quartz-scheduler.org/downloads/">版本</a>，可以跳过注册画面。解压缩安装，这样你的应用程序可以使用Quartz。</p>
+
+<h3 id="toc_1">Quartz Jar文件</h3>
+
+<p>Quartz包中有很多jar，在根目录中。最主要的一个库叫作quartz-all-xxx.jar(xxx是版本号)。为了使用Quartz，你需要把这个jar放在你应用程序的classpath里。</p>
+
+<p>你下载完之后，解压缩包，将quartz-all-xxx.jar这个文件取出来，放到任何你喜欢的地方。</p>
+
+<p>因为我主要将Quartz用在应用服务器的环境中，所以我希望将Quartz jar放在我的程序中(也就是.ear或者.war中)。然而，如果希望多个应用都能使用Quartz，那么就放在你的应用服务器的classpath下吧。如果你只希望有一个独立的应用，那么就放在这个应用的classpath中，和其他的jar放在一起。</p>
+
+<p>Quartz需要依赖很多第三方的库(以jar的形式)，这些jar都放在了lib目录下，要使用所有的功能的话，你需要将所有的jar都放在classpath中。而如果你是建立一个独立的应用，建议你将所有的jar都放在classpath下。但若是在应用服务器的环境下，你可能已经包含其中某些jar了，这时就需要你进行取舍了，确定将什么版本的jar放到classpath下。</p>
+
+<p>在应用服务器的环境下，你需要注意可能会有一些奇怪的结果，是由于你包含了同一个jar的不同版本。例如，Weblogic包含了J2EE的实现，但是不同于servlet.jar。所以，你最好将servlet.jar从classpath中移出来，以便知道真正用到了哪些类。</p>
+
+<h3 id="toc_2">Properties文件</h3>
+
+<p>Quartz使用quartz.properties作为配置文件。你需要进行一些基本的配置，并将其放入classpath下。</p>
+
+<p>再说一次，还是看你是什么环境。我个人而言用WebLogic，所以我将所有的配置文件(包括quartz.properties)放在应用程序根文件夹下。当我将所有的程序都打包到.ear时，这些配置文件都打包到.jar文件里，并包含在最后的.ear文件中。这将自动将quartz.properties文件包含在classpath下。</p>
+
+<p>如果你的应用是.war，那么你可能要将quartz.properties放在WEB-INF/classes文件架下。</p>
+
+<h3 id="toc_3">配置Quartz</h3>
+
+<p>配置是最重要的部分。Quartz是一个配置性很强的应用，最好的配置方法就是修改quartz.properties。</p>
+
+<p>在解压缩包里已经含有了一些配置文件的范例，你可以查看examples/ 文件夹。不过我建议你创建你自己的quartz.properties，而不是直接拷贝范例文件然后删掉你不要的配置。创建你自己的配置文件能让你学到更多的东西.</p>
+
+<p>查看所有有关配置的文档，请查看<a href="http://quartz-scheduler.org/documentation/quartz-2.1.x/configuration">Quartz配置参考文档</a>。</p>
+
+<p>最基本的配置文件quartz.properties如下：</p>
+
+<pre><code>org.quartz.scheduler.instanceName = MyScheduler
+org.quartz.threadPool.threadCount = 3
+org.quartz.jobStore.class = org.quartz.simpl.RAMJobStore
+</code></pre>
+
+<p>这个配置有如下含义：</p>
+
+<ul>
+<li>org.quartz.scheduler.instanceName – 调度器的名字是”MyScheduler”。</li>
+<li>org.quartz.threadPool.threadCount – 在线程池中有三个线程。这就意味着最多有3个job可以同时运行。</li>
+<li>org.quartz.jobStore.class – 所有的Quartz的数据保存在内存中（而不是数据库中）。尽管可能你有数据库，并且希望配合Quartz一起使用。但我仍旧建议你首先使用RAMJobStore，再去接触数据库。</li>
+</ul>
+
+<h3 id="toc_4">启动一个示例程序</h3>
+
+<p>现在是时候启动程序了。下面的代码包含了一个调度器，首先启动它，然后关闭它。</p>
+
+<p>QuartzTest.java：</p>
+
+<pre><code>import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
+import static org.quartz.JobBuilder.*;
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.SimpleScheduleBuilder.*;
+ 
+public class QuartzTest {
+ 
+    public static void main(String[] args) {
+ 
+        try {
+            // Grab the Scheduler instance from the Factory 
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+ 
+            // and start it off
+            scheduler.start();
+ 
+            scheduler.shutdown();
+ 
+        } catch (SchedulerException se) {
+            se.printStackTrace();
+        }
+    }
+}
+</code></pre>
+
+<p>一旦你通过StdSchedulerFactory.getDefaultScheduler()获得了一个调度器,你的程序会一直运行，直到调用scheduler.shutdown()方法。</p>
+
+<p>注意还有一些import static ...，下面的代码你会见到它们的作用。</p>
+
+<p>如果你没有设置好logging输出日志，所有的日志都回输出到控制台，可能如下：</p>
+
+<pre><code>[INFO] 21 Jan 08:46:27.857 AM main [org.quartz.core.QuartzScheduler]
+Quartz Scheduler v.2.0.0-SNAPSHOT created.
+ 
+[INFO] 21 Jan 08:46:27.859 AM main [org.quartz.simpl.RAMJobStore]
+RAMJobStore initialized.
+ 
+[INFO] 21 Jan 08:46:27.865 AM main [org.quartz.core.QuartzScheduler]
+Scheduler meta-data: Quartz Scheduler (v2.0.0) &#39;Scheduler&#39; with instanceId &#39;NON_CLUSTERED&#39;
+  Scheduler class: &#39;org.quartz.core.QuartzScheduler&#39; - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool &#39;org.quartz.simpl.SimpleThreadPool&#39; - with 50 threads.
+  Using job-store &#39;org.quartz.simpl.RAMJobStore&#39; - which does not support persistence. and is not clustered.
+ 
+[INFO] 21 Jan 08:46:27.865 AM main [org.quartz.impl.StdSchedulerFactory]
+Quartz scheduler &#39;Scheduler&#39; initialized from default resource file in Quartz package: &#39;quartz.properties&#39;
+ 
+[INFO] 21 Jan 08:46:27.866 AM main [org.quartz.impl.StdSchedulerFactory]
+Quartz scheduler version: 2.0.0
+ 
+[INFO] 21 Jan 08:46:27.866 AM main [org.quartz.core.QuartzScheduler]
+Scheduler Scheduler_$_NON_CLUSTERED started.
+ 
+[INFO] 21 Jan 08:46:27.866 AM main [org.quartz.core.QuartzScheduler]
+Scheduler Scheduler_$_NON_CLUSTERED shutting down.
+ 
+[INFO] 21 Jan 08:46:27.866 AM main [org.quartz.core.QuartzScheduler]
+Scheduler Scheduler_$_NON_CLUSTERED paused.
+ 
+[INFO] 21 Jan 08:46:27.867 AM main [org.quartz.core.QuartzScheduler]
+Scheduler Scheduler_$_NON_CLUSTERED shutdown complete.
+</code></pre>
+
+<p>你可以在start()和shutdown()之间添加你想要完成的工作。</p>
+
+<pre><code>// define the job and tie it to our HelloJob class
+JobDetail job = newJob(HelloJob.class)
+    .withIdentity(&quot;job1&quot;, &quot;group1&quot;)
+    .build();
+ 
+// Trigger the job to run now, and then repeat every 40 seconds
+Trigger trigger = newTrigger()
+    .withIdentity(&quot;trigger1&quot;, &quot;group1&quot;)
+    .startNow()
+    .withSchedule(simpleSchedule()
+            .withIntervalInSeconds(40)
+            .repeatForever())            
+    .build();
+ 
+// Tell quartz to schedule the job using our trigger
+scheduler.scheduleJob(job, trigger);
+</code></pre>
+
+<p>（也许你需要在调用shutdown()之前一段时间，以便job可以被顺利触发和执行。例如，你可以增加一行代码Thread.sleep(60000)）。</p>
+
+<p>现在执行它吧。</p>
+
+<p>英文原文： <a href="http://quartz-scheduler.org/overview/quick-start">Quartz Scheduler</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-07-29-android-simulator-genymotion.html">快到极致的Android模拟器——Genymotion</a></h1>
+			<p class="meta"><time datetime="2013-07-29T18:02:45+08:00" 
+			pubdate data-updated="true">2013/7/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>还在用Android原生模拟器？向你推荐一款全方位把Android原生模拟器秒成渣渣的神器：<a href="http://www.genymotion.com/">Genymotion</a>！</p>
+
+<h3 id="toc_0">需要理由？</h3>
+
+<ul>
+<li>性能卓越作为历史上最快的Android模拟器（没有之一），秒级开机关机速度足够让你膜拜了（粗略估计5-20s不等），Android模拟器应该是1min起吧（如果你够幸运的话）？ 此外，堪比真机的操作体验实在让人欲罢不能（希望你的真机性能足够卓越，不然在Genymotion面前，一切都是浮云）！</li>
+<li>返璞归真傻瓜式安装，易于使用，将复杂的技术隐藏于VitualBox、HardWare OpenGL等驱动引擎中。</li>
+<li>完美仿真支持绝大部分的模拟器功能与感应器，甚至支持语音、NFC、蓝牙等等…作为Beta版，初出茅庐的Genymotion就坐拥数十万忠实粉丝，其中包括一些知名度极高的业内人士。在Genymotion团队的蓝图中，它将与开发测试完美的契合在一起。截至7月1日，Genymotion的功能已经足够应付开发的需求，胜任测试开发调试等工作。同时它兼容各大系统，提供Eclipse、IntelliJ插件，周到之极，实在是提高生产力的必备神器。然而可惜的是，99.9%墙内的群众却还不知情，Baidu、Google相关中文词条，得到的搜索结果却全是英文。诸君奔走相告吧，将那些受挟或鄙视android模拟器的穷苦屌丝从苦海中拯救出来吧！Android名人Cyril Mottier在博客中强烈推荐将Genmotion，以提高开发者的生产力。在Twitter上，一些Andriod名人对Genymotion赞美之词溢于言表：</li>
+<li>If you’re like me, an iOS user with a growing Android curiosity, AndroVM is an awesome up-to-date VirtualBox package. – Kristian F. a Curious Android user</li>
+<li>Developing Android apps with AndroVM is fast! Almost as convenient as developing an iOS app ! Richard L. – Android developer</li>
+<li>AndroVM, is an awesomely easy way to run the latest version of Android in VirtualBox. Ross S. – Application tester
+然而，在一片欢呼声中，总有一小部分反对的声音，比如下面这位：</li>
+</ul>
+
+<p>Genymotion太快了，快得一点美感也没有。- 瑞安 未来的Android名人</p>
+
+<p>简易安装教程</p>
+
+<ol>
+<li><a href="http://www.genymotion.com/">注册Genymotion账号</a></li>
+<li><a href="https://cloud.genymotion.com/page/launchpad/download/">下载Genymotion安装包</a></li>
+<li><a href="https://www.virtualbox.org/wiki/Downloads">安装VitualBox</a></li>
+<li><a href="https://cloud.genymotion.com/page/launchpad/download/">安装Eclipse或者Intellij插件</a></li>
+<li>快速体验</li>
+</ol>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-07-19-jpa-and-cmt-why-catching-persistence-exception-is-not-enough.html">JPA与CMT – 为什么单纯捕捉持久化异常是不够的？</a></h1>
+			<p class="meta"><time datetime="2013-07-19T17:02:55+08:00" 
+			pubdate data-updated="true">2013/7/19</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在EJB和JPA架构中使用CMT（容器控制事务）是很简单的。只要定义一些注解来标示事务边界（或使用默认），无需再手动使用开始、提交或回滚操作。在EJB的业务方法中唯一回滚事务的方法就是抛出非应用异常（或者使用rollback=true标注应用异常）。看起来很简单：如果在某些操作中有可能会抛出一个异常，但你不希望事务回滚只需要捕获异常就可以了。你能够在同一个仍然活动的事务中再次重试这个不稳定的操作。</p>
+
+<p>对于用户组件抛出的应用异常来说是完全成立的。问题是从其他组件抛出的异常会怎么样？比如JPA的EntityManager抛出的一个PersistenceException？这就是撰写本文的原因。</p>
+
+<h3 id="toc_0">我们想要实现什么</h3>
+
+<p>想象一下如下场景：你有一个名为E的实体。包括如下属性：</p>
+
+<ul>
+<li>id–主键,</li>
+<li>name– 可读的实体名称,</li>
+<li>content– 一些存放字符串的随意字段 – 用于模拟“高级属性”例如在持久化/更新时计算的字段并且可能导致错误的。</li>
+<li>code– 保存OK 或者ERROR字符串 – 定义高级属性是否成功保存。</li>
+</ul>
+
+<p>希望持久化E。假设E的基础属性一直都能成功持久化。而高级属性，需要一些附加计算或操作可能会导致例如数据库抛出的违反约束。当这样的情况发生后，你仍然希望E能够持久化到数据库中（只是基础属性填充，code字段设置为ERROR）<br/>
+换句话说你可能希望：</p>
+
+<ul>
+<li>持久化E的基本属性</li>
+<li>尝试更新高级属性</li>
+<li>若步骤2中抛出了PersistenceException – 捕获该异常并设置‘code’属性为ERROR并且清除所有高级属性（因为会引发异常）</li>
+<li>更新E</li>
+</ul>
+
+<h3 id="toc_1">普通解决方案</h3>
+
+<p>在EJB代码中展示你可能会如何执行（假设为默认的事务属性（TransactionAttributes））</p>
+
+<pre><code>public void mergeEntity() {
+ MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ 
+ em.persist(entity);
+ 
+ // This will raise DB constraint violation
+ entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+ // We don&#39;t need em.merge(entity) - our entity is in managed mode.
+ 
+ try{
+ em.flush(); // Force the flushing to occur now, not during method commit.
+ }catch(PersistenceException e) {
+ // Clear the properties to be able to persist the entity.
+ entity.setContent(&#39;&#39;);
+ entity.setCode(&#39;ERROR&#39;);
+ 
+ // We don&#39;t need em.merge(entity) - our entity is in managed mode.
+ }
+ }
+</code></pre>
+
+<h3 id="toc_2">示例中有什么问题？</h3>
+
+<p>捕获EntityManager 抛出的PersistenceException 不能够阻止事务回滚。这不像不捕捉EJB中的异常会使得事务回滚，而是EntityManager 抛出的非应用程序异常会将事务标记为回滚。更不用说资源内部可能会标记事务为回滚。意味着实际上你的程序并不能真正控制事务的行为。同时，作为事务回滚的结果，我们的实体被转移至游离（detached ）状态。因此，在方法的最后 em.merge(entity)这样的方法还是需要的。</p>
+
+<h3 id="toc_3">有效方案</h3>
+
+<p>该如何应对事务自动回滚呢？因为我们使用CMT，所以我们唯一的方法就是定义另一个业务方法开始一个全新的事务，并且将所有可能导致异常的操作在那里执行。这样的话即使PersistenceException 被抛出（并且捕获）它只会标注当前新事务回滚，我们的主事务是不会有影响的。如下可以看到一些样例代码（为了简洁去除了日志代码）：</p>
+
+<pre><code>public void mergeEntity() {
+ 
+MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ 
+em.persist(entity);
+ 
+try{
+self.tryMergingEntity(entity);
+}catch(UpdateException ex) {
+entity.setContent(&#39;&#39;);
+entity.setCode(&#39;ERROR&#39;);
+}
+}
+ 
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+public void tryMergingEntity(finalMyEntity entity) throws UpdateException {
+entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+em.merge(entity);
+ 
+try{
+em.flush();
+}catch(PersistenceException e) {
+thrownewUpdateException();
+}
+}
+</code></pre>
+
+<p>注意：<br/>
+更新异常（UpdateExceptionis ）也是继承自Exception类的应用异常（所以默认是rollback=false）。用于表示更新动作失败。作为一个可选方式，你可以将 tryMergingEntity(-)方法的返回值由void转为boolean。用这个boolean结果来表示更新动作成功与否。</p>
+
+<p>Self在我们的EJB中是对自身的引用。这在EJB容器代理中是一个必须步骤，使得被调用的方法能够使用@TransactionAttribute，作为一个可选方式，可以使用SessionContext#getBusinessObject(clazz).tryMergingEntity(entity).</p>
+
+<p>em.merge(entity) 方法是很关键的。我们在tryMergingEntity(-)方法中开启一个新事务，所以实体不会存在于持久化上下文中。<br/>
+方法中无需再有其他的更新或刷新操作了。CMT的常规特性确保了事务不会被回滚，这意味着实体的所有改动都会在事务提交时自动刷新。<br/>
+我们再次强调一下底线：捕获异常并不意味着你当前的事务不会被标记为回滚。PersistenceException 并发应用程序异常，但无论是你否捕捉都会导致你的事务回滚。</p>
+
+<h3 id="toc_4">JTA BMT解决方案</h3>
+
+<p>一直以来我们都讨论的是CMT。那JTA BMT呢？找到下面代码中展示如何使用BMT处理这个问题作为奖励吧：</p>
+
+<pre><code>public void mergeEntity() throws Exception {
+ utx.begin();
+ MyEntity entity =newMyEntity(&#39;entityName&#39;,&#39;OK&#39;,&#39;DEFAULT&#39;);
+ em.persist(entity);
+utx.commit();
+ 
+ utx.begin();
+ entity.setContent(&#39;tooLongContentValue&#39;);
+ 
+ em.merge(entity);
+ 
+ try{
+ em.flush();
+ }catch(PersistenceException e) {
+ utx.rollback();
+ 
+utx.begin();
+ entity.setContent(&#39;&#39;);
+ entity.setCode(&#39;ERROR&#39;);
+ 
+ em.merge(entity);
+ utx.commit();
+ }
+ }
+</code></pre>
+
+<p>使用JTA BMT我们能够在一个方法中处理所有的问题。是因为我们能够控制事务何时开始与提交/回滚（查看上述代码中的utx.begin()/commit()/rollback()）。然而结果还是一样的，在抛出PersistenceException 之后，我们的事务还是被标记为回滚，你可以使用UserTransaction#getStatus() 来查看并且与常量Status.STATUS_MARKED_ROLLBACK进行比较。</p>
+
+<p>原文地址：<a href="http://piotrnowicki.com/2013/03/jpa-and-cmt-why-catching-persistence-exception-is-not-enough/">JPA and CMT -- Why Catching Persistence Exception is Not Enough?</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-06-10-netbeans-maven-jetty-plugin.html">NetBeans 中使用 maven-jetty-plugin 运行与调试 web 项目</a></h1>
+			<p class="meta"><time datetime="2013-06-10T11:26:16+08:00" 
+			pubdate data-updated="true">2013/6/10</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>NetBeans 对于 maven 的支持非常好，结合 maven 插件，很容易就可以定制出一个简单易用的 maven web 开发环境。</p>
+
+<p>这里我们使用 maven-jetty-plugin 插件进行 web 项目的运行与调试，关于该插件的配置细节请参考<a href="http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin">这里</a>。</p>
+
+<p>假设你已经配置好了 maven-jetty-plugin（修改 pom.xml 中 build -&gt; plugins 加入该 mvn 插件配置），接下来就需要配置 NetBeans 来使用该插件了。</p>
+
+<h3 id="toc_0">运行 web 项目</h3>
+
+<ol>
+<li>右键单击你的 mvn web 项目，选择 Custom -&gt; Goals...</li>
+<li>填入如下配置：</li>
+</ol>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2prMeEUUCxLkt_9dXM_38-UKOAHaDNuRU2tIE2wXaC_F_-9qz6kz75lf268lPK2lKjMq-L-gR1nquRwn1c5Q2EYmzJu0q9owLT_sxUGwVUaBc/mvn-jetty-plugin-run.jpg?psid=1" alt="netbeans maven-jetty-plugin run"/></p>
+
+<h3 id="toc_1">调试 web 项目</h3>
+
+<ol>
+<li>右键单击你的 mvn web 项目，选择 Custom -&gt; Goals...</li>
+<li>填入如下配置：</li>
+</ol>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2pt-HEt5uc7hfmsEVEXsqcQ89y3Evcfye6F98Fw900Mqau7t1NPGvNjCDzjiH0By8BL1hR5doYMgGIHvYsuHurhe05td-XKViT-RGzokny1RY/mvn-jetty-plugin-debug.jpg?psid=1" alt="netbeans maven-jetty-plugin debug"/></p>
+
+<p>最终，我们可以右键单击项目，找到刚才配置的 maven-jetty-plugin 插件进行运行或调试项目：</p>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2pXZTNkZbJw6q85_mutPEATkeV899Mzron7BJeGZIREcuINDcWM0Qd0LQmUoibR90rTDCE-05KdmUj7Xd8UxczzsNR0Nbo1Pg7NWIg0WOwRl4/mvn-jetty-plugin.jpg?psid=1" alt="netbeans maven-jetty-plugin"/></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-06-04-app-dev-accumulation.html">应用开发积累</a></h1>
+			<p class="meta"><time datetime="2013-06-04T11:23:40+08:00" 
+			pubdate data-updated="true">2013/6/4</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">用户向导程序独立——开始总是困难的，这里没有复用</h3>
+
+<p>向导程序一般功能为初始化配置参数，持久化用户选择的默认参数。这部分逻辑应该是与正常的配置逻辑有重叠的，用户界面上也可能有重叠。</p>
+
+<p>但在设计时最好不要去考虑去复用，向导程序只是使用一次，而且会有些与正常功能有不同的细节。另外，向导程序独立逻辑实现也可能有助于性能。</p>
+
+<p>比如，在博客程序中，初始化后需要发布一篇“Hello World”文章，初始化的发布文章的实现是可以复用正常发布功能的。但是这样会导致初始化的性能比较低，也会增加修改文章功能的复杂。</p>
+
+<p>调用接口地址——系统间的调用接口地址应该保存在项目的配置文件中，而不应该存放于数据库表中</p>
+
+<p>在一个非分布式服务的设计体系中，系统间的调用没有统一的服务接口配置（注册）中心，系统间的调用只能通过显示指定调用接口地址的方式。调用接口地址指的是 host，在开发环境中，数据库往往是所有开发共用一个，在联调系统接口的时候接口地址应该是从本地配置中加载的，否则的话开发环境很难做到配置独立，开发之间会互相影响。</p>
+
+<p>比如，我在系统 A 上新开发了一个接口，和我联调的开发负责修改系统 B 来调用该接口，此时，如果系统 A 的调用地址是配置在数据库中，则联调的时候只能修改开发库的配置，这样就会影响到其他的开发（开发环境一般都公用一个开发数据库）；而如果系统 A 的调用地址是配置在配置文件中，则可以灵活地进行系统 B 的本地配置修改。</p>
+
+<p>当然，调用接口地址使用域名并设置本地 hosts 也是一种可行的做法，但从整体服务内部接口调用这个角度出发，hosts 的方式是不提倡的，因为需要进行域名解析。</p>
+
+<h3 id="toc_1">配置文件——配置文件也是源代码的一部分</h3>
+
+<p>有的时候硬编码和做成配置文件其实在根本上是没有区别的，典型的例子就是依赖注入容器使用上，IoC 实现一般会同时提供注解、XML 配置、API 方式。</p>
+
+<p>而如果是决定系统运行时的环境参数，是必须做成配置文件的。比如框架根据环境配置启用模块特性、切换运行模式。至少包含两套运行环境：开发环境和生产环境，这样方便部署切换。</p>
+
+<p>另外，有的时候会有特殊需求要求运行期修改配置文件能够生效，如果有这样的动态配置需求，应该考虑使用数据库存取配置，而不是使用配置文件。</p>
+
+<h3 id="toc_2">开发环境副本——做一个变更时，开发环境应该是完全独立的，在理想情况下</h3>
+
+<p>开发环境包括源代码版本分支、本地开发环境、应用服务器、数据库服务、依赖的远程服务。</p>
+
+<p>实际情况下，最好时应该可以做到源代码版本分支独立、本地开发环境独立、应用服务器、依赖的远程服务独立，但数据库服务是基本不可能独立的，因为配置数据库系统与导数据是非常耗费时间的。</p>
+
+<p>开发环境的搭建是比较乏味且易出错的工作，即使是搭建环境本身可以通过一些工具脚本进行，众多的应用服务器管理成本也是较高的。</p>
+
+<h3 id="toc_3">消息系统——松耦合不是系统的最终目标</h3>
+
+<p>消息服务是异步地整合系统间调用的一种方式，至少提供两种模式：发布/订阅（组播），点到点（单播）。</p>
+
+<p>其最大的特点是异步处理，而发布方与接收方之间的松耦合只是消息系统的副产品，不应该认为松耦合是消息系统的特性。</p>
+
+<p>消息系统的机制从调用角度看是一种隐式调用，既调用方与被调用方不直接在源码上依赖，而是将调用关系隐含在主题类型上。理论上所有应用场景实现上的调用都可以通过消息系统来实现，但实际不存在完全基于消息系统的架构，因为维护这样松耦合的架构成本更高。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-05-18-jelly-bean-native-rtl.html">Android 4.2原生支持从右到左的文字排列格式</a></h1>
+			<p class="meta"><time datetime="2013-05-18T15:59:40+08:00" 
+			pubdate data-updated="true">2013/5/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Android 4.1(Jelly Bean)  在 <a href="http://developer.android.com/reference/android/widget/TextView.html">TextView</a> 和 <a href="http://developer.android.com/reference/android/widget/EditText.html">EditText</a> 元素里对“<a href="http://developer.android.com/about/versions/jelly-bean.html#intl">双向文字顺序</a>”提供了有限的功能支持，允许应用程序在编辑和显示字符的时候，能够同时支持从左到右（LTR）以及从右到左（RTL）的排列格式。Android 4.2目前已经对“从右到左”的文字排列顺序给予了<a href="http://developer.android.com/about/versions/jelly-bean.html#42-native-rtl">原生级别的全面支持</a>，包括提供了一个布局镜面工具，使得开发者把能够将优质的用户体验带给每一位用户，不管该用户的书写顺序是从左到右，还是从右到左。</p>
+
+<p>Android 4.2保证了该新特性不会影响到目前已经存在程序，如果之前的程序代码不修改，其应用的外观将维持现状。如果你想要修改程序，那么仅仅需要很小的改动，应用就可以自动地被“镜面反射”，这样就能轻易地将系统语言设置为从右到左的书写格式（阿拉伯语，希伯来语和波斯语都采用这种格式）。例如，下面的截图就展示了上述的设置效果：</p>
+
+<p><img src="/resource/image/2013-05-18-jelly-bean-native-rtl/setings-ltr.png" alt="从左到右的布局方式"/><br/>
+从左到右的布局方式</p>
+
+<p><img src="/resource/image/2013-05-18-jelly-bean-native-rtl/setings-rtl.png" alt="从右到左的布局方式"/><br/>
+从右到左的布局方式</p>
+
+<p>要实现RTL（从右到左）的布局镜面反射，仅仅需要遵循下列步骤就可以做到：</p>
+
+<ol>
+<li><p>在你的应用程序声明文件（manifest）里声明开启RTL mirroring的支持。具体做法是：在manifest.xml声明文件的<application>元素中，添加 android:supportsRtl=”true”</p></li>
+<li><p>修改应用程序中所有的“left/right”布局属性，改为对应的”start/end”布局</p></li>
+</ol>
+
+<p>1）如果你的应用程序是针对Android 4.2目标平台（应用的targetSdkVersion或者minSdkVersion是17或者更高), 那么你就应当用“start”和“end”替换原来的“left”和“right”。例如，android:paddingLeft应当被替换为android:paddingStart。</p>
+
+<p>2)  如果你想让你的应用程序与Android 4.2之前的版本保持兼容（也就是与targetSdkVersion或者minSdkVersion为16或者更早的版本），那么你应当既加上“start”和“end”，又加上“left”和“right”。例如，你应当同时写上：adnroid:paddingLeft和android:paddingStart。</p>
+
+<p>为了更精确地控制应用程序在UI上的文字书写顺序（从左到右，或者从右到左），Android 4.2 引入了如下的API：</p>
+
+<p><a href="http://developer.android.com/reference/android/view/View.html#attr_android:layoutDirection">android:layoutDirection</a> —该属性设置组件的布局排列方向</p>
+
+<p><a href="http://developer.android.com/reference/android/view/View.html#attr_android:textDirection">android:textDirection</a> — 该属性设置组件的文字排列方向</p>
+
+<p><a href="http://developer.android.com/reference/android/view/View.html#attr_android:textAlignment">android:textAlignment</a> — 该属性设置文字的对齐方式</p>
+
+<p><a href="http://developer.android.com/reference/android/text/TextUtils.html#getLayoutDirectionFromLocale(java.util.Locale)">getLayoutDirectionFromLocale()</a> —该方法用于获取指定地区的惯用布局方式</p>
+
+<p>在使用从右到左的排列方式时，你甚至创建自定义的布局方式，可绘制对象，以及其他资源。仅仅是简单地使用资源匹配器“ldrtl”对你的资源进行一下标识，你就可以把资源定义为“从右到左方向的资源”。在调试和优化从右到左的布局方面，HierarchyViewer目前支持对start/end属性，布局方向，文字方向，文字对齐方式等所有信息的层次化显示。</p>
+
+<p>那么现在是时候为所有的用户开发优美的Android应用程序了，无论用户的文字语言习惯是从左到右，还是从右到左。我们非常期待看到这些优美应用的产生！</p>
+
+<p>原文地址: <a href="http://android-developers.blogspot.com/2013/03/native-rtl-support-in-android-42.html">Native RTL support in Android 4.2</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-05-16-android-studio.html">Google I/O 2013隆重推出Android Studio</a></h1>
+			<p class="meta"><time datetime="2013-05-16T16:52:45+08:00" 
+			pubdate data-updated="true">2013/5/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Google刚刚在I/O 2013开发者大会的keynote演讲上隆重推出了全新的Android IDE(集成开发环境）——Android Studio。Android Studio基于Jetbrains公司的标志性Java IDE——IntelliJ（开发者社区开源版本）开发，该产品在功能和设计上别具匠心，可以让开发者更容易地处理开发和布局设计工作。</p>
+
+<p><img src="/resource/image/2013-05-16-android-studio/Android-Studio.jpg" alt="Android Studio"/></p>
+
+<p>Google IO现场对Android Studio进行了功能演示，演示是直接用代码的形式进行的，IDE可以检查硬编码情况，直接查看颜色编码，还可以对不同尺寸的设备布局进行预览——无论是3.7英寸的电话设备，还是10英寸的平板设备，都不在话下。IDE甚至还可以对不同语言布局情况进行预览，以检验在不同的国际化产品环境下文字是否会出现排版溢出。</p>
+
+<p><img src="/resource/image/2013-05-16-android-studio/android-ui-designer.png" alt="android-ui-designer"/></p>
+
+<p>与会的开发者无不为Android Studio的强大演示功能所折服，因此我们几乎可以确定，不管是对Android开发老鸟还是菜鸟，这款IDE都会成为其爱不释手的开发工具。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-04-17-mybatis-mysql-oracle-paging-plugin.html">MyBatis MySQL Oracle 分页插件</a></h1>
+			<p class="meta"><time datetime="2013-04-17T11:17:55+08:00" 
+			pubdate data-updated="true">2013/4/17</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>MyBatis 的 MySQL、Oracle 分页插件，使用相同的分页接口。</p>
+
+<pre><code>/**
+ * 分页对象
+ */
+public final class Page implements Serializable {
+ 
+    /**
+     * 默认的序列化版本 id.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * 分页查询开始记录位置.
+     */
+    private int               begin;
+    /**
+     * 分页查看下结束位置.
+     */
+    private int               end;
+    /**
+     * 每页显示记录数.
+     */
+    private int               length           = 20;
+    /**
+     * 查询结果总记录数.
+     */
+    private int               totalRecords;
+    /**
+     * 当前页码.
+     */
+    private int               pageNo;
+    /**
+     * 总共页数.
+     */
+    private int               pageCount;
+ 
+    public Page() {
+    }
+ 
+    /**
+     * 构造函数.
+     * 
+     * @param begin
+     * @param length
+     */
+    public Page(int begin, int length) {
+        this.begin = begin;
+        this.length = length;
+        this.end = this.begin + this.length;
+        this.pageNo = (int) Math.floor((this.begin * 1.0d) / this.length) + 1;
+    }
+ 
+    /**
+     * @param begin
+     * @param length
+     * @param count
+     */
+    public Page(int begin, int length, int totalRecords) {
+        this(begin, length);
+        this.totalRecords = totalRecords;
+    }
+ 
+    /**
+     * 设置页数，自动计算数据范围.
+     * 
+     * @param pageNo
+     */
+    public Page(int pageNo) {
+        this.pageNo = pageNo;
+        pageNo = pageNo &gt; 0 ? pageNo : 1;
+        this.begin = this.length * (pageNo - 1);
+        this.end = this.length * pageNo;
+    }
+ 
+    /**
+     * @return the begin
+     */
+    public int getBegin() {
+        return begin;
+    }
+ 
+    /**
+     * @return the end
+     */
+    public int getEnd() {
+        return end;
+    }
+ 
+    /**
+     * @param end
+     *            the end to set
+     */
+    public void setEnd(int end) {
+        this.end = end;
+    }
+ 
+    /**
+     * @param begin
+     *            the begin to set
+     */
+    public void setBegin(int begin) {
+        this.begin = begin;
+        if (this.length != 0) {
+            this.pageNo = (int) Math.floor((this.begin * 1.0d) / this.length) + 1;
+        }
+    }
+ 
+    /**
+     * @return the length
+     */
+    public int getLength() {
+        return length;
+    }
+ 
+    /**
+     * @param length
+     *            the length to set
+     */
+    public void setLength(int length) {
+        this.length = length;
+        if (this.begin != 0) {
+            this.pageNo = (int) Math.floor((this.begin * 1.0d) / this.length) + 1;
+        }
+    }
+ 
+    /**
+     * @return the totalRecords
+     */
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+ 
+    /**
+     * @param totalRecords
+     *            the totalRecords to set
+     */
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+        this.pageCount = (int) Math.floor((this.totalRecords * 1.0d) / this.length);
+        if (this.totalRecords % this.length != 0) {
+            this.pageCount++;
+        }
+    }
+ 
+    /**
+     * @return the pageNo
+     */
+    public int getPageNo() {
+        return pageNo;
+    }
+ 
+    /**
+     * @param pageNo
+     *            the pageNo to set
+     */
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+        pageNo = pageNo &gt; 0 ? pageNo : 1;
+        this.begin = this.length * (pageNo - 1);
+        this.end = this.length * pageNo;
+    }
+ 
+    /**
+     * @return the pageCount
+     */
+    public int getPageCount() {
+        if (pageCount == 0) {
+            return 1;
+        }
+        return pageCount;
+    }
+ 
+    /**
+     * @param pageCount
+     *            the pageCount to set
+     */
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+ 
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder(&quot;begin=&quot;).append(begin).append(&quot;, end=&quot;)
+                .append(end).append(&quot;, length=&quot;).append(length).append(&quot;, totalRecords=&quot;).append(
+                        totalRecords).append(&quot;, pageNo=&quot;).append(pageNo).append(&quot;, pageCount=&quot;)
+                .append(pageCount);
+ 
+        return builder.toString();
+    }
+}
+</code></pre>
+
+<pre><code>/**
+ * Oracle 分页生成插件
+ */
+public class OraclePaginationPlugin extends PluginAdapter {
+ 
+    @Override
+    public boolean modelExampleClassGenerated(TopLevelClass topLevelClass,
+            IntrospectedTable introspectedTable) {
+        // add field, getter, setter for limit clause
+        addPage(topLevelClass, introspectedTable, &quot;page&quot;);
+        return super.modelExampleClassGenerated(topLevelClass, introspectedTable);
+    }
+ 
+    @Override
+    public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
+        XmlElement parentElement = document.getRootElement();
+ 
+        // 产生分页语句前半部分
+        XmlElement paginationPrefixElement = new XmlElement(&quot;sql&quot;);
+        paginationPrefixElement.addAttribute(new Attribute(&quot;id&quot;, &quot;OracleDialectPrefix&quot;));
+        XmlElement pageStart = new XmlElement(&quot;if&quot;);
+        pageStart.addAttribute(new Attribute(&quot;test&quot;, &quot;page != null&quot;));
+        pageStart.addElement(new TextElement(
+                &quot;select * from ( select row_.*, rownum rownum_ from ( &quot;));
+        paginationPrefixElement.addElement(pageStart);
+        parentElement.addElement(paginationPrefixElement);
+ 
+        // 产生分页语句后半部分
+        XmlElement paginationSuffixElement = new XmlElement(&quot;sql&quot;);
+        paginationSuffixElement.addAttribute(new Attribute(&quot;id&quot;, &quot;OracleDialectSuffix&quot;));
+        XmlElement pageEnd = new XmlElement(&quot;if&quot;);
+        pageEnd.addAttribute(new Attribute(&quot;test&quot;, &quot;page != null&quot;));
+        pageEnd
+                .addElement(new TextElement(
+                        &quot;&lt;![CDATA[ ) row_  where rownum &lt;= #{page.end} ) where rownum_ &gt; #{page.begin}  ]]&gt;&quot;));
+        paginationSuffixElement.addElement(pageEnd);
+        parentElement.addElement(paginationSuffixElement);
+ 
+        return super.sqlMapDocumentGenerated(document, introspectedTable);
+    }
+ 
+    @Override
+    public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(XmlElement element,
+            IntrospectedTable introspectedTable) {
+ 
+        XmlElement pageStart = new XmlElement(&quot;include&quot;); //$NON-NLS-1$   
+        pageStart.addAttribute(new Attribute(&quot;refid&quot;, &quot;OracleDialectPrefix&quot;));
+        element.getElements().add(0, pageStart);
+ 
+        XmlElement isNotNullElement = new XmlElement(&quot;include&quot;); //$NON-NLS-1$   
+        isNotNullElement.addAttribute(new Attribute(&quot;refid&quot;, &quot;OracleDialectSuffix&quot;));
+        element.getElements().add(isNotNullElement);
+ 
+        return super.sqlMapUpdateByExampleWithoutBLOBsElementGenerated(element, introspectedTable);
+    }
+ 
+    /**
+     * @param topLevelClass
+     * @param introspectedTable
+     * @param name
+     */
+    private void addPage(TopLevelClass topLevelClass, IntrospectedTable introspectedTable,
+            String name) {
+        topLevelClass.addImportedType(new FullyQualifiedJavaType(
+                &quot;com.yuanxin.framework.mybatis.Page&quot;));
+        CommentGenerator commentGenerator = context.getCommentGenerator();
+        Field field = new Field();
+        field.setVisibility(JavaVisibility.PROTECTED);
+        field.setType(new FullyQualifiedJavaType(&quot;com.yuanxin.framework.mybatis.Page&quot;));
+        field.setName(name);
+        commentGenerator.addFieldComment(field, introspectedTable);
+        topLevelClass.addField(field);
+        char c = name.charAt(0);
+        String camel = Character.toUpperCase(c) + name.substring(1);
+        Method method = new Method();
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setName(&quot;set&quot; + camel);
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(
+                &quot;com.yuanxin.framework.mybatis.Page&quot;), name));
+        method.addBodyLine(&quot;this.&quot; + name + &quot;=&quot; + name + &quot;;&quot;);
+        commentGenerator.addGeneralMethodComment(method, introspectedTable);
+        topLevelClass.addMethod(method);
+        method = new Method();
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType(&quot;com.yuanxin.framework.mybatis.Page&quot;));
+        method.setName(&quot;get&quot; + camel);
+        method.addBodyLine(&quot;return &quot; + name + &quot;;&quot;);
+        commentGenerator.addGeneralMethodComment(method, introspectedTable);
+        topLevelClass.addMethod(method);
+    }
+ 
+    /**
+     * This plugin is always valid - no properties are required
+     */
+    @Override
+    public boolean validate(List&lt;String&gt; warnings) {
+        return true;
+    }
+}
+</code></pre>
+
+<pre><code>/**
+ * MySQL 分页生成插件
+ */
+public final class MySQLPaginationPlugin extends PluginAdapter {
+ 
+    @Override
+    public boolean modelExampleClassGenerated(TopLevelClass topLevelClass,
+            IntrospectedTable introspectedTable) {
+        // add field, getter, setter for limit clause
+        addPage(topLevelClass, introspectedTable, &quot;page&quot;);
+        return super.modelExampleClassGenerated(topLevelClass, introspectedTable);
+    }
+ 
+    @Override
+    public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(XmlElement element,
+            IntrospectedTable introspectedTable) {
+        XmlElement page = new XmlElement(&quot;if&quot;);
+        page.addAttribute(new Attribute(&quot;test&quot;, &quot;page != null&quot;));
+        page.addElement(new TextElement(&quot;limit #{page.begin} , #{page.length}&quot;));
+        element.addElement(page);
+ 
+        return super.sqlMapUpdateByExampleWithoutBLOBsElementGenerated(element, introspectedTable);
+    }
+ 
+    /**
+     * @param topLevelClass
+     * @param introspectedTable
+     * @param name
+     */
+    private void addPage(TopLevelClass topLevelClass, IntrospectedTable introspectedTable,
+            String name) {
+        topLevelClass.addImportedType(new FullyQualifiedJavaType(
+                &quot;com.yuanxin.framework.mybatis.Page&quot;));
+        CommentGenerator commentGenerator = context.getCommentGenerator();
+        Field field = new Field();
+        field.setVisibility(JavaVisibility.PROTECTED);
+        field.setType(new FullyQualifiedJavaType(&quot;com.yuanxin.framework.mybatis.Page&quot;));
+        field.setName(name);
+        commentGenerator.addFieldComment(field, introspectedTable);
+        topLevelClass.addField(field);
+        char c = name.charAt(0);
+        String camel = Character.toUpperCase(c) + name.substring(1);
+        Method method = new Method();
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setName(&quot;set&quot; + camel);
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(
+                &quot;com.yuanxin.framework.mybatis.Page&quot;), name));
+        method.addBodyLine(&quot;this.&quot; + name + &quot;=&quot; + name + &quot;;&quot;);
+        commentGenerator.addGeneralMethodComment(method, introspectedTable);
+        topLevelClass.addMethod(method);
+        method = new Method();
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType(&quot;com.yuanxin.framework.mybatis.Page&quot;));
+        method.setName(&quot;get&quot; + camel);
+        method.addBodyLine(&quot;return &quot; + name + &quot;;&quot;);
+        commentGenerator.addGeneralMethodComment(method, introspectedTable);
+        topLevelClass.addMethod(method);
+    }
+ 
+    /**
+     * This plugin is always valid - no properties are required
+     */
+    public boolean validate(List&lt;String&gt; warnings) {
+        return true;
+    }
+}
+</code></pre>
+
+<p>使用时在 generatorConfig.xml 中配置对应的插件即可，最终，在生成的 Criteria 中就会存在 Page 字段，用于设置分页。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-04-10-gae-java-sdk-1.7.7-release.html">GAE Java 1.7.7 发布</a></h1>
+			<p class="meta"><time datetime="2013-04-10T11:16:34+08:00" 
+			pubdate data-updated="true">2013/4/10</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ul>
+<li>The Sockets API, which allows applications to make outgoing TCP connections and send/receive UDP packets to the Internet using both IPv4 and IPv6, is now available as an experimental feature. </li>
+<li>The Java runtime now defaults to Java7. If you still need to use the Java6 runtime, please use the --use_java6 flag when deploying your app. We encourage you to move to Java7 as soon as possible.</li>
+<li>Billing enabled apps will no longer be subject to a $2.10 minimum weekly spend. Instead, apps will only be charged for their actual usage.</li>
+<li>Fixed an issue where Datastore auto ids assigned by the scattered id policy were too large to be represented as floating point numbers in the SDK.</li>
+<li><p>Fixed an issue with sort by doc_id not translating correctly causing InvalidRequest errors in the Search API</p>
+
+<ul>
+<li><a href="https://code.google.com/p/googleappengine/issues/detail?id=8958">https://code.google.com/p/googleappengine/issues/detail?id=8958</a></li>
+</ul></li>
+</ul>
+
+<ol>
+<li>终于支持 Sockets API 了，不过目前还是实验特性</li>
+<li>默认运行环境升级到了 Java7</li>
+</ol>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-29-zookeeper-znode-type.html">ZooKeeper 节点类型</a></h1>
+			<p class="meta"><time datetime="2013-03-29T11:10:19+08:00" 
+			pubdate data-updated="true">2013/3/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>ZooKeeper 节点是有生命周期的，这取决于节点的类型。在 ZooKeeper 中，节点类型可以分为持久节点（PERSISTENT ）、临时节点（EPHEMERAL），以及时序节点（SEQUENTIAL ），具体在节点创建过程中，一般是组合使用，可以生成以下 4 种节点类型。</p>
+
+<h3 id="toc_0">持久节点（PERSISTENT）</h3>
+
+<p>所谓持久节点，是指在节点创建后，就一直存在，直到有删除操作来主动清除这个节点——不会因为创建该节点的客户端会话失效而消失。</p>
+
+<h3 id="toc_1">持久顺序节点（PERSISTENT_SEQUENTIAL）</h3>
+
+<p>这类节点的基本特性和上面的节点类型是一致的。额外的特性是，在ZK中，每个父节点会为他的第一级子节点维护一份时序，会记录每个子节点创建的先后顺序。基于这个特性，在创建子节点的时候，可以设置这个属性，那么在创建节点过程中，ZK会自动为给定节点名加上一个数字后缀，作为新的节点名。这个数字后缀的范围是整型的最大值。</p>
+
+<h3 id="toc_2">临时节点（EPHEMERAL）</h3>
+
+<p>和持久节点不同的是，临时节点的生命周期和客户端会话绑定。也就是说，如果客户端会话失效，那么这个节点就会自动被清除掉。注意，这里提到的是会话失效，而非连接断开。另外，在临时节点下面不能创建子节点。</p>
+
+<h3 id="toc_3">临时顺序节点（EPHEMERAL_SEQUENTIAL）</h3>
+
+<p>可以用来实现分布式锁</p>
+
+<p>客户端调用create()方法创建名为“_locknode_/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为EPHEMERAL_SEQUENTIAL。<br/>
+客户端调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，注意，这里不注册任何Watcher。<br/>
+客户端获取到所有子节点path之后，如果发现自己在步骤1中创建的节点序号最小，那么就认为这个客户端获得了锁。<br/>
+如果在步骤3中发现自己并非所有子节点中最小的，说明自己还没有获取到锁。此时客户端需要找到比自己小的那个节点，然后对其调用exist()方法，同时注册事件监听。<br/>
+之后当这个被关注的节点被移除了，客户端会收到相应的通知。这个时候客户端需要再次调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，确保自己确实是最小的节点了，然后进入步骤3。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-19-zoundry-raven.html">Zoundry Raven: ’Nonetype’ object has no attribute ‘tagName’</a></h1>
+			<p class="meta"><time datetime="2013-03-19T11:08:44+08:00" 
+			pubdate data-updated="true">2013/3/19</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Zoundry Raven 是个不错的离线博客客户端，今天试用时发现一个问题，在打开文章的时候会出现：’Nonetype’ object has no attribute ‘tagName’</p>
+
+<p>环境：Win7 32位，IE9 </p>
+
+<p>解决：在“程序和功能” -&gt; “查看已安装的更新”中找到并卸载 IE9，重启。</p>
+
+<p>应该是 Zoundry Raven 用到了 IE 的组件，而 IE9 不兼容造成的。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-18-xmpp-simple-irc-psyc.html">即时消息协议预研</a></h1>
+			<p class="meta"><time datetime="2013-03-18T11:00:44+08:00" 
+			pubdate data-updated="true">2013/3/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>选取了主流的四种即时消息协议作为预研对象，分别描述了这四种消息技术的原理、适用场景以及限制。</p>
+
+<h3 id="toc_0">XMPP</h3>
+
+<p>XMPP（The Extensible Messaging and Presence Protocol，可扩展的消息通讯与呈现协议），前身是开源即时消息协议 <a href="http://www.jabber.org/">Jabber</a>，现在已经被 IETF 标准化（<a href="http://www.ietf.org/rfc/rfc3920.txt">RFC 3920</a>）。</p>
+
+<p>应用非常广泛，可选择的实现很多，<a href="http://www.igniterealtime.org/projects/openfire/">Openfire</a> 是目前比较成熟的。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pIDQtf-tFsJZ_2e0f4a6C02OuBYE5Qr2WpFLYgQoc_wXaRB_vz13zpAoNPkbaY7KD6Sr7bqPtYwldqB6lQTV6Gq758-fbIQl8/xmpp.gif?psid=1" alt="XMPP"/></p>
+
+<h3 id="toc_1">SIMPLE</h3>
+
+<p>SIMPLE（SIP for Instant Messaging and Presence Leveraging Extensions，基于 SIP 的即时消息与呈现扩展），IBM/微软主推的即时消息协议，虽然 Java 有相关 JSRs（164、165）定义了接口，但没有找到适合的实现。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1p4KVz3qLNvK7CoVUFkHOnnPMV0zNntw81J_c2uC5PDkoVycAhsBO-mFG_nbNwV1TNoPBO_UP6o738vPOvdVys_95bMuYHQanE/simple.png?psid=1" alt="SIMPLE"/></p>
+
+<p>各实体功能如下：</p>
+
+<ul>
+<li>Presence Service：接收、存储和分发 presence information。Presence Service 既可以是一个物理实体上的 server，也可以只是 presentity 和 watcher 之间的直接通信。在具体实现中前者比较常见，后者是 P2P 的模式</li>
+<li>Presentity：用于提供 presence information 给 Presence Service</li>
+<li>Watcher：向 Presence Service 请求获取 Presentity 的 presence information 或者自身的 watcher information</li>
+<li>Principal：指单个的人、程序或者设备，也可以是人、程序、设备的集合体。对于 Presence Service 来说，各个 Principal 是不同的</li>
+<li>Presence User Agent：为 Principal 提供手段来操作 0 个或者多个 Presentity，Principal 操作 Presence User Agent 改变 Presentity 的状态。是 Principal 和 Presentity 交互的 interface</li>
+<li>Watcher User Agent：类似 Presence User Agent，Principal 通过其来操作 0 个或多个 Watcher，Watcher 收到 Presentity 的新状态之后也通过 Watcher User Agent 呈现给 Principal</li>
+<li>Presence Protocol：定义了 Presentity 和 Presence Service，Watcher 和 Presence Service 之间交换消息的一组标准</li>
+<li>在具体的实现中最常见的是把 Presence Service 实现为一个 Presence Server，Presence User Agent 和 Presentity 组合在一起，Watcher 和 Watcher User Agent 组合在一起，由一个终端来同时支持这两种组合体，这样，一个终端就既能订阅别人的也能发布自己的 presence information</li>
+</ul>
+
+<h3 id="toc_2">IRC</h3>
+
+<p>IRC（Internet Relay Chat，互联网中继聊天协议），以服务器中转为原理进行消息转发，机制成熟稳定，应用广泛，可选择的实现较多。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pYk_HjXE41e-TbezFqQ9VdnWRBcaLlNfkC5_lIfnE7ZKOkLkV20-JdTwxV-3AIbyRetleM8LCZxXFOWV-WpaSmqbIaXbp03UN/irc.png?psid=1" alt="IRC"/></p>
+
+<p>A作为客户端连接到了服务器 S1 的 ChannelX 频道，B 作为客户端连接到了服务器 S2 的 ChannelX 频道，此时 A 发消息后通过 S1 转发给 S2，然后 S2 有把消息发送给了 B。</p>
+
+<p>其中频道是一个广播组，用户可以进入频道，也可以离开频道。当一个用户在频道里发消息时，频道里的其他所有用户都能够收到该消息。当第一个用户进入频道，频道被创建，当最后一个用户离开此频道时，频道被销毁。</p>
+
+<p>在 IRC 服务器网络中，频道由这些服务器共同维护，频道相当于一条通信管道，将所有开通此项频道的服务器贯穿起来，消息在这个管道中流通。</p>
+
+<h3 id="toc_3">PSYC</h3>
+
+<p>PSYC（Protocol for SYnchronous Conferencing，同步会话协议），设计用来取代 IRC，兼容 IRC/XMPP 客户端，据称其可以无限扩容，弥补 IRC/XMPP 中使用 s2s 后服务器网络拓扑膨胀时性能急剧下降的缺陷。</p>
+
+<p>比较新，应用较少，可选择的实现较少。<a href="http://about.psyc.eu/Comparison">http://about.psyc.eu/Comparison</a>。</p>
+
+<h3 id="toc_4">结论</h3>
+
+<p>可选择 XMPP 作为即时消息底层支持协议，Openfire 作为实现。</p>
+
+<p>在单机 Openfire 不能满足用户数时可考虑使用 Openfire Connection Manager 模块增加客户端连接数；配置 Openfire 集群增加整体容量。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-13-irc-intro.html">互联网中继聊天协议（IRC）</a></h1>
+			<p class="meta"><time datetime="2013-03-13T10:57:26+08:00" 
+			pubdate data-updated="true">2013/3/13</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>IRC是Internet Relay Chat的英文缩写，中文一般称为互联网中继聊天。它是由芬兰人Jarkko Oikarinen于1988年首创的一种网络聊天协议。经过十年的发展，目前世界上有超过60个国家提供了IRC的服务。在人气最旺的EFnet上，您可以看到上万的使用者在同一时间使用IRC。很多人称其为继bbs后的一种即时闲聊方式，相比于bbs来说，它有着更直观，友好的界面，在这里你可以畅所欲言、而且可以表现动作化，是故使众多的网虫们留连忘返。 </p>
+
+<p>相比于ICQ来说，它更具人性化，而且是即时式的聊天，更接近真实的聊天情景。下面看IRC的工作原理。 IRC的工作原理非常简单，您只要在自己的PC上运行客户端软件，然后通过因特网以IRC协议连接到一台IRC服务器上即可。它的特点是速度非常之快，聊天时几乎没有延迟的现象，并且只占用很小的带宽资源。所有用户可以在一个被称为“Channel(频道)”的地方就某一话题进行交谈或密谈。每个IRC的使用者都有一个Nickname(昵称)，所有的沟通就在他们所在的Channel内以不同的Nickname进行交谈。</p>
+
+<h3 id="toc_0">1. 中转</h3>
+
+<p>理解IRC原理的关键就是理解其&quot;中转&quot;功能。什么是中转呢?我们来做一个比较说明。假设，A与B要交谈。如果不采用中转，那么A直接建立一条到达B的通信隧道，二者通过这条通信隧道进行信息交流，信息流的方向为:A-B和B-A;如果采用中转，则需要有一个第三方来担任中转角色，设为C，A建立一条到达C的通信隧道，B也建立一条到达C的通信隧道，然后A与B通过C来间接进行通信，信息流的方向为:A-C-B和B-C-A。C就起着A与B间的中转站的作用。中转有什么优点呢?中转的最大优点是使“群聊”能够方便地进行。恰当地说，中转模式为信息广播提供了方便。我们来举例子。假设A，B和D三者要一起聊天。如果没有C的中转，那么A要将所说的每句话分别发给B和D;如果有C做中转，那么A将所说的话发给C，然后C将A的话分别发给B和D。可见，当没有中转时，每个参与聊天的计算机都要执行信息广播的任务，当存在中转时，信息广播的任务全由中转者来执行。中转站C的存在使得信息交流过程中的工作任务发生分离，可以把网络环境好、机器配置高的计算机作为中转站来提供服务功能。这就形成了IRC的服务器-客户端模型，聊天者作为客户端，连接到中转站服务器上。</p>
+
+<h3 id="toc_1">2. 服务器网络</h3>
+
+<p>在上面的例子里，只有一个中转者C来承担服务。当聊天者数量很多时，会使C不堪重负。解决的办法是，使用多个服务器，服务器之间互相连接成网络，把聊天者分散到各个服务器上。服务器网络以树型结构互相连通。聊天者可以任选一个服务器连接。举例来说，在北京建立一个IRC服务器，称为BJ，在上海建立一个IRC服务器，称为SH，然后将BJ和SH连接起来，组成一个只有两个服务器的IRC网络。北京的用户连接到BJ上，上海的用户连接到SH上，这样北京的用户就可以与上海的用户聊天了。其他地区的用户可以根据地理位置的远近选择使用BJ或SH服务器。概括地说，聊天网络上的每个服务器都是一个中转站，当它从一个服务器或客户收到一条消息时，就将该消息转发给其它服务器，同时也根据具体情况，决定是否将消息转发给连接到自己的用户。</p>
+
+<h3 id="toc_2">3. 频道</h3>
+
+<p>频道的本质是广播组。用户可以进入一个频道，也可以离开一个频道。当一个用户朝频道说话时，频道里的其他用户都能收到他的话(由服务器中转)。当第一个用户进入频道时，频道被创建，当最后一个用户离开频道时，频道被取消。因此，从用户的角度看，频道就是聊天室。下面说说频道之所以被称为“频道”的原因。如果一个聊天网络有多个服务器，频道要由服务器共同维护。举一个例子。有三个服务器，连接方式为A-B-C。在服务器A上，有第一个用户进入#IRC频道，这时，服务器A上即创建频道&quot;#IRC&quot;，A将频道&quot;IRC&quot;的创建消息发给B和C。由于B和C上都没有用户位于#IRC频道，因此不执行任何操作。在这以后，服务器C上有一个用户进入#IRC频道，此时服务器C上也创建频道&quot;#IRC&quot;，C将&quot;#IRC&quot;的创建消息发给A和B。之后，需要执行以下操作:B上建立频道&quot;#IRC&quot;并将A与C的&quot;#IRC&quot;频道连接起来，组成一个统一的#IRC。现在，虽然B上没有用户位于#IRC频道内，但是B上也开通了#IRC频道。可见，频道好像一条通信管道，将所有开通此频道的服务器贯穿起来，信息流在这个管道中流通。</p>
+
+<h3 id="toc_3">4. 请求与应答</h3>
+
+<p>IRC上的信息交流采用请求与应答的模式。请求是由服务器或客户端发出的，其目的是请求(另)一个服务器执行某个操作或提供某些信息;应答是服务器对一个请求的回应信息。请求通常被称为命令;由于对每种应答都规定了一个三位数字做标识，应答也称为数字应答(numeric reply)。</p>
+
+<p>转自：<a href="http://202.194.28.9:8002/jxzy/refs/htmlfiles/protocol/protocol00055.htm">http://202.194.28.9:8002/jxzy/refs/htmlfiles/protocol/protocol00055.htm</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-07-activemq-jdbc-master-slave.html">ActiveMQ JDBC 主从集群</a></h1>
+			<p class="meta"><time datetime="2013-03-07T10:51:38+08:00" 
+			pubdate data-updated="true">2013/3/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>从 ActiveMQ 4.1 版本开始支持 JDBC 主从集群。</p>
+
+<p>如果你正在使用纯 JDBC 以及非高性能日志，那可以认为数据库是一个存在单点故障的地方。</p>
+
+<p>如果你的应用没有高性能需求，那单一数据库的方式是最容易备份与管理的。（译注：可以理解为使用 JDBC 主从集群使用单一数据库容易配置）</p>
+
+<h3 id="toc_0">启动</h3>
+
+<p>当你使用 JDBC 作为数据源时，你可以使用主从方式进行 ActiveMQ 集群，运行多个代理如下图。</p>
+
+<p>启动时，一个主代理将从数据库获取排它锁——所有其他的从代理将暂停服务，等待获取锁。</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1ppjaNmr4-UPWlDqz6BgkecpHO2OIn8ytlTKciI3lsulh6WymOj5EP6-Bly1ki0KJ7IaiKlI63AsnVdmzkztl9oSQYOQ5y3LPX/Startup.png?psid=1" alt="Startup"/></p>
+
+<p>客户端应该使用故障转移传输来连接 ActiveMQ 服务代理。例如使用如下形式的 URL：</p>
+
+<pre><code>failover:(tcp://broker1:61616,tcp://broker2:61616,tcp://broker3:61616)
+</code></pre>
+
+<p>主代理必须启动传输连接器后客户端才能连接到，详见文末配置示例。（译注：获取排它锁后，主代理才会启动传输连接器）</p>
+
+<h3 id="toc_1">主代理故障</h3>
+
+<p>当主代理丢失数据库连接或丢失排它锁时，主代理将被关闭。当主代理关闭或故障时，其他任一从代理将获取到排它锁，拓扑逻辑如下图：</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1p_vnTTWIQEcYk-YF0FsJRZU_FpdFUKrsMZabyM0MFh4Hk5OjWRJ69dWXulblEjHuOfENQtc8Yf1Tc4iG0NB8tphs8oAq0D1N_/MasterFailed.png?psid=1" alt="MasterFailed"/></p>
+
+<p>一旦某一从代理获取了数据库排它锁，则它将成为主代理，并启用传输连接器。</p>
+
+<p>客户端丢失对已经停止服务的代理，并使用故障转移传输尝试连接其他代理——唯一可用的就是刚才新启的主代理。（译注：客户端应该是逐一尝试，因为此时客户端并不知道哪个地址的代理成为了主代理）</p>
+
+<h3 id="toc_2">主代理重启</h3>
+
+<p>任何时刻你都可以重启集群中已经挂了的代理，重启后拓扑逻辑如下图：</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1ppjaNmr4-UPV02ix2WOrBAAzaTjhgLNEdJLliIf3eqhBX-lOg1LfC7M5aS8ST8-LAuC8iMane3psWUYpjXIeerTbrQOUJKc9L/MasterRestarted.png?psid=1" alt="MasterRestarted"/></p>
+
+<h3 id="toc_3">配置 JDBC 主从</h3>
+
+<p>使用 <jdbcPersistenceAdapter/> 避免高性能日志，从而使用默认的 JDBC 主从配置。你只需启动多个代理并配置客户端 URLs 来连接该主从集群。</p>
+
+<p>这些代理都会尝试获取数据库表排它锁，并且只有一个代理会获取到从而成为主代理。</p>
+
+<p>如下的配置示例展示了如何配置 ActiveMQ JDBC 主从集群：</p>
+
+<pre><code>&lt;beans&gt;
+ 
+  &lt;!-- Allows us to use system properties as variables in this configuration file --&gt;
+  &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;/&gt;
+   
+  &lt;broker xmlns=&quot;http://activemq.apache.org/schema/core&quot;&gt;
+ 
+    &lt;destinationPolicy&gt;
+      &lt;policyMap&gt;&lt;policyEntries&gt;
+         
+          &lt;policyEntry topic=&quot;FOO.&gt;&quot;&gt;
+            &lt;dispatchPolicy&gt;
+              &lt;strictOrderDispatchPolicy /&gt;
+            &lt;/dispatchPolicy&gt;
+            &lt;subscriptionRecoveryPolicy&gt;
+              &lt;lastImageSubscriptionRecoveryPolicy /&gt;
+            &lt;/subscriptionRecoveryPolicy&gt;
+          &lt;/policyEntry&gt;
+ 
+      &lt;/policyEntries&gt;&lt;/policyMap&gt;
+    &lt;/destinationPolicy&gt;
+   
+   
+    &lt;persistenceAdapter&gt;
+        &lt;jdbcPersistenceAdapter dataDirectory=&quot;${activemq.base}/activemq-data&quot;/&gt;
+ 
+        &lt;!-- 
+        &lt;jdbcPersistenceAdapter dataDirectory=&quot;activemq-data&quot; dataSource=&quot;#oracle-ds&quot;/&gt;
+        --&gt;
+    &lt;/persistenceAdapter&gt;
+   
+    &lt;transportConnectors&gt;
+       &lt;transportConnector name=&quot;default&quot; uri=&quot;tcp://localhost:61616&quot;/&gt;
+    &lt;/transportConnectors&gt;
+     
+  &lt;/broker&gt;
+   
+  &lt;!--  This xbean configuration file supports all the standard spring xml configuration options --&gt;
+   
+  &lt;!-- Postgres DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;postgres-ds&quot; class=&quot;org.postgresql.ds.PGPoolingDataSource&quot;&gt;
+    &lt;property name=&quot;serverName&quot; value=&quot;localhost&quot;/&gt;
+    &lt;property name=&quot;databaseName&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;portNumber&quot; value=&quot;0&quot;/&gt;
+    &lt;property name=&quot;user&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;dataSourceName&quot; value=&quot;postgres&quot;/&gt;
+    &lt;property name=&quot;initialConnections&quot; value=&quot;1&quot;/&gt;
+    &lt;property name=&quot;maxConnections&quot; value=&quot;10&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt;
+   
+  &lt;!-- MySql DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;mysql-ds&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
+    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost/activemq?relaxAutoCommit=true&quot;/&gt;
+    &lt;property name=&quot;username&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;poolPreparedStatements&quot; value=&quot;true&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt; 
+    
+  &lt;!-- Oracle DataSource Sample Setup --&gt;
+  &lt;!--
+  &lt;bean id=&quot;oracle-ds&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
+    &lt;property name=&quot;driverClassName&quot; value=&quot;oracle.jdbc.driver.OracleDriver&quot;/&gt;
+    &lt;property name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@localhost:1521:AMQDB&quot;/&gt;
+    &lt;property name=&quot;username&quot; value=&quot;scott&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;tiger&quot;/&gt;
+    &lt;property name=&quot;poolPreparedStatements&quot; value=&quot;true&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt;
+       
+  &lt;!-- Embedded Derby DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;derby-ds&quot; class=&quot;org.apache.derby.jdbc.EmbeddedDataSource&quot;&gt;
+    &lt;property name=&quot;databaseName&quot; value=&quot;derbydb&quot;/&gt;
+    &lt;property name=&quot;createDatabase&quot; value=&quot;create&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt; 
+ 
+&lt;/beans&gt;
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-05-hello-world.html">为什么这段代码输出的是”Hello World”</a></h1>
+			<p class="meta"><time datetime="2013-03-05T15:36:51+08:00" 
+			pubdate data-updated="true">2013/3/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Stackoverlfow.com上有一篇有趣的讨论帖：</p>
+
+<p>在这篇帖子里提到了如下的程序：</p>
+
+<pre><code>import java.util.*;
+ 
+public class HelloWorld{
+ 
+    public static String randomString(int i)
+    {
+        Random ran = new Random(i);
+        StringBuilder sb = new StringBuilder();
+        for (int n = 0; ; n++)
+        {
+            int k = ran.nextInt(27);
+            if (k == 0)
+                break;
+ 
+            sb.append((char)(&#39;`&#39; + k));
+        }
+ 
+        return sb.toString();
+    }
+ 
+    public static void main(String[] args){
+        System.out.println(randomString(-229985452)+&quot; &quot;+randomString(-147909649));
+    }
+ 
+}
+</code></pre>
+
+<p>明明是在程序里使用了java.util.Ramdom()函数产生随机数，为什么每次打出的结果都是Hello world? 各位程序员，你们怎么看？请务必要独立思考后再看下面的内容哦~</p>
+
+<p>--------------- 独立思考的分割线 ---------------</p>
+
+<p>OK，假如你通过独立思考了以后有了答案，那么可以参照一下下面的各种理解，这些都是来自stackoverflow对此问题的回复。</p>
+
+<p>首先看一下这个程序的工作原理：</p>
+
+<p>通过这句命令首先得到的六个数是:</p>
+
+<p>8 5 12 12 15 0</p>
+
+<p>然后，通过new Random(-147909649).nextInt(27)得到的6个数是：</p>
+
+<p>23 15 18 12 4 0</p>
+
+<p>这样一来，根据：sb.append((char) (‘`’+n)); 得到：</p>
+
+<p>8 + 96 = 104 --&gt; h <br/>
+5 + 96 = 101 --&gt; e <br/>
+12 + 96 = 108 --&gt; l <br/>
+12 + 96 = 108 --&gt; l <br/>
+15 + 96 = 111 --&gt; o <br/>
+23 + 96 = 119 --&gt; w <br/>
+15 + 96 = 111 --&gt; o <br/>
+18 + 96 = 114 --&gt; r <br/>
+12 + 96 = 108 --&gt; l <br/>
+4 + 96 = 100 --&gt; d</p>
+
+<p>整个程序的执行就是这样。</p>
+
+<p>关于这个程序的运行原理的解释，最置顶的一个回复如下：</p>
+
+<p>“如果java.util.Random是被一个具体的数字做为“随机数种子”而实例化（在本例中是-229985452和-147909649），那么该实例就会以这个随机数种子作为随机算法产生随机数的基础。</p>
+
+<p>使用同样的种子实例化的Random对象，每次运行时将会遵循同一种模式，产生同样的序列。”<br/>
+这就是为什么每次运行该程序都会产生同样的结果的原理啦~</p>
+
+<p>当然，关于这个话题，高手林立的Stackoverflow上是不缺乏懂行的专家和见解的。其实对于这个帖子本身，很快就有人论坛上提出了，这不是一个新鲜的问题，之前的某个帖子已经很详细地说明了原理：</p>
+
+<p>参见：<a href="http://stackoverflow.com/questions/8044570/why-does-the-use-of-random-with-a-hardcoded-seed-always-produce-the-same-results">stackoverflow.com/questions/8044570/why-does-the-use-of-random-with-a-hardcoded-seed-always-produce-the-same-results</a></p>
+
+<p>还有的人就非常精辟地指出了，这是计算机所谓的“伪随机数”问题（详细见扩展阅读），更有部分Geek的回复者从计算机理论和概率论的角度说明了，应该如何找到这些神奇的“随机数种子”。能够把这么一个原意为搞笑的帖子发展到理论的高度~，相信这应该也是计算机科学家的境界和觉悟了吧！</p>
+
+<h4 id="toc_0">扩展阅读：计算机伪随机数问题</h4>
+
+<p>随机数在计算机科学和计算机应用中都扮演非常重要的角色（例如通信、安全、密码等方面）。但是，由于计算机本身的结构和原理，实际上是无法产生出所谓的“绝对随机数”的。也就是说，计算机所产生的随机数，实际上是有某种规律或者模式的“伪随机数”（Pseudo random number)。</p>
+
+<p>如何用计算机程序产生高质量随机数，这是计算机理论科学中的一个非常重要的课题。尤其是在复杂的计算环境下的高质量随机数的产生，需要牵涉到非常高深的计算科学和数学方面的理论研究。</p>
+
+<p>在计算机随机数产生的理论研究上，美籍华人姚期智（目前任职于清华大学）是世界顶尖的专家。正是因为他在计算理论和伪随机数产生方面多项贡献，于2000年获得了ACM图灵奖，这也是计算机科学领域的最高奖项。</p>
+
+
+		</div>
+
+		
+
+	</article>
+  
+	<div class="pagination">
+	 <a class="prev" href="all_7.html">&larr; Older</a> 
+<a href="archives.html">Blog Archives</a>
+	 <a class="next" href="all_5.html">Newer &rarr;</a>  
+	    
+	</div>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

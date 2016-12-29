@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  优雅的卸载Mac默认的Xcode附带的git - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">优雅的卸载Mac默认的Xcode附带的git</h1>
+				<p class="meta"><time datetime="2014-05-08T00:32:32+08:00" pubdate data-updated="true">2014/5/8</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>这里说的优雅的卸载其实不是真正的卸载，而是不用动Xcode附带的git，通过用户~/.bash_profile的文件来优雅的完成。仅仅需要在~/.bash_profile文件后追加如下的导出变量代码即可:</p>
+
+<pre><code>export GIT_HOME=/usr/local/git
+export PATH=$GIT_HOME/bin:$PATH
+</code></pre>
+
+<p>通git官网下载的mac安装包进行安装，git会被安装到</p>
+
+<pre><code>/usr/local/git
+</code></pre>
+
+<p>Xcode附带的git被安装到</p>
+
+<pre><code>/usr/bin
+</code></pre>
+
+<p>不必移动或者删除这里的git版本，仅仅需要更改一下用户下面的~/.bash_profile的文件即可优雅的解决git版本的问题.</p>
+
+<p>如果您非要卸载旧的也可以通过下面的命令来完成</p>
+
+<pre><code>sudo cd /usr/bin
+sudo mkdir old-git
+sudo mv git* old-git
+ln -s /usr/local/git ./
+</code></pre>
+
+<p>~/.bash_profile文件这个文件除了导出GIT_HOME，也会导出其他的HOME，下面是我常用的一些导出</p>
+
+<pre><code>export COCOS2DX_ROOT=/Users/Lamb/Applications/cocos2d/cocos2d-x-2.2.1
+export PATH=$COCOS2DX_ROOT:$PATH
+
+export NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_SDK_ROOT=/Users/Lamb/Applications/android-sdk-macosx
+export PATH=$NDK_ROOT:$PATH
+export PATH=$ANDROID_NDK_ROOT:$PATH
+export PATH=$ANDROID_SDK_ROOT:$PATH
+
+export M2_HOME=/Users/Lamb/Applications/maven/apache-maven-3.2.1
+export PATH=$M2_HOME/bin:$PATH
+export GRADLE_HOME=/Users/Lamb/Applications/gradle/gradle-1.11
+export PATH=$GRADLE_HOME/bin:$PATH
+
+export MONGO_HOME=/Users/Lamb/Applications/mongodb/mongodb-osx-x86_64-2.6.1
+export PATH=$MONGO_HOME/bin:$PATH
+</code></pre>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-05-30-cloud-app-platform-multitenancy.html" 
+	        title="Previous Post: 云平台之多租户">&laquo; 云平台之多租户</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-05-07-mac-launchd-conf.html" 
+	        title="Next Post: Mac通过launchd.conf文件进行环境变量的设置">Mac通过launchd.conf文件进行环境变量的设置 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

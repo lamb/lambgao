@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Java 原子操作与并发 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Java 原子操作与并发</h1>
+				<p class="meta"><time datetime="2012-06-16T17:54:28+08:00" pubdate data-updated="true">2012/6/16</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>由一个简单的例子引出并发处理时容易被忽视的陷阱，用来作为面试问题应该很适合。</p>
+
+<p>某日，工作了 4 年多的 Java 程序员小 K 跳槽，面试时碰到这样一个题目....</p>
+
+<pre><code>public class P1 {
+ 
+    private long b = 0;
+ 
+    public void set1() {
+        b = 0;
+    }
+ 
+    public void set2() {
+        b = -1;
+    }
+ 
+    public void check() {
+        System.out.println(b);
+ 
+        if (0 != b &amp;&amp; -1 != b) {
+            System.err.println(&quot;Error&quot;);
+        }
+    }
+}
+</code></pre>
+
+<h4 id="toc_0">问题</h4>
+
+<p>调用 set1()、set2()、check()，会打印出 Error 么？</p>
+
+<h4 id="toc_1">小K 的推理</h4>
+
+<p>“无论如何调用 set1()、set2() -&gt; b 的值只可能是 0 或 -1 -&gt; 在 check() 里面的判断条件（b 既不为 0 也不为 -1）永远不成立 -&gt; 不打印 Error”</p>
+
+<p>小 K 觉得有坑：这题目应该不会这么简单，再考虑一下多线程环境。</p>
+
+<p>思前想后，小 K 得出结论：“在多线程环境下也不会打印 Error。这题目很简单，就是考察一下推理吧。”，K 暗自窃喜。</p>
+
+<p>后来小 K 陆续又被问了几个多线程和 JVM 的问题。</p>
+
+<p>后来，就没有后来了....</p>
+
+<h4 id="toc_2">后来</h4>
+
+<p>后来还是有的。到家后，不甘心的小 K 验证了这道秒杀他的面试题。</p>
+
+<pre><code>public static void main(final String[] args) {
+    final P1 v = new P1();
+ 
+    // 线程 1：设置 b = 0
+    final Thread t1 = new Thread() {
+        public void run() {
+            while (true) {
+                v.set1();
+            }
+        };
+    };
+    t1.start();
+ 
+    // 线程 2：设置 b = -1
+    final Thread t2 = new Thread() {
+        public void run() {
+            while (true) {
+                v.set2();
+            }
+        };
+    };
+    t2.start();
+ 
+    // 线程 3：检查 0 != b &amp;&amp; -1 != b
+    final Thread t3 = new Thread() {
+        public void run() {
+            while (true) {
+                v.check();
+            }
+        };
+    };
+    t3.start();
+}
+</code></pre>
+
+<p>使用 3 个线程分别重复执行 set1()、set2()、check()。执行输出结果部分如下：</p>
+
+<pre><code>....
+0
+0
+1
+1
+1
+Error
+Error
+-4294967296
+0
+0
+4294967295
+....
+</code></pre>
+
+<p>执行环境：</p>
+
+<pre><code>*Java(TM) SE Runtime Environment (build 1.6.0_31-b05)
+
+Java HotSpot(TM) Client VM (build 20.6-b01, mixed mode, sharing), 32bit*
+</code></pre>
+
+<p>“确实打印了 Error，并且打印了 4294967295、-4294967296。我勒个去，只是啥情况？”</p>
+
+<p>小 K 决定搞懂其中奥秘，重新审视了题目。以一个专业程序员的严谨，并经过无数次 Google 后....他似乎发现了问题所在。 </p>
+
+<p>“这确实是一个并发问题！”</p>
+
+<h4 id="toc_3">分析</h4>
+
+<p>这道题目有两个陷阱，分别考察了对并发执行的理解，以及对 JVM 基础（赋值操作）的掌握。</p>
+
+<h4 id="toc_4">陷阱一：并发执行</h4>
+
+<p>并发执行就是多个操作一起执行，CPU 执行不同上下文（可理解为不同线程）发过来的指令。操作系统上层看上去就像是并行处理一样。</p>
+
+<p>也就是说，在编程语言层面，一个简单的操作同样需要考虑并发问题。</p>
+
+<p>小 K 首先是栽在了 check() 中的 if 判断上和设值是存在并发的，不能保证 0 != b 这个判断真（此时 b 为 -1）后恰好 b 被赋值为 0 时判断 1 != b。</p>
+
+<p>除此外，无论 JVM、操作系统、CPU 层面对指令如何优化、重排，最终都是逐一执行单一指令，唯一不同的就是不同层面可能会对执行加以限制，</p>
+
+<p>比如加入原子操作，最终保证 CPU 能够完整执行一组指令。</p>
+
+<h4 id="toc_5">陷阱二：JVM 赋值操作</h4>
+
+<p>一些赋值操作不是原子性的。“纳尼？”</p>
+
+<p>Java 基础类型中，long 和 double 是 64 位长的。32 位架构 CPU 的算术逻辑单元（ALU）宽度是 32 位的，在处理大于 32 位操作时需要处理两次。</p>
+
+<p>“这不是&lt;计算机组成原理与汇编&gt;么”，小 K 顿时感到大学白上了，不懂学以致用 T_T~</p>
+
+<p>题目执行打印 4294967295、-4294967296 就是因为读时高 32 位或低 32 位被其他写覆盖了（看一下这两个数字的二进制就知道了）。</p>
+
+<p>Java 已经是封装底层细节很好的语言了，但依然需要注意这些陷阱，可以使用并发处理包 java.util.concurrent.atomic 中包含了一系列无锁原子操作类型，</p>
+
+<p>也可以使用 volatile 关键字保证线程间变量的可见性。</p>
+
+<p>其实这道题目只要解决了并发问题，也就保证了每个执行单元（set1()、set2()、check()）中赋值、比较的正确性。可以把同步方法执行看作序列化的事务，各中操作不会相互影响。</p>
+
+<h4 id="toc_6">再后来</h4>
+
+<p>虽然小 K 面试挂了，不过他挂得心服口服。</p>
+
+<p>通过这个期间的不断翻阅文档以及实验，小 K 下次的面试应该不会被类似的题目秒杀了吧....</p>
+
+<p>“按照这个简单面试题的标准，以前写过的程序简直就是通篇 bugs 啊！有木有，有木有啊！！！！”</p>
+
+<h4 id="toc_7">骚年，继续充电吧！</h4>
+
+<p>内外兼修才是好程序员 :-)</p>
+
+<ul>
+<li><a href="http://www.iteye.com/topic/109150">多核线程笔记-volatile原理与技巧</a></li>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-jtp06197.html">Java 理论与实践: 正确使用 Volatile 变量</a></li>
+<li><a href="http://www.infoq.com/cn/articles/ftf-java-volatile">深入分析Volatile的实现原理</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp11234/">Java 理论与实践: 流行的原子</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-07-22-what-is-solo.html" 
+	        title="Previous Post: solo(独唱团)这是一个由Node构建的静态博客">&laquo; solo(独唱团)这是一个由Node构建的静态博客</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-05-20-reset-weblogic-password.html" 
+	        title="Next Post: Weblogic 10.3.3 重置管理密码">Weblogic 10.3.3 重置管理密码 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

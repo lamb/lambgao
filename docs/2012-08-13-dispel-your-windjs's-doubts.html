@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  消除你对Wind.js的疑虑 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">消除你对Wind.js的疑虑</h1>
+				<p class="meta"><time datetime="2012-08-13T00:28:55+08:00" pubdate data-updated="true">2012/8/13</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h3 id="toc_0">eval is (always) evil</h3>
+
+<p>eval大概也算是整个ECMAScript语言中最强大的一个方法，<br/>
+他就像是一个完整的ECMAScript解析器。你说它evil,我也承认这个<br/>
+方法会存在危险，有可能带来安全问题，特别是在用它执行用户输入<br/>
+数据的情况下。但Wind.js是用eval来运行已经“编译”后的代码，<br/>
+让你更舒服顺畅的来编写异步回调的代码。这些代码是你自己写的，<br/>
+所以不必担心代码注入、跨站脚本攻击这样的安全问题。没有这这个<br/>
+困扰和担忧，我相信eval应该是美好的。</p>
+
+<h3 id="toc_1">API太丑，eval为什么不封装？</h3>
+
+<p>通过eval执行的代码是被认为是包含该次调用的执行环境的一部分，<br/>
+因此被执行的代码具有与该执行环境有着相同的作用域链。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var msg = &#39;hello world&#39;;
+eval(&quot;console.log(msg)&quot;);//hello world
+
+var msg = &#39;hello world&#39;;
+var newFunc = eval(Wind.compile(&quot;async&quot;, function () { 
+    console.log(msg);
+}));
+newFunc().start();//hello world
+</code></pre>
+
+<p>变量msg是在eval外定义的，但eval中还是能够打印&quot;hello world&quot;。<br/>
+如果包装起来如法访问到msg这个变量。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var msg = &#39;hello world&#39;;
+var newFunc = $async(function () { 
+    console.log(msg);
+});
+newFunc().start();//[WARNING] An unhandled error occurred: ReferenceError: msg is not defined
+</code></pre>
+
+<p>上面的例子中看到我们使用vm模块对eval有一个简单的包装，可以直接<br/>
+使用$async方法来替换以前的写法。从打印信息中，你很容易看出访问<br/>
+不到msg这个参数。麻烦请注意一下调用script.runInNewContext()方法<br/>
+时传入了一个sandbox对象，这相当于往代码运行环境中添加上下文参数。<br/>
+如果sanbox这个参数不传递，运行上端代码会报ReferenceError: Wind <br/>
+is not defined的错误。这就是eval为什么无法包装的原因。</p>
+
+<p>如果你的代码不需要依赖上下文你可以用上述方法包装，例如这样：</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var fib = $async(function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+});
+
+fib().start();
+</code></pre>
+
+<h3 id="toc_2">Wind.js很重很慢不适合前端</h3>
+
+<p>Wind.js基础组件及异步运行库共计4K大小（Minified + GZipped），<br/>
+Wind.js完全不会给前端带来负担，给你带来顺畅舒服的异步编程体验。</p>
+
+<h3 id="toc_3">生成的代码看不懂，难以调试</h3>
+
+<p>Wind.js生产的代码也完全是Javascript代码，你无需为调试担忧。<br/>
+下面是一个例子，我相信你很容易就可以看懂。</p>
+
+<pre><code>// Original: 
+function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+}
+
+// Windified: 
+/* async &lt;&lt; function () { */     (function () {
+                                     var _builder_$0 = Wind.builders[&quot;async&quot;];
+                                     return _builder_$0.Start(this,
+                                         _builder_$0.Delay(function () {
+/*     $await(Wind.Async.sleep(1000)); */    return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(0); */                        console.log(0);
+/*     $await(Wind.Async.sleep(1000)); */        return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(1); */                            console.log(1);
+/*     var a = 0, current = 1; */                    var a = 0, current = 1;
+                                                     return _builder_$0.While(function () {
+/*     while (true) { */                                 return true;
+                                                     },
+                                                         _builder_$0.Delay(function () {
+/*         var b = a; */                                     var b = a;
+/*         a = current; */                                   a = current;
+/*         current = a + b; */                               current = a + b;
+/*         $await(Wind.Async.sleep(1000)); */                return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*         console.log(current); */                              console.log(current);
+                                                                 return _builder_$0.Normal();
+                                                             });
+                                                         })
+/*     } */                                          );
+                                                 });
+                                             });
+                                         })
+                                     );
+/* } */                          })
+</code></pre>
+
+<h3 id="toc_4">eval性能方面会有问题</h3>
+
+<p>有童鞋提出这方面的问题，但不知道提供什么样子的测试才能令人信服，从而消除疑虑，放心大胆的使用Wind.js。<br/>
+这个问题还在收集整理中...</p>
+
+<h3 id="toc_5">写在最后</h3>
+
+<p>在ADC被老赵的执着打动了，支持老赵从文档开始吧。<br/>
+如果你还有对Wind.js的任何疑虑都可以留言，这个文档的目的就是消除你对Wind.js的疑虑。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-08-30-bae-sae-gae.html" 
+	        title="Previous Post: BAE、SAE 与 GAE 对比">&laquo; BAE、SAE 与 GAE 对比</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-08-12-test-v8-delete.html" 
+	        title="Next Post: v8 can not handle delete yet">v8 can not handle delete yet &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1578 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[金氧]]></title>
+  <link href="http://lambgao.com/atom.xml" rel="self"/>
+  <link href="http://lambgao.com/"/>
+  <updated>2016-12-29T09:52:39+08:00</updated>
+  <id>http://lambgao.com/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.coderforart.com/">CoderForArt</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[张小龙首次公开解读小程序：1月9号上线]]></title>
+    <link href="http://lambgao.com/2016-12-29-wechat-small-app.html"/>
+    <updated>2016-12-29T02:01:18+08:00</updated>
+    <id>http://lambgao.com/2016-12-29-wechat-small-app.html</id>
+    <content type="html"><![CDATA[
+<p>只能说偏执的张小龙真的很厉害。</p>
+
+<p>小程序定义：</p>
+
+<ol>
+<li>无需下载，用完即走</li>
+<li>没有入口，没有排序，没有推荐</li>
+<li>不能订阅</li>
+<li>不能通知</li>
+<li>不能分享到朋友圈，可以分享到聊天。协作式任务，小程序页，活的页面</li>
+<li>不能做游戏</li>
+<li>能被搜索到，但是是有限的搜索能力</li>
+<li>小程序和公众号没有关系，相互独立，但有个关联，就是可以互相跳转</li>
+<li>有周边推荐和提示，有哪些小程序可以用。</li>
+</ol>
+
+<p>精简一点的定义：这也不行，那也不行 =。=|</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[微服务的好处和陷阱]]></title>
+    <link href="http://lambgao.com/2016-12-27-benefits-and-pitfalls-of-micro-service.html"/>
+    <updated>2016-12-29T01:05:36+08:00</updated>
+    <id>http://lambgao.com/2016-12-27-benefits-and-pitfalls-of-micro-service.html</id>
+    <content type="html"><![CDATA[
+<p>微服务架构设计代表了一种架构设计思想，配合现在的容器技术（如 Docker），可在软件开发流程、部署、服务维护等各方面产生效率提升。</p>
+
+<p>但不一定所有的业务场景都适合微服务，有时候非常简单的业务场景下，微服务反而会降低效率。什么是微服务，其特性，好处及陷阱，是本文要讨论的内容。</p>
+
+<h3 id="toc_0">一、什么是微服务</h3>
+
+<p>微服务是一种软件架构风格，它是以专注于单一责任与功能的小型功能区块为基础，利用模组化的方式组合出复杂的大型应用程序，各功能区块使用与语言无关的 API（例如 REST）集相互通讯，且每个服务可以被单独部署，它具备以下三个核心特点：</p>
+
+<ol>
+<li>微服务为大型系统而生。随着业务的快速增长，会带来系统流量压力和复杂度的上升，系统的可维护性和可扩展性成为架构设计的主要考虑因素，微服务架构设计理念通过小而美的业务拆分，通过分而自治来实现复杂系统的优雅设计实现。</li>
+<li>微服务架构是面向结果的。 微服务架构设计风格的产生并非是出于学术或为标准而标准的设计，而是在软件架构设计领域不断演进过程中，面对实际工业界所遇到问题，而出现的面向解决实际问题的架构设计风格。</li>
+<li>专注于服务的可替代性来设计。 微服务架构设计风格核心要解决的问题之一便是如何便利地在大型系统中进行系统组件的维护和替换，且不影响整体系统稳定性。</li>
+</ol>
+
+<h3 id="toc_1">二、微服务的特征</h3>
+
+<ol>
+<li>每个微服务仅对单个业务负责，且为该业务的容量负责；</li>
+<li>每个微服务可以进行独立部署，即不需要依赖其它微服务及其相关资源，如数据库、内存缓存系统等；</li>
+<li>轻量级的通信协议，例如REST、STOMP、AMQP等；</li>
+<li>服务的可替代性，代表着每个微服务原则上都可以使用不同的语言、框架进行技术实现，且更换实现后的微服务对于整个业务系统不会造成影响；</li>
+<li>每个微服务拥有单独的数据存储；</li>
+<li>每个微服务由小团队维护，服务以业务来进行拆分后，每个微服务的维护工作将有人数不多的小团队进行维护；</li>
+</ol>
+
+<h3 id="toc_2">三、微服务带来的好处</h3>
+
+<ol>
+<li>独立的可扩展性，每个微服务都可以独立进行横向或纵向扩展，根据业务实际增长情况来进行快速扩展；</li>
+<li>独立的可升级性，每个微服务都可以独立进行服务升级、更新，不用依赖于其它服务，结合持续集成工具可以进行持续发布，开发人员就可以独立快速完成服务升级发布流程；</li>
+<li>易维护性，每个微服务的代码均只专注于完成该单个业务范畴的事情，因此微服务项目代码数量将减少至IDE可以快速加载的大小，这样可以提高了代码的可读性，进而可以提高研发人员的生产效率；</li>
+<li>语言无关性，研发人员可以选用自己最为熟悉的语言和框架来完成他们的微服务项目（当然，一般根据每个公司的实际技术栈需要来了），这样在面对新技术或新框架的选用时，微服务能够更好地进行快速响应；</li>
+<li>故障和资源的隔离性，在系统中出现不好的资源操作行为时，例如内存泄露、数据库连接未关闭等情况，将仅仅只会影响单个微服务；</li>
+<li>优化跨团队沟通，如果要完全实践微服务架构设计风格，研发团队势必会按照新的原则来进行划分，由之前的按照技能、职能划分的方式变为按照业务（单个微服务）来进行划分，如此这般团队里将有各个方向技能的研发人员，沟通效率上来说要优于之前按照技能进行划分的组织架构；</li>
+<li>原生基于“云”的系统架构设计，基于微服务架构设计风格，我们能构建出来原生对于“云”具备超高友好度的系统，与常用容器工具如Docker能够很方便地结合，构建持续发布系统与IaaS、PaaS平台对接，使其能够方便的部署于各类“云”上，如公用云、私有云以及混合云。</li>
+</ol>
+
+<h3 id="toc_3">四、避免微服务的陷阱</h3>
+
+<ol>
+<li>不要以微服务作为开始，在项目刚开始时，一般都还很小，不需要进行非常完整的业务拆分，如果采用“微服务”作为开始会有点杀鸡用牛刀的感觉，当然，你的项目非常之庞大的话，以“微服务”为始是个不错的选择；</li>
+<li>不要自己进行基础设施的管理，微服务意味着一堆的数据库、消息系统、数据缓存系统等，会带来相应的运维管理成本（这里的前提是，没有良好的自动化运维平台和工具），建议多使用IaaS、PaaS平台，部署发布与其对接；</li>
+<li>无DevOps、不微服务，如果研发团队不具备DevOps的理念并贯彻执行，仅想单独来实施微服务的话，在实施过程中会发现比之前的架构维护要困难些，主要原因是微服务需要持续集成、持续部署及监控等工具或系统的配合才能降低其带来的维护成本；</li>
+<li>不要创建过多的微服务，微服务的业务颗粒度一定要根据实际业务系统的现状及日后规划来制定，切记不要制定过细的拆分颗粒度；</li>
+<li>可能带来的延迟问题，由于服务拆分开来，部署到不同的平台或网络，可能会引起微服务间的调用延迟问题，服务间的调用延迟可能带来整体系统的响应缓慢问题；</li>
+<li>微服务不是银弹。</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rexxar：豆瓣对混合开发的思考]]></title>
+    <link href="http://lambgao.com/2016-12-02-douban-rexxar.html"/>
+    <updated>2016-12-29T01:13:18+08:00</updated>
+    <id>http://lambgao.com/2016-12-02-douban-rexxar.html</id>
+    <content type="html"><![CDATA[
+<p>前段时间，豆瓣将自己的混合开发框架Rexxar开源了。豆瓣可以说是在国内对HTML5实践最早的一批公司，早在2013年的时候他们就应用了当时还显得超前的Web Component概念开发了CardKit移动UI框架。在移动开发上，豆瓣也采用了混合开发的模式，Rexxar就是他们实践和思考的结晶。我采访了Rexxar的主要开发者之一郭麟，看看他们对混合开发的思考。</p>
+
+<p>豆瓣使用混合开发的原因，是因为他们需要同时提供iOS、Android、移动Web版本的页面，相对于同时开发三个版本，使用混合开发显然可以在代码重用、开发成本和效率方面有很大的优势，在权衡性能体验的前提下，使用混合开发是非常现实的选择。</p>
+
+<h3 id="toc_0">Rexxar是什么</h3>
+
+<p>Rexxar是一个针对移动端的混合开发框架。支持Android、iOS和移动Web。</p>
+
+<p>Rexxar主要由三部分组成：</p>
+
+<p>Rexxar-web：前端代码库。包括一套打包、调试、发布工具，以及公共前端组件，和对Rexxar Container实现的Widget的调用。</p>
+
+<p>Rexxar-Router：路由表，将每个页面分配一个服务器端链接，以及一个本地URI，通过路由表来访问页面。</p>
+
+<p>Rexxar-container：增强版WebView，封装了一些Native API支持，包括OAuth授权、图片缓存等。</p>
+
+<p>Rexxar目前已经开源，并且分为3个项目，你可以只使用其中某个项目来开发对应平台的代码：</p>
+
+<p><a href="https://github.com/douban/rexxar-web">https://github.com/douban/rexxar-web</a> <br/>
+<a href="https://github.com/douban/rexxar-android">https://github.com/douban/rexxar-android</a> <br/>
+<a href="https://github.com/douban/rexxar-ios">https://github.com/douban/rexxar-ios</a></p>
+
+<h3 id="toc_1">混合开发的注意点</h3>
+
+<p>对于混合开发，很多团队都有过实践，从大家分享的内容来看，重点无非以下几类：</p>
+
+<ul>
+<li><p>增强WebView：原生WebView基本是PC平台浏览器内核的移植，但对于移动场景并不完全适合，各种硬件API得不到HTML5原生支持。因此对于WebView的种种Hack、增强应运而生，甚至出现了基于增强WebView提供第三方服务的。</p></li>
+<li><p>路由：应用内跳转由于加入了WebView而变得复杂起来，同时由于组件化、模块化带来的问题，路由也成为人们讨论的重点。</p></li>
+<li><p>缓存：移动网络条件差，为了用户体验，必须要做资源缓存和预加载。</p></li>
+<li><p>通信：即HTML5和Native之间的通信。利用系统提供的桥接API可以实现，不过在应用上还有着一些坑点和安全问题。</p></li>
+</ul>
+
+<p>这些问题大部分已经有了最佳实践，Rexxar就是其中一个解决方案。在混合开发中一般有两种方案：纯浏览器方案、前端模板渲染容器方案，Rexxar则处于两者之间。</p>
+
+<p>Rexxar的设计者对于Rexxar使用场景有明确的定义：页面是重度展示，并轻度交互的。所以，除了比较简单的应用之外，如果对使用体验有追求，大概很难仅仅用Rexxar，或者其他某种混合开发完成。</p>
+
+<p>对于扩展功能，Rexxar留出了清晰易用的接口。项目中也提供了几个扩展Rexxar功能的实例，文档也较为完整。郭麟他们在豆瓣App中其实也使用相同的接口做了一些扩展，只是由于这些扩展和豆瓣App的业务绑定较深，就没有放入Rexxar项目。</p>
+
+<p>Rexxar在客户端的实现其实就是一个定制了更多功能的WebView。而且，Rexxar使用的是系统的WebView。所以，它对App的体积没有影响。但是，同时使用很多个WebView带来的内存问题，Rexxar同样也有，这是需要注意的。</p>
+
+<p>Rexxar的Crash有两种：</p>
+
+<ul>
+<li><p>一种是JavaScript的错误，也就是应用逻辑的问题。这类错误他们在WebView中做了捕获，然后通过App的日志系统发回服务器。</p></li>
+<li><p>一种是WebView的Crash，这种错误WebView自己无法捕获，现在是通过fabric，Umeng这种原生的Crash收集系统收集。</p></li>
+</ul>
+
+<p>从上线了Rexxar之后，JavaScript，WebView相关错误日志和Crash报告是有增长的。所占的比例和Rexxar的页面数量相关，一直在变化，但都未超过10%。但由于豆瓣App中主要还是原生页面占大多数。所以，Rexxar带来的Crash所占的比例并不大。</p>
+
+<p>他们也正在研究，在移动环境下如何定位Rexxar页面的错误，如何调试，如何修正这些错误，并将其加入基础设施里面。</p>
+
+<h3 id="toc_2">为什么不用PhonGap/Cordova</h3>
+
+<p>在混合开发中早已有了很成熟的方案，就是PhoneGap和它的后继者Cordoba. 为什么豆瓣还要造自己的轮子呢？</p>
+
+<p>郭麟说，如果Hybrid方案定义为前端和原生技术的混合使用，那他们认为PhoneGap/Cordova严格来说不算是Hybrid方案，因为它的目标是全面使用前端技术开发移动应用，而不是前端和原生技术混合使用。但是，包括Cordova，还可以加上React Native，以及Rexxar的目标是一致的：使用前端技术来开发移动应用，提高工程效率。</p>
+
+<p>豆瓣实际上使用PhoneGap开发过一款移动App，并在AppStore上架了，这个应用叫豆瓣音乐人，因此，其实豆瓣对PhoneGap/Cordova已经有一定了解和使用经验。为何在开发豆瓣App时又造了一个叫Rexxar的“轮子”呢？这是因为，他们对PhoneGap/Cordova这个项目的理念并不完全赞同，Rexxar的出发点和PhoneGap/Cordova并不一样。</p>
+
+<p>PhoneGap/Cordova这个项目极具野心。它希望完全使用前端技术完成移动开发。所以，可以看到它尽力让前端技术完成尽量多的开发工作，只在前端无法直接调用的原生系统功能方面提供了前端可用的接口。主流的PhoneGap/Cordova项目将业务逻辑都实现在一个WebView中，目标是，让开发者只使用前端技术就可以完成一个移动应用的所有开发工作。这种做法需要有一个前提：前端技术可以解决移动开发的所有需求。他们认为PhoneGap/Cordova这个理念在现阶段有些过于理想化了，或者说过于激进了。</p>
+
+<p>Rexxar则相对实际，或者说保守一些。郭麟表示，他们仍然认为，<strong>现阶段，甚至在相当遥远的未来，移动开发中前端技术都不太可能完全代替原生技术</strong>。但同时也承认，移动开发中总是存在部分功能是适合使用前端技术完成的。在他们的认识中，前端技术和原生技术应该是共存的。移动开发中，前端技术不会完全代替原生技术；而有了前端技术的加入，移动开发的效率会提高。基于这种认识，豆瓣开发了Rexxar。</p>
+
+<p>可以看到，<strong>Rexxar立足于在一个原生项目使用前端技术，而不是整个项目都使用前端技术实现</strong>。他们甚至提供一个页面部分使用Rexxar完成，部分使用原生技术实现的方案。豆瓣希望借助前端技术优秀的排版能力、开发速度、通用性，来弥补原生开发在这方面的不足。在微信作为主要内容分享渠道的今天，这样做还带来了一个额外的好处，Rexxar页面可以平滑的使用在微信中。</p>
+
+<p>总结而言，如果Rexxar和PhoneGap/Cordova比较的话，大目标是一致的：使用前端技术开发移动应用。实现技术栈差不多：使用WebView，提供调用原生功能的接口。但是，出发点不一样。PhoneGap/Cordova致力于完全使用前端技术进行移动开发；Rexxar致力于在移动项目中部分使用前端技术。</p>
+
+<h3 id="toc_3">移动开发者要学习前端技术</h3>
+
+<p>目前，豆瓣移动团队大约有十多位客户端工程师，其中 iOS 和 Android 各一半。另有一位优秀的前端工程师专门支持豆瓣App中的混合开发，他负责Rexxar Web的开发，提供基础设施。同时如果有一些较复杂的业务要用Rexxar实现，他也会参与和指导业务开发。</p>
+
+<p>使用Rexxar这类混合开发技术，使得团队开发的技术栈向前端技术偏斜了。所以，较理想的配置是团队中加入较优秀的前端工程师，由他来处理基础设施的开发，和疑难问题的解决。同时，整个团队需要理解混合开发所带来的优势，认可这个开发方式的转变，并且愿意学习和调整自己的技术栈。</p>
+
+<p>在项目中，在合适的场景中，豆瓣会优先使用Rexxar。在团队中，他们鼓励非前端工程师学习和使用前端技术。为此，他们专门组织了关于前端技术内部培训，让有意愿的非前端工程师具有了可以使用前端技术进行日常开发的基本能力。在豆瓣App的日常开发中，大部分Rexxar页面都由客户端工程师完成，前端工程师会帮忙做Code Review和解决疑难问题。</p>
+
+<h3 id="toc_4">Rexxar与React Native</h3>
+
+<p>豆瓣在实际使用Rexxar的时候，使用React作为前端框架。对此郭麟解释道，Rexxar本身对前端框架的选择没有要求，只是他们选择了React来实现业务层，而当时React Native并未发布，经过对RN的了解后，他们并未否定使用RN的可能性。</p>
+
+<p>在他们看来，React Native同样是一种使用前端技术开发移动应用的技术方案，这和他们开发Rexxar的目的是一致的。只是，Rexxar仍然在停留在浏览器引擎中，而Facebook激进地脱离了沉重的浏览器引擎，架设了他们自己的Web通向Native的桥梁，这是一个很大胆的方案。</p>
+
+<p>在React Native发布后，他们马上就组织研究，并做了小范围的实践，也与同行做了交流。结论是，现阶段，React Native还稍显稚嫩。对于一些技术栈比较特别的团队，比如Web经验特别丰富，前端工程师特别优秀，但又缺乏客户端工程师的情况，React Native是一个快速切入移动应用市场的技术选择。但就豆瓣App的情况和React Native的现状而言，使用前端技术进行移动应用开发方面，他们还坚持留在WebView中，不会使用React Native。</p>
+
+<p>当然，React Native一直在发展和进步。如果，有一天React Native和React可以在代码级别移植，他们也许会尝试从WebView迁移到React Native。毕竟WebView的性能仍然弱于原生。</p>
+
+<h3 id="toc_5">总结与展望</h3>
+
+<p>豆瓣App和研发团队都经历了从小到大的发展过程。Rexxar是这个发展过程中，解决工程效率的一个方案。在豆瓣移动开发中使用Rexxar，确实在一定程度上提高了他们的开发效率。以前一个页面需要 iOS 和 Android 两位工程师各开发一遍，现在只需要一位工程师写一次前端代码，甚至还可以应用到移动 Web 站上去。前端技术开发界面方面开发方面也有效率上的优势。热部署能力，使他们规避了发布移动应用的审核过程，也让bug修复过程更便利。</p>
+
+<p>豆瓣将Rexxar这个项目开源，一方面，是因为提高移动开发的工程效率是一个普遍问题，而他们的实践结果也证明Rexxar确实帮助改善了工程效率。所以，他们认为Rexxar应该能给大家提供一些借鉴的方向。另一方面，是为了提高项目本身的质量，没有方案是完美的，Rexxar也还存在不少问题。开源这个项目，促使他们提高了整个项目的代码质量。同时，也更容易听到大家的意见和建议。</p>
+
+<p>虽然Rexxar仍然存在一些问题和使用上的限制。但是在有限的使用中，豆瓣App团队仍然收获不少。在未来他们会持续推动Rexxar在豆瓣移动开发中的使用。郭麟表示，对于Rexxar未来的发展，他们主要关注两个方面：</p>
+
+<ul>
+<li><p>一方面是基础设施，比如，如何在产品中，更好地监控Rexxar页面出现的问题，如何调试和解决Rexxar页面出现的bug。如果希望在大型项目中使用Rexxar，这些基础设施是应该配备的；</p></li>
+<li><p>另一方面是性能，Rexxar仍然跑在浏览器引擎中。浏览器引擎这个中间层提高了工程效率，但也因为性能问题局限了其使用范围。所以，他们会花一些精力提高Rexxar的运行效率。比如，Rexxar的iOS版一直在关注从UIWebView迁移到WKWebView的可能性。</p></li>
+</ul>
+
+<p>参考文章：</p>
+
+<ul>
+<li><a href="http://lincode.github.io/Hybrid-Rexxar">豆瓣混合开发实践</a></li>
+<li><a href="Rexxar%20http://lincode.github.io/Rexxar-OpenSource">豆瓣的混合开发框架</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA3ODg4MDk0Ng==&amp;mid=2651112821&amp;idx=1&amp;sn=2987ba2c9d68e3982e795d9eeb15f82b">豆瓣App的模块化实践</a> </li>
+<li><a href="https://www.douban.com/note/347692465/">《CardKit &amp; DOMO UI - 移动时代技术与设计的十字路口》技术篇</a> </li>
+<li><a href="http://www.infoq.com/cn/news/2013/10/douban-artist-PhoneGap-practice">豆瓣音乐人app的PhoneGap实践</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CLOSE_WAIT 问题分析]]></title>
+    <link href="http://lambgao.com/2016-10-31-close-wait-problem.html"/>
+    <updated>2016-12-28T00:25:48+08:00</updated>
+    <id>http://lambgao.com/2016-10-31-close-wait-problem.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">问题场景</h3>
+
+<p>服务器出现大量 TCP 连接状态为 CLOSE_WAIT，将系统资源耗尽，导致业务处理失败。</p>
+
+<h3 id="toc_1">处理方式</h3>
+
+<p>重启导致问题的进程，释放 TCP 连接后服务恢复正常。</p>
+
+<p>调整服务器网络参数：</p>
+
+<ul>
+<li>net.ipv4.tcp_keepalive_time=600，tcp 连接空闲 10 分钟后发送探测包，默认是 7200 秒（两小时）</li>
+<li>net.ipv4.tcp_keepalive_intvl=15，每次探测包间隔 15 秒，默认是 75 秒</li>
+<li>net.ipv4.tcp_keepalive_probes=5，一共发送 5 次探测包，默认是 9 次</li>
+</ul>
+
+<p>让内核尽快检测出空闲连接并释放。</p>
+
+<h3 id="toc_2">分析</h3>
+
+<p>服务器环境是 Java、Tomcat。服务端在收到客户端 FIN 包后进入 CLOSE_WAIT，但服务端没有发送 FIN 包，具体原因没有查明。猜测的原因是</p>
+
+<ul>
+<li>服务端的业务处理阻塞，导致发送不了 FIN 包</li>
+<li>网络问题导致依赖的基础库 bug</li>
+</ul>
+
+<p>附：TCP 连接状态图</p>
+
+<p><img src="/resource/image/2016-10-31-close-wait-problem/8b538e707e964084a2161844efb023ea-tcp.jpg" alt="8b538e707e964084a2161844efb023ea-tcp.jpg"/></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift 3：sizeof移进MemoryLayout]]></title>
+    <link href="http://lambgao.com/2016-10-08-swift-sizeof-into-memorylayout.html"/>
+    <updated>2016-12-29T00:42:41+08:00</updated>
+    <id>http://lambgao.com/2016-10-08-swift-sizeof-into-memorylayout.html</id>
+    <content type="html"><![CDATA[
+<p>sizeof这个方法名直接取自C语言，但是实际上LLVM中并没有一个函数叫sizeof。而且sizeof的使用范围很窄，不像map，filter这种经常会全局用到。所以重新定义了一个结构体 MemoryLayout来实现原来sizeof的功能，使用上也有变化。</p>
+
+<p>主要有两种方式，一种是直接通过泛型参数从静态变量获取：</p>
+
+<pre><code>let stringSize = MemoryLayout&lt;String&gt;.size
+</code></pre>
+
+<p>也可以通过调用静态方法获取</p>
+
+<pre><code>let stringValue = &quot;A&quot;
+let varSize = MemoryLayout.size(ofValue: stringValue)
+</code></pre>
+
+<p>两者都会得到正确的结果。</p>
+
+<p>除了sizeof, MemoryLayout还可以获取stride， alignment。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode 8:在Active Compilation Conditions中自定义环境变量]]></title>
+    <link href="http://lambgao.com/2016-09-21-xcode-eight-custom-environment-variables.html"/>
+    <updated>2016-12-29T00:35:48+08:00</updated>
+    <id>http://lambgao.com/2016-09-21-xcode-eight-custom-environment-variables.html</id>
+    <content type="html"><![CDATA[
+<p>在Xcode 7我们在 OTHER_SWIFT_FLAGS中配置环境变量。但是有一个不爽的地方就是需要在自定义的变量前增加“-D”后才能使用。</p>
+
+<pre><code>#if MYFLAG
+// 逻辑判断
+#endif
+</code></pre>
+
+<p>现在在Xcode 8中新增了一个SWIFT_ACTIVE_COMPILATION_CONDITIONS选项，现在直接在里面添加就可以啦！在代码中的使用逻辑和之前一样。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[兼容iOS 10：配置获取隐私数据权限声明]]></title>
+    <link href="http://lambgao.com/2016-09-12-ios-ten-declare-intended.html"/>
+    <updated>2016-12-29T00:32:14+08:00</updated>
+    <id>http://lambgao.com/2016-09-12-ios-ten-declare-intended.html</id>
+    <content type="html"><![CDATA[
+<p>iOS 10的一大变化是更强的隐私数据保护。在文档中是这么描述的：</p>
+
+<p>You must statically declare your app’s intended use of protected data classes by including the appropriate purpose string keys in your Info.plist file.</p>
+
+<p>简单的说访问用户数据都需要现在Info.plist中声明，否则会crash。<br/>
+这些用户数据包括：</p>
+
+<p>Contacts, Calendar, Reminders, Photos, Bluetooth Sharing, Microphone, Camera, Location, Health, HomeKit, Media Library, Motion, CallKit, Speech Recognition, SiriKit, TV Provider.</p>
+
+<p>10之前只需要获取位置时配置，现在更严格了，比如需要调用相册访问权限，也需要在Info.plist中配置privacy。<br/>
+好在这些key的名字在Xcode 8中已经有了自动补全。添加一个属性，输入Privacy后就会出现自动提示，后面填的string会在弹出用户允许时展示在描述里。描述一定要填写，如果描述空着提交AppStore时会拒绝。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift中的可选类型(Optional Type)]]></title>
+    <link href="http://lambgao.com/2016-08-10-swift-optional-type.html"/>
+    <updated>2016-12-29T00:47:34+08:00</updated>
+    <id>http://lambgao.com/2016-08-10-swift-optional-type.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">Optional Type总览</h3>
+
+<p>什么是optional? Swift中声明的一个变量时, 默认情况下它是non-optional的, 即必须赋予这个变量一个非空的值. 如果给non-optional类型的变量赋值nil, 编译器就会报错。</p>
+
+<pre><code>var string1: String = &quot;This is string1&quot; // OK
+string1 = nil  // Nil cannot be assigned to type &#39;String&#39;
+- Swift中, 当声明一个类的属性时, 属性默认也是non-optional的
+swift
+class MyClass {
+    var name: String = &quot;Lv&quot;
+    var age: String  // Class &#39;MyClass&#39; has no initializers
+}
+</code></pre>
+
+<p>对于之前使用Objective-C的同学来说, 这样的错误可能会让你们有些惊讶, 因为在Objective-C中, 当把nil赋值给一个变量或者声明一个没有初始值的属性时, 编译器都不会报错.</p>
+
+<pre><code>NSString *string1 = @&quot;This is string1&quot;;
+string1 = nil;
+class MyClass {
+    NSString *name = @&quot;Lv&quot;
+    NSString *age;
+}
+</code></pre>
+
+<p>然而并不意味着在Swift中不能声明一个没有初始值的属性. Swift中引入了可选类型(optional type)来解决这一问题. 它的定义是通过在类型生命后加加一个<code>?</code>操作符完成的.</p>
+
+<pre><code>class MyClass {
+    var name: String?  // OK
+    var age: String?  // OK
+}
+</code></pre>
+
+<h3 id="toc_1">为什么引入可选类型?</h3>
+
+<p>Swift是一门安全的编程语言. 正如苹果所言, 可选类型就是证明Swift是一门安全的编程语言的一个小例子. 如上面的例子所示, Swift的可选类型提供了在编译阶段就检查一些可能在运行时才会出现的常见错误的机制. 下面通过下面的例子更好的诠释一下可选类型的威力.</p>
+
+<p>考虑下面一个Objective-C中的方法</p>
+
+<pre><code>- (NSString *)findStockCode:(NSString *)company {
+    if ([company isEqualToString:@&quot;Apple&quot;]) {
+        return @&quot;AAPL&quot;;
+    } else if ([company isEqualToString:@&quot;Google&quot;]) {
+        return @&quot;GOOG&quot;;
+    }
+    return nil;
+}
+</code></pre>
+
+<p>通过<code>findStockCode:</code>方法可以传入公司的名字,然后得到对应公司的股票代码. 为了方便演示, 这里只返回Apple和Google的代码, 对于其他的传入参数, 统统返回nil.<br/>
+假设在同一个类中调用<code>findStockCode:</code>方法:</p>
+
+<pre><code>NSString *stockCode = [self findStockCode:@&quot;Facebook&quot;]; // nil is returned
+NSString *text = @&quot;Stock Code - &quot;;
+NSString *message = [text stringByAppendingString:stockCode]; // runtime error
+NSLog(@&quot;%@&quot;, message);
+</code></pre>
+
+<p>上面的代码是可以编译通过的, 但是因为传入了&quot;Facebook&quot;导致返回值是nil, 当代码开始运行后, 程序就会报错了.<br/>
+当使用Swift中的可选类型时, 上面在运行时才会出现的错误在编译阶段就会报错. 如果使用Swift的代码重写上面的例子,代码如下:</p>
+
+<pre><code>func findStockCode(company: String) -&gt; String? {
+   if (company == &quot;Apple&quot;) {
+      return &quot;AAPL&quot;
+   } else if (company == &quot;Google&quot;) {
+      return &quot;GOOG&quot;
+   }
+   return nil
+}
+var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+let message = text + stockCode  // compile-time error
+print(message)
+</code></pre>
+
+<p>stockCode被定义成可选类型. 这就意味着它要么是一个String, 要么就是nil. 因为编译器在编译阶段就检测到了潜在的错误(可选类型的值没有被解包: value of optional type String? is not unwrapped)并且提示你去改正, 这段代码就不能够被执行.<br/>
+从这个例子中可以看到, Swift的可选类型加强了对空值的检查, 并且在编译阶段就给开发者提供了可能的错误信息. 很明显, 可选类型的引入可以让代码的质量变得更好.</p>
+
+<h3 id="toc_2">解包可选类型(Unwrapping Optionals)</h3>
+
+<p>如何让上面的代码正常运行? 很明显, 这里需要判断stockCode是否为空. 代码如下:</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+if stockCode {
+    let message = text + stockCode!
+    print(message)
+}
+</code></pre>
+
+<p>像在Objective-C中一样, 还是使用if来判断stockCode中是否有值. 一旦确定stockCode中肯定有值时, 将一个感叹号(!)加在可选类型变量名后面来解包这个可选类型的变量. 在Swift中, 这叫做硬解包. 即直接在可选类型后面加一个感叹号来表示它肯定有值.<br/>
+上面的例子中, 我们只是自己知道stockCode肯定有值, 所以才直接硬解包了stockCode变量. 但是万一有时候我们的感觉是错的, 那程序在运行时可能会出现严重的错误. 所以Swift中是推荐先检查可选类型是否有值, 然后再进行解包的!</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+let message = text + stockCode!  // runtime error
+</code></pre>
+
+<p>以上代码在编译阶段不会报错.因为使用了硬解包, 编译器认为可选类型是有值的, 所以编译是通过的. 当代码运行起来时, 知名的错误将会出现: <code>fatal error: Can’t unwrap Optional.None</code></p>
+
+<h3 id="toc_3">可选绑定(Optional Binding)</h3>
+
+<p>与硬解包不同, 可选绑定(Optional Binding)是一种更简单更推荐的方法来解包一个可选类型. 使用可选绑定来检查可选类型的变量有值还是没值. 如果有值, 解包它并且将值传递给一个常量或者变量.<br/>
+再多的言语描述也不如直接上代码来的实际! 将上面的代码改成可选绑定的代码如下:</p>
+
+<pre><code>var stockCode:String? = findStockCode(&quot;Facebook&quot;)
+let text = &quot;Stock Code - &quot;
+if let tempStockCode = stockCode {
+    let message = text + tempStockCode
+    print(message)
+}
+</code></pre>
+
+<p>if let<code>或者</code>if var`是可选绑定的两个关键字. 使用自然语言来描述上面这段代码的话, 意思就是如果stockCode有值,解包它,并且将它的值赋值给tempStockCode, 然后执行下面的条件语句; 如果stockCode为空, 直接跳过条件语句块.</p>
+
+<p>上面的代码可以简化如下:</p>
+
+<pre><code>let text = &quot;Stock Code - &quot;
+if var stockCode = findStockCode(&quot;Apple&quot;) {
+    let message = text + stockCode
+    print(message)
+}
+</code></pre>
+
+<p>这里stockCode不再是可选类型, 所以不需要使用<code>!</code>来解包. 如果findStockCode:方法返回值是nil, 那么程序并不会执行条件语句块中的代码.</p>
+
+<h3 id="toc_4">可选链式调用(Optional Chaining)</h3>
+
+<p>在解释optional chaining之前, 先来修改一下上面的例子. 这里重新创建一个名为Stock的类, 包含两个可选类型的属性code和price. <code>findStockCode:</code>方法直接返回Stock类的对象, 而不再是String.</p>
+
+<pre><code>class Stock {
+    var code: String?
+    var price: Double?
+}
+func findStockCode(company: String) -&gt; Stock? {
+    if (company == &quot;Apple&quot;) {
+        let aapl: Stock = Stock()
+        aapl.code = &quot;AAPL&quot;
+        aapl.price = 90.32
+        return aapl
+    } else if (company == &quot;Google&quot;) {
+        let goog: Stock = Stock()
+        goog.code = &quot;GOOG&quot;
+        goog.price = 556.36
+        return goog
+    }
+    return nil
+}
+</code></pre>
+
+<p>改写了创建类的代码, 相应的调用代码也需要修改. 这里调用findStockCode:方法得到一个Stock对象, 然后计算买100股股票所需的价格.</p>
+
+<pre><code>if let stock = findStockCode(&quot;Apple&quot;) {
+    if let sharePrice = stock.price {
+        let totalCost = sharePrice * 100
+        print(totalCost)
+    }
+}
+</code></pre>
+
+<p>这里因为findStockCode:方法的返回值类型是可选类型, 所以使用if let进行可选绑定, 又因为price属性也是可选类型, 所以再使用一个if let来判断是否有值.</p>
+
+<p>上面的代码是一段正确的代码. 但是可以通过使用可选链式调用(Optional Chaining)来简化上面的代码, 毕竟上面是使用了两个if let的. 可选链式调用使我们能够通过<code>?.</code>链接多个可选类型. 示例代码如下:</p>
+
+<pre><code>if let sharePrice = findStockCode(&quot;Apple&quot;)?.price {
+    let totalCost = sharePrice * 100
+    print(totalCost)
+}
+</code></pre>
+
+<p>可选链式调用提供了另外一种方法获得price的值. 现在的代码看起来更加简洁. 这里只是对可选链式调用(Optional Chaining)做了简要介绍, 详细的介绍请阅读<a href="https://developer.apple.com/library/prerelease/ios/documentation/swift/conceptual/swift_programming_language/OptionalChaining.html#//apple_ref/doc/uid/TP40014097-CH21-XID_312">苹果官方文档</a>。</p>
+
+<h3 id="toc_5">Swift和Objective-C的互通性</h3>
+
+<p>Swift的可选类型是非常强大的. 尽管可能需要花一段时间熟悉它的语法.</p>
+
+<p>Swift的设计是本着可以和Objective-C的API交互的原则. 当你想和UIKit或者其他框架的API交互时, 你肯定得需要可选类型. 下面是一些在实现table view时遇见的可选类型.</p>
+
+<pre><code>func numberOfSectionsInTableView(tableView: UITableView?) -&gt; Int {
+   // Return the number of sections.
+   return 1
+}
+func tableView(tableView: UITableView?, numberOfRowsInSection section: Int) -&gt; Int {
+   // Return the number of rows in the section.
+   return recipes.count
+}
+func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -&gt; UITableViewCell! {
+   let cell = tableView.dequeueReusableCellWithIdentifier(&quot;Cell&quot;, forIndexPath: indexPath) as UITableViewCell
+   cell.textLabel.text = recipes[indexPath.row]
+   return cell
+}
+</code></pre>
+
+<h3 id="toc_6">总结</h3>
+
+<p>理解可选类型的工作原理是非常重要的，在Swift中可选类型允许开发者能够在代码的编译阶段就发现一些潜在的问题, 从而确保在代码真正运行时能更安全. 一旦等你习惯了它的语法, 你必将会爱上可选类型这个新引入的概念。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Xcode真机调试报错：The Application Could Not Be Verified.]]></title>
+    <link href="http://lambgao.com/2016-07-26-xcode-could-not-be-verified.html"/>
+    <updated>2016-12-29T01:47:59+08:00</updated>
+    <id>http://lambgao.com/2016-07-26-xcode-could-not-be-verified.html</id>
+    <content type="html"><![CDATA[
+<p>今天真机调试的时候遇到这个错误：</p>
+
+<p>The application could not be verified.</p>
+
+<p>这还是第一次遇到，应该是手机上的app的证书跟现在的证书不一致导致。</p>
+
+<p>解决方法有两个</p>
+
+<h3 id="toc_0">xcode中切换证书：</h3>
+
+<p>你手机上的app用的是哪个证书，你现在还用那个证书运行。</p>
+
+<h3 id="toc_1">删除手机上的app</h3>
+
+<p>直接删除手机上的app，再运行就可以啦！</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift中被忽略的@noescape]]></title>
+    <link href="http://lambgao.com/2016-06-04-swift-noescape.html"/>
+    <updated>2016-12-29T00:03:16+08:00</updated>
+    <id>http://lambgao.com/2016-06-04-swift-noescape.html</id>
+    <content type="html"><![CDATA[
+<p>这里需要先介绍一下escape的概念。当一个闭包当做一个参数传进函数里，这个闭包是在这个函数执行完后执行的，这个时候我们就说这个闭包从函数逃出来了（escape）。这种场景很常见，比如我们进行一个异步的请求，请求时会传入一个handler，比如当请求成功后执行达到回调的目的。</p>
+
+<p>众所周知swift的内存管理是引用计数。闭包里用到的数据都需要捕捉到闭包里，保证闭包执行时这些数据不会被释放还在内存里。Xcode为了让我们意识到闭包里用到的对象其实已经被retain了，就要求我们访问当前属性时显示声明self。<br/>
+这个时候如果新手就很容易犯引用循环的错误。闭包retain了self，self如果又持有retain了闭包。最后就谁都释放不了，内存就泄露了。</p>
+
+<p>这是swift中默认闭包的使用场景。<br/>
+但是这里是有另外一种可能，假设有一个闭包是传入用于sort用的，或者比如作为map参数的闭包。当这行代码执行完成时，这个闭包也就使用完了，之后不会再被执行。这个情况下，闭包就不必再持有里面用到的对象。<br/>
+这就是非escape闭包。</p>
+
+<p>swift里针对非escape用@noescape表示。<br/>
+比如map函数就使用了：</p>
+
+<pre><code>func map&lt;T&gt;(@noescape transform: (Self.Generator.Element) throws -&gt; T) rethrows -&gt; [T]
+</code></pre>
+
+<p>这样标记之后能看到的好处就是这个闭包里如果再使用self的属性不需要加self.了。对于编译器而言，在知道是noescape闭包后可以进行一些内存的优化。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift 3：inout 关键字位置的变化]]></title>
+    <link href="http://lambgao.com/2016-05-14-swift-inout.html"/>
+    <updated>2016-12-29T01:19:18+08:00</updated>
+    <id>http://lambgao.com/2016-05-14-swift-inout.html</id>
+    <content type="html"><![CDATA[
+<p>inout 关键字可以用于将参数修饰为可修改，并且将修改会回传。这次 Swift 3 中对这个关键字也做了一些修改，咱们一起来kan&#39;k吧。</p>
+
+<p>在 Swift 中，如果我们希望一个函数可以修改它的参数变量的值，我们可以使用 inout 关键词。这个相当于编程语言概念中所谓的传址调用。 具体代码中就是这样的例子：</p>
+
+<pre><code>func foo(inout x:  Int) {
+
+    x = 2
+
+}
+
+var x = 5
+foo(&amp;x)
+print(x) // 2
+</code></pre>
+
+<p>在这个例子中， foo 函数的参数 x, 使用了 inout 修饰，这样我们在后面的调用中，将变量 x 传递给这个函数后，这个变量中的值也会被这个函数内部改变。 这个就是 inout 的基本作用了。</p>
+
+<p>在 Swift 3.0 中，有一个 <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0031-adjusting-inout-declarations.md">SE-0031</a> 的提案，就是改变 inout 这个关键词的位置的。</p>
+
+<p>当前的语法中，inout 的位置是在参数标签的位置上，也就是这个例子中的：</p>
+
+<pre><code>func foo(inout x:  Int)
+</code></pre>
+
+<p>inout 关键字位于参数标签 x 的前面。 而 Swift 3.0 以后，这个关键词的位置就会在参数类型前面了：</p>
+
+<pre><code>func foo(x: inout Int)
+</code></pre>
+
+<p>这个提案中也解释了这样做的好处。首先这样做之后参数标签就不和修饰关键字发生混淆，比如避免了这样的情况：</p>
+
+<pre><code>func foo(inOut x:  Int)
+func foo(inout x:  Int)
+</code></pre>
+
+<p>第一行的 inout 的大小写错误，所以它不是关键字。但这时编译器不会报错，因为 inOut 这时候作为了外部参数标签(Swift 的参数标签分为外部标签和内部标签，这个例子中外部标签是 inOut，所以我们在外部调用这个函数的时候就是这个语法 foo(inOut:),而函数内部还是用内部标签 x 来引用这个参数)。</p>
+
+<p>除了避免混淆之外，inout 的位置移动后还有一点需要大家注意的。按照提案中的意思，就是以前版本的遗留代码中的 inout，很可能会变成参数标签，也就是这样：</p>
+
+<pre><code>func foo(inout x:  Int)
+</code></pre>
+
+<p>比如之前我们的 foo 函数这样定义，但 Swift 3.0 之后， 这里的 inout 并不是关键字，而变成这个参数的外部标签了。所以这一点还是很值得注意的。</p>
+
+<p>最后提案中还说了一句，这样修改后能够更好的和 Rust 语言的模式相匹配。并且说在后续的版本中会更多的引入到 Swift 语言中。</p>
+
+<p>总体来说呢，这个改动不算大，但多多少少会对我们已有的代码造成一些影响。 inout 这个关键字大家应该多少都会用到过。所以在 Swift 3.0 更新后，也需要注意下这个问题。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[敏感数据处理]]></title>
+    <link href="http://lambgao.com/2016-05-11-sensitive-data-processing.html"/>
+    <updated>2016-12-28T00:19:41+08:00</updated>
+    <id>http://lambgao.com/2016-05-11-sensitive-data-processing.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">背景</h3>
+
+<p>大多数应用或多或少都会涉及到敏感数据处理，比如用户的手机号、身份证号，甚至银行卡账号。作为应用的开发者，如何 安全地 维护这些敏感数据呢？</p>
+
+<p>这里讨论的安全不是指服务器如何保护，而是在数据库层面做敏感数据的分离：</p>
+
+<ul>
+<li>业务库中不保存敏感数据，只保存混淆过的数据，比如电话字段保存的是 133****9961，在数据层面就进行脱敏</li>
+<li>敏感数据统一保存在另一个库中，有应用调用一个服务来建立原值和混淆值的映射关系</li>
+<li>业务库中因为保存的是脱敏过的数据，通过只读复制镜像可以很方便地提供给其他服务使用，比如 OLAP</li>
+<li>除了技术开发上方便，运维上也方便了很多，降低了敏感数据被暴露到外部的可能性</li>
+</ul>
+
+<h3 id="toc_1">技术设计</h3>
+
+<p>提供服务接口给应用存取敏感数据，本质上是一个 KV 存取服务。</p>
+
+<p><img src="/resource/image/2016-05-11-sensitive-data-processing/4910a7b5389945cc870dcc8f9cbfaf88.png" alt="4910a7b5389945cc870dcc8f9cbfaf88"/></p>
+
+<p>一些细节：</p>
+
+<ul>
+<li>表 protyle 的 domain 字段用于标识该记录的作用域，在一个作用域上相同的值要保证唯一</li>
+<li>表 protyle 的 hash 字段值是 SHA-512(domain/value) 的结果，用于唯一性校验</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[移动端数据库新王者：realm]]></title>
+    <link href="http://lambgao.com/2016-05-11-realm.html"/>
+    <updated>2016-12-29T00:18:47+08:00</updated>
+    <id>http://lambgao.com/2016-05-11-realm.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">介绍</h3>
+
+<p><a href="https://realm.io/cn/">realm</a>是一个跨平台移动数据库引擎，支持iOS、OS X（Objective‑C和Swift）以及Android。<br/>
+2014年7月发布。由YCombinator孵化的创业团队历时几年打造，是第一个专门针对移动平台设计的数据库。目标是取代SQLite。<br/>
+为了彻底解决性能问题，核心数据引擎用C++打造，并不是建立在SQLite之上的ORM。如果对数据引擎实现想深入了解可以查看：Realm 核心数据库引擎探秘。因此得到的收益就是比普通的ORM要快很多，甚至比单独无封装的SQLite还要快。<br/>
+因为是ORM，本身在设计时也针对移动设备（iOS、Android），所以非常简单易用，学习成本很低。</p>
+
+<p>碾压级性能<br/>
+数据引自：introducing-realm<br/>
+每秒能在20万条数据中进行查询后count的次数。realm每秒可以进行30.9次查询后count。</p>
+
+<p>在20万条中进行一次遍历查询，数据和前面的count相似：realm一秒可以遍历20万条数据31次，而coredata只能进行两次查询。</p>
+
+<p>一次事务每秒插入数据的对比，realm每秒可以插入9.4万条记录，在这个比较里纯SQLite的性能最好，每秒可以插入17.8万条记录。然而封装了SQLite的FMDB的成绩大概是realm的一半。</p>
+
+<h3 id="toc_1">简单易用</h3>
+
+<p>实例代码语言是Objective‑C。<br/>
+Realm对象和其他对象没有太大区别，只是需要继承RLMObject</p>
+
+<pre><code>@interface Dog : RLMObject
+@property NSString *name;
+@property NSInteger age;
+@end
+
+Dog *mydog = [[Dog alloc] init];
+</code></pre>
+
+<p>存储起来也非常简单，获取数据库实例，在一个事务中进行写入。</p>
+
+<pre><code>RLMRealm *realm = [RLMRealm defaultRealm];
+
+[realm transactionWithBlock:^{
+    [realm addObject:mydog];
+}];
+</code></pre>
+
+<p>方便的查询，可以在一个查询结果中再进行查询。查询的条件有着丰富的支持。</p>
+
+<pre><code>RLMResults *r = [Dog objectsWhere:@&quot;age &gt; 8&quot;];
+
+// Queries are chainable
+r = [r objectsWhere:@&quot;name contains &#39;Rex&#39; AND  name BEGINSWITH &#39;大&#39;&quot;];
+</code></pre>
+
+<h3 id="toc_2">zero-copy和懒加载</h3>
+
+<p>在通常的数据库中，数据大多数时间都静静地呆在硬盘当中。当你访问 NSManagedObject 对象中的某个属性的时候，Core Data 会将这个请求转换为一组 SQL 语句，如果还未连接数据库的话则创建一个数据库连接，然后将这个 SQL 语句发送给硬盘，执行检索，从匹配检索的结果中读取所有的数据，然后将它们放到内存当中（也就是内存分配）。然而，这时候你需要对其格式进行反序列化(deserialize)，因为硬盘上存储的格式不能直接在内存中使用，这意味着你需要调整位，以便 CPU 能够对其进行处理。<br/>
+然而Realm跳过了整个拷贝数据到内存的过程，称之为zero-copy。做到这点是因为文件始终是内存映射的，无论文件是或否在内存当中，你都能够访问文件的任何内容。关于核心文件格式的重要一点就是，确保硬盘上的文件格式都是内存可读的，这样就无需执行任何反序列化操作了。<br/>
+这样就带来了一个问题，难道数据全加载到内存里了？所以这里懒加载应运而生，比如在查询到一组数据后，只有当你真正访问对象的时候才真正加载进来。</p>
+
+<h3 id="toc_3">VS SQLite</h3>
+
+<p>SQLite第一个版本发布于2000年，至今已16年。以当今的角度来看，它的编程抽象程度非常低。业务上我们其实只想把这些对象存进去，可以查询出来。<br/>
+即便已经是封装过的<a href="https://github.com/ccgus/fmdb">FMDB</a>，要写这样的代码心里也依旧难受:</p>
+
+<pre><code>FMDatabase *db = [FMDatabase databaseWithPath:@&quot;/tmp/tmp.db&quot;];
+if (![db open]) {
+    [db release];
+    return;
+}
+
+NSString *sql = @&quot;create table bulktest1 (id integer primary key autoincrement, x text);&quot;
+                 &quot;create table bulktest2 (id integer primary key autoincrement, y text);&quot;
+                 &quot;create table bulktest3 (id integer primary key autoincrement, z text);&quot;
+                 &quot;insert into bulktest1 (x) values (&#39;XXX&#39;);&quot;
+                 &quot;insert into bulktest2 (y) values (&#39;YYY&#39;);&quot;
+                 &quot;insert into bulktest3 (z) values (&#39;ZZZ&#39;);&quot;;
+
+success = [db executeStatements:sql];
+
+sql = @&quot;select count(*) as count from bulktest1;&quot;
+       &quot;select count(*) as count from bulktest2;&quot;
+       &quot;select count(*) as count from bulktest3;&quot;;
+
+success = [self.db executeStatements:sql withResultBlock:^int(NSDictionary *dictionary) {
+    NSInteger count = [dictionary[@&quot;count&quot;] integerValue];
+    XCTAssertEqual(count, 1, @&quot;expected one record for dictionary %@&quot;, dictionary);
+    return 0;
+}];
+
+[db close];
+</code></pre>
+
+<p>VS CoreData</p>
+
+<p>详细的比较推荐看这篇：<a href="http://iiiyu.com/2016/01/19/CoreData-VS-Realm/">CoreData VS Realm</a>。<br/>
+下面给出一个查询的比较：</p>
+
+<pre><code>// Core Data
+let fetchRequest = NSFetchRequest(entityName: &quot;Specimen&quot;)
+let predicate = NSPredicate(format: &quot;name BEGINSWITH [c]%@&quot;, searchString)
+fetchRequest.predicate = predicate
+let sortDescriptor = NSSortDescriptor(key: &quot;name&quot;, ascending: true)
+fetchRequest.sortDescriptors = [sortDescriptor]
+let error = NSError()
+let results = managedObjectContext?.executeFetchRequest(fetchRequest, error:&amp;error)
+</code></pre>
+
+<p>Realm则简单的多：</p>
+
+<pre><code>// Realm
+let predicate = NSPredicate(format: &quot;name BEGINSWITH [c]%@&quot;, searchString);
+let specimens = Specimen.objectsWithPredicate(predicate).arraySortedByProperty(&quot;name&quot;, ascending: true)
+</code></pre>
+
+<h3 id="toc_4">总结一下Realm对CoreData</h3>
+
+<h4 id="toc_5">优势：</h4>
+
+<ul>
+<li>不需要架构Context那种烦人的东西，CoreData 是一个博大精深的技术，不要妄想几天之内可以用的很溜。</li>
+<li>支持 NSPredicate，从 CoreData 转过来并没有太多的不适应。</li>
+<li>CoreData多个持久化文件很麻烦，Realm轻松支持这个功能</li>
+</ul>
+
+<h4 id="toc_6">劣势：</h4>
+
+<p>是会增加应用大概1MB的体积。CoreData原生支持，不会增加App体积。</p>
+
+<h3 id="toc_7">需要知道的一些问题</h3>
+
+<p>其实我自己觉得这些是可以接受的问题。技术很多时候就是权衡，为了达到一些目的，总是要牺牲掉一些东西。</p>
+
+<h4 id="toc_8">所有的存储对象需要继承RealmObject</h4>
+
+<p>比如我现在的项目的数据从网络请求回来都会继承自己写的一个方便解析的基类，在这里就需要做出一些适应。<br/>
+但是该问题在swift中是不存在的。因为swift是天生的面向协议编程范式。</p>
+
+<h4 id="toc_9">不能自定义getter、setter</h4>
+
+<p>realm会自动生成getter、setter，如果自定义getter、setter存储就会有影响。如果要规避这个问题，可以通过设置这个对象的忽略属性。<br/>
+比如有个属性id，需要自定义setter。可以在对象属性里把id设置为忽略属性，这样realm就不会为它自动生成getter、setter，但是也不会把id存入数据库。接着自定义一个用于存储的属性比如realm_id。在id的setter中可以把把值也赋给realm_id。<br/>
+这个问题在swift中也是不存在的，因为swfit中使用的是willset、didset这种通知机制。</p>
+
+<h4 id="toc_10">查询的结果不是数组</h4>
+
+<p>为了能够支持查询结果的链式查询，realm自定义了一个集合类型。可以枚举，但是不是熟悉的数组了。又因为realm的懒加载机制，所以不建议在数据层把这个枚举转成数组类型。这样的缺点就是上层知道了数据的存储逻辑。严格的说这里不应该让上层知道。但是这样设计也许是为了方便上层进行再次检索，realm有着优越的查询性能。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[解决MWPhotoBrowser中的SDWebImage加载大图导致的内存警告问题]]></title>
+    <link href="http://lambgao.com/2016-04-22-load-big-image.html"/>
+    <updated>2016-12-29T01:56:38+08:00</updated>
+    <id>http://lambgao.com/2016-04-22-load-big-image.html</id>
+    <content type="html"><![CDATA[
+<p><a href="https://github.com/mwaterfall/MWPhotoBrowser.git">MWPhotoBrowser</a>是一个非常不错的照片浏览器，在github的star接近3000个。</p>
+
+<p>MWPhotoBrowser来加载小图1M以下的都应该不会有内存警告的问题。如果遇到大图，3M、4M、5M的大图，很有可能导致内存警告。最近我就遇到这个问题，很是头疼。来回滑动查看照片内存飙到100M以上。</p>
+
+<p>网上查了很多资料，都没有解决问题。</p>
+
+<p>我们来看一下MWPhotoBrowser，其实MWPhotoBrowser用的是<a href="https://github.com/rs/SDWebImage.git">SDWebImage</a>来下载图片的。</p>
+
+<p>在github看到SDWebImage的介绍，后面说到：</p>
+
+<p>Future Enhancements<br/>
+LRU memory cache cleanup instead of reset on memory warning</p>
+
+<p>看到这个真是欲哭无泪啊。</p>
+
+<p>再去看看SDWebImage的，有个人提问了：</p>
+
+<p>How to disable &quot;memory cache&quot;?  I don&#39;t want memory cache,  it used a lot of memory and got memory waring easily,  disk is enough for me...</p>
+
+<p>有人回答：</p>
+
+<p>There is no way to disable the memory cache. But the cache is designed to flush itself when you get a memory warning, so you shouldn&#39;t need to worry it.</p>
+
+<p>说的是SDWebImage遇到内存警告会自动释放内存，但是这还是解决不了问题，加载大图的时候，内存会突然蹦到100多M，在4s及以下的手机上跑，再就挂了。</p>
+
+<p>还是没有解决内存警告的问题。怎么办呢？</p>
+
+<p>我是这么解决的：</p>
+
+<p>SDWebImage有一个SDWebImageDownloaderOperation类来执行下载操作的。里面有个下载完成的方法：</p>
+
+<pre><code>- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
+   SDWebImageDownloaderCompletedBlock completionBlock = self.completedBlock;
+   @synchronized(self) {
+       CFRunLoopStop(CFRunLoopGetCurrent());
+       self.thread = nil;
+       self.connection = nil;
+       [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
+   }
+
+   if (![[NSURLCache sharedURLCache] cachedResponseForRequest:_request]) {
+       responseFromCached = NO;
+   }
+
+   if (completionBlock)
+   {
+       if (self.options &amp; SDWebImageDownloaderIgnoreCachedResponse &amp;&amp; responseFromCached) {
+           completionBlock(nil, nil, nil, YES);
+       }
+       else {
+           UIImage *image = [UIImage sd_imageWithData:self.imageData];
+           NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
+           image = [self scaledImageForKey:key image:image];
+
+           // Do not force decoding animated GIFs
+           if (!image.images) {
+               image = [UIImage decodedImageWithImage:image];
+           }
+           if (CGSizeEqualToSize(image.size, CGSizeZero)) {
+               completionBlock(nil, nil, [NSError errorWithDomain:@&quot;SDWebImageErrorDomain&quot; code:0 userInfo:@{NSLocalizedDescriptionKey : @&quot;Downloaded image has 0 pixels&quot;}], YES);
+           }
+           else {
+               completionBlock(image, self.imageData, nil, YES);
+           }
+       }
+   }
+   self.completionBlock = nil;
+   [self done];
+}
+</code></pre>
+
+<p>其中，UIImage *image = [UIImage sd_imageWithData:self.imageData];就是将data转换成image。</p>
+
+<p>再看看sd_imageWithData:这个方法：</p>
+
+<pre><code>+ (UIImage *)sd_imageWithData:(NSData *)data {
+   UIImage *image;
+   NSString *imageContentType = [NSData sd_contentTypeForImageData:data];
+   if ([imageContentType isEqualToString:@&quot;image/gif&quot;]) {
+       image = [UIImage sd_animatedGIFWithData:data];
+   }
+#ifdef SD_WEBP
+   else if ([imageContentType isEqualToString:@&quot;image/webp&quot;])
+   {
+       image = [UIImage sd_imageWithWebPData:data];
+   }
+#endif
+   else {
+       image = [[UIImage alloc] initWithData:data];
+       UIImageOrientation orientation = [self sd_imageOrientationFromImageData:data];
+       if (orientation != UIImageOrientationUp) {
+           image = [UIImage imageWithCGImage:image.CGImage
+                                       scale:image.scale
+                                 orientation:orientation];
+       }
+   }
+
+
+   return image;
+}
+</code></pre>
+
+<p>这个方法在UIImage+MultiFormat里面，是UIImage的一个类别处理。这句话很重要image = [[UIImage alloc] initWithData:data]; SDWebImage把下载下来的data直接转成image，然后没做等比缩放直接存起来使用。所以，我们只需要在这边做处理即可：</p>
+
+<p>UIImage+MultiFormat添加一个方法：</p>
+
+<pre><code>+(UIImage *)compressImageWith:(UIImage *)image
+{
+   float imageWidth = image.size.width;
+   float imageHeight = image.size.height;
+   float width = 640;
+   float height = image.size.height/(image.size.width/width);
+
+   float widthScale = imageWidth /width;
+   float heightScale = imageHeight /height;
+
+   // 创建一个bitmap的context
+   // 并把它设置成为当前正在使用的context
+   UIGraphicsBeginImageContext(CGSizeMake(width, height));
+
+   if (widthScale &gt; heightScale) {
+       [image drawInRect:CGRectMake(0, 0, imageWidth /heightScale , height)];
+   }
+   else {
+       [image drawInRect:CGRectMake(0, 0, width , imageHeight /widthScale)];
+   }
+
+   // 从当前context中创建一个改变大小后的图片
+   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+   // 使当前的context出堆栈
+   UIGraphicsEndImageContext();
+
+   return newImage;
+
+}
+</code></pre>
+
+<p>然后在：image = [[UIImage alloc] initWithData:data];下面调用以下：</p>
+
+<pre><code>if (data.length/1024 &gt; 1024) {
+    image = [self compressImageWith:image];
+}
+</code></pre>
+
+<p>当data大于1M的时候做压缩处理。革命尚未成功，还需要一步处理。在SDWebImageDownloaderOperation的connectionDidFinishLoading方法里面的：</p>
+
+<pre><code>  UIImage *image = [UIImage sd_imageWithData:self.imageData];
+
+  //将等比压缩过的image在赋在转成data赋给self.imageData
+  NSData *data = UIImageJPEGRepresentation(image, 1);
+  self.imageData =  [NSMutableData dataWithData:data];
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[gitconfig配置别名alias]]></title>
+    <link href="http://lambgao.com/2016-03-29-gitconfig-alias.html"/>
+    <updated>2016-12-29T01:50:52+08:00</updated>
+    <id>http://lambgao.com/2016-03-29-gitconfig-alias.html</id>
+    <content type="html"><![CDATA[
+<p>git有一些命令如：git pull 、 git push等等，这些命令可以设置alias，也就是缩写。如：git pull 是 git pl， git push 是 git ps。可以根据个人习惯进行修改。</p>
+
+<p>修改别名alias步骤如下：</p>
+
+<p>1,进入根目录</p>
+
+<p><code>$ cd</code></p>
+
+<p>2,查看根目录下面的文件</p>
+
+<p><code>$ ls -la</code></p>
+
+<p>查看一下有没有.gitconfig文件。</p>
+
+<p>3，编辑.gitconfig</p>
+
+<p><code>$ vi .gitconfig</code></p>
+
+<p>添加如下：</p>
+
+<pre><code>[alias]
+co = checkout
+ci = commit
+st = status
+pl = pull
+ps = push
+dt = difftool
+l = log --stat
+cp = cherry-pick
+ca = commit -a
+b = branch
+</code></pre>
+
+<p>具体可以根据个人习惯进行添加修改。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[你保存用户密码的姿势正确吗？]]></title>
+    <link href="http://lambgao.com/2016-02-24-secure-salted-password-hashing.html"/>
+    <updated>2016-12-28T00:15:22+08:00</updated>
+    <id>http://lambgao.com/2016-02-24-secure-salted-password-hashing.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">摘要</h3>
+
+<p>这几年陆陆续续有很多大站被脱裤，最终导致了很多用户的密码明文泄露。本文不探讨脱裤技术，主要研究的是如何正确（尽量安全）地保存用户密码。</p>
+
+<h3 id="toc_1">哈希</h3>
+
+<p>“把明文加密后再保存数据库”应该是大家的共识。这个过程应该是不可逆的（不能通过加密后的串再得到原文），所以对于这个“加密”过程更贴切的叫法应该是 - 哈希：</p>
+
+<p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的。就是把任意长度的输入通过散列算法变换成固定长度的输出，该输出就是散列值。<br/>
+这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出，所以不可能从散列值来唯一的确定输入值。<br/>
+简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
+
+<p>我们常用的 Hash 算法主要就是 MD5 和 SHA，并且很多时候我们就是使用其中一种来加密用户密码的。<br/>
+以上两类哈希算法主要是用于校验文件/数字签名，但并不适合用来保护用户密码，虽然对于我们来说_感觉上_似乎起到了一定安全防护的效果，但其实效果很差，特别是 MD5，秒秒钟就可以找到碰撞值。</p>
+
+<h3 id="toc_2">加盐</h3>
+
+<p>上面我们提到过，将用户明文直接哈希后保存并不是正确的姿势，那加盐后呢？</p>
+
+<p>我们先看下加盐解决的问题：如果两个用户密码一样，那么哈希后的值也是一样，攻击者通过查表法很容易就能破解原文并且一石多鸟。因为攻击者不知道用户的颜值和哈希算法，所以不大可能破解。</p>
+
+<p>加盐的确是正确的思路，前提是：</p>
+
+<ul>
+<li>盐长度不能太短，并且必须是随机生成的</li>
+<li>用户更新密码的同时也需要更新盐值</li>
+</ul>
+
+<p>并且加盐后使用的算法非常非常重要，而恰恰是这一点大家都没怎么弄对。</p>
+
+<h3 id="toc_3">加盐哈希</h3>
+
+<p>我们直接说结论吧：</p>
+
+<ul>
+<li>不要使用自己设计的算法（比如 sha1(sha1(password+salt))、sha1(md5(salt) + md5(password)) 等类似的）</li>
+<li>要使用 <a href="%5Bhttps://en.wikipedia.org/wiki/Crypt_(Unix)#Library_Function_crypt.283.29%5D(https://en.wikipedia.org/wiki/Crypt_(Unix)#Library_Function_crypt.283.29)">crypt</a> 函数并且使用安全算法的参数（\(2y\), \(5\), \(6\)）。*nix 系统正是使用 crypt 来保护用户口令的，我们应该使用这样久经考验的姿势
+使用流程</li>
+</ul>
+
+<p>以 golang 代码举例：</p>
+
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+
+    &quot;github.com/kless/osutil/user/crypt/sha512_crypt&quot;
+)
+
+func main() {
+    // 1. 生成密码安全处理后 hash 串
+    c := sha512_crypt.New()
+    hash, _ := c.Generate([]byte(&quot;secret&quot;), nil) // 第二个参数是 salt，设置为 nil 表示自动生成 salt
+
+    fmt.Println(hash)
+
+    // 2. 将该 hash 存库
+    // ....
+
+    // 3. 用户登录验证
+    userInput := &quot;secret&quot;
+    inputHash, _ := c.Generate([]byte(userInput), []byte(hash)) // 第一个参数是用户输入的密码，第二个参数是数据库中取出的 hash 串
+    if inputHash == hash {
+       fmt.Println(&quot;登录成功&quot;)
+    } else {
+       fmt.Println(&quot;登录失败&quot;)
+    }
+}
+</code></pre>
+
+<p>输出形如：</p>
+
+<pre><code>$6$P0pVrLOL89I7Y4.Y$IlUd2ABQnUcSecMr2nMgB8lay58RXrQGODwVOQHtfP7IYr.mpGE7dn5.nmxxb9RWkM8o/rNNJCxs3mLKsB5Xl.
+登录成功
+</code></pre>
+
+<p>要理解第 3 步中的验证原理，需要先知道 salt 的格式。在上面的例子中，我们没有指定 salt，而是使用自动生成的，最终生成的 hash 串中也是带有这个 salt 值的，也就是 \(6\)P0pVrLOL89I7Y4.Y$ 这个部分。</p>
+
+<p>我们指定一下 salt 再调用函数就清晰一些了：</p>
+
+<pre><code>hash, _ := c.Generate([]byte(&quot;secret&quot;), []byte(&quot;$6$rounds=5000$saltstr&quot;))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>$6$rounds=5000$saltstr$SH73gRYn1O7I/XTiq3AjDklhcqGvJ9vp65/TuFq2vQOoJEaejlTvsXOfy3dBpHju9v0Vi.VOcFh.79yy/kksl1
+</code></pre>
+
+<ul>
+<li>$6：指定了 crypt 算法为 SHA512</li>
+<li>$rounds=5000：指定了迭代 5000 次</li>
+<li>$saltstr：盐值</li>
+</ul>
+
+<p>也就是说，salt 这个参数实际上是定义了算法、盐值两个部分。</p>
+
+<p>回到登录验证的例子，第 3 步中把用户输入的密码和数据库中取出的 hash 作为 salt 加密就很好理解了，其实数据库中取出的 hash 在该函数中只是使用了 salt 部分，所以如果用户输入的密码正确的话，计算结果会和持久化的 hash 一致。</p>
+
+<h3 id="toc_4">参考</h3>
+
+<ul>
+<li>文中提到的大部分内容在<a href="http://drops.wooyun.org/papers/1066">这篇文章</a>中有详述，建议阅读</li>
+<li><a href="http://php.net/manual/en/function.crypt.php">PHP: crypt - Manual</a></li>
+<li><a href="https://github.com/kless/osutil/tree/master/user/crypt">A golang password hashing library</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发之如何跳到系统设置里的各种设置界面]]></title>
+    <link href="http://lambgao.com/2016-01-30-goto-settings.html"/>
+    <updated>2016-12-29T01:32:41+08:00</updated>
+    <id>http://lambgao.com/2016-01-30-goto-settings.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">需求</h3>
+
+<p>从应用跳到系统设置里的WiFi界面有这个需求存在吗？答案是肯定的。比如以下两个例子：</p>
+
+<p>在没有网的状态下，你可能想提醒用户去设置界面连接WiFi。如果不能跳到WiFi界面，只能在APP里面做出文字提示。这样很多小白用户可能不会看提示，只会觉得APP没有做好。</p>
+
+<p>还有一种情况，做智能家居的APP，智能硬件设备自带WiFi（局域网）。如果用户没有连接设备的WiFi进入APP时，需要提示用户去设置界面连接WiFi。</p>
+
+<p>以上这两种情况只是举个例子，这个小功能的用处还是很多的，大家可以自行探索。</p>
+
+<h3 id="toc_1">实现</h3>
+
+<p>info里面设置</p>
+
+<p>在项目中的info.plist中添加 URL types 并设置一项URL Schemes为prefs，如下图：</p>
+
+<p><img src="http://images.90159.com/12/wifi1.png" alt="wifi1"/></p>
+
+<p>实现代码</p>
+
+<pre><code>NSURL *url = [NSURL URLWithString:@&quot;prefs:root=WIFI&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h3 id="toc_2">跳到更多设置界面</h3>
+
+<p>除了跳到WiFi设置界面，能不能跳到其他的设置界面呢？比如：定位服务、FaceTime、音乐等等。都是可以的，一起来看看如何实现的！</p>
+
+<h4 id="toc_3">定位服务</h4>
+
+<p>定位服务有很多APP都有，如果用户关闭了定位，那么，我们在APP里面可以提示用户打开定位服务。点击到设置界面设置，直接跳到定位服务设置界面。代码如下：</p>
+
+<pre><code>//定位服务设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=LOCATION_SERVICES&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<p>这样就可以跳到系统设置的定位服务界面啦！我们继续看几个列子。</p>
+
+<h4 id="toc_4">FaceTime</h4>
+
+<pre><code>//FaceTime设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=FACETIME&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h4 id="toc_5">音乐</h4>
+
+<pre><code>//音乐设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=MUSIC&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h4 id="toc_6">墙纸设置界面</h4>
+
+<pre><code>//墙纸设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=Wallpaper&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h4 id="toc_7">蓝牙设置界面</h4>
+
+<pre><code>//蓝牙设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=Bluetooth&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url])
+{
+   [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h4 id="toc_8">iCloud设置界面</h4>
+
+<pre><code>//iCloud设置界面
+NSURL *url = [NSURL URLWithString:@&quot;prefs:root=CASTLE&quot;];
+if ([[UIApplication sharedApplication] canOpenURL:url]
+{
+   [[UIApplication sharedApplication] openURL:url];
+}
+</code></pre>
+
+<h3 id="toc_9">参数配置</h3>
+
+<p>看到这几个例子，大家有没有发现，想跳到哪个设置界面只需要prefs:root=后面的值即可！是的，就是这样的。</p>
+
+<p>我在网上找到一个列表，可以跳到这些界面的参数配置：</p>
+
+<pre><code>About — prefs:root=General&amp;path=About
+Accessibility — prefs:root=General&amp;path=ACCESSIBILITY
+Airplane Mode On — prefs:root=AIRPLANE_MODE
+Auto-Lock — prefs:root=General&amp;path=AUTOLOCK
+Brightness — prefs:root=Brightness
+Bluetooth — prefs:root=General&amp;path=Bluetooth
+Date &amp; Time — prefs:root=General&amp;path=DATE_AND_TIME
+FaceTime — prefs:root=FACETIME
+General — prefs:root=General
+Keyboard — prefs:root=General&amp;path=Keyboard
+iCloud — prefs:root=CASTLE
+iCloud Storage &amp; Backup — prefs:root=CASTLE&amp;path=STORAGE_AND_BACKUP
+International — prefs:root=General&amp;path=INTERNATIONAL
+Location Services — prefs:root=LOCATION_SERVICES
+Music — prefs:root=MUSIC
+Music Equalizer — prefs:root=MUSIC&amp;path=EQ
+Music Volume Limit — prefs:root=MUSIC&amp;path=VolumeLimit
+Network — prefs:root=General&amp;path=Network
+Nike + iPod — prefs:root=NIKE_PLUS_IPOD
+Notes — prefs:root=NOTES
+Notification — prefs:root=NOTIFICATIONS_ID
+Phone — prefs:root=Phone
+Photos — prefs:root=Photos
+Profile — prefs:root=General&amp;path=ManagedConfigurationList
+Reset — prefs:root=General&amp;path=Reset
+Safari — prefs:root=Safari
+Siri — prefs:root=General&amp;path=Assistant
+Sounds — prefs:root=Sounds
+Software Update — prefs:root=General&amp;path=SOFTWARE_UPDATE_LINK
+Store — prefs:root=STORE
+Twitter — prefs:root=TWITTER
+Usage — prefs:root=General&amp;path=USAGE
+VPN — prefs:root=General&amp;path=Network/VPN
+Wallpaper — prefs:root=Wallpaper
+Wi-Fi — prefs:root=WIFI
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Carthage去中心化的Cocoa依赖管理器]]></title>
+    <link href="http://lambgao.com/2015-12-18-carthage-decentralized-dependency-manager.html"/>
+    <updated>2016-12-21T00:36:07+08:00</updated>
+    <id>http://lambgao.com/2015-12-18-carthage-decentralized-dependency-manager.html</id>
+    <content type="html"><![CDATA[
+<p>说到 iOS 的依赖管理工具，大家一定首先想到的是 CocoaPods ，不错，CocoaPods 确实是一个很好依赖管理工具，已然成为了 Cocoa 依赖管理的标准，丰富的支持库、文档等等，CocoaPods 相关的文章有很多，这里就不一一赘述了。</p>
+
+<p>今天要介绍的是一款新的依赖管理工具，名曰 “Carthage”，名字有点难理解，简单方便，完全独立，不修改 XCode 项目文件或配置。我们已经有了CocoaPods，非常好用，那么为什么还要创建这样一个项目呢？本文翻译自Carthage的Github的README.md，带大家来了解一下这个工具有何不同之处。</p>
+
+<p>Carthage的目标是用最简单的方式来管理Cocoa第三方框架。</p>
+
+<p>基本的工作流如下：</p>
+
+<ol>
+<li>创建一个Cartfile，包含你希望在项目中使用的框架的列表</li>
+<li>运行Carthage，将会获取列出的框架并编译它们</li>
+<li>将编译完成的.framework二进制文件拖拽到你的Xcode项目当中</li>
+</ol>
+
+<p>Carthage编译你的依赖，并提供框架的二进制文件，但你仍然保留对项目的结构和设置的完整控制。Carthage不会自动的修改你的项目文件或编译设置。</p>
+
+<span id="more"></span><!-- more -->
+
+<h3 id="toc_0">Carthage与CocoaPods的不同</h3>
+
+<p>CocoaPods是已存在很长时间的Cocoa依赖管理器，那么为什么要创建Carthage呢？</p>
+
+<p>首先，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。Carthage使用xcodebuild来编译框架的二进制文件，但如何集成它们将交由用户自己判断。CocoaPods的方法更易于使用，但Carthage更灵活并且是非侵入性的。</p>
+
+<p>CocoaPods的目标在它的README文件描述如下：</p>
+
+<p>…为提高第三方开源库的可见性和参与度，创建一个更中心化的生态系统。</p>
+
+<p>与之对照，Carthage创建的是去中心化的依赖管理器。它没有总项目的列表，这能够减少维护工作并且避免任何中心化带来的问题（如中央服务器宕机）。不过，这样也有一些缺点，就是项目的发现将更困难，用户将依赖于Github的趋势页面或者类似的代码库来寻找项目。</p>
+
+<p>CocoaPods项目同时还必须包含一个podspec文件，里面是项目的一些元数据，以及确定项目的编译方式。Carthage使用xcodebuild来编译依赖，而不是将他们集成进一个workspace，因此无需类似的设定文件。不过依赖需要包含自己的Xcode工程文件来描述如何编译。</p>
+
+<p>最后，我们创建Carthage的原因是想要一种尽可能简单的工具——一个只关心本职工作的依赖管理器，而不是取代部分Xcode的功能，或者需要 让框架作者做一些额外的工作。CocoaPods提供的一些特性很棒，但由于附加的复杂性，它们将不会被包含在Carthage当中。</p>
+
+<h3 id="toc_1">安装Carthage</h3>
+
+<p>Carthage提供OS X平台的pkg安装文件，你可以从Github的最新release中找到，按照引导一步步安装即可。</p>
+
+<p>如果你想安装最新的开发版本（可能存在稳定性和兼容性的问题），你只需要clone本仓库的master分支，然后运行make install.</p>
+
+<h3 id="toc_2">添加框架到应用程序</h3>
+
+<p>安装完Carthage后，你能够使用它来添加框架到你的项目。注意Carthage只支持动态框架，而后者只存在于iOS 8以上（以及任意版本的OS X）。</p>
+
+<p>开始使用：</p>
+
+<p>创建一个Cartfile，将你想要使用的框架列在里面<br/>
+运行carthage update，将获取依赖文件到一个Carthage.checkout文件夹，然后编译每个依赖<br/>
+在你的应用程序target的“General”设置标签中的“Embedded Binaries”区域，将框架从Carthage.build文件夹拖拽进去。<br/>
+在这个过程当中，Carthage将创建一些build artifacts，其中最重要的是Cartfile.lock文件，里面将列出每个框架的具体版本，确保你提交了这个文件到版本控制工具里面（如Git、SVN），因为每个用到项目的人都需要它来编译相同版本的框架。</p>
+
+<p>完成上面的步骤并提交你的修改，项目的其他用户就只需要获取该仓库并执行carthage bootstrap就能使用你所添加的框架。</p>
+
+<h3 id="toc_3">添加框架到单元测试或另一个框架</h3>
+
+<p>使用Carthage添加框架到任意目标的方法，和添加到应用程序差不多。主要的不同在于框架是如何设置并链接到Xcode的。</p>
+
+<p>因为非应用程序目标没有“Embedded Binaries”设置区域，你需要将编译完成后的框架拖拽到“Link Binaries With Libraries”的区域里。</p>
+
+<p>在某些稀有案例中，你也许会想要复制每个依赖到已编译的项目中（比如，在外部框架中嵌入依赖，或确保依赖在测试工具中正常显示）。想要达到这个目的，你需要创建一个新的“Copy Files”编译选项和“Frameworks”组，然后将框架的引用添加到里面。</p>
+
+<h3 id="toc_4">升级框架</h3>
+
+<p>如果你改动了你的Cartfile，或者你想升级到框架的最新版本（服从于你指定的需求版本），执行carthage update命令可以达到目的。</p>
+
+<h3 id="toc_5">让你的框架支持Carthage</h3>
+
+<p>Carthage只正式支持动态框架，动态框架能够在任何版本的OS X上使用，但只能在iOS 8及以上版本使用。</p>
+
+<p>因为Carthage拥有非中心化的包列表，以及没有项目指定的编译设置，大多数框架应该能自动编译。</p>
+
+<h3 id="toc_6">分享你的Xcode schemes</h3>
+
+<p>Carthage将只从你的.xcodeproj中标记为已分享的Xcode schemes来编译。如果你想检查编译是否成功，执行carthage build --no-skip-current命令，然后检查Carthage.build文件夹。</p>
+
+<p>如果当执行命令但有scheme没有被编译，打开Xcode并确定对应scheme被标记为“Shared”，以便Carthage能够发现它。</p>
+
+<h3 id="toc_7">解决编译失败</h3>
+
+<p>如果你在执行carthage build --no-skip-current时编译失败，尝试执行xcodebuild -scheme SCHEME -workspace WORKSPACE build 或xcodebuild -scheme SCHEME -project PROJECT build（将其中的大写单词换成你项目的对应名称），然后观察是否有相同的失败发生，这应该能生成足够的失败信息来解决问题。</p>
+
+<h3 id="toc_8">稳定版发布的标签</h3>
+
+<p>Carthage使用语义化标签来发布稳定版本。如1.2.0，如带有字母则是不受支持的版本（如1.2-alpha-1）.</p>
+
+<h3 id="toc_9">CarthageKit</h3>
+
+<p>大多数carthage命令行工具的功能都封装在一个名为CarthageKit的框架中。</p>
+
+<p>如果你希望将Carthage作为另一个工具的一部分，或者希望扩展Carthage的功能，可以看看CarthageKit的源码，检查API是否符合你的需求。</p>
+
+<h3 id="toc_10">授权协议</h3>
+
+<p>Carthage使用MIT开源协议授权发布。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[禁止浏览器自动填充表单字段]]></title>
+    <link href="http://lambgao.com/2015-12-09-disable-browser-auto-fill-form-field.html"/>
+    <updated>2016-12-27T00:34:09+08:00</updated>
+    <id>http://lambgao.com/2015-12-09-disable-browser-auto-fill-form-field.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">场景</h3>
+
+<p>我们的登录表单一般都是 input text + input password：</p>
+
+<pre><code>&lt;form id=&quot;loginForm&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+    &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+    &lt;button type=&quot;submit&quot;&gt;登录&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>登录后如果用户选择了保存登录密码，那后续界面中如果有形如：</p>
+
+<pre><code>&lt;input type=&quot;text&quot; name=&quot;field1&quot;&gt;
+&lt;input type=&quot;password&quot; name=&quot;field2&quot;&gt;
+</code></pre>
+
+<p>这样的两个 input（text+password）接在一起，那浏览器就会自动填充登录时的输入。</p>
+
+<p>要用程序清空自动填充有两个方案：</p>
+
+<h3 id="toc_1">使用 autocomplete 属性</h3>
+
+<p>在不需要自动填充的 input 上设置 autocomplete 属性：</p>
+
+<pre><code>&lt;input autocomplete=&quot;off&quot;&gt;
+</code></pre>
+
+<p>这个方案对于某些版本的浏览器可能不行。</p>
+
+<h3 id="toc_2">使用假的 input 让浏览器去填充</h3>
+
+<p>在页面 <body> 后加入：</p>
+
+<pre><code>&lt;!-- fake fields are a workaround for chrome autofill getting the wrong fields --&gt;
+&lt;input style=&quot;display:none&quot; type=&quot;text&quot; name=&quot;fakeusernameremembered&quot;/&gt;
+&lt;input style=&quot;display:none&quot; type=&quot;password&quot; name=&quot;fakepasswordremembered&quot;/&gt;
+</code></pre>
+
+<p>这个方案原理是让浏览器去填充用户实际上看不到的 input。虽然看上去代码比较 low，但是很实用。</p>
+
+<p>参考：<a href="http://stackoverflow.com/questions/15738259/disabling-chrome-autofill">Disabling Chrome Autofill</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[标签服务实现漫谈]]></title>
+    <link href="http://lambgao.com/2015-12-01-tag.html"/>
+    <updated>2016-12-27T00:30:04+08:00</updated>
+    <id>http://lambgao.com/2015-12-01-tag.html</id>
+    <content type="html"><![CDATA[
+<p>标签服务是一个较为通用的基础业务服务，比如博客系统对文章加标签、社交网络中为好友添加印象、收藏的歌曲贴标签方便整理等等。</p>
+
+<p>其主要提供两类接口：</p>
+
+<ul>
+<li>标签实体的管理/查询：负责标签实体的 CRUD</li>
+<li>标签关联的管理/查询：将外部业务实体与标签建立/删除关联，根据外部业务实体 id 查询标签集</li>
+</ul>
+
+<h3 id="toc_0">RDB 实现</h3>
+
+<p>基于关系型数据库的实现是最容易的，并且上大多数应用也是这样做的。</p>
+
+<ol>
+<li>建立 tag 表，其中包含了 tag 的基础属性，例如 name、description 等</li>
+<li>建立 tag_rel 关联表，其中主要包含了 object_id、tag_id</li>
+</ol>
+
+<p>管理服务（创建/更新/删除）的实现非常容易；根据 object_id 查询其对应的标签集也很容易实现：</p>
+
+<pre><code>SELECT
+  tag_rel.tag_id,
+  tag_rel.object_id,
+  tag.name
+FROM
+  tag_rel
+LEFT JOIN tag ON tag_rel.tag_id = tag.tag_id
+WHERE
+  tag_rel.object_id = &#39;2db775c1d2174a8c67fc39b86c3fc168&#39;
+  
+</code></pre>
+
+<h4 id="toc_1">问题</h4>
+
+<p>RDB 实现标签服务时最主要会面临的是性能问题，随着 tag_rel 数据量的不断增长，上面查询的性能会不断下降。</p>
+
+<h4 id="toc_2">优化</h4>
+
+<h5 id="toc_3">数据库</h5>
+
+<ul>
+<li>给列 tag_rel.object_id 加普通索引</li>
+<li>升级数据库服务器硬件配置</li>
+<li>使用数据库产品的特性，比如表分区/内存表</li>
+</ul>
+
+<p>在应用层面，可以缓存查询结果，如果实时性要求不高，缓存机制是比较容易实现的，但大多数业务场景可能并不适用。</p>
+
+<h5 id="toc_4">分表</h5>
+
+<p>前面提到的数据库产品的表分区特性（Oracle）我们也可以在应用层代码通过分表来实现。</p>
+
+<ul>
+<li>建立多张标签关联表 tag_rel_0、tag_rel_1、…、tag_rel_31</li>
+<li>将查询条件 object_id 通过某种散列算法（比如 UUID 字符串的话可以通过 FNV Hash 后取模 32）得到 [0, 31] 的结果</li>
+<li>SQL 落到具体的某张具体的分表上 FROM tag_rel_16</li>
+</ul>
+
+<p>大部分应用应该通过分表就能解决性能问题，还解决不了的话可以通过这个思路进行分库、分实例。</p>
+
+<h3 id="toc_5">NoSQL 实现</h3>
+
+<p>基于前文的背景可知，标签服务的定位是一个独立的服务，并不维护业务主体（object），所以将标签嵌套到业务主体中的设计在这里并不适合。</p>
+
+<p>排除了这一条，我们还是只能用 RDB 的思想来进行设计：</p>
+
+<ul>
+<li>数据结构沿用 RDB 设计，即同样分为两个“表”：tag、tag_rel</li>
+<li>将 SQL 中的 join 分成两步进行：1. 根据 object_id 查询出 tag_id 集合；2. 根据 tag_id 集合查询出 tag 集合</li>
+</ul>
+
+<h4 id="toc_6">Redis</h4>
+
+<p>Redis 介绍和“为什么选用 Redis”略过。下面我们介绍一下如何使用 Redis 实现上述思路。</p>
+
+<h5 id="toc_7">数据类型</h5>
+
+<p>我们可以使用 Redis Hash 类型来保存标签，使用 Redis Set 来保存标签关联（这也是 Redis 官方文档的<a href="http://redis.io/topics/data-types-intro#redis-sets">示例</a>）。</p>
+
+<p>给新闻（id: 1000）添加 4 个标签（通过 id 关联）：</p>
+
+<pre><code>&gt; sadd news:1000:tags 1 2 5 77
+(integer) 4
+</code></pre>
+
+<p>添加反向关联：</p>
+
+<pre><code>&gt; sadd tag:1:news 1000
+(integer) 1
+&gt; sadd tag:2:news 1000
+(integer) 1
+&gt; sadd tag:5:news 1000
+(integer) 1
+&gt; sadd tag:77:news 1000
+(integer) 1
+</code></pre>
+
+<p>查询该新闻的标签 id 集合：</p>
+
+<pre><code>&gt; smembers news:1000:tags
+1. 5
+2. 1
+3. 77
+4. 2
+</code></pre>
+
+<p>然后根据返回的标签 id 集合查询标签。虽然分了两步进行查询，但 Redis 的高性能将为我们带来很低的耗时。</p>
+
+<h3 id="toc_8">结论</h3>
+
+<ul>
+<li> 数据库分表能够解决标签服务的性能问题
+
+<ul>
+<li>实现简单，在现有实现的基础上改造很小</li>
+<li>依然是基于关系型数据库，不用调整技术架构，开发模式、运维等保持不变</li>
+</ul></li>
+<li>使用 Redis 同样可以实现标签服务
+
+<ul>
+<li>使用 Hash 保存标签、Set 保存关联关系</li>
+<li>分两步进行查询，Redis 自身的实现解决性能问题</li>
+</ul></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

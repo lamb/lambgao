@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  NetBeans 中使用 maven-jetty-plugin 运行与调试 web 项目 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">NetBeans 中使用 maven-jetty-plugin 运行与调试 web 项目</h1>
+				<p class="meta"><time datetime="2013-06-10T11:26:16+08:00" pubdate data-updated="true">2013/6/10</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>NetBeans 对于 maven 的支持非常好，结合 maven 插件，很容易就可以定制出一个简单易用的 maven web 开发环境。</p>
+
+<p>这里我们使用 maven-jetty-plugin 插件进行 web 项目的运行与调试，关于该插件的配置细节请参考<a href="http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin">这里</a>。</p>
+
+<p>假设你已经配置好了 maven-jetty-plugin（修改 pom.xml 中 build -&gt; plugins 加入该 mvn 插件配置），接下来就需要配置 NetBeans 来使用该插件了。</p>
+
+<h3 id="toc_0">运行 web 项目</h3>
+
+<ol>
+<li>右键单击你的 mvn web 项目，选择 Custom -&gt; Goals...</li>
+<li>填入如下配置：</li>
+</ol>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2prMeEUUCxLkt_9dXM_38-UKOAHaDNuRU2tIE2wXaC_F_-9qz6kz75lf268lPK2lKjMq-L-gR1nquRwn1c5Q2EYmzJu0q9owLT_sxUGwVUaBc/mvn-jetty-plugin-run.jpg?psid=1" alt="netbeans maven-jetty-plugin run"/></p>
+
+<h3 id="toc_1">调试 web 项目</h3>
+
+<ol>
+<li>右键单击你的 mvn web 项目，选择 Custom -&gt; Goals...</li>
+<li>填入如下配置：</li>
+</ol>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2pt-HEt5uc7hfmsEVEXsqcQ89y3Evcfye6F98Fw900Mqau7t1NPGvNjCDzjiH0By8BL1hR5doYMgGIHvYsuHurhe05td-XKViT-RGzokny1RY/mvn-jetty-plugin-debug.jpg?psid=1" alt="netbeans maven-jetty-plugin debug"/></p>
+
+<p>最终，我们可以右键单击项目，找到刚才配置的 maven-jetty-plugin 插件进行运行或调试项目：</p>
+
+<p><img src="https://pyqdbw.dm1.livefilestore.com/y2pXZTNkZbJw6q85_mutPEATkeV899Mzron7BJeGZIREcuINDcWM0Qd0LQmUoibR90rTDCE-05KdmUj7Xd8UxczzsNR0Nbo1Pg7NWIg0WOwRl4/mvn-jetty-plugin.jpg?psid=1" alt="netbeans maven-jetty-plugin"/></p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2013-07-19-jpa-and-cmt-why-catching-persistence-exception-is-not-enough.html" 
+	        title="Previous Post: JPA与CMT – 为什么单纯捕捉持久化异常是不够的？">&laquo; JPA与CMT – 为什么单纯捕捉持久化异常是不够的？</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2013-06-04-app-dev-accumulation.html" 
+	        title="Next Post: 应用开发积累">应用开发积累 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

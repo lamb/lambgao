@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Auto Layout 使用心得（二）—— 实现三等分 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Auto Layout 使用心得（二）—— 实现三等分</h1>
+				<p class="meta"><time datetime="2015-03-07T23:56:08+08:00" pubdate data-updated="true">2015/3/7</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h3 id="toc_0">准备</h3>
+
+<p>上一篇文章中，我们共同进行了 Auto Layout 的初体验，在本篇我们将一起尝试用 Auto Layout 实现三等分。</p>
+
+<h3 id="toc_1">Auto Layout 的本质原理</h3>
+
+<p>Auto Layout 的本质是用一些约束条件对元素进行约束，从而让他们显示在我们想让他们显示的地方。</p>
+
+<p>约束主要分为以下几种（欢迎补充）：</p>
+
+<ol>
+<li>相对于父 view 的约束。如：距离上边距 10，左边距 10。</li>
+<li>相对于前一个元素的约束。如：距离上一个元素 20，距离左边的元素 5 等。</li>
+<li>对齐类约束。如：跟父 view 左对齐，跟上一个元素居中对齐等。</li>
+<li>相等约束。如：跟父 view 等宽。</li>
+</ol>
+
+<h3 id="toc_2">三等分设计思路</h3>
+
+<p>许多人刚开始接触 Auto Layout，可能会以为它只能实现上面的1、2功能，其实后面3、4两个功能才是强大、特别的地方。接下来我们将尝试设计横向三等分：</p>
+
+<ol>
+<li>第一个元素距离左边一定距离。</li>
+<li>最后一个元素距离右边一定距离。</li>
+<li>三者高度恒定，宽度相等。（此处我们设置为高度恒定（height 属性），如果你需要的是固定长宽比，则需要设定 Aspect Ratio 属性）</li>
+<li>1和2、2和3的横向间距固定。</li>
+</ol>
+
+<h4 id="toc_3">干货，实现过程的动图：</h4>
+
+<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/process.gif" alt="动图"/></p>
+
+<h4 id="toc_4">运行结果</h4>
+
+<p>4 寸：</p>
+
+<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/1.jpg" alt="Image1"/></p>
+
+<p>4.7 寸：</p>
+
+<p><img src="/resource/image/2015-03-07-auto-layout-three-equal-parts/2.jpg" alt="Image2"/></p>
+
+<h4 id="toc_5">纵向三等分实现方式类似，大家可以自己尝试一下哦~</h4>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2015-03-08-auto-layout-drag-rebound.html" 
+	        title="Previous Post: Auto Layout 使用心得（三）—— 22 行代码实现拖动回弹">&laquo; Auto Layout 使用心得（三）—— 22 行代码实现拖动回弹</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2015-03-06-auto-layout-start-up.html" 
+	        title="Next Post: Auto Layout 使用心得（一）—— 初体验">Auto Layout 使用心得（一）—— 初体验 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

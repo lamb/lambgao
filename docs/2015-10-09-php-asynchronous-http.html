@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  PHP 异步 HTTP 与 NGINX 499 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">PHP 异步 HTTP 与 NGINX 499</h1>
+				<p class="meta"><time datetime="2015-10-09T00:05:18+08:00" pubdate data-updated="true">2015/10/9</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h3 id="toc_0">PHP 异步 HTTP</h3>
+
+<p>在 PHP 代码中提交异步 HTTP 请求比较常用的方式是通过 fsockopen/fwrite/fclose 来实现，请参考如下代码。</p>
+
+<pre><code>function post($host, $path, $port, $data) {
+    $post = http_build_query($data);
+    $len = strlen($post);
+
+    $fp = fsockopen($host, $port, $errno, $errstr, 30);
+    if (!$fp) {
+        echo &quot;$errstr ($errno)\n&quot;;
+
+        return;
+    }
+
+    $out = &quot;POST $path HTTP/1.1\r\n&quot;;
+    $out .= &quot;Host: $host\r\n&quot;;
+    $out .= &quot;Content-type: application/x-www-form-urlencoded\r\n&quot;;
+    $out .= &quot;Connection: Close\r\n&quot;;
+    $out .= &quot;Content-Length: $len\r\n&quot;;
+    $out .= &quot;\r\n&quot;;
+    $out .= $post . &quot;\r\n&quot;;
+    // echo($out);
+    fwrite($fp, $out);
+
+    // 注释掉如下代码实现不等待 HTTP 响应，从而实现“异步”
+//    $receive = &#39;&#39;;
+//    while (!feof($fp)) {
+//        $receive .= fgets($fp, 128);
+//    }
+//    echo &quot;&lt;br /&gt;&quot; . $receive;
+
+
+    fclose($fp);
+}
+</code></pre>
+
+<p>这段代码可以如期完成异步 HTTP 效果，但是如果提交的服务端有 NGINX 做 CGI 反代的话，可能会导致上游后端 PHP 接收不到该请求。</p>
+
+<h3 id="toc_1">NGINX 499</h3>
+
+<p>查看 NGINX access log，发现这样的请求会以 499（Client Closed Request）记录。确定问题是因为：客户端主动端口请求连接时，NGINX 不会将该请求代理给上游服务（FastCGI PHP 进程），这个时候 access log 中会以 499 记录这个请求。</p>
+
+<p>要解决这个问题需要将 NGINX FastCGI 忽略客户端中断配置打开：</p>
+
+<pre><code>fastcgi_ignore_client_abort on;
+</code></pre>
+
+<p>这样无论客户端是否断开，都会将这个请求代理给上游，并且会记录上游服务处理后的返回状态。</p>
+
+<p>另外，还有一个类似配置 proxy_ignore_client_abort on;，这个配置是针对其他类型的反代，PHP 的场景并不适用。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2015-10-19-www-domian-and-cookie-free.html" 
+	        title="Previous Post: www 开头的域名和 Cookie-free">&laquo; www 开头的域名和 Cookie-free</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2015-09-20-compile-go-cross-platform.html" 
+	        title="Next Post: Go 编译跨平台">Go 编译跨平台 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

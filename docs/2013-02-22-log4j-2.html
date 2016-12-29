@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Log4j 2 介绍 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Log4j 2 介绍</h1>
+				<p class="meta"><time datetime="2013-02-22T15:44:19+08:00" pubdate data-updated="true">2013/2/22</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h3 id="toc_0">关于Log4j 2</h3>
+
+<p>Log4j 2 是Log4j的升级版，与之前的版本Log4j 1.x相比、有重大的改进，在修正了Logback固有的架构问题的同时，改进了许多Logback所具有的功能。</p>
+
+<p>Log4j 2的特性以及改进有：</p>
+
+<ul>
+<li>API分离：Log4j将API与实现分离开来。开发人员现在可以很清楚地知道能够使用哪些没有兼容问题的类和方法，同时又允许通过自己实现来增强功能。</li>
+<li>改进的性能：Log4j 2的性能在某些关键领域比Log4j 1.x更快，而且大多数情况下与Logback相当。更多的信息请参考性能。</li>
+<li>多个API支持：Log4j 2提供最棒的性能的同时，还支持SLF4J和公共日志记录API。</li>
+<li>自动配置加载：像Logback一样，一旦配置发生改变，Log4j 2可以自动载入这些更改后的配置信息，又与Logback不同，配置发生改变时不会丢失任何日志事件。</li>
+<li>高级过滤功能：与Logback类似，Log4j 2可以支持基于上下文数据、标记，正则表达式以及日志事件中的其他组件的过滤。Log4j 2 能够专门指定适用于所有的事件，无论这些事件在传入Loggers之前还是正在传给 appenders。另外，过滤器还可以与Loggers关联起来。与Logback不同的是，Filter公共类可以用于任何情况。</li>
+<li>插件架构：所有可以配置的组件都以Log4j插件的形式来定义。同样地，不需要修改任何Log4j代码就可以创建新的Appender、Layout、Pattern Convert 等等。Log4j自动识别预定义的插件，如果在配置中引用到这些插件，Log4j就自动载入使用。</li>
+<li>属性支持：属性可以在配置文件中引用，也可以直接替代或传入潜在的组件，属性在这些组件中能够动态解析。属性可以是配置文件，系统属性，环境变量，线程上下文映射以及事件中的数据中定义的值。用户可以通过增加自己的Lookup插件来定制自己的属性。</li>
+</ul>
+
+<h3 id="toc_1">文档</h3>
+
+<p>Log4j 2用户文档可在<a href="http://logging.apache.org/log4j/2.x/manual/index.html">这里</a>在线阅读，或下载成<a href="http://logging.apache.org/log4j/2.x/log4j-users-guide.pdf">PDF</a>格式。</p>
+
+<h3 id="toc_2">要求</h3>
+
+<p>Log4j 2至少要求安装Java 5，然而使用Java 6的增强功能可以提高性能。有些特性需要一些可选的依赖，这些依赖在相关特性的文档中有说明。</p>
+
+<h3 id="toc_3">资讯</h3>
+
+<p>Log4j 2现在已经可以测试。API与Log4j 1.x 不兼容，不过通过适配器可以继续使用Log4j 1.x API。 适配器同样适用于Commons Logging和SLF4J.</p>
+
+<h3 id="toc_4">以前的发布</h3>
+
+<p>以前的Apache log4j发布可以从<a href="http://archive.apache.org/dist/logging/log4j">archive repository</a>找到。</p>
+
+<h3 id="toc_5">Log4j 2.x的构建与安装</h3>
+
+<h4 id="toc_6">构建</h4>
+
+<p>Log 4j 运行在Apache 软件基金会下的代码仓库中。<a href="http://logging.apache.org/log4j/2.x/source-repository.html">Log4j 代码仓库</a>可以找到如何获取当前绝大多的源代码的细节。可以根据<a href="http://logging.apache.org/log4j/2.x/download.html">Log4j下载说明</a>下载最新的源代码</p>
+
+<p>Log4j 2.x 使用Maven 2或3作为生成工具。在root目录中仅运行”mvn install”就可以生成Log4j.</p>
+
+<h4 id="toc_7">程序中如何使用</h4>
+
+<p>在你的程序中使用Log4j之前必须确保API和Core jars 在程序的classpath中。使用Maven将下面的依赖加入pom.xml.</p>
+
+<pre><code>&lt;dependencies&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+&lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+&lt;version&gt;2.0-beta3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+&lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+&lt;version&gt;2.0-beta3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;/dependecies&gt;
+</code></pre>
+
+<h4 id="toc_8">Apache 公共日志记录</h4>
+
+<p>公共日志记录在许多组件中使用，不同的组建可以选择特定的日志记录的实现。为了把这些组件的日志功能集成到Log4j 2，需要加入下面的依赖，而且不能删除Commons Logging jar</p>
+
+<pre><code>&lt;dependencies&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.logging.log4j.adapters&lt;/groupId&gt;
+&lt;artifactId&gt;log4j-jcl&lt;/artifactId&gt;
+&lt;version&gt;2.0-beta3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;/dependecies&gt;
+</code></pre>
+
+<h4 id="toc_9">SLF4J</h4>
+
+<p>SLF4J是另一个受欢迎的日志记录API，通过加入下面的依赖以及SLF4J依赖就可以将其绑定到Log4j 2.</p>
+
+<pre><code>&lt;dependencies&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.logging.log4j.adapters&lt;/groupId&gt;
+&lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+&lt;version&gt;2.0-beta3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;/dependecies&gt;
+</code></pre>
+
+<h4 id="toc_10">发布更改记录</h4>
+
+<ul>
+<li><a href="http://logging.apache.org/log4j/2.x/jira-report.html#a1.0-alpha1">JIRA更改记录</a></li>
+<li><a href="http://logging.apache.org/log4j/2.x/changes-report.html#a1.0-alpha1">Manual更改记录</a></li>
+</ul>
+
+<h4 id="toc_11">升级注意事项</h4>
+
+<p>Apache Log4j 2不支持兼容老版本。如果要升级到Log4j 2请铭记下列几条：</p>
+
+<ul>
+<li>需要Java 5</li>
+<li>简化了XML配置，不兼容logj4 1.x。</li>
+<li>不支持属性文件配置</li>
+<li>支持JSON配置</li>
+<li>虽然Log4j 2不能与Log4j 1.x直接兼容，但是可以通过自带兼容桥梁来降低升级带来的代码更改。</li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2013-03-05-hello-world.html" 
+	        title="Previous Post: 为什么这段代码输出的是”Hello World”">&laquo; 为什么这段代码输出的是”Hello World”</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2013-01-12-java-oom.html" 
+	        title="Next Post: 诊断Java.lang.OutOfMemoryError（OOM）">诊断Java.lang.OutOfMemoryError（OOM） &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

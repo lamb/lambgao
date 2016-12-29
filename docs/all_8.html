@@ -1,0 +1,1530 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div class="blog-index">
+
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-09-08-ten-jdbc-best-practices.html">十个 JDBC 最佳实践</a></h1>
+			<p class="meta"><time datetime="2012-09-08T18:18:10+08:00" 
+			pubdate data-updated="true">2012/9/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>JDBC是Java为多种关系型数据库提供的统一的访问接口，以下是我长期使用JDBC总结的十个最佳实践。</p>
+
+<h4 id="toc_0">JDBC最佳实践1：使用PrearedStatement</h4>
+
+<p>任何一个使用过JDBC的Java程序员几乎都知道这个，PreparedStatment可以通过预编译的方式避免我们在拼接SQL时造成SQL注入。</p>
+
+<h4 id="toc_1">JDBC最佳实践2、使用ConnectionPool（连接池）</h4>
+
+<p>使用连接池作为最佳实践几乎都成了公认的标准。一些框架已经提供了内建的连接池支持，例如Spring中的Database Connection Pool，如果你的应用部署在JavaEE的应用服务器中，例如JBoss，WAS，这些服务器也会有内建的连接池支持，例如DBCP。使用连接的原因简单的说就是因为创建JDBC连接耗时比较长，如果每次查询都重新打开一个连接，然后关闭，性能将会非常低，而如果事先创建好一批连接缓存起来，使用的时候取出，不使用的时候仍不关闭，将会节省大量的创建关闭连接的时间。</p>
+
+<h4 id="toc_2">JDBC最佳实践3、禁用自动提交</h4>
+
+<p>这个最佳实践在我们使用JDBC的批量提交的时候显得非常有用，将自动提交禁用后，你可以将一组数据库操作放在一个事务中，而自动提交模式每次执行SQL语句都将执行自己的事务，并且在执行结束提交。</p>
+
+<h4 id="toc_3">JDBC最佳实践4、使用Batch Update</h4>
+
+<p>JDBC的API提供了通过addBatch()方法向batch中添加SQL查询，然后通过executeBatch()执行批量的查询。JDBC batch update可以减少数据库数据传输的往返次数，从而提高性能。</p>
+
+<h5 id="toc_4">JDBC最佳实践5：使用列名获取ResultSet中的数据，从而避免invalidColumIndexError</h5>
+
+<p>JDBC中的查询结果封装在ResultSet中，我们可以通过列名和列序号两种方式获取查询的数据，当我们传入的列序号不正确的时候，就会抛出invalidColumIndexException，例如你传入了0，就会出错，因为ResultSet中的列序号是从1开始的。另外，如果你更改了数据表中列的顺序，你也不必更改JDBC代码，保持了程序的健壮性。有一些Java程序员可能会说通过序号访问列要比列名访问快一些，确实是这样，但是为了程序的健壮性、可读性，我还是更推荐你使用列名来访问。</p>
+
+<h4 id="toc_5">JDBC最佳实践6：使用变量绑定而不是字符串拼接</h4>
+
+<p>在第一条最佳实践中，我们已经说过要使用PreparedStatment可以防止注入，而使用？或者其他占位符也会提升性能，因为这样数据库就可以使用不同的参数执行相同的查询，这个最佳实践带来更高的性能的同时也防止了SQL注入。</p>
+
+<h4 id="toc_6">JDBC最佳实践7：要记住关闭Statement、PreparedStatement和Connection</h4>
+
+<p>通常的做法是在finally块中关闭它们，这样做的好处是不论语句执行正确与否，不管是否有异常抛出，都能保证资源被释放。在Java 7中，可以通过Automatic Resource Management Block来自动的关闭资源。</p>
+
+<h4 id="toc_7">JDBC最佳实践8：选择合适的JDBC驱动</h4>
+
+<p>有四种JDBC驱动，分别是</p>
+
+<ul>
+<li>第一种JDBC驱动叫做JDBC-ODBC Bridge driver (bridge driver)</li>
+<li>第二种JDBC驱动叫做Native-API/partly Java driver (native driver)</li>
+<li>第三种JDBC驱动叫做AllJava/Net-protocol driver (middleware driver)</li>
+<li>第四种JDBC驱动叫做All Java/Native-protocol driver (Pure java driver)</li>
+</ul>
+
+<h4 id="toc_8">JDBC最佳实践9：尽量使用标准的SQL语句，从而在某种程度上避免数据库对SQL支持的差异</h4>
+
+<p>不同的数据库厂商的数据库产品支持的SQL的语法会有一定的出入，为了方便移植，我推荐使用标准的ANSI SQL标准写SQL语句。</p>
+
+<h4 id="toc_9">JDBC最佳实践10：使用正确的getXXX()方法</h4>
+
+<p>当从ResultSet中读取数据的时候，虽然JDBC允许你使用getString()和getObject()方法获取任何数据类型，推荐使用正确的getter方法，这样可以避免数据类型转换。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-08-30-bae-sae-gae.html">BAE、SAE 与 GAE 对比</a></h1>
+			<p class="meta"><time datetime="2012-08-30T18:05:40+08:00" 
+			pubdate data-updated="true">2012/8/30</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>从数据库、应用配置、计费、域名绑定、平台服务对比了 BAE、SAE 以及 GAE 的优劣，最后给出云平台选型的建议。</p>
+
+<h3 id="toc_0">数据库</h3>
+
+<p>SAE 不支持 InnoDB（可申请支持），BAE 默认支持。</p>
+
+<p>BAE 不支持数据库连接池（c3p0、BoneCP 已测不支持），数据库连接不能长时间保持。</p>
+
+<p>GAE 使用 Datasotre 存取数据，最近也提供了云 SQL（MySQL），但申请比较困难，配额/性能笔者未测试过。</p>
+
+<p>另外，SAE 显式给出了主从库的访问方式，应用可以比较灵活地设计存取策略，例如读写分离。并且 SAE 是每个应用都拥有自己的数据库，而 BAE 是所有应用共用一个库。</p>
+
+<h3 id="toc_1">应用配置</h3>
+
+<p>BAE 的 duapp-web.xml 基本是抄袭 GAE 的 appengine-web.xml，元素基本一致。</p>
+
+<p>比较奇葩的是 BAE 静态资源配置默认所有后缀为静态文件类型（例如 .html）的请求路径都默认假设为静态资源，需要在 duapp-web.xml 中指定排除。</p>
+
+<h3 id="toc_2">计费与配额</h3>
+
+<p>SAE 按应用天计费“豆豆”，服务也按流量计费、CPU 时间、调用次数计费。注册或活动送配额，否则需要购买。</p>
+
+<p>BAE 目前还没有详细的计费，只限定了应用数。公测结束后应该会细化计费模型。</p>
+
+<p>GAE 目前的计费模型主要是按 API 调用计数，流量分为 In/Out 配额。每天会定时刷新免费配额。</p>
+
+<p>综上，GAE 的计费一目了然，主要就是 API 调用次数；SAE 的计费比较复杂，不同服务有不同的计费策略；BAE 还没有明确的计费模型。</p>
+
+<h3 id="toc_3">域名绑定</h3>
+
+<p>GAE 开通企业套件后随便绑，企业套件有免费版。</p>
+
+<p><del>SAE 需要确认通过域名备案才能绑定，并且绑定后的流量计费翻倍。</del></p>
+
+<p>SAE 目前可以随便绑，但没备案的话绑定域名的请求走海外中转，流量计费翻倍（原二级域名请求计费不变）。</p>
+
+<p>BAE 目前可以随便绑，但没备案的后果自负。</p>
+
+<h3 id="toc_4">平台服务</h3>
+
+<p>SAE 提供了 SDK 包，包含了开发需要的本地服务实现。</p>
+
+<p>BAE 则分别提供了服务 Jar，调用方式按不同服务而异。</p>
+
+<p>GAE 提供了完整的 SDK 包，包含了开发需要的本地运行环境和配置客户端。</p>
+
+<p>综上，GAE 提供了完整的平台化服务，覆盖了从开发到上线运维的一系列工具；SAE 则提供了部分工具，平台化不完整，增加了开发、运维难度；BAE 则是分别提供不同服务给开发，没有统一的 SDK 与调用方式。</p>
+
+<p>另外，值得一提的是 BAE 虽然服务没有整合到一个 SDK 中，但其分散的服务也比较适合应用自己选择。 其中云消息（消息服务）以及云触发（数据变更通知）是 GAE/SAE 没有提供的服务，某些业务场景应该会非常适用。</p>
+
+<h3 id="toc_5">结论</h3>
+
+<p>SAE 与 BAE 主要还是面向应用部署托管，普通应用修改后易迁移部署到 BAE 或 SAE。</p>
+
+<p>新应用开发可以选择和平台绑死（依赖平台服务）或按照普通应用开发。</p>
+
+<p>使用配置工具来上传、更新应用配置其实是非常好的方式，但目前 SAE/J、BAE/J 都没有提供客户端配置工具，这增加了使用者的维护工作量。</p>
+
+<p>GAE 提供了比较完整的服务平台，覆盖了应用的生命周期，最近也提供了云 MySQL 服务以吸引更多开发者。</p>
+
+<p>需要根据应用类型来考虑平台选型，例如 GAE 基本以 API 计数的配额就不适合做社交应用，‘墙’的问题也需要考虑解决方案。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-08-13-dispel-your-windjs's-doubts.html">消除你对Wind.js的疑虑</a></h1>
+			<p class="meta"><time datetime="2012-08-13T00:28:55+08:00" 
+			pubdate data-updated="true">2012/8/13</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">eval is (always) evil</h3>
+
+<p>eval大概也算是整个ECMAScript语言中最强大的一个方法，<br/>
+他就像是一个完整的ECMAScript解析器。你说它evil,我也承认这个<br/>
+方法会存在危险，有可能带来安全问题，特别是在用它执行用户输入<br/>
+数据的情况下。但Wind.js是用eval来运行已经“编译”后的代码，<br/>
+让你更舒服顺畅的来编写异步回调的代码。这些代码是你自己写的，<br/>
+所以不必担心代码注入、跨站脚本攻击这样的安全问题。没有这这个<br/>
+困扰和担忧，我相信eval应该是美好的。</p>
+
+<h3 id="toc_1">API太丑，eval为什么不封装？</h3>
+
+<p>通过eval执行的代码是被认为是包含该次调用的执行环境的一部分，<br/>
+因此被执行的代码具有与该执行环境有着相同的作用域链。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var msg = &#39;hello world&#39;;
+eval(&quot;console.log(msg)&quot;);//hello world
+
+var msg = &#39;hello world&#39;;
+var newFunc = eval(Wind.compile(&quot;async&quot;, function () { 
+    console.log(msg);
+}));
+newFunc().start();//hello world
+</code></pre>
+
+<p>变量msg是在eval外定义的，但eval中还是能够打印&quot;hello world&quot;。<br/>
+如果包装起来如法访问到msg这个变量。</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var msg = &#39;hello world&#39;;
+var newFunc = $async(function () { 
+    console.log(msg);
+});
+newFunc().start();//[WARNING] An unhandled error occurred: ReferenceError: msg is not defined
+</code></pre>
+
+<p>上面的例子中看到我们使用vm模块对eval有一个简单的包装，可以直接<br/>
+使用$async方法来替换以前的写法。从打印信息中，你很容易看出访问<br/>
+不到msg这个参数。麻烦请注意一下调用script.runInNewContext()方法<br/>
+时传入了一个sandbox对象，这相当于往代码运行环境中添加上下文参数。<br/>
+如果sanbox这个参数不传递，运行上端代码会报ReferenceError: Wind <br/>
+is not defined的错误。这就是eval为什么无法包装的原因。</p>
+
+<p>如果你的代码不需要依赖上下文你可以用上述方法包装，例如这样：</p>
+
+<pre><code>var Wind = require(&quot;wind&quot;);
+
+var vm = require(&quot;vm&quot;);
+var sandbox = {
+      Wind: Wind,
+      console:console
+};
+
+function $async(fun){
+    var script = vm.createScript(Wind.compile(&quot;async&quot;, fun));
+    return script.runInNewContext(sandbox);
+}
+
+var fib = $async(function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+});
+
+fib().start();
+</code></pre>
+
+<h3 id="toc_2">Wind.js很重很慢不适合前端</h3>
+
+<p>Wind.js基础组件及异步运行库共计4K大小（Minified + GZipped），<br/>
+Wind.js完全不会给前端带来负担，给你带来顺畅舒服的异步编程体验。</p>
+
+<h3 id="toc_3">生成的代码看不懂，难以调试</h3>
+
+<p>Wind.js生产的代码也完全是Javascript代码，你无需为调试担忧。<br/>
+下面是一个例子，我相信你很容易就可以看懂。</p>
+
+<pre><code>// Original: 
+function () {
+
+    $await(Wind.Async.sleep(1000));
+    console.log(0);
+
+    $await(Wind.Async.sleep(1000));
+    console.log(1);
+
+    var a = 0, current = 1;
+    while (true) {
+        var b = a;
+        a = current;
+        current = a + b;
+
+        $await(Wind.Async.sleep(1000));
+        console.log(current);
+    }
+}
+
+// Windified: 
+/* async &lt;&lt; function () { */     (function () {
+                                     var _builder_$0 = Wind.builders[&quot;async&quot;];
+                                     return _builder_$0.Start(this,
+                                         _builder_$0.Delay(function () {
+/*     $await(Wind.Async.sleep(1000)); */    return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(0); */                        console.log(0);
+/*     $await(Wind.Async.sleep(1000)); */        return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*     console.log(1); */                            console.log(1);
+/*     var a = 0, current = 1; */                    var a = 0, current = 1;
+                                                     return _builder_$0.While(function () {
+/*     while (true) { */                                 return true;
+                                                     },
+                                                         _builder_$0.Delay(function () {
+/*         var b = a; */                                     var b = a;
+/*         a = current; */                                   a = current;
+/*         current = a + b; */                               current = a + b;
+/*         $await(Wind.Async.sleep(1000)); */                return _builder_$0.Bind(Wind.Async.sleep(1000), function () {
+/*         console.log(current); */                              console.log(current);
+                                                                 return _builder_$0.Normal();
+                                                             });
+                                                         })
+/*     } */                                          );
+                                                 });
+                                             });
+                                         })
+                                     );
+/* } */                          })
+</code></pre>
+
+<h3 id="toc_4">eval性能方面会有问题</h3>
+
+<p>有童鞋提出这方面的问题，但不知道提供什么样子的测试才能令人信服，从而消除疑虑，放心大胆的使用Wind.js。<br/>
+这个问题还在收集整理中...</p>
+
+<h3 id="toc_5">写在最后</h3>
+
+<p>在ADC被老赵的执着打动了，支持老赵从文档开始吧。<br/>
+如果你还有对Wind.js的任何疑虑都可以留言，这个文档的目的就是消除你对Wind.js的疑虑。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-08-12-test-v8-delete.html">v8 can not handle delete yet</a></h1>
+			<p class="meta"><time datetime="2012-08-12T00:27:15+08:00" 
+			pubdate data-updated="true">2012/8/12</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>v8 delete操作存在的这个问题</p>
+
+<p><img src="/resource/image/2012-08-12-test-v8-delete/v8delete.jpeg" alt="有帮助的截图"/></p>
+
+<p>测试地址在这里， <a href="http://jsperf.com/test-v8-delete%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E5%9C%A8node%E4%B8%AD%E6%B5%8B%E8%AF%95">http://jsperf.com/test-v8-delete，也可以用下面的代码在node中测试</a></p>
+
+<pre><code>var begin = new Date();
+function Foo() {}
+Foo.prototype.x = 1;
+Foo.prototype.y = 2;
+
+//delete Foo.prototype.y;
+
+var foo = new Foo();
+
+var result = 0;
+for (var i = 0; i &lt; 100000; i++) {
+    result = result + foo.x;
+}
+
+var end = new Date();
+console.log(end - begin);
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-07-22-what-is-solo.html">solo(独唱团)这是一个由Node构建的静态博客</a></h1>
+			<p class="meta"><time datetime="2012-07-22T00:26:24+08:00" 
+			pubdate data-updated="true">2012/7/22</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ul>
+<li>这个静态博客是用markdown来写文章，通过皮肤模板可以build出html页面。</li>
+<li>你可以将他提交至GithubPages或者云端（七牛）或者一个Node服务器。</li>
+<li>这里有示例:<a href="http://jinyang.mynah.org/">Pages</a>  <a href="http://qiniu.mynah.org/">七牛</a></li>
+</ul>
+
+<h3 id="toc_0">为什么会有这样一个静态博客</h3>
+
+<ul>
+<li>以前的博客不方便添加自己的demo例子页面(前端开发的童鞋应该会有强烈的认同感)</li>
+<li>markdown语法简洁易用，所见即所得的html编辑器不好用也太重</li>
+<li>不依赖于数据库，所有的内容都是文本，方便管理和迁移</li>
+<li>不需要一个什么复杂的服务器，也不需要担心什么配额，可以托管html页面就可以</li>
+<li>不用为图片文件等外链来发愁，直接放到相应的目录下，一起上传即可</li>
+</ul>
+
+<h3 id="toc_1">如何部署</h3>
+
+<ul>
+<li>你可以在<a href="https://github.com/lambgao/solo">这里</a>找到他。</li>
+<li>如果你熟悉<a href="http://pages.github.com/">Github Pages</a>,可以直接Push到你的Pages仓库即可。</li>
+<li>如果有一个Node服务器，那么你可以部署至你的服务器,启动app.js即可。</li>
+<li>如果你有一个云端（七牛）服务，那么你可以上传至你的云端(运行lib/publish.js)。</li>
+</ul>
+
+<h3 id="toc_2">如何使用</h3>
+
+<ul>
+<li>你会发现根目录下md文件夹，这个里面存放的都是博客内容(markdown格式)。</li>
+<li>md下有article和page两个文件夹，从字面上就很容易理解，分别是文章和页面。</li>
+<li>md/article下面的文章在build之后会在article目录下生成同文件名的html页面</li>
+<li>md/page下面的页面在build之后会在根目录下生成同文件名的html页面</li>
+<li>运行lib/build.js来build页面(请先安装<a href="http://www.nodejs.org/">Node</a>,并安装依赖npm install)</li>
+</ul>
+
+<h3 id="toc_3">皮肤模板修改</h3>
+
+<ul>
+<li>你会发现根目录下skin文件夹,这个文件夹里面存放的都是皮肤模板(html文件)。</li>
+<li>上面提到了article和page两种页面，那么皮肤模板也提供了article.html和page.html两个模板文件。</li>
+<li>如果两个页面用到了共同的内容那么你可以把共同的内容提取出来放到skin/slot文件夹下。</li>
+<li>在模板文件中${slot}就可以将这个文件引入到当前模板文件中。</li>
+<li>${article}这个变量用于引入文章或者页面的内容，即md文件夹下生成的内容。</li>
+<li>根目录下你还会发现css、image、javascript文件夹，这些是存放模板使用到的静态文件</li>
+</ul>
+
+<h3 id="toc_4">有疑问或者...</h3>
+
+<ul>
+<li>如果你有疑问、建议、bug提交都可以找我。</li>
+<li>找我请这里新浪微博<a href="http://weibo.com/lambsand">@金氧</a>,或这里Github<a href="https://github.com/lamb">@lambgao</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-06-16-java-atomic-conncurrent.html">Java 原子操作与并发</a></h1>
+			<p class="meta"><time datetime="2012-06-16T17:54:28+08:00" 
+			pubdate data-updated="true">2012/6/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>由一个简单的例子引出并发处理时容易被忽视的陷阱，用来作为面试问题应该很适合。</p>
+
+<p>某日，工作了 4 年多的 Java 程序员小 K 跳槽，面试时碰到这样一个题目....</p>
+
+<pre><code>public class P1 {
+ 
+    private long b = 0;
+ 
+    public void set1() {
+        b = 0;
+    }
+ 
+    public void set2() {
+        b = -1;
+    }
+ 
+    public void check() {
+        System.out.println(b);
+ 
+        if (0 != b &amp;&amp; -1 != b) {
+            System.err.println(&quot;Error&quot;);
+        }
+    }
+}
+</code></pre>
+
+<h4 id="toc_0">问题</h4>
+
+<p>调用 set1()、set2()、check()，会打印出 Error 么？</p>
+
+<h4 id="toc_1">小K 的推理</h4>
+
+<p>“无论如何调用 set1()、set2() -&gt; b 的值只可能是 0 或 -1 -&gt; 在 check() 里面的判断条件（b 既不为 0 也不为 -1）永远不成立 -&gt; 不打印 Error”</p>
+
+<p>小 K 觉得有坑：这题目应该不会这么简单，再考虑一下多线程环境。</p>
+
+<p>思前想后，小 K 得出结论：“在多线程环境下也不会打印 Error。这题目很简单，就是考察一下推理吧。”，K 暗自窃喜。</p>
+
+<p>后来小 K 陆续又被问了几个多线程和 JVM 的问题。</p>
+
+<p>后来，就没有后来了....</p>
+
+<h4 id="toc_2">后来</h4>
+
+<p>后来还是有的。到家后，不甘心的小 K 验证了这道秒杀他的面试题。</p>
+
+<pre><code>public static void main(final String[] args) {
+    final P1 v = new P1();
+ 
+    // 线程 1：设置 b = 0
+    final Thread t1 = new Thread() {
+        public void run() {
+            while (true) {
+                v.set1();
+            }
+        };
+    };
+    t1.start();
+ 
+    // 线程 2：设置 b = -1
+    final Thread t2 = new Thread() {
+        public void run() {
+            while (true) {
+                v.set2();
+            }
+        };
+    };
+    t2.start();
+ 
+    // 线程 3：检查 0 != b &amp;&amp; -1 != b
+    final Thread t3 = new Thread() {
+        public void run() {
+            while (true) {
+                v.check();
+            }
+        };
+    };
+    t3.start();
+}
+</code></pre>
+
+<p>使用 3 个线程分别重复执行 set1()、set2()、check()。执行输出结果部分如下：</p>
+
+<pre><code>....
+0
+0
+1
+1
+1
+Error
+Error
+-4294967296
+0
+0
+4294967295
+....
+</code></pre>
+
+<p>执行环境：</p>
+
+<pre><code>*Java(TM) SE Runtime Environment (build 1.6.0_31-b05)
+
+Java HotSpot(TM) Client VM (build 20.6-b01, mixed mode, sharing), 32bit*
+</code></pre>
+
+<p>“确实打印了 Error，并且打印了 4294967295、-4294967296。我勒个去，只是啥情况？”</p>
+
+<p>小 K 决定搞懂其中奥秘，重新审视了题目。以一个专业程序员的严谨，并经过无数次 Google 后....他似乎发现了问题所在。 </p>
+
+<p>“这确实是一个并发问题！”</p>
+
+<h4 id="toc_3">分析</h4>
+
+<p>这道题目有两个陷阱，分别考察了对并发执行的理解，以及对 JVM 基础（赋值操作）的掌握。</p>
+
+<h4 id="toc_4">陷阱一：并发执行</h4>
+
+<p>并发执行就是多个操作一起执行，CPU 执行不同上下文（可理解为不同线程）发过来的指令。操作系统上层看上去就像是并行处理一样。</p>
+
+<p>也就是说，在编程语言层面，一个简单的操作同样需要考虑并发问题。</p>
+
+<p>小 K 首先是栽在了 check() 中的 if 判断上和设值是存在并发的，不能保证 0 != b 这个判断真（此时 b 为 -1）后恰好 b 被赋值为 0 时判断 1 != b。</p>
+
+<p>除此外，无论 JVM、操作系统、CPU 层面对指令如何优化、重排，最终都是逐一执行单一指令，唯一不同的就是不同层面可能会对执行加以限制，</p>
+
+<p>比如加入原子操作，最终保证 CPU 能够完整执行一组指令。</p>
+
+<h4 id="toc_5">陷阱二：JVM 赋值操作</h4>
+
+<p>一些赋值操作不是原子性的。“纳尼？”</p>
+
+<p>Java 基础类型中，long 和 double 是 64 位长的。32 位架构 CPU 的算术逻辑单元（ALU）宽度是 32 位的，在处理大于 32 位操作时需要处理两次。</p>
+
+<p>“这不是&lt;计算机组成原理与汇编&gt;么”，小 K 顿时感到大学白上了，不懂学以致用 T_T~</p>
+
+<p>题目执行打印 4294967295、-4294967296 就是因为读时高 32 位或低 32 位被其他写覆盖了（看一下这两个数字的二进制就知道了）。</p>
+
+<p>Java 已经是封装底层细节很好的语言了，但依然需要注意这些陷阱，可以使用并发处理包 java.util.concurrent.atomic 中包含了一系列无锁原子操作类型，</p>
+
+<p>也可以使用 volatile 关键字保证线程间变量的可见性。</p>
+
+<p>其实这道题目只要解决了并发问题，也就保证了每个执行单元（set1()、set2()、check()）中赋值、比较的正确性。可以把同步方法执行看作序列化的事务，各中操作不会相互影响。</p>
+
+<h4 id="toc_6">再后来</h4>
+
+<p>虽然小 K 面试挂了，不过他挂得心服口服。</p>
+
+<p>通过这个期间的不断翻阅文档以及实验，小 K 下次的面试应该不会被类似的题目秒杀了吧....</p>
+
+<p>“按照这个简单面试题的标准，以前写过的程序简直就是通篇 bugs 啊！有木有，有木有啊！！！！”</p>
+
+<h4 id="toc_7">骚年，继续充电吧！</h4>
+
+<p>内外兼修才是好程序员 :-)</p>
+
+<ul>
+<li><a href="http://www.iteye.com/topic/109150">多核线程笔记-volatile原理与技巧</a></li>
+<li><a href="http://www.ibm.com/developerworks/cn/java/j-jtp06197.html">Java 理论与实践: 正确使用 Volatile 变量</a></li>
+<li><a href="http://www.infoq.com/cn/articles/ftf-java-volatile">深入分析Volatile的实现原理</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/java/j-jtp11234/">Java 理论与实践: 流行的原子</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-05-20-reset-weblogic-password.html">Weblogic 10.3.3 重置管理密码</a></h1>
+			<p class="meta"><time datetime="2012-05-20T17:51:13+08:00" 
+			pubdate data-updated="true">2012/5/20</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<ol>
+<li><p>cd到你的域目录下的security，如C:\bea\wls103\user_projects\domains\my_domain\security</p></li>
+<li><p>rm DefaultAuthenticatorInit.ldift</p></li>
+<li><p>运行java -cp &lt;weblogic_home\wlserver_10.3\server\lib\weblogic.jar weblogic.security.utils.AdminAccount adminuser adminpassword .</p>
+
+<p>这步会创建一个新的DefaultAuthenticatorInit.ldift文件</p></li>
+<li><p>cd到<domain_home>/servers/<AdminServer>/data/ldap</p></li>
+<li><p>rm DefaultAuthenticatormyrealmInit.initialized</p></li>
+<li><p>重启 Server，用新帐号登录 Admin Console，然后你就可以重置原帐号的密码了。</p></li>
+</ol>
+
+<p>参考：<a href="http://pridesnow.iteye.com/blog/1453653">http://pridesnow.iteye.com/blog/1453653</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-05-12-server-push-based-on-pushlets.html">基于 Pushlets 的消息推送设计</a></h1>
+			<p class="meta"><time datetime="2012-05-16T17:40:38+08:00" 
+			pubdate data-updated="true">2012/5/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Pushlets 是通过长连接方式实现“推”消息的。推送模式分为：Poll（轮询）、Pull（拉）。本文围绕 Pull 模式进行设计。</p>
+
+<h3 id="toc_0">原理</h3>
+
+<p>客户端发起请求，服务端接收到请求后根据 Pushlets 协议进行处理。推数据通过 HTTP 响应返回。</p>
+
+<p>客户端在接收到响应后根据 Pushlets 协议进行处理，重新发起请求。Pull 模式时序：</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1ptpxVei6mgGxLAv79zOuIx46cVw3jQx5EgPX1MirgoMA5wt7KFkIyA20YE2GuLTBXy_IQi1CjBSkYs4GnJU5JKA/pushlets_pull.png?psid=1" alt="Pushlets Pull"/></p>
+
+<ol>
+<li>join：join 请求，服务器端建立 Pushlet 会话</li>
+<li>join-ack：join 应答，返回会话 id</li>
+<li>listen：订阅并监听主题</li>
+<li>listen-ack：监听应答，返回会话 id，订阅 id</li>
+<li>subscribe（可选）：订阅主题</li>
+<li>subscribe-ack（可选）：订阅主题应答，返回会话 id，订阅</li>
+<li>refresh：长连接请求，实参会话 id</li>
+<li>refresh-ack：长连接响应，包括下一次 refresh 请求间隔</li>
+<li>hb：心跳响应</li>
+<li>data：推数据</li>
+<li>leave：清空订阅</li>
+<li>leave-ack：清空订阅应答</li>
+</ol>
+
+<h3 id="toc_1">服务器端</h3>
+
+<p>服务器端主要负责维护会话，根据请求处理应答。使用内存队列维护每个会话的主题事件。</p>
+
+<p>事件产生后通过分发器（Dispatcher）将事件发布到指定订阅者的事件队列里。Pull 模式使用阻塞队列，读超时（没有事件）后返回 hb 与 refresh 指令的应答。</p>
+
+<h4 id="toc_2">事件发布</h4>
+
+<ul>
+<li>广播：将事件发布给所有订阅者</li>
+<li>多播：将事件发布给匹配的订阅者</li>
+<li>单播：将事件发给某个订阅者</li>
+</ul>
+
+<h4 id="toc_3">关键参数</h4>
+
+<p>订阅者的事件队列配置：</p>
+
+<ul>
+<li>queue.size=24队列大小为 24。如果队列满了新发布到该队列的事件将被丢弃。</li>
+<li>queue.read.timeout.millis=20000 队列读超时 20 秒。读超时后返回 hb 与 refresh 指令的应答。该项配置即请求线程最长 hold 时间。</li>
+<li>queue.write.timeout.millis=20 队列写超时 20 毫秒。如果队列是满的，等待 20 毫秒后如果还满，则销毁该订阅者。</li>
+</ul>
+
+<p>刷新时长配置：</p>
+
+<ul>
+<li>pull.refresh.timeout.millis=45000
+服务器端刷新超时 45 秒。如果服务器端某订阅者超过 45 秒没有收到客户端的 listen 或 refresh 请求，则销毁该订阅者。该超时判断发生在发布事件时。</li>
+<li>pull.refresh.wait.min.millis=2000
+pull.refresh.wait.max.millis=6000
+refresh 指令中指定客户端下次请求的等待时间区间，值取该区间内的随机值。</li>
+</ul>
+
+<h3 id="toc_4">客户端</h3>
+
+<p>Pushlets 支持多种客户端，例如浏览器客户端、Java 客户端。浏览器客户端又分为 iframe 和 AJAX 两种。</p>
+
+<p>初始化客户端后，客户端发起监听、订阅请求，并根据服务器返回指令发送 refresh 请求。当有 data 应答时，回调客户端 onData(event) 函数实现消息处理。</p>
+
+<h3 id="toc_5">技术设计</h3>
+
+<p>对 Pushlets 做接口封装以屏蔽其特性细节，也便于以后兼容其他服务器消息推送技术（例如 WebSocket）做好铺垫。</p>
+
+<p>封装的服务器推机制定义为 Channel 服务，提供服务器到浏览器客户端的消息推送。</p>
+
+<h4 id="toc_6">服务器端</h4>
+
+<p>通过 Channel API 在 JS 客户端与服务器端建立长连接，使服务器端可以实时地发送消息给客户端。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pZFZKlLqBHhM8SWRJGY6-1KDloobUVsp6EexI5XRDH-gXpPK4JiWHJHfOgyiHbbnQwiy2nBNg2DAPt-EgZqZUvg/channel_class.png?psid=1" alt="Channel 类图"/></p>
+
+<h4 id="toc_7">JS 客户端</h4>
+
+<p>oaweb.Channel() 类：</p>
+
+<ul>
+<li>init()
+初始化服务器调用 URL、客户端状态。</li>
+<li>open()
+发送 join 请求，服务端创建会话。</li>
+<li>subscribe(listeners : {topic, onmessage, onerror})
+发送 subscribe 请求，服务端创建订阅者，添加订阅主题。</li>
+<li>unsubscribe(topic)
+发送 unsubscribe 请求，服务端移除订阅。</li>
+<li>close()
+发送 leave 请求，服务端销毁会话。</li>
+</ul>
+
+<h4 id="toc_8">时序</h4>
+
+<p><img src="https://public.sn2.livefilestore.com/y1p5e65HlecGSpWAaqLF01v27kXVa5l_mk8E38aZszmxjzn2hs5OvpVtK_SNgW82eZJVwjjmrcAbtHkrjZYMaCTjw/channel_seq.png?psid=1" alt="Channel 时序图"/></p>
+
+<h4 id="toc_9">集群</h4>
+
+<p>均衡器通过源地址保持策略保证同一 IP 的请求均会分发到固定服务节点。</p>
+
+<p>当服务节点进行业务逻辑处理后，发送消息到消息服务系统；</p>
+
+<p>服务节点订阅消息主题，当监听到新消息时调用 Channel 服务发布消息到具体的推送实现组件（Pushlets）。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pFcfOSzdHxwV99UxthxH2wTXgwS8-GkQttbtzHJS1PO7cD-FCoRMvrkjnwzz9QAzAFy0apLGuGJaMRzFq7_1ZXQ/channel_cluster.png?psid=1" alt="Channel 集群"/></p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="https://developers.google.com/appengine/docs/java/channel/">Google App Engine Channel API</a></li>
+<li><a href="http://www.w3.org/TR/websockets/">HTML5 WebSocket API</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-05-07-web-message-push.html">消息推送技术</a></h1>
+			<p class="meta"><time datetime="2012-05-07T17:26:55+08:00" 
+			pubdate data-updated="true">2012/5/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">消息推送</h3>
+
+<p>消息推送是针对 Web 应用开发领域的技术，指服务端以主动方式将信息送达客户端。主要用于提升用户体验，避免用户刷新页面从服务端拉取数据。例如 Web 邮件中自动出现刚收到的邮件项，Web 即时通讯自动提示新到消息等应用场景。</p>
+
+<p>要实现消息推送机制，涉及两方面的内容：<br/>
+* Web 层消息推送<br/>
+* 服务层消息服务</p>
+
+<h3 id="toc_1">Web 层消息推送</h3>
+
+<h4 id="toc_2">套接字</h4>
+
+<p>可以使用套接字接口进行全双工通讯。可以通过 Flash XMLSocket、Java Applet 技术实现。<br/>
+但由于实现方案与厂商技术绑定过紧，不属于 Web 标准化范畴，并且存在一些限制（通讯端口开启安全、客户端插件），这里不进行描述。</p>
+
+<h4 id="toc_3">HTTP 请求轮询</h4>
+
+<p>目前的 Web 应用是基于 HTTP 协议的，其规定了请求-响应的处理模型，位于应用层的单工通讯模式使得纯粹意义上的服务端推送方式变得难以实现。</p>
+
+<p>为了基于 HTTP 协议进行“推送”实现，可由客户端发起 HTTP 请求轮询，服务端在请求后返回响应。</p>
+
+<p>根据轮询时间、请求处理方式，分为以下三种推。</p>
+
+<h4 id="toc_4">简单轮询</h4>
+
+<p>客户端一般以定时方式发起请求，服务端处理后返回响应。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pKG8qSIKx4nniHeaUQwfGkn7_AOS8GwVUrn63-xV6m5W6slIEvRMWLM8c13e6gqWmfcoNq-KPHaE_cSzsWYiPSg/simple-poll.png?psid=1" alt="简单轮询"/></p>
+
+<ul>
+<li>原理、客户端/服务端实现简单</li>
+<li>可根据应用场景调整轮询时间间隔</li>
+<li>服务端需要处理大量请求</li>
+</ul>
+
+<h4 id="toc_5">长轮询</h4>
+
+<p>客户端发起请求后服务端将该请求挂起（不返回响应），直到超时、异常或需要处理响应（推内容）才返回。客户端收到响应后再次请求（即轮询）服务端，并处理响应。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB9FvU9eVTCSJTko6y9nBiqZDzKVBAR6PA5ZEeQWUo-g9-BIDGUcnzgp-o2jfNqeKa9iMtg-8oP80w/long-poll.png?psid=1" alt="长轮询"/></p>
+
+<ul>
+<li>实时性高</li>
+<li>服务端需要管理挂起请求</li>
+</ul>
+
+<h4 id="toc_6">HTTP 流</h4>
+
+<p>客户端发起请求后服务器端处理请求，并通过 HTTP 流一直向客户端写入数据，直到超时或异常才返回响应。连接断开后客户端再次请求服务端，属于长轮询的一种。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB_dSNHMdTAGrE3L-qzp-3wRJGRGg3vep25W61bdfXvlMSZZn7xezEgptcNNk3MPEAEZ1W-7BEOuzw/stream.png?psid=1" alt="HTTP 流"/></p>
+
+<h4 id="toc_7">HTML 5 WebSocket</h4>
+
+<p>这是标准化的客户端全<a href="http://dev.w3.org/html5/websockets/">双工通讯规范</a>，但由于目前<a href="http://jcp.org/en/jsr/summary?id=356">服务端规范</a>尚未成型，且考虑到现有客户端对 HTML 5 的支持有限，这里不进行描述。</p>
+
+<h4 id="toc_8">多客户端支持</h4>
+
+<p>上述介绍是针对浏览器客户端的，在实际应用场景中，还需要考虑其他客户端支持，例如 iOS、Android 等。</p>
+
+<p>在移动客户端方面，需要考虑如下几点。</p>
+
+<h5 id="toc_9">APIs 多样</h5>
+
+<p>不同客户端本地 APIs 接口存在差异，但都支持基本的 HTTP 协议。直接基于 HTTP 协议进行开发可将差异最小化。</p>
+
+<h5 id="toc_10">网络连接不稳定</h5>
+
+<p>通讯信道打开后不一定能长时间维护，客户端与服务端的状态管理复杂。</p>
+
+<h5 id="toc_11">最小化流量</h5>
+
+<p>需要尽量最小化网络流量，提升移动客户端可用性。</p>
+
+<h3 id="toc_12">服务层消息服务</h3>
+
+<p>消息是系统或组件间通讯的一种低耦合方式，是系统级异步架构的基础。</p>
+
+<p>在 Web 消息推送中，服务端管理应用状态，当状态发生变迁时需要通知客户端，完成消息推送。</p>
+
+<h4 id="toc_13">Java Message Service</h4>
+
+<p>需要重点关注如下技术点：</p>
+
+<h5 id="toc_14">消息域</h5>
+
+<ul>
+<li><p>点对点只有一个客户端可以接收到消息。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKx8JlI0OEosOio1o4ukP3Xlq1Fb-gzO4T6rXa4vrjXP8MUUFgk6R5_c9lltWVrQtnO3aeZi5AjD7Q/jms-pointToPoint.gif?psid=1" alt="JMS p2p"/></p></li>
+<li><p>发布/订阅<br/>
+广播给订阅的客户端。可配置持久化订阅。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKxAtr19116nVAs_T-MJCBnyLPgpCZA8UyOT6A9Komub9StYUSNXykqk8WFB3IKt6DPC3KU4FtVHow/jms-publishSubscribe.gif?psid=1" alt="JMS Pub/Sub"/></p></li>
+</ul>
+
+<h5 id="toc_15">消息确认</h5>
+
+<p>会话本地事务提交时会对收到的消息进行确认，回滚时将重传所有消息<br/>
+非本地事务确认：Session.AUTO_ACKNOWLEDGE、Session.CLIENT_ACKNOWLEDGE、Session.DUPS_OK_ACKNOWLEDGE</p>
+
+<h3 id="toc_16">技术设计</h3>
+
+<h4 id="toc_17">目标</h4>
+
+<ul>
+<li>支持浏览器客户端的推送</li>
+<li>高性能、高可靠</li>
+<li>模块化，不与应用耦合</li>
+<li>未来可支持多种移动客户端</li>
+</ul>
+
+<h4 id="toc_18">Web 层设计</h4>
+
+<p>Web 层考虑采用开源组件 <a href="http://www.pushlets.com/">Pushlets</a> 进行实现。</p>
+
+<h5 id="toc_19">Pushlets 组件</h5>
+
+<p>Pushlets 基于 HTTP 协议的发布/订阅模型，提供了 Poll（轮询）、Pull（拉）两种推方式实现。其中 Pull 即长轮询方式，当有消息时就返回。</p>
+
+<ul>
+<li>发布：GET/POST 或方法调用ethod call（Dispatcher 接口）</li>
+<li>订阅：GET 流，拉/轮询模式</li>
+<li>树形主题：可层次化订阅</li>
+<li>协议格式：JS，XML（JSON 尚未支持）</li>
+<li>对使用 HTTP 协议的客户端都可用</li>
+<li>易扩展：例如事件源实现</li>
+<li>方便整合：可独立为 Web 应用，也可为 Web 应用组件</li>
+<li>多种实现：J2EE/servlets，JavaScript (AJAX)
+<img src="https://public.sn2.livefilestore.com/y1pTsZtjVvNgmTlwZ7_PaqcNsOFttmKJ49e0S4_L482d0X0nfuF5xG0pWYpaCmSIj46i7iq0EzCuKuDZTW_mBfz8w/pushlets.png?psid=1" alt="Pushlets"/></li>
+</ul>
+
+<h5 id="toc_20">JS 客户端</h5>
+
+<ul>
+<li>js-pushlet-client.js
+
+<ul>
+<li>使用 “隐藏 iframe 技巧”</li>
+<li>格式：JavaScript 函数事件</li>
+</ul></li>
+<li>ajax-pushlet-client.js
+
+<ul>
+<li>使用 XMLHttpRequest</li>
+<li>格式：XML</li>
+<li>不支持 HTTP 流
+使用 AJAX 客户端，较为灵活，便于封装。</li>
+</ul></li>
+</ul>
+
+<h4 id="toc_21">服务层设计</h4>
+
+<p>服务层消息服务采用应用服务器 JMS 中间件。通过发布/订阅模型实现状态同步。</p>
+
+<h5 id="toc_22">处理步骤</h5>
+
+<ol>
+<li>配置主题订阅</li>
+<li>应用状态变迁时发布 JMS 消息</li>
+<li>JMS 消息监听器将监听到的消息发布到 Pushlets</li>
+<li>将该消息写入 Web 层消息表</li>
+</ol>
+
+<h5 id="toc_23">消息表</h5>
+
+<p>保存推送多的消息记录，用于客户端刷新时/多客户端查找消息。</p>
+
+<p>消息体使用 JSON 字符串存放于 msg 字段中。其余字段可根据通用性进行抽取，比如用户名等。</p>
+
+<p>消息监听器接收到消息时推 Pushlets，并进行记录写入（记录 lastGetTime 为写入时间，表示这条消息已经推送过）。</p>
+
+<p>设置定时任务对超时记录进行删除。</p>
+
+<h4 id="toc_24">逻辑架构</h4>
+
+<p>JMS 消息系统为单独的通讯总线服务独立于应用系统，Pushlets 为应用系统中的一个组件。</p>
+
+<p>消息表管理组件提供消息新增，以及对推送过的消息记录的查询、删除。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pJ_acuYt_CkkiHarLltUaKNjDom3zMbwe4EIjC5Uaj_Z-dS8TjrLofeSWl8BCH1e6xApcxf200RDtKTNiWNq4nQ/components.png?psid=1" alt="组件图"/></p>
+
+<h5 id="toc_25">推时序</h5>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB-AzkrrJdr8rJyXVHgO0CgLBYHOKqFk15LmxOJMRsmKkOnqQBG4TEOGvpF_-gPnW9v0NEL2FXa_0Q/sequences.png?psid=1" alt="时序图"/></p>
+
+<h4 id="toc_26">关键点</h4>
+
+<p>服务层消息监听<br/>
+消息表管理<br/>
+Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业项目使用时必须进行封装<br/>
+前端容错开关</p>
+
+<h3 id="toc_27">参考</h3>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/cn/web/wa-lo-comet/">Comet：基于 HTTP 长连接的“服务器推”技术</a></li>
+<li><a href="http://www.pushlets.com/">Pushlets 官网</a></li>
+<li><a href="http://docs.oracle.com/javaee/6/tutorial/doc/bncdq.html">The JavaEE 6 Tutorial - Java Message Service</a></li>
+<li><a href="https://docs.google.com/open?id=0B9vEkLPApAcqMGZWNFFrczBOckU">《JMS 规范教程》</a></li>
+</ul>
+
+<p>原文：<a href="https://docs.google.com/document/d/1qHVKlGz1raVemA2eHMSrPQppVKAiIrnFmfkpoyYE-U4/edit">《消息推送技术》via Google Docs</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-04-25-tapestry-defects.html">吐槽 Tapestry</a></h1>
+			<p class="meta"><time datetime="2012-04-25T17:23:46+08:00" 
+			pubdate data-updated="true">2012/4/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h4 id="toc_0">组件化</h4>
+
+<p>组件是 Tapestry 中的核心概念，将页面模版与 Java 类做对应。在运行时框架管理组件生命周期与行为，最后输出 HTML 到客户端。</p>
+
+<p>Tapestry 组件化所要达到的目标是使 Java 程序员更容易理解页面构成，使应用开发周期缩短。</p>
+
+<p>但这样的组件化思想有个根本性的问题：不同编程模型在做映射的时候存在不匹配问题，与 ORM 的<a href="http://www.hudong.com/wiki/%E9%98%BB%E6%8A%97%E4%B8%8D%E5%8C%B9%E9%85%8D">“阻抗不匹配”</a>类似。</p>
+
+<h4 id="toc_1">模版</h4>
+
+<p>从输出展现上看，前端与后端的分离是必须的。前端程序员主要使用 HTML/CSS/JS 进行开发，不关注后端的组件构成。在页面布局设计上面是以展现结构进行模块化，比如分为页头、侧边栏、页脚、主体等。各部分的展现在运行时通过模版引擎即可完成组合，后端也只需要往不同模版组装填充对应数据，后端对应页面的组件化方式就显得多余了，并且处理过程繁琐，性能低下。</p>
+
+<h4 id="toc_2">IoC</h4>
+
+<p>对象状态管理是面向对象设计中比较复杂的一个问题。IoC 主要是为了帮助应用开发者管理对象，降低实现难度。但从实践出发，应用在设计的时候一般不会考虑使用 IoC 管理域对象，而只是使用 IoC 管理服务。这样的话其实使用 IoC 意义也不是很大了，工厂方法已经足够。</p>
+
+<p>现在，随着分布式技术的普遍使用，JVM 内存领域对象必须做到最小化，以规避状态同步带来的复杂度和性能问题，目前的 IoC 容器并不能做到这一点。</p>
+
+<h4 id="toc_3">总结</h4>
+
+<ul>
+<li>组件化模型存在问题</li>
+<li>模版功能单一，只是为了辅助组件化</li>
+<li>IoC 实践意义不大</li>
+<li>多客户端视图渲染不宜扩展</li>
+<li>过于依赖 HTTP 会话</li>
+<li>版本不向后兼容</li>
+</ul>
+
+<p>框架是程序的半成品，其目的是为了降低开发难度，缩短开发周期。从某些方面上看，也是为了限制开发者，做到全局上的实现统一。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-03-31-how-to-skip-filters-in-java.html">如何跳过过滤器处理？</a></h1>
+			<p class="meta"><time datetime="2012-03-31T17:02:45+08:00" 
+			pubdate data-updated="true">2012/3/31</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>假如应用中存在多个过滤器，如何在第一个过滤器处理时根据某些条件跳过后续过滤器处理？这里提供了两种方式来解决这个问题。</p>
+
+<h4 id="toc_0">方式一：</h4>
+
+<p>在后续过滤器中根据前面过滤器处理后设置的标识手动跳过。标识可以放在 Request Attributes 里。</p>
+
+<pre><code>public class FirstFilter implements Filter {
+    //...
+ 
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        servletRequest.setAttribute(&quot;executeSecondFilter&quot;, true);
+        //...
+        if(someReason)
+            servletRequest.setAttribute(&quot;executeSecondFilter&quot;, false);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+}
+ 
+public class SecondFilter implements Filter {
+    //..
+ 
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        if (servletRequest.getAttribute(&quot;executeSecondFilter&quot;) == null || !((Boolean) servletRequest.getAttribute(&quot;executeSecondFilter&quot;))) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+        //...
+    }
+}
+</code></pre>
+
+<h4 id="toc_1">方式二：</h4>
+
+<p>过滤器处理时，不进行后续过滤器链处理（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/Filter.html#doFilter%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse,%20javax.servlet.FilterChain%29">FilterChain#doFilter()</a>），而是直接转发请求给 Servlet（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/RequestDispatcher.html#forward%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse%29">RequestDispatcher#forward()</a>）。</p>
+
+<pre><code>if (condition) {
+    request.getRequestDispatcher(httpServletRequest.getServletPath() + httpServletRequest.getPathInfo()).forward(request, response);
+} else {
+    chain.doFilter(request, response);
+}
+</code></pre>
+
+<p>这样会跳过后续的所有过滤器处理，如果有某个过滤器仍然需要进行处理，那可以在 web.xml 中配置该过滤器 <filter-mapping>：</p>
+
+<p><code>&lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;</code></p>
+
+<p>细节可参阅 Servlet 3.0 规范（<a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">JSR-315</a>）6.2.5 Filters and the RequestDispatcher</p>
+
+<p>参考：</p>
+
+<ul>
+<li>StackOverflow：<a href="http://stackoverflow.com/questions/3738162/how-to-skip-a-filter-in-the-filter-chain-in-java">How to skip a filter in the filter chain in java</a></li>
+<li><a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">Servlet 3.0 规范</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-03-30-distributed-transaction-principle.html">分布式事务原理</a></h1>
+			<p class="meta"><time datetime="2012-03-30T16:54:11+08:00" 
+			pubdate data-updated="true">2012/3/30</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>分布式事务原理</p>
+
+<p>Distributed Computing, Architecture Design, Database 2012-03-30<br/>
+本文是对分布式事务原理、规范的科普，主要围绕两阶段提交协议展开。最后描述了在应用框架层面模拟两阶段提交协议的简化设计。</p>
+
+<h3 id="toc_0">1 事务/分布式事务</h3>
+
+<h4 id="toc_1">1.1 事务</h4>
+
+<p>事务是数据库从一个稳定状态变迁到另一个稳定状态的保证，具备 <a href="http://zh.wikipedia.org/wiki/ACID">ACID</a> 这 4 个特性：</p>
+
+<ul>
+<li>原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚到事务开始前的状态。</li>
+<li>一致性（Consistency）：在事务开始之前和事务结束以后，数据库的完整性限制没有被破坏。</li>
+<li>隔离性（Isolation）：两个事务的执行是互不干扰的，两个事务时间不会互相影响。</li>
+<li>持久性（Durability）：在事务完成以后，该事务对数据库所作的更改便持久地保存在数据库之中，并且是完全的。</li>
+</ul>
+
+<p>例如应用程序需要更新多条相关数据时就需要进行事务处理。</p>
+
+<h4 id="toc_2">1.2 分布式事务与 XA 规范</h4>
+
+<p>分布式事务是指会涉及到操作多个数据库的事务，同样必须保证 ACID。<br/>
+其就是将对同一库事务的概念扩大到了对多个库的事务：对同一库的 SQL 操作对应了分布式事务中对一个库的事务。</p>
+
+<p><a href="http://zh.wikipedia.org/wiki/X/Open_XA">X/Open XA</a> 定义了分布式事务处理的规范，并由数据库厂商在驱动层面进行实现。XA 规范的基础是两阶段提交协议，并定义了分布式事务处理所涉及的角色：<br/>
+* 应用程序（AP）<br/>
+* 事务管理器（TM）<br/>
+* 资源管理器（RM）<br/>
+* 通信资源管理器（CRM）</p>
+
+<p>可以这样认为，事务管理器即事务处理中间件（分布式事务处理系统）；资源管理器即各个数据库。</p>
+
+<h3 id="toc_3">2 两阶段提交协议</h3>
+
+<p>两阶段提交协议（<a href="http://en.wikipedia.org/wiki/2PC">Two-phase commit protocol</a>, 2PC）将一次分布式事务处理划分为两个阶段：预提交阶段（也称为准备阶段或投票阶段），提交阶段。</p>
+
+<h4 id="toc_4">2.1 预提交阶段</h4>
+
+<p>这是两阶段提交协议的第一个阶段，分布式事务处理系统咨询各个资源管理器是否可以提交本地事务，各个资源管理器会把这个咨询过程写入日志，以便进行回滚或提交。</p>
+
+<p>当一个数据库接收到咨询后，它会将需要执行的操作写入日志，禁止其他写入操作（锁定资源）。</p>
+
+<p>如果分布式事务中某数据库预提交失败或提交失败，那该数据库会根据日志进行自身的操作回滚，并解锁。</p>
+
+<p>2.2 提交阶段</p>
+
+<p>分布式事务处理系统对各个资源管理器下达提交/回滚的指令，使整个分布式事务结束。</p>
+
+<p>当一个数据库接受到提交/回滚指令时，它将根据第一阶段的日志进行提交/回滚处理。</p>
+
+<p>两阶段提交协议可以在数据库层面通过驱动支持，也可以在应用框架中按照其原理进行设计实现。</p>
+
+<h3 id="toc_5">3 分布式事务应用框架</h3>
+
+<p>使用数据库驱动方式实现两阶段事务有两个不足：</p>
+
+<ul>
+<li>随着分布式事务的参与者增多，效率会明显降低</li>
+<li>对应用开发者透明，调试不便</li>
+<li>必须依赖数据库，不是所有数据库都实现了 XA 规范</li>
+</ul>
+
+<h4 id="toc_6">3.1 角色</h4>
+
+<ul>
+<li>发起者：分布式事务发起者，需要提供回查恢复接口。</li>
+<li>参与者：参与到分布式事务的其他系统，提供提交/回滚接口。这里的提交/回滚接口即是对数据库数据的 SQL 操作。</li>
+<li>活动管理器：负责管理分布式事务（活动、操作）。</li>
+<li>定时器：触发对分布式事务活动的捞取，以备回查恢复。</li>
+</ul>
+
+<h4 id="toc_7">3.2 交互时序</h4>
+
+<p>两阶段提交时序：</p>
+
+<p><img src="/resource/image/2012-03-30-distributed-transaction-principle/dts1.png" alt="两阶段提交时序"/></p>
+
+<p>因为系统在上述交互中不是绝对可靠的，所以需要一定的方式进行事务状态恢复，保证所有参与者最终一致。<br/>
+回查恢复时序：</p>
+
+<p><img src="/resource/image/2012-03-30-distributed-transaction-principle/dts2.png" alt="回查恢复时序"/></p>
+
+<h4 id="toc_8">3.3 关键点</h4>
+
+<p>参与者提供的提交/回滚接口必须满足幂等性，即定时触发重复调用提交/回滚时不会重复操作同一资源<br/>
+根据发起者生成 txId，回查恢复时根据 txId 调用发起者回查恢复接口<br/>
+活动管理器与发起者同库/不同库时，事务活动、操作状态变迁的不同处理<br/>
+事务内调用操作的顺序<br/>
+定时任务定时间隔/重试次数</p>
+
+<h3 id="toc_9">参考</h3>
+
+<ul>
+<li><a href="http://qify.iteye.com/blog/315619">分布式事务、XA事务、两阶段提交</a></li>
+<li><a href="http://rdc.taobao.com/blog/cs/?p=1183">淘宝核心团队博客：事务和两阶段提交</a></li>
+<li><a href="http://scriptogr.am/kimiazhu/post/a-simple-design-of-distributed-transaction-system">简化的分布式事务框架设计</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-03-05-ziiiro-originality-watch.html">ziiiro创意手表，大爱这个品牌</a></h1>
+			<p class="meta"><time datetime="2012-03-05T00:25:53+08:00" 
+			pubdate data-updated="true">2012/3/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="http://www.ziiiro.com/">ziiiro</a>创意手表，大爱这个品牌<br/>
+<p><img src="http://www.ziiiro.com/wp-content/uploads/2014/10/ziiiro-mercury-watch-chrome-ocean-blue-front.jpg" alt="" width="361" height="500"></p></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-02-03-multiple-inheritance.html">Java面试题：多继承</a></h1>
+			<p class="meta"><time datetime="2012-02-03T16:48:09+08:00" 
+			pubdate data-updated="true">2012/2/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h4 id="toc_0">Java是否支持多重继承？</h4>
+
+<p>好了，很明显传统意义上Java并没有多继承，所以正确的答案应该是：“没有”或者“有，但是”或者“没有，但是”。单从这点就可以探索出不同的方法来。通常我会问“是否因Java语言的设计者笨到没法实现多重继承”作为我们话题的开始，为什么C++那帮家伙实现了呢？我主要以<a href="http://en.wikipedia.org/wiki/Diamond_problem#The_diamond_problem">菱形继承问题</a>来说明：</p>
+
+<p><em>在面向对象的编程语言中总伴随着多重继承及组织的理解。菱形继承问题就是在如下情景时出现含糊不清的情况：当两个类B和C继承自A，类D同时继承自B和C，如果D中的一个方法调用一个在A中定义的方法(不是覆盖方法).而B和C分别用不同地方式重写（overridden)了方法，那么这个方法到底是继承的哪个类呢，B还是C？</em></p>
+
+<p>另一探索性的方法是：Java怎么模拟“多重继承”？我想答案已经浮出水面了，就是接口（Interface）。我们经常在Java中讨论接口，那么应试者在什么时候，怎么使用接口的呢？使用接口又有什么好处呢？应试者是否喜欢使用接口？我可以检测他对建模有多熟练，有时还会让他针对接口画画图。我们继续谈论Java中接口的问题，当两个接口有相同的静态域（field)，有一个类实现了Java中所谓的“多继承”的两个接口时会出现什么情况？</p>
+
+<pre><code>public interface I1 {
+   String NAME = &quot;codemonkeyism&quot;;
+}
+ 
+public interface I2 {
+   String NAME = &quot;stephan&quot;;
+}
+ 
+public class C implements I1, I2 {
+   public static void main(String[] args) {
+      System.out.println(NAME);
+   }
+}
+</code></pre>
+
+<p>Java坚持了他们的做法，语言的设计者决定不让其编译通过。<br/>
+C.java:3: reference to NAME is ambiguous, both variable NAME <br/>
+              in I1 and variable NAME in I2 match<br/>
+      System.out.println(NAME);<br/>
+                         ^<br/>
+1 error<br/>
+还有更多的方法和我们的应试者去探讨多继承的问题，例如：接口中方法的修饰符是什么？对于菱形继承问题使用traits实现混合结构是否比使用接口更好，还是和多继承一样的糟糕？正如我不在那么钟爱继承一样，大量使用继承是一种代码异味。我们还可以和应试者讨论继承的负面因素—–重耦合的例子。</p>
+
+<h4 id="toc_1">为什么会有这问题？</h4>
+
+<p>我为什么会问这个问题呢，从这个问题中又学到了什么？继承在面向对象（OO）中是很基础的概念，是每个Java程序员都应该理解的概念。同时也是他反映到工作中，理解超出语法层面的另一个基本的特性。所以对于多继承问题，我喜欢那些可以引出很多可以探讨与思考的问题。这个继承问题只是多继承、语言设计、代码味道、解决方案、接口、基于角色的开发等众多问题中的一种而已。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="2012-01-29-review-fast-sort.html">纪念大师，复习快排</a></h1>
+			<p class="meta"><time datetime="2012-01-29T00:25:18+08:00" 
+			pubdate data-updated="true">2012/1/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<pre><code>package com.test;
+
+public class Sort {
+    // 对R[low..high]快速排序
+    public static void QuickSort(Comparable[] data, int low, int high) { 
+        int pivotpos; // 划分后的基准记录的位置
+
+        if (low &lt; high) {// 仅当区间长度大于1时才须排序
+            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
+            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
+            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
+        }
+    } // QuickSort
+
+    private static int Partition(Comparable[] data, int i, int j) {
+        // 从数组两端交替地向中间扫描
+        Comparable pivotKey = data[i];
+        // 进行扫描的指针i,j;i从左边开始,j从右边开始
+        while (i &lt; j) {
+            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
+                j--;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素小的移动到左边
+                data[i] = data[j];
+                i++;
+            }// end if
+            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
+                i++;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素大的移动到右边
+                data[j] = data[i];
+                j--;
+            }// end if
+        }// end while
+        // 枢纽元素移动到正确位置
+        data[i] = pivotKey;
+        return i;
+    }
+
+    public static void main(String[] args) {
+        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
+        QuickSort(c, 0, c.length - 1);
+        for (Comparable data : c) {
+            System.out.println(data);
+        }
+    }
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+  
+	<div class="pagination">
+	 <a class="prev" href="all_9.html">&larr; Older</a> 
+<a href="archives.html">Blog Archives</a>
+	 <a class="next" href="all_7.html">Newer &rarr;</a>  
+	    
+	</div>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

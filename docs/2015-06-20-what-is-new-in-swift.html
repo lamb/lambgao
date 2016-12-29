@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Swift 2.0初探 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Swift 2.0初探</h1>
+				<p class="meta"><time datetime="2015-06-20T23:35:16+08:00" pubdate data-updated="true">2015/6/20</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>转眼间，Swift已经一岁多了，这门新鲜、语法时尚、类型安全、执行速度更快的语言已经渐渐的深入广大开发者的心。我同样也是非常喜爱这门新的编程语言。</p>
+
+<p>今年6月，一年一度的WWDC大会如期而至，在大会上Apple发布了Swift 2.0，引入了很多新的特性，以帮助开发者能更快，更简单的构建应用。我在这里也说道说道Swift 2.0中值得大家注意的新特性。</p>
+
+<h3 id="toc_0">guard语句</h3>
+
+<p>guard语句和if语句有点类似，都是根据其关键字之后的表达式的布尔值决定下一步执行什么。但与if语句不同的是，guard语句只会有一个代码块，不像if语句可以if else多个代码块。</p>
+
+<p>那么guard语句的作用到底是什么呢？顾名思义，就是守护。guard语句判断其后的表达式布尔值为false时，才会执行之后代码块里的代码，如果为true，则跳过整个guard语句，我们举例来看看。</p>
+
+<p>我们以今年高考为例，在进入考场时一般都会检查身份证和准考证，我们写这样一个方法：</p>
+
+<pre><code>func checkup(person: [String: String!]) {
+  
+    // 检查身份证，如果身份证没带，则不能进入考场
+    guard let id = person[&quot;id&quot;] else {
+        print(&quot;没有身份证，不能进入考场!&quot;)
+        return
+    }
+    
+    // 检查准考证，如果准考证没带，则不能进入考场
+    guard let examNumber = person[&quot;examNumber&quot;] else {
+        print(&quot;没有准考证，不能进入考场!&quot;)
+        return
+    }
+    
+    // 身份证和准考证齐全，方可进入考场
+    print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)。请进入考场!&quot;)
+    
+}
+
+checkup([&quot;id&quot;: &quot;123456&quot;]) // 没有准考证，不能进入考场!
+checkup([&quot;examNumber&quot;: &quot;654321&quot;]) // 没有身份证，不能进入考场!
+checkup([&quot;id&quot;: &quot;123456&quot;, &quot;examNumber&quot;: &quot;654321&quot;]) // 您的身份证号为:123456，准考证号为:654321。请进入考场!
+</code></pre>
+
+<p>上述代码中的第一个guard语句用于检查身份证，如果检查到身份证没带，也就是表达式为false时，执行大括号里的代码，并返回。第二个guard语句则检查准考证。</p>
+
+<p>如果两证齐全，则执行最后一个打印语句，上面的两个guard语句大括号内的代码都不会执行，因为他们表达式的布尔值都是true。</p>
+
+<p>这里值得注意的是，id和examNumber可以在guard语句之外使用，也就是说当guard对其表达式进行验证后，id和examNumber可在整个方法的作用域中使用，并且是解包后的。</p>
+
+<p>我们再用if else语句写一个类似的方法：</p>
+
+<pre><code>func checkupUseIf(person: [String: String!]) {
+    
+    if let id = person[&quot;id&quot;], let examNumber = person[&quot;examNumber&quot;] {
+        print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)。请进入考场！&quot;)
+    } else {
+        print(&quot;证件不齐全，不能进入考场!&quot;)
+    }
+    
+    print(&quot;您的身份证号为:\(id)，准考证号为:\(examNumber)&quot;)  // 报异常
+    
+}
+
+checkupUseIf([&quot;id&quot;: &quot;123456&quot;]) // 证件不齐全，不能进入考场!
+checkupUseIf([&quot;examNumber&quot;: &quot;654321&quot;]) // 证件不齐全，不能进入考场!
+checkupUseIf([&quot;id&quot;: &quot;123456&quot;, &quot;examNumber&quot;: &quot;654321&quot;]) // 您的身份证号为:123456，准考证号为:654321。请进入考场!
+</code></pre>
+
+<p>我们可以看到用if else实现的方法显然不如guard实现的那么精准。而且id和examNumber的作用域只限在if的第一个大括号内，超出这个作用域编译就会报错。</p>
+
+<p>通过上述两个小例子不难看出，guard语句正如一个称职的守卫，层层把关，严防一切不允许发生的事，并且让代码具有更高的可读性，非常棒。</p>
+
+<h3 id="toc_1">异常处理</h3>
+
+<p>在Swift 1.0时代是没有异常处理和抛出机制的，如果要处理异常，要么使用if else语句或switch语句判断处理，要么使用闭包形式的回调函数处理，再要么就使用NSError处理。以上这些方法都不能像Java中的try catch异常控制语句那样行如流水、从容不迫的处理异常，而且也会降低代码的可读性。当Swift 2.0到来后，一切都不一样了。</p>
+
+<p>在Swift 2.0中Apple提供了使用throws、throw、try、do、catch这五个关键字组成的异常控制处理机制。下面我们来举例看看如何使用，我用使用手机刷朋友圈为例。</p>
+
+<p>首先我们需要定义异常枚举，在Swift 2.0中Apple提供了ErrorType协议需要我们自定义的异常枚举遵循：</p>
+
+<pre><code>enum WechatError: ErrorType {
+    case NoBattery // 手机没电
+    case NoNetwork // 手机没网
+    case NoDataStream // 手机没有流量
+}
+</code></pre>
+
+<p>我们定义了导致不能刷微信的错误枚举’wechatError。然后定义一个检查是否可以刷微信的方法checkIsWechatOk()：</p>
+
+<pre><code>func checkIsWechatOk(isPhoneHasBattery: Bool, isPhoneHasNetwork: Bool, dataStream: Int) throws {
+    
+    guard isPhoneHasBattery else {
+        throw WechatError.NoBattery
+    }
+    
+    guard isPhoneHasNetwork else {
+        throw WechatError.NoNetwork
+    }
+    
+    guard dataStream &gt; 50 else {
+        throw WechatError.NoDataStream
+    }
+    
+}
+</code></pre>
+
+<p>这里注意，在方法名后有throws关键字，意思为该方法产生的异常向上层抛出。在方法体内使用guard语句对各种状态进行判断，然后使用throw关键字抛出对应的异常。然后我们定义刷微信的方法：</p>
+
+<pre><code>func playWechat(isPhoneHasBattery: Bool, isPhoneHasNetwork: Bool, dataStream: Int) {
+    
+    do {
+        try checkIsWechatOk(isPhoneHasBattery, isPhoneHasNetwork: isPhoneHasNetwork, dataStream: dataStream)
+        print(&quot;放心刷，刷到天昏地暗！&quot;)
+    } catch WechatError.NoBattery {
+        print(&quot;手机都没电，刷个鬼啊！&quot;)
+    } catch WechatError.NoNetwork {
+        print(&quot;没有网络哎，洗洗玩单机吧！&quot;)
+    } catch WechatError.NoDataStream {
+        print(&quot;没有流量了，去蹭Wifi吧！&quot;)
+    } catch {
+        print(&quot;见鬼了！&quot;)
+    }
+    
+}
+
+playWechat(true, isPhoneHasNetwork: true, dataStream: 60) // 放心刷，刷到天昏地暗！
+playWechat(true, isPhoneHasNetwork: false, dataStream: 60) // 没有网络哎，洗洗玩单机吧！
+playWechat(false, isPhoneHasNetwork: true, dataStream: 60) // 手机都没电，刷个鬼啊！
+playWechat(true, isPhoneHasNetwork: true, dataStream: 30) // 没有流量了，去蹭Wifi吧！
+</code></pre>
+
+<p>上述的代码示例中，首先检查是否可以刷微信的方法前使用try关键字，表示允许该方法抛出异常，然后使用了do catch控制语句捕获抛出的异常，进而做相关的逻辑处理。</p>
+
+<p>这套异常处理机制使Swift更加的全面和安全，并且提高了代码的可读性，非常棒。</p>
+
+<h3 id="toc_2">协议扩展</h3>
+
+<p>在Swift 1.0 时代，协议（Protocol）基本上类似一个接口，定义若干属性和方法，供类、结构体、枚举遵循和实现。在Swift 2.0中，可以对协议进行属性或者方法的扩展，和扩展类与结构体类似。这让我们开启了面向协议编程的篇章。</p>
+
+<p>Swift中，大多数基础对象都遵循了CustomStringConvertible协议，比如Array、Dictionary（Swift 1.0中的Printable协议），该协议定义了description方法，用于print方法打印对象。现在我们对该协议扩展一个方法，让其打印出大写的内容:</p>
+
+<pre><code>var arr = [&quot;hello&quot;, &quot;world&quot;]
+print(arr.description) // &quot;[hello, world]&quot;
+
+extension CustomStringConvertible {
+    var upperDescription: String {
+        return &quot;\(self.description.uppercaseString)&quot;
+    }
+}
+print(arr.upperDescription) // &quot;[HELLO, WORLD]&quot;
+</code></pre>
+
+<p>如果在Swfit 1.0时代，要想达到上述示例的效果，那么我们需要分别对Array、Dictionary进行扩展，所以协议的扩展极大的提高了我们的编程效率，也同样使代码更简洁和易读。</p>
+
+<h3 id="toc_3">打印语句的改变</h3>
+
+<p>在Swift1中，有’println()’和’print()’两个在控制台打印语句的方法，前者是换行打印，后者是连行打印。在Swift2中，’println()’已成为过去，取而代之的是他俩的结合体。如果你想做换行打印，现在需要这样写：</p>
+
+<pre><code>print(&quot;我要换行！&quot;, appendNewline: true)
+</code></pre>
+
+<h3 id="toc_4">available检查</h3>
+
+<p>作为iOS开发者，谁都希望使用最新版本iOS的Api进行开发，省事省力。但常常事与愿违，因为我们经常需要适配老版本的iOS，这就会面临一个问题，一些新特性特性或一些类无法在老版本的iOS中使用，所以在编码过程中经常会对iOS的版本做以判断，就像这样：</p>
+
+<pre><code>if NSClassFromString(&quot;NSURLQueryItem&quot;) != nil {
+    // iOS 8或更高版本
+} else{
+    // iOS8之前的版本
+}
+</code></pre>
+
+<p>以上这只是一种方式，在Swift 2.0之前也没有一个标准的模式或机制帮助开发者判断iOS版本，而且容易出现疏漏。在Swift 2.0到来后，我们有了标准的方式来做这个工作：</p>
+
+<pre><code>if #available(iOS 8, *) {
+    // iOS 8或更高版本
+    let queryItem = NSURLQueryItem()
+    
+} else {
+    // iOS8之前的版本
+    
+}
+</code></pre>
+
+<p>这个特性让我们太幸福。</p>
+
+<h3 id="toc_5">do-while语句重命名</h3>
+
+<p>经典的do-while语句改名了，改为了repeat-while：</p>
+
+<pre><code>var i = 0
+repeat {
+    i++
+    print(i)
+} while i &lt; 10
+</code></pre>
+
+<p>个人感觉更加直观了。</p>
+
+<h3 id="toc_6">defer关键字</h3>
+
+<p>在一些语言中，有try/finally这样的控制语句，比如Java。这种语句可以让我们在finally代码块中执行必须要执行的代码，不管之前怎样的兴风作浪。在Swift 2.0中，Apple提供了defer关键字，让我们可以实现同样的效果。</p>
+
+<pre><code>func checkSomething() {
+    
+    print(&quot;CheckPoint 1&quot;)
+    doSomething()
+    print(&quot;CheckPoint 4&quot;)
+    
+}
+
+func doSomething() {
+    
+    print(&quot;CheckPoint 2&quot;)
+    defer {
+        print(&quot;Clean up here&quot;)
+    }
+    print(&quot;CheckPoint 3&quot;)
+    
+}
+
+checkSomething() // CheckPoint 1, CheckPoint 2, CheckPoint 3, Clean up here, CheckPoint 4
+</code></pre>
+
+<p>上述示例可以看到，在打印出“CheckPoint 2”之后并没有打印出“Clean up here”，而是“CheckPoint 3”，这就是defer的作用，它对进行了print(&quot;Clean up here&quot;)延迟。我们再来看一个I/O的示例：</p>
+
+<pre><code>// 伪代码
+func writeSomething() {
+    
+    let file = OpenFile()
+    
+    let ioStatus = fetchIOStatus()
+    guard ioStatus != &quot;error&quot; else {
+        return
+    }
+    file.write()
+    
+    closeFile(file)
+    
+}
+</code></pre>
+
+<p>上述示例是一个I/O操作的伪代码，如果获取到的ioStatus正常，那么该方法没有问题，如果ioStatus取到的是error，那么会被guard语句抓到执行return操作，这样的话closeFile(file)就永远都不会执行了，一个严重的Bug就这样产生了。下面我们看看如何用defer来解决这个问题：</p>
+
+<pre><code>// 伪代码
+func writeSomething() {
+    
+    let file = OpenFile()
+    defer {
+        closeFile(file)
+    }
+    
+    let ioStatus = fetchIOStatus()
+    guard ioStatus != &quot;error&quot; else {
+        return
+    }
+    file.write()
+    
+}
+</code></pre>
+
+<p>我们将closeFile(file)放在defer代码块里，这样即使ioStatus为error，在执行return前会先执行defer里的代码，这样就保证了不管发生什么，最后都会将文件关闭。</p>
+
+<p>defer又一个保证我们代码健壮性的特性，我非常喜欢。</p>
+
+<p>Swift 2.0中的新特性当然不止以上这些，但窥一斑可见全豹，Swift 2.0努力将更快、更安全做到极致，这是开发人员的福音，让我们尽情享受这门美妙的语言吧。</p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2015-06-26-batching-select-statements-in-jdbc.html" 
+	        title="Previous Post: JDBC批处理Select语句">&laquo; JDBC批处理Select语句</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2015-06-14-why-use-preparedstatement-in-java-jdbc.html" 
+	        title="Next Post: JDBC为什么要使用PreparedStatement而不是Statement">JDBC为什么要使用PreparedStatement而不是Statement &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

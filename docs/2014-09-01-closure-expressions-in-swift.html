@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Swift中的闭包（Closure） - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Swift中的闭包（Closure）</h1>
+				<p class="meta"><time datetime="2014-09-01T22:57:30+08:00" pubdate data-updated="true">2014/9/1</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>闭包在Swift中非常有用。通俗的解释就是一个Int类型里存储着一个整数，一个String类型包含着一串字符，同样，闭包是一个包含着函数的类型。有了闭包，你就可以处理很多在一些古老的语言中不能处理的事情。这是因为闭包使用的多样性，比如你可以将闭包赋值给一个变量，你也可以将闭包作为一个函数的参数，你甚至可以将闭包作为一个函数的返回值。它的强大之处可见一斑。</p>
+
+<p>在Swift的很多文档教材中都说函数是“一等公民”，起初我还不是很理解“一等公民”是什么意思，但当我理解了闭包以及它的强大功能后，我恍然大悟、茅塞顿开、醍醐灌顶。原来闭包的这些特性就是“一等公民”的特性啊！参见维基百科<a href="http://en.wikipedia.org/wiki/First-class_citizen">First-class citizen</a>。</p>
+
+<p>Swift中的闭包类似Objective-C中的Block。其实，如果你想在Swift中实现Objective-C里的Block功能，你可以直接使用闭包来代替。Block和闭包的区别只是语法的不同而已，而且闭包的可读性比较强。</p>
+
+<h3 id="toc_0">函数是闭包吗？</h3>
+
+<p>虽然你还没有意识到，但我们确实已经在Swift中这么用了。Swift中的函数就是闭包，在Apple的官方文档中有这样的描述：</p>
+
+<p>闭包有三种形式：</p>
+
+<ol>
+<li>全局函数是一个有名字但不会捕获任何值的闭包。</li>
+<li>嵌套函数是一个有名字并可以捕获到其封闭函数域内的值的闭包。</li>
+<li>闭包表达式是一个利用轻量级语法所写的，可以捕获其上下文中变量或常量值的匿名闭包。</li>
+</ol>
+
+<p>今天，我们要讨论的是第三种形式，尤其讨论它是如何将繁复的、可读性比较差的业务逻辑代码压缩成高可读性、简明明了的形式。</p>
+
+<p>大家还记得数组的map方法么？它的参数就是一个闭包，它会将数组里的每一个元素放在闭包中进行处理，然后返回一个新的数组，甚至是与原数组不同元素类型的新数组。</p>
+
+<p>map函数的原型如下：</p>
+
+<pre><code>func map&lt;U&gt;(transform: (T) -&gt; U) -&gt; [U]
+</code></pre>
+
+<p>我们可以看到该函数使用了泛型。(T) -&gt; U是一个泛型闭包，它的意思就是类型T将会在闭包中进行逻辑处理，然后返回U类型。最后map函数会返回一个U类型的数组。</p>
+
+<p>用一个例子来说明。今天我办生日聚会，要迎接很多人，并且为每个人都准备了一句欢迎词。我们要怎么做呢？首先我们将迎接的人放进一个数组名叫guestList，然后用一个名叫greetPeople的函数为每个人生成欢迎词：</p>
+
+<pre><code>func greetPeople(person: String) -&gt; String
+{
+    return &quot;Hello, \(person)!&quot;
+}
+
+
+let guestList = [&quot;Chris&quot;, &quot;Jill&quot;, &quot;Tim&quot;]
+let fullGreetings = guestList.map(greetPeople)
+</code></pre>
+
+<p>然后将greetPeople函数作为guestList数组的map函数的参数传入，并返回一个新的数组fullGreetings，这个数组就包含了每个人的欢迎词。</p>
+
+<p>如果我们想展示一下每个人的欢迎词，我们甚至可以这样写：</p>
+
+<pre><code>fullGreetings.map(println)
+</code></pre>
+
+<p>这时也许有人要质疑了，println函数不是没有返回值么？那么map函数会返回什么呢？其实每一个没有返回值的函数，都会返回一个空的元组（tuple），所以说上述代码的返回值其实是Array&lt;()&gt;。</p>
+
+<p>上面的例子中我们就是将一个全局函数greetPeople作为一个闭包来使用的。</p>
+
+<h3 id="toc_1">简明扼要的闭包表达式</h3>
+
+<p>其实Swift已经为我们提供了很多简化的语法，可以让我们保证代码的高可读性和维护性。还用上面的例子来说明，对于greetPeople这个全局函数来说，其实只需要使用一次，所以我们没必要单独定义这个函数。我们可以直接使用闭包表达式来处理：</p>
+
+<pre><code>let fullGreetings = guestList.map({(person: String) -&gt; String in return &quot;Hello, \(person)!&quot;})
+</code></pre>
+
+<p>闭包表达式其实是函数的字面值，官方一般称之为匿名函数。一般当我们需要使用函数快速的实现一个简短的处理逻辑并且只使用一次的时候，我们可以省去函数名，使用简化的语法。上面的代码中可以看到关键字in之前是闭包表达式的参数和返回值，in之后是闭包表达式实际处理逻辑的代码区域。</p>
+
+<p>下面我们将使用Swift更多的特性来进一步简化闭包表达式。</p>
+
+<p>我们知道Swift中有类型推断的特性，所以我们可以取掉参数类型：</p>
+
+<pre><code>let fullGreetings = guestList.map({(person) -&gt; String in return &quot;Hello, \(person)!&quot; })
+</code></pre>
+
+<p>像我们示例中的这种单一闭包表达式，编译器可以根据in之前的返回值类型和return之后的返回数据类型自动判断，所以我们可以省略返回值和return关键字：</p>
+
+<pre><code>let fullGreetings = guestList.map({person in &quot;Hello, \(person)!&quot; })
+</code></pre>
+
+<p>其实在Swift中还提供了参数的简写方式：\(0代表第一个参数、\)1代表第二个参数以此类推。所以我们又可以将参数名称省略：</p>
+
+<pre><code>let fullGreetings = guestList.map({ &quot;Hello, \($0)!&quot; })
+</code></pre>
+
+<p>当函数的最后一个参数是闭包时，可以将闭包写在()之外，这也是Swift的一个特性，所以我们还可以继续简化：</p>
+
+<pre><code>let fullGreetings = guestList.map(){ &quot;Hello, \($0)!&quot; }
+</code></pre>
+
+<p>当函数有且仅有一个参数，并该参数是闭包时，不但可以将闭包写在()外，还可以省略()：</p>
+
+<pre><code>let fullGreetings = guestList.map{ &quot;Hello, \($0)!&quot; }
+</code></pre>
+
+<p>到目前为止，示例中的闭包表达式已经被我们根据Swift的特性，简化为简明扼要、高可读性的闭包表达式了，是不是很酷呢！</p>
+
+<p>参考原文：<a href="http://www.codingexplorer.com/closure-expressions-swift/?utm_source=feedly&amp;utm_reader=feedly&amp;utm_medium=rss&amp;utm_campaign=closure-expressions-swift">Closure Expressions in Swift</a></p>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-09-02-optionals-case-study.html" 
+	        title="Previous Post: Swift中Optional类型的使用案例分析：valuesForKeys">&laquo; Swift中Optional类型的使用案例分析：valuesForKeys</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-08-27-change-ubuntu-display-resolution.html" 
+	        title="Next Post: 修改 Ubuntu 分辨率">修改 Ubuntu 分辨率 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

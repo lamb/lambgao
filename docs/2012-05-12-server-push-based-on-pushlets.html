@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  基于 Pushlets 的消息推送设计 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">基于 Pushlets 的消息推送设计</h1>
+				<p class="meta"><time datetime="2012-05-16T17:40:38+08:00" pubdate data-updated="true">2012/5/16</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>Pushlets 是通过长连接方式实现“推”消息的。推送模式分为：Poll（轮询）、Pull（拉）。本文围绕 Pull 模式进行设计。</p>
+
+<h3 id="toc_0">原理</h3>
+
+<p>客户端发起请求，服务端接收到请求后根据 Pushlets 协议进行处理。推数据通过 HTTP 响应返回。</p>
+
+<p>客户端在接收到响应后根据 Pushlets 协议进行处理，重新发起请求。Pull 模式时序：</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1ptpxVei6mgGxLAv79zOuIx46cVw3jQx5EgPX1MirgoMA5wt7KFkIyA20YE2GuLTBXy_IQi1CjBSkYs4GnJU5JKA/pushlets_pull.png?psid=1" alt="Pushlets Pull"/></p>
+
+<ol>
+<li>join：join 请求，服务器端建立 Pushlet 会话</li>
+<li>join-ack：join 应答，返回会话 id</li>
+<li>listen：订阅并监听主题</li>
+<li>listen-ack：监听应答，返回会话 id，订阅 id</li>
+<li>subscribe（可选）：订阅主题</li>
+<li>subscribe-ack（可选）：订阅主题应答，返回会话 id，订阅</li>
+<li>refresh：长连接请求，实参会话 id</li>
+<li>refresh-ack：长连接响应，包括下一次 refresh 请求间隔</li>
+<li>hb：心跳响应</li>
+<li>data：推数据</li>
+<li>leave：清空订阅</li>
+<li>leave-ack：清空订阅应答</li>
+</ol>
+
+<h3 id="toc_1">服务器端</h3>
+
+<p>服务器端主要负责维护会话，根据请求处理应答。使用内存队列维护每个会话的主题事件。</p>
+
+<p>事件产生后通过分发器（Dispatcher）将事件发布到指定订阅者的事件队列里。Pull 模式使用阻塞队列，读超时（没有事件）后返回 hb 与 refresh 指令的应答。</p>
+
+<h4 id="toc_2">事件发布</h4>
+
+<ul>
+<li>广播：将事件发布给所有订阅者</li>
+<li>多播：将事件发布给匹配的订阅者</li>
+<li>单播：将事件发给某个订阅者</li>
+</ul>
+
+<h4 id="toc_3">关键参数</h4>
+
+<p>订阅者的事件队列配置：</p>
+
+<ul>
+<li>queue.size=24队列大小为 24。如果队列满了新发布到该队列的事件将被丢弃。</li>
+<li>queue.read.timeout.millis=20000 队列读超时 20 秒。读超时后返回 hb 与 refresh 指令的应答。该项配置即请求线程最长 hold 时间。</li>
+<li>queue.write.timeout.millis=20 队列写超时 20 毫秒。如果队列是满的，等待 20 毫秒后如果还满，则销毁该订阅者。</li>
+</ul>
+
+<p>刷新时长配置：</p>
+
+<ul>
+<li>pull.refresh.timeout.millis=45000
+服务器端刷新超时 45 秒。如果服务器端某订阅者超过 45 秒没有收到客户端的 listen 或 refresh 请求，则销毁该订阅者。该超时判断发生在发布事件时。</li>
+<li>pull.refresh.wait.min.millis=2000
+pull.refresh.wait.max.millis=6000
+refresh 指令中指定客户端下次请求的等待时间区间，值取该区间内的随机值。</li>
+</ul>
+
+<h3 id="toc_4">客户端</h3>
+
+<p>Pushlets 支持多种客户端，例如浏览器客户端、Java 客户端。浏览器客户端又分为 iframe 和 AJAX 两种。</p>
+
+<p>初始化客户端后，客户端发起监听、订阅请求，并根据服务器返回指令发送 refresh 请求。当有 data 应答时，回调客户端 onData(event) 函数实现消息处理。</p>
+
+<h3 id="toc_5">技术设计</h3>
+
+<p>对 Pushlets 做接口封装以屏蔽其特性细节，也便于以后兼容其他服务器消息推送技术（例如 WebSocket）做好铺垫。</p>
+
+<p>封装的服务器推机制定义为 Channel 服务，提供服务器到浏览器客户端的消息推送。</p>
+
+<h4 id="toc_6">服务器端</h4>
+
+<p>通过 Channel API 在 JS 客户端与服务器端建立长连接，使服务器端可以实时地发送消息给客户端。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pZFZKlLqBHhM8SWRJGY6-1KDloobUVsp6EexI5XRDH-gXpPK4JiWHJHfOgyiHbbnQwiy2nBNg2DAPt-EgZqZUvg/channel_class.png?psid=1" alt="Channel 类图"/></p>
+
+<h4 id="toc_7">JS 客户端</h4>
+
+<p>oaweb.Channel() 类：</p>
+
+<ul>
+<li>init()
+初始化服务器调用 URL、客户端状态。</li>
+<li>open()
+发送 join 请求，服务端创建会话。</li>
+<li>subscribe(listeners : {topic, onmessage, onerror})
+发送 subscribe 请求，服务端创建订阅者，添加订阅主题。</li>
+<li>unsubscribe(topic)
+发送 unsubscribe 请求，服务端移除订阅。</li>
+<li>close()
+发送 leave 请求，服务端销毁会话。</li>
+</ul>
+
+<h4 id="toc_8">时序</h4>
+
+<p><img src="https://public.sn2.livefilestore.com/y1p5e65HlecGSpWAaqLF01v27kXVa5l_mk8E38aZszmxjzn2hs5OvpVtK_SNgW82eZJVwjjmrcAbtHkrjZYMaCTjw/channel_seq.png?psid=1" alt="Channel 时序图"/></p>
+
+<h4 id="toc_9">集群</h4>
+
+<p>均衡器通过源地址保持策略保证同一 IP 的请求均会分发到固定服务节点。</p>
+
+<p>当服务节点进行业务逻辑处理后，发送消息到消息服务系统；</p>
+
+<p>服务节点订阅消息主题，当监听到新消息时调用 Channel 服务发布消息到具体的推送实现组件（Pushlets）。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pFcfOSzdHxwV99UxthxH2wTXgwS8-GkQttbtzHJS1PO7cD-FCoRMvrkjnwzz9QAzAFy0apLGuGJaMRzFq7_1ZXQ/channel_cluster.png?psid=1" alt="Channel 集群"/></p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="https://developers.google.com/appengine/docs/java/channel/">Google App Engine Channel API</a></li>
+<li><a href="http://www.w3.org/TR/websockets/">HTML5 WebSocket API</a></li>
+</ul>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2012-05-20-reset-weblogic-password.html" 
+	        title="Previous Post: Weblogic 10.3.3 重置管理密码">&laquo; Weblogic 10.3.3 重置管理密码</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2012-05-07-web-message-push.html" 
+	        title="Next Post: 消息推送技术">消息推送技术 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>

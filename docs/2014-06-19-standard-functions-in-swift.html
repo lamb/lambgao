@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+  Swift中的标准函数 - 金氧
+  
+
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="金氧" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <script src="asset/highlightjs/highlight.pack.js"></script>
+  <link href="asset/highlightjs/styles/solarized_light.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">金氧</a></h1>
+  
+    <h2></h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lambgao.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_blank" href="https://github.com/lamb">Github@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="https://twitter.com/lambgao">Twitter@Lamb</a></li>
+
+  <li id=""><a target="_blank" href="http://weibo.com/lambsand">微博@金氧</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Swift中的标准函数</h1>
+				<p class="meta"><time datetime="2014-06-19T22:25:18+08:00" pubdate data-updated="true">2014/6/19</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<p>Swift中共有74个内建函数，但是在Swift官方文档（“<a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/index.html#//apple_ref/doc/uid/TP40014097">The Swift Programming Language</a>”）中只记录了7中。剩下的67个都没有记录。</p>
+
+<p>本文将列举Swift所有的内建函数。本文中提到的所谓的内建函数是指那些在Swift中不需要导入任何模块（如Foundation等）或者引用任何类就可以使用的函数。</p>
+
+<p>abs(signedNumber): 返回给定的有符号数字的绝对值。很简单，但是没有在文档中记录。</p>
+
+<pre><code>abs(-1) == 1 
+abs(-42) == 42 
+abs(42) == 42 
+</code></pre>
+
+<p>contains(sequence, element): 如果给定的序列（如数组）包含特定的元素，则返回true。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+contains(languages, &quot;Swift&quot;) == true 
+contains(languages, &quot;Java&quot;) == false 
+contains([29, 85, 42, 96, 75], 42) == true 
+</code></pre>
+
+<p>dropFirst(sequence): 返回一个去掉第一个元素的新序列（如数组）。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+var oldLanguages = dropFirst(languages) 
+equal(oldLanguages, [&quot;Objective-C&quot;]) == true
+</code></pre>
+
+<p>dropLast(sequence): 返回一个的新序列（如数组），该序列去掉作为参数传递给函数的最后一个元素。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+var newLanguages = dropLast(languages) 
+equal(newLanguages, [&quot;Swift&quot;]) == true
+</code></pre>
+
+<p>dump(object): 一个对象的内容转储到标准输出。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+dump(languages) 
+// Prints: 
+// ? 2 elements 
+// - [0]: Swift 
+// - [1]: Objective-C 
+</code></pre>
+
+<p>equal(sequence1, sequence2): 如果序列1和序列2包含相同的元素，则返回true。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+equal(languages, [&quot;Swift&quot;, &quot;Objective-C&quot;]) == true 
+var oldLanguages = dropFirst(languages) 
+equal(oldLanguages, [&quot;Objective-C&quot;]) == true 
+</code></pre>
+
+<p>filter(sequence, includeElementClosure): 返回序列的一个元素，这个元素满足includeElementClosure所指定的条件。</p>
+
+<pre><code>for i in filter(1...100, { $0 % 10 == 0 }) 
+{ 
+    // 10, 20, 30, ... 
+    println(i) 
+    assert(contains([10, 20, 30, 40, 50, 60, 70, 80, 90, 100], i)) 
+} 
+</code></pre>
+
+<p>find(sequence, element): 再给定的序列中返回一个指定的索引，如果在序列中没有找到这个元素就返回nil。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+find(languages, &quot;Objective-C&quot;) == 1 
+find(languages, &quot;Java&quot;) == nil 
+find([29, 85, 42, 96, 75], 42) == 2 
+</code></pre>
+
+<p>indices(sequence): 在指定的序列中返回元素的索引（零索引）。</p>
+
+<pre><code>equal(indices([29, 85, 42]), [0, 1, 2]) 
+for i in indices([29, 85, 42]) { 
+    // 0, 1, 2 
+    println(i) 
+} 
+</code></pre>
+
+<p>join(separator, sequence): 返回一个由给定的分隔符分离出来的序列的元素。</p>
+
+<pre><code>join(&quot;:&quot;, [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]) == &quot;A:B:C&quot; 
+var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+join(&quot;/&quot;, languages) == &quot;Swift/Objective-C&quot;
+</code></pre>
+
+<p>map(sequence, transformClosure): 如果transformClosure适用于所给序列中所有的元素，则返回一个新序列。</p>
+
+<pre><code>equal(map(1...3, { $0 * 5 }), [5, 10, 15]) 
+for i in map(1...10, { $0 * 10 }) { 
+    // 10, 20, 30, ... 
+    println(i) 
+    assert(contains([10, 20, 30, 40, 50, 60, 70, 80, 90, 100], i)) 
+} 
+</code></pre>
+
+<p>max(comparable1, comparable2, etc.): 返回函数所给参数中的最大值。</p>
+
+<pre><code>max(0, 1) == 1 
+max(8, 2, 3) == 8 
+</code></pre>
+
+<p>maxElement(sequence): 返回所给序列的同类元素中的最大元素。</p>
+
+<pre><code>maxElement(1...10) == 10 
+var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+maxElement(languages) == &quot;Swift&quot; 
+</code></pre>
+
+<p>minElements(sequence): 返回所给序列的同类元素中的最小元素。</p>
+
+<pre><code>minElement(1...10) == 1 
+var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+minElement(languages) == &quot;Objective-C&quot; 
+</code></pre>
+
+<p>reduce(sequence, initial, combineClosure): 从第一个初始值开始对其进行combineClosure操作，递归式地将序列中的元素合并为一个元素。</p>
+
+<pre><code>var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+reduce(languages, &quot;&quot;, { $0 + $1 }) == &quot;SwiftObjective-C&quot; 
+reduce([10, 20, 5], 1, { $0 * $1 }) == 1000 
+ 
+reverse(sequence): 返回所给序列的倒序。
+equal(reverse([1, 2, 3]), [3, 2, 1]) 
+for i in reverse([1, 2, 3]) { 
+    // 3, 2, 1 
+    println(i) 
+} 
+</code></pre>
+
+<p>startsWith(sequence1, sequence2):如果序列1和序列2的起始元素相等，则返回true。</p>
+
+<pre><code>startsWith(&quot;foobar&quot;, &quot;foo&quot;) == true 
+startsWith(10..100, 10..15) == true 
+var languages = [&quot;Swift&quot;, &quot;Objective-C&quot;] 
+startsWith(languages, [&quot;Swift&quot;]) == true
+</code></pre>
+
+<p>如下列表为Swift中的74个内建函数。上文所描述的函数是我认为在日常开发中比较有用处的。当然我可能遗漏了一些常用函数。欢迎大家在评论中讨论，并且请用一个简短的代码段来展示如何使用该函数。</p>
+
+<pre><code>abs(...) 
+advance(...) 
+alignof(...) 
+alignofValue(...) 
+assert(...) 
+bridgeFromObjectiveC(...) 
+bridgeFromObjectiveCUnconditional(...) 
+bridgeToObjectiveC(...) 
+bridgeToObjectiveCUnconditional(...) 
+c_malloc_size(...) 
+c_memcpy(...) 
+c_putchar(...) 
+contains(...) 
+count(...) 
+countElements(...) 
+countLeadingZeros(...) 
+debugPrint(...) 
+debugPrintln(...) 
+distance(...) 
+dropFirst(...) 
+dropLast(...) 
+dump(...) 
+encodeBitsAsWords(...) 
+enumerate(...) 
+equal(...) 
+filter(...) 
+find(...) 
+getBridgedObjectiveCType(...) 
+getVaList(...) 
+indices(...) 
+insertionSort(...) 
+isBridgedToObjectiveC(...) 
+isBridgedVerbatimToObjectiveC(...) 
+isUniquelyReferenced(...) 
+join(...) 
+lexicographicalCompare(...) 
+map(...) 
+max(...) 
+maxElement(...) 
+min(...) 
+minElement(...) 
+numericCast(...) 
+partition(...) 
+posix_read(...) 
+posix_write(...) 
+print(...) 
+println(...) 
+quickSort(...) 
+reduce(...) 
+reflect(...) 
+reinterpretCast(...) 
+reverse(...) 
+roundUpToAlignment(...) 
+sizeof(...) 
+sizeofValue(...) 
+sort(...) 
+split(...) 
+startsWith(...) 
+strideof(...) 
+strideofValue(...) 
+swap(...) 
+swift_MagicMirrorData_summaryImpl(...) 
+swift_bufferAllocate(...) 
+swift_keepAlive(...) 
+toString(...) 
+transcode(...) 
+underestimateCount(...) 
+unsafeReflect(...) 
+withExtendedLifetime(...) 
+withObjectAtPlusZero(...) 
+withUnsafePointer(...) 
+withUnsafePointerToObject(...) 
+withUnsafePointers(...) 
+withVaList(...) 
+</code></pre>
+
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			
+			<span class="categories">
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="" data-url=""></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"lambgao"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="2014-06-23-full-text-search-elasticsearch.html" 
+	        title="Previous Post: 全文搜索之 Elasticsearch">&laquo; 全文搜索之 Elasticsearch</a>
+	    
+	    
+	        <a class="basic-alignment right" href="2014-06-06-angularjs-and-emberjs.html" 
+	        title="Next Post: AngularJS 与 EmberJS">AngularJS 与 EmberJS &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+  
+    
+
+
+
+
+</body>
+</html>
