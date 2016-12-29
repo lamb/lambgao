@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2016-12-29T10:43:32+08:00</updated>
+  <updated>2016-12-29T16:45:36+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,140 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Chrome插件：网易云音乐一键全赞]]></title>
+    <link href="http://lambgao.com/2016-12-29-chrome-plugin.html"/>
+    <updated>2016-12-29T14:44:17+08:00</updated>
+    <id>http://lambgao.com/2016-12-29-chrome-plugin.html</id>
+    <content type="html"><![CDATA[
+<p>最近帮朋友做了一个Chrome插件，方便做一些批量的内容。对于Chrome插件有兴趣的同学可以看一下。</p>
+
+<h3 id="toc_0">需求</h3>
+
+<p>网易云音乐音乐详情页底部的评论区，一键自动全赞，然后翻页继续全赞直至最后一页。</p>
+
+<h3 id="toc_1">分析</h3>
+
+<p>那么我们以薛之谦的“<a href="http://music.163.com/#/song?id=32507038">演员</a>”这首歌页面为例仔细分析一下。首先看页面的URL <a href="http://music.163.com/#/song?id=32507038">http://music.163.com/#/song?id=32507038</a>，页面用的锚点，主url music.163.com/ 一直没变过。那么再看页面底部的评论区域，评论区域分为两部分，第一部分是精彩评论，第二部分是最新评论。最新评论下面有翻页按钮，点击第二页后，可以翻页，第二页以后的页面上部没有精彩评论。</p>
+
+<h3 id="toc_2">实现</h3>
+
+<p>由于代码中有注释而且非常短，就不一一解释了，直接上代码吧。<br/>
+关于Chrome插件的制作可以看着里：<a href="https://www.zhihu.com/question/20179805">如何从零开始写一个 Chrome 扩展？</a></p>
+
+<h4 id="toc_3">manifest.json</h4>
+
+<pre><code>{
+  &quot;name&quot;: &quot;云音乐&quot;,
+  &quot;description&quot;: &quot;云音乐&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;permissions&quot;: [
+    &quot;tabs&quot;, &quot;http://music.163.com/*&quot;
+  ],
+  &quot;content_scripts&quot;: [
+    {
+      &quot;matches&quot;: [&quot;http://music.163.com/*&quot;],
+      &quot;js&quot;: [&quot;jquery.min.js&quot;, &quot;myscript.js&quot;]
+    }
+  ],
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+
+<h4 id="toc_4">myscript.js</h4>
+
+<pre><code>window.onhashchange = handleHashchange;
+window.onerror = handleError;
+
+var time = new Date().getTime();
+var array = new Array();
+
+$(window.frames[&quot;contentFrame&quot;].document).ready(function(){
+  addButton();
+});
+
+function handleHashchange() {
+  //console.log(&quot;onhashchange&quot;);
+  location.reload();
+}
+
+function handleError() {
+  console.log(&quot;onerror&quot;);
+}
+
+function addButton() {
+  array = new Array();
+  var iptarea = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.iptarea&quot;);
+  //var button = $(&#39;&lt;input id=&quot;like&quot; class=&quot;btn u-btn u-btn-1&quot; type=&quot;button&quot; value=&quot;全部点赞&quot; /&gt;&#39;);
+  var button = $(&#39;&lt;a href=&quot;javascript:void(0)&quot; class=&quot;btn u-btn u-btn-1 j-flag&quot; &gt;全赞&lt;/a&gt;&#39;);
+
+  button.click( function () {
+    //绑定事件监听评论区域的数据改变
+    var cmmts = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.cmmts&quot;);
+    cmmts.bind(&#39;DOMNodeInserted&#39;, function(e) {
+      //console.log(&#39;element now contains: &#39; + $(e.target).html());
+      //console.log(&#39;element now length:%d contains:%s &#39;, $(e.target).parent().children().length, $(e.target).html());
+      //console.log(&#39;element now length: &#39; + $(e.target).parent().children().length);
+      //判断是否满一页，然后全部点一页
+      //if ($(e.target).parent().children().length == 20) {
+      //  like();
+      //}
+      item($(e.target));
+    });
+
+    //当前页一键全赞
+    like();
+  });
+  var input = $(&#39;&lt;div&gt;频率&lt;input id=&quot;interval&quot; class=&quot;&quot; type=&quot;text&quot; value=&quot;0&quot; /&gt;s&lt;/div&gt;&#39;);
+  iptarea.after(input);
+  iptarea.after(button);
+}
+
+function like() {
+  var cmmts = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.cmmts&quot;).children(&quot;.itm&quot;);
+  //console.log(&quot;cmmts.length : %d&quot;, cmmts.length);
+  //console.log(&quot;cmmts.html : %s&quot;, cmmts.html());
+  for (var i=0;i&lt;cmmts.length;i++){
+    var itm = cmmts.eq(i);
+    item(itm);
+  }
+  next();
+}
+
+function item(itm) {
+    time = new Date().getTime();
+    var rp = itm.find(&quot;.cntwrap .rp a&quot;);
+    //console.log(rp.html());
+    //console.log(rp.attr(&quot;data-type&quot;));
+    if(rp.attr(&quot;data-type&quot;) == &quot;like&quot;){
+      //console.log(rp.html());
+      var zan = rp.children();
+      //console.log(zan.html());
+      zan.click();
+    }
+}
+
+function next() {
+  var upage = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.u-page&quot;).children();
+  //console.log(&quot;upage.length : %d&quot;, upage.length);
+  if (upage.length &gt; 0) {
+    var znxt = upage.eq(upage.length - 1);
+    if(!znxt.hasClass(&#39;js-disabled&#39;)){
+      znxt.html(&quot;&lt;span&gt;下一页&lt;/span&gt;&quot;);
+      //console.log(&quot;znxt.html : %s&quot;, znxt.html());
+      znxt.children().click();
+    }
+  }
+  var interval = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;#interval&quot;);
+  interval = interval.val() - 0;
+  //console.log(&#39;interval: %d&#39;, interval);
+  setTimeout(&quot;next()&quot;, interval*1000);
+}
+</code></pre>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[张小龙首次公开解读小程序：1月9号上线]]></title>
@@ -1451,142 +1585,6 @@ Wi-Fi — prefs:root=WIFI
 <p>这个方案原理是让浏览器去填充用户实际上看不到的 input。虽然看上去代码比较 low，但是很实用。</p>
 
 <p>参考：<a href="http://stackoverflow.com/questions/15738259/disabling-chrome-autofill">Disabling Chrome Autofill</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[标签服务实现漫谈]]></title>
-    <link href="http://lambgao.com/2015-12-01-tag.html"/>
-    <updated>2016-12-27T00:30:04+08:00</updated>
-    <id>http://lambgao.com/2015-12-01-tag.html</id>
-    <content type="html"><![CDATA[
-<p>标签服务是一个较为通用的基础业务服务，比如博客系统对文章加标签、社交网络中为好友添加印象、收藏的歌曲贴标签方便整理等等。</p>
-
-<p>其主要提供两类接口：</p>
-
-<ul>
-<li>标签实体的管理/查询：负责标签实体的 CRUD</li>
-<li>标签关联的管理/查询：将外部业务实体与标签建立/删除关联，根据外部业务实体 id 查询标签集</li>
-</ul>
-
-<span id="more"></span><!-- more -->
-
-<h3 id="toc_0">RDB 实现</h3>
-
-<p>基于关系型数据库的实现是最容易的，并且上大多数应用也是这样做的。</p>
-
-<ol>
-<li>建立 tag 表，其中包含了 tag 的基础属性，例如 name、description 等</li>
-<li>建立 tag_rel 关联表，其中主要包含了 object_id、tag_id</li>
-</ol>
-
-<p>管理服务（创建/更新/删除）的实现非常容易；根据 object_id 查询其对应的标签集也很容易实现：</p>
-
-<pre><code>SELECT
-  tag_rel.tag_id,
-  tag_rel.object_id,
-  tag.name
-FROM
-  tag_rel
-LEFT JOIN tag ON tag_rel.tag_id = tag.tag_id
-WHERE
-  tag_rel.object_id = &#39;2db775c1d2174a8c67fc39b86c3fc168&#39;
-  
-</code></pre>
-
-<h4 id="toc_1">问题</h4>
-
-<p>RDB 实现标签服务时最主要会面临的是性能问题，随着 tag_rel 数据量的不断增长，上面查询的性能会不断下降。</p>
-
-<h4 id="toc_2">优化</h4>
-
-<h5 id="toc_3">数据库</h5>
-
-<ul>
-<li>给列 tag_rel.object_id 加普通索引</li>
-<li>升级数据库服务器硬件配置</li>
-<li>使用数据库产品的特性，比如表分区/内存表</li>
-</ul>
-
-<p>在应用层面，可以缓存查询结果，如果实时性要求不高，缓存机制是比较容易实现的，但大多数业务场景可能并不适用。</p>
-
-<h5 id="toc_4">分表</h5>
-
-<p>前面提到的数据库产品的表分区特性（Oracle）我们也可以在应用层代码通过分表来实现。</p>
-
-<ul>
-<li>建立多张标签关联表 tag_rel_0、tag_rel_1、…、tag_rel_31</li>
-<li>将查询条件 object_id 通过某种散列算法（比如 UUID 字符串的话可以通过 FNV Hash 后取模 32）得到 [0, 31] 的结果</li>
-<li>SQL 落到具体的某张具体的分表上 FROM tag_rel_16</li>
-</ul>
-
-<p>大部分应用应该通过分表就能解决性能问题，还解决不了的话可以通过这个思路进行分库、分实例。</p>
-
-<h3 id="toc_5">NoSQL 实现</h3>
-
-<p>基于前文的背景可知，标签服务的定位是一个独立的服务，并不维护业务主体（object），所以将标签嵌套到业务主体中的设计在这里并不适合。</p>
-
-<p>排除了这一条，我们还是只能用 RDB 的思想来进行设计：</p>
-
-<ul>
-<li>数据结构沿用 RDB 设计，即同样分为两个“表”：tag、tag_rel</li>
-<li>将 SQL 中的 join 分成两步进行：1. 根据 object_id 查询出 tag_id 集合；2. 根据 tag_id 集合查询出 tag 集合</li>
-</ul>
-
-<h4 id="toc_6">Redis</h4>
-
-<p>Redis 介绍和“为什么选用 Redis”略过。下面我们介绍一下如何使用 Redis 实现上述思路。</p>
-
-<h5 id="toc_7">数据类型</h5>
-
-<p>我们可以使用 Redis Hash 类型来保存标签，使用 Redis Set 来保存标签关联（这也是 Redis 官方文档的<a href="http://redis.io/topics/data-types-intro#redis-sets">示例</a>）。</p>
-
-<p>给新闻（id: 1000）添加 4 个标签（通过 id 关联）：</p>
-
-<pre><code>&gt; sadd news:1000:tags 1 2 5 77
-(integer) 4
-</code></pre>
-
-<p>添加反向关联：</p>
-
-<pre><code>&gt; sadd tag:1:news 1000
-(integer) 1
-&gt; sadd tag:2:news 1000
-(integer) 1
-&gt; sadd tag:5:news 1000
-(integer) 1
-&gt; sadd tag:77:news 1000
-(integer) 1
-</code></pre>
-
-<p>查询该新闻的标签 id 集合：</p>
-
-<pre><code>&gt; smembers news:1000:tags
-1. 5
-2. 1
-3. 77
-4. 2
-</code></pre>
-
-<p>然后根据返回的标签 id 集合查询标签。虽然分了两步进行查询，但 Redis 的高性能将为我们带来很低的耗时。</p>
-
-<h3 id="toc_8">结论</h3>
-
-<ul>
-<li> 数据库分表能够解决标签服务的性能问题
-
-<ul>
-<li>实现简单，在现有实现的基础上改造很小</li>
-<li>依然是基于关系型数据库，不用调整技术架构，开发模式、运维等保持不变</li>
-</ul></li>
-<li>使用 Redis 同样可以实现标签服务
-
-<ul>
-<li>使用 Hash 保存标签、Set 保存关联关系</li>
-<li>分两步进行查询，Redis 自身的实现解决性能问题</li>
-</ul></li>
-</ul>
 
 ]]></content>
   </entry>

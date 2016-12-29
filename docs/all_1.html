@@ -88,6 +88,56 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-03-29-gitconfig-alias.html">gitconfig配置别名alias</a></h1>
+			<p class="meta"><time datetime="2016-03-29T01:50:52+08:00" 
+			pubdate data-updated="true">2016/3/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>git有一些命令如：git pull 、 git push等等，这些命令可以设置alias，也就是缩写。如：git pull 是 git pl， git push 是 git ps。可以根据个人习惯进行修改。</p>
+
+<p>修改别名alias步骤如下：</p>
+
+<p>1,进入根目录</p>
+
+<p><code>$ cd</code></p>
+
+<p>2,查看根目录下面的文件</p>
+
+<p><code>$ ls -la</code></p>
+
+<p>查看一下有没有.gitconfig文件。</p>
+
+<p>3，编辑.gitconfig</p>
+
+<p><code>$ vi .gitconfig</code></p>
+
+<p>添加如下：</p>
+
+<pre><code>[alias]
+co = checkout
+ci = commit
+st = status
+pl = pull
+ps = push
+dt = difftool
+l = log --stat
+cp = cherry-pick
+ca = commit -a
+b = branch
+</code></pre>
+
+<p>具体可以根据个人习惯进行添加修改。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-02-24-secure-salted-password-hashing.html">你保存用户密码的姿势正确吗？</a></h1>
 			<p class="meta"><time datetime="2016-02-24T00:15:22+08:00" 
 			pubdate data-updated="true">2016/2/24</time></p>
@@ -588,28 +638,6 @@ export GOARCH=amd64
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-08-27-why-character-array-is-better-than.html">为什么存储密码字符数组比字符串更合适？</a></h1>
-			<p class="meta"><time datetime="2015-08-27T22:49:24+08:00" 
-			pubdate data-updated="true">2015/8/27</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>“为什么存储密码用字符数组比字符串更合适”这个问题是我的一个朋友在最近一次面试中提到的。那哥们应聘的是一个技术lead职位，有超过六年的工作经验。字符数组和字符串都可以用于存储文本数据，但是在选择具体哪一种时，如果你没有针对具体的情况是很难回答这个问题的。但是正如这哥们说的任何与字符串相关的问题一定可以从字符串的属性里面的线索中找到，比如不可变性。他就用这种方式去说服面试官的。这里我们就来探讨一些关于为什么你应该使用char[] 来存储密码而不是字符串。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-08-27-why-character-array-is-better-than.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_2.html">&larr; Older</a> 
@@ -635,6 +663,12 @@ export GOARCH=amd64
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -654,12 +688,6 @@ export GOARCH=amd64
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

@@ -88,6 +88,146 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a></h1>
+			<p class="meta"><time datetime="2016-12-29T14:44:17+08:00" 
+			pubdate data-updated="true">2016/12/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>最近帮朋友做了一个Chrome插件，方便做一些批量的内容。对于Chrome插件有兴趣的同学可以看一下。</p>
+
+<h3 id="toc_0">需求</h3>
+
+<p>网易云音乐音乐详情页底部的评论区，一键自动全赞，然后翻页继续全赞直至最后一页。</p>
+
+<h3 id="toc_1">分析</h3>
+
+<p>那么我们以薛之谦的“<a href="http://music.163.com/#/song?id=32507038">演员</a>”这首歌页面为例仔细分析一下。首先看页面的URL <a href="http://music.163.com/#/song?id=32507038">http://music.163.com/#/song?id=32507038</a>，页面用的锚点，主url music.163.com/ 一直没变过。那么再看页面底部的评论区域，评论区域分为两部分，第一部分是精彩评论，第二部分是最新评论。最新评论下面有翻页按钮，点击第二页后，可以翻页，第二页以后的页面上部没有精彩评论。</p>
+
+<h3 id="toc_2">实现</h3>
+
+<p>由于代码中有注释而且非常短，就不一一解释了，直接上代码吧。<br/>
+关于Chrome插件的制作可以看着里：<a href="https://www.zhihu.com/question/20179805">如何从零开始写一个 Chrome 扩展？</a></p>
+
+<h4 id="toc_3">manifest.json</h4>
+
+<pre><code>{
+  &quot;name&quot;: &quot;云音乐&quot;,
+  &quot;description&quot;: &quot;云音乐&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;permissions&quot;: [
+    &quot;tabs&quot;, &quot;http://music.163.com/*&quot;
+  ],
+  &quot;content_scripts&quot;: [
+    {
+      &quot;matches&quot;: [&quot;http://music.163.com/*&quot;],
+      &quot;js&quot;: [&quot;jquery.min.js&quot;, &quot;myscript.js&quot;]
+    }
+  ],
+  &quot;manifest_version&quot;: 2
+}
+</code></pre>
+
+<h4 id="toc_4">myscript.js</h4>
+
+<pre><code>window.onhashchange = handleHashchange;
+window.onerror = handleError;
+
+var time = new Date().getTime();
+var array = new Array();
+
+$(window.frames[&quot;contentFrame&quot;].document).ready(function(){
+  addButton();
+});
+
+function handleHashchange() {
+  //console.log(&quot;onhashchange&quot;);
+  location.reload();
+}
+
+function handleError() {
+  console.log(&quot;onerror&quot;);
+}
+
+function addButton() {
+  array = new Array();
+  var iptarea = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.iptarea&quot;);
+  //var button = $(&#39;&lt;input id=&quot;like&quot; class=&quot;btn u-btn u-btn-1&quot; type=&quot;button&quot; value=&quot;全部点赞&quot; /&gt;&#39;);
+  var button = $(&#39;&lt;a href=&quot;javascript:void(0)&quot; class=&quot;btn u-btn u-btn-1 j-flag&quot; &gt;全赞&lt;/a&gt;&#39;);
+
+  button.click( function () {
+    //绑定事件监听评论区域的数据改变
+    var cmmts = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.cmmts&quot;);
+    cmmts.bind(&#39;DOMNodeInserted&#39;, function(e) {
+      //console.log(&#39;element now contains: &#39; + $(e.target).html());
+      //console.log(&#39;element now length:%d contains:%s &#39;, $(e.target).parent().children().length, $(e.target).html());
+      //console.log(&#39;element now length: &#39; + $(e.target).parent().children().length);
+      //判断是否满一页，然后全部点一页
+      //if ($(e.target).parent().children().length == 20) {
+      //  like();
+      //}
+      item($(e.target));
+    });
+
+    //当前页一键全赞
+    like();
+  });
+  var input = $(&#39;&lt;div&gt;频率&lt;input id=&quot;interval&quot; class=&quot;&quot; type=&quot;text&quot; value=&quot;0&quot; /&gt;s&lt;/div&gt;&#39;);
+  iptarea.after(input);
+  iptarea.after(button);
+}
+
+function like() {
+  var cmmts = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.cmmts&quot;).children(&quot;.itm&quot;);
+  //console.log(&quot;cmmts.length : %d&quot;, cmmts.length);
+  //console.log(&quot;cmmts.html : %s&quot;, cmmts.html());
+  for (var i=0;i&lt;cmmts.length;i++){
+    var itm = cmmts.eq(i);
+    item(itm);
+  }
+  next();
+}
+
+function item(itm) {
+    time = new Date().getTime();
+    var rp = itm.find(&quot;.cntwrap .rp a&quot;);
+    //console.log(rp.html());
+    //console.log(rp.attr(&quot;data-type&quot;));
+    if(rp.attr(&quot;data-type&quot;) == &quot;like&quot;){
+      //console.log(rp.html());
+      var zan = rp.children();
+      //console.log(zan.html());
+      zan.click();
+    }
+}
+
+function next() {
+  var upage = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;.u-page&quot;).children();
+  //console.log(&quot;upage.length : %d&quot;, upage.length);
+  if (upage.length &gt; 0) {
+    var znxt = upage.eq(upage.length - 1);
+    if(!znxt.hasClass(&#39;js-disabled&#39;)){
+      znxt.html(&quot;&lt;span&gt;下一页&lt;/span&gt;&quot;);
+      //console.log(&quot;znxt.html : %s&quot;, znxt.html());
+      znxt.children().click();
+    }
+  }
+  var interval = $(window.frames[&quot;contentFrame&quot;].document).find(&quot;#interval&quot;);
+  interval = interval.val() - 0;
+  //console.log(&#39;interval: %d&#39;, interval);
+  setTimeout(&quot;next()&quot;, interval*1000);
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a></h1>
 			<p class="meta"><time datetime="2016-12-29T02:01:18+08:00" 
 			pubdate data-updated="true">2016/12/29</time></p>
@@ -612,56 +752,6 @@ LRU memory cache cleanup instead of reset on memory warning</p>
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2016-03-29-gitconfig-alias.html">gitconfig配置别名alias</a></h1>
-			<p class="meta"><time datetime="2016-03-29T01:50:52+08:00" 
-			pubdate data-updated="true">2016/3/29</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>git有一些命令如：git pull 、 git push等等，这些命令可以设置alias，也就是缩写。如：git pull 是 git pl， git push 是 git ps。可以根据个人习惯进行修改。</p>
-
-<p>修改别名alias步骤如下：</p>
-
-<p>1,进入根目录</p>
-
-<p><code>$ cd</code></p>
-
-<p>2,查看根目录下面的文件</p>
-
-<p><code>$ ls -la</code></p>
-
-<p>查看一下有没有.gitconfig文件。</p>
-
-<p>3，编辑.gitconfig</p>
-
-<p><code>$ vi .gitconfig</code></p>
-
-<p>添加如下：</p>
-
-<pre><code>[alias]
-co = checkout
-ci = commit
-st = status
-pl = pull
-ps = push
-dt = difftool
-l = log --stat
-cp = cherry-pick
-ca = commit -a
-b = branch
-</code></pre>
-
-<p>具体可以根据个人习惯进行添加修改。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_1.html">&larr; Older</a> 
@@ -687,6 +777,12 @@ b = branch
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -706,12 +802,6 @@ b = branch
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

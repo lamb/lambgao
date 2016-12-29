@@ -88,6 +88,28 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-08-27-why-character-array-is-better-than.html">为什么存储密码字符数组比字符串更合适？</a></h1>
+			<p class="meta"><time datetime="2015-08-27T22:49:24+08:00" 
+			pubdate data-updated="true">2015/8/27</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>“为什么存储密码用字符数组比字符串更合适”这个问题是我的一个朋友在最近一次面试中提到的。那哥们应聘的是一个技术lead职位，有超过六年的工作经验。字符数组和字符串都可以用于存储文本数据，但是在选择具体哪一种时，如果你没有针对具体的情况是很难回答这个问题的。但是正如这哥们说的任何与字符串相关的问题一定可以从字符串的属性里面的线索中找到，比如不可变性。他就用这种方式去说服面试官的。这里我们就来探讨一些关于为什么你应该使用char[] 来存储密码而不是字符串。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-08-27-why-character-array-is-better-than.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-07-21-tomcat-performance-tuning.html">Tomcat 生产服务器性能优化</a></h1>
 			<p class="meta"><time datetime="2015-07-21T22:33:51+08:00" 
 			pubdate data-updated="true">2015/7/21</time></p>
@@ -591,101 +613,6 @@ This is a bit pointless
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-02-16-golang-get-user-home-dir.html">Golang 获取用户 home 目录路径</a></h1>
-			<p class="meta"><time datetime="2015-02-16T23:34:06+08:00" 
-			pubdate data-updated="true">2015/2/16</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h3 id="toc_0">os/user</h3>
-
-<p>一般情况下我们可以使用 os/user 包提供的 Current() 函数来获取用户信息：</p>
-
-<pre><code>user, err := user.Current()
-if nil == err {
-    return user.HomeDir, nil
-}
-</code></pre>
-
-<p>但这个方式交叉编译后不能完全跨平台，在 darwin 下需要 cgo 才能正常工作。</p>
-
-<h3 id="toc_1">改进</h3>
-
-<p>为了解决这个问题，我们需要进行一点增强，在通过 os/user 获取失败时再通过环境变量、命令来获取：</p>
-
-<pre><code>// Home returns the home directory for the executing user.
-//
-// This uses an OS-specific method for discovering the home directory.
-// An error is returned if a home directory cannot be detected.
-func Home() (string, error) {
-    user, err := user.Current()
-    if nil == err {
-        return user.HomeDir, nil
-    }
-
-    // cross compile support
-    
-    if &quot;windows&quot; == runtime.GOOS {
-        return homeWindows()
-    }
-
-    // Unix-like system, so just assume Unix
-    return homeUnix()
-}
-
-func homeUnix() (string, error) {
-    // First prefer the HOME environmental variable
-    if home := os.Getenv(&quot;HOME&quot;); home != &quot;&quot; {
-        return home, nil
-    }
-
-    // If that fails, try the shell
-    var stdout bytes.Buffer
-    cmd := exec.Command(&quot;sh&quot;, &quot;-c&quot;, &quot;eval echo ~$USER&quot;)
-    cmd.Stdout = &amp;stdout
-    if err := cmd.Run(); err != nil {
-        return &quot;&quot;, err
-    }
-
-    result := strings.TrimSpace(stdout.String())
-    if result == &quot;&quot; {
-        return &quot;&quot;, errors.New(&quot;blank output when reading home directory&quot;)
-    }
-
-    return result, nil
-}
-
-func homeWindows() (string, error) {
-    drive := os.Getenv(&quot;HOMEDRIVE&quot;)
-    path := os.Getenv(&quot;HOMEPATH&quot;)
-    home := drive + path
-    if drive == &quot;&quot; || path == &quot;&quot; {
-        home = os.Getenv(&quot;USERPROFILE&quot;)
-    }
-    if home == &quot;&quot; {
-        return &quot;&quot;, errors.New(&quot;HOMEDRIVE, HOMEPATH, and USERPROFILE are blank&quot;)
-    }
-
-    return home, nil
-}
-</code></pre>
-
-<h3 id="toc_2">参考</h3>
-
-<ul>
-<li><a href="http://stackoverflow.com/questions/7922270/obtain-users-home-directory">Obtain user’s home directory</a></li>
-<li><a href="https://github.com/mitchellh/go-homedir">go-homedir</a></li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_3.html">&larr; Older</a> 
@@ -711,6 +638,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -730,12 +663,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

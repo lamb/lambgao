@@ -88,6 +88,72 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-01-29-review-fast-sort.html">纪念大师，复习快排</a></h1>
+			<p class="meta"><time datetime="2012-01-29T00:25:18+08:00" 
+			pubdate data-updated="true">2012/1/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<pre><code>package com.test;
+
+public class Sort {
+    // 对R[low..high]快速排序
+    public static void QuickSort(Comparable[] data, int low, int high) { 
+        int pivotpos; // 划分后的基准记录的位置
+
+        if (low &lt; high) {// 仅当区间长度大于1时才须排序
+            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
+            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
+            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
+        }
+    } // QuickSort
+
+    private static int Partition(Comparable[] data, int i, int j) {
+        // 从数组两端交替地向中间扫描
+        Comparable pivotKey = data[i];
+        // 进行扫描的指针i,j;i从左边开始,j从右边开始
+        while (i &lt; j) {
+            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
+                j--;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素小的移动到左边
+                data[i] = data[j];
+                i++;
+            }// end if
+            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
+                i++;
+            }// end while
+            if (i &lt; j) {
+                // 比枢纽元素大的移动到右边
+                data[j] = data[i];
+                j--;
+            }// end if
+        }// end while
+        // 枢纽元素移动到正确位置
+        data[i] = pivotKey;
+        return i;
+    }
+
+    public static void main(String[] args) {
+        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
+        QuickSort(c, 0, c.length - 1);
+        for (Comparable data : c) {
+            System.out.println(data);
+        }
+    }
+}
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-01-06-print-exception-log.html">记录异常日志的7条规则</a></h1>
 			<p class="meta"><time datetime="2012-01-06T16:42:04+08:00" 
 			pubdate data-updated="true">2012/1/6</time></p>
@@ -814,30 +880,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-07-26-java-final-keyword.html">再识 Java 的 final 关键字</a></h1>
-			<p class="meta"><time datetime="2011-07-26T17:15:55+08:00" 
-			pubdate data-updated="true">2011/7/26</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在 Java 中，我们一般用 final 关键字来定义类字段常量，防止类继承、方法覆写。但其实我们也应该尽可能地使用 final 关键字来修饰方法参数与局部变量。</p>
-
-<p>因为这样做可以使代码更易读，能让阅读者清楚地知道该参数/变量是不会在被重赋值的，也可以让编译器更好地帮助我们优化生成的字节码。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2011-07-26-java-final-keyword.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_10.html">&larr; Older</a> 
@@ -863,6 +905,12 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -882,12 +930,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

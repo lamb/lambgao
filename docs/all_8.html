@@ -88,6 +88,45 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-09-14-plsql-developer-oracle-min-client.html">PL/SQL Developer 与 Oracle 精简客户端</a></h1>
+			<p class="meta"><time datetime="2012-09-14T18:20:40+08:00" 
+			pubdate data-updated="true">2012/9/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>本文介绍如何安装 PL/SQL Developer 9 与 Oracle 精简客户端。</p>
+
+<ol>
+<li><p>下载 <a href="https://www.allroundautomations.com/bodyplsqldevreg.html">PL/SQL Dev</a></p></li>
+<li><p>下载 <a href="http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html">Oracle 精简客户端</a></p></li>
+<li><p>安装 PL/SQL Dev 以及汉化包</p></li>
+<li><p>解压 Oracle 精简客户端，比如解压目录为 D:\oracle10g</p></li>
+<li><p>配置 Oracle 连接。D:\oracle10g\tnsnames.ora，D:\oracle10g\NETWORK\ADMIN\tnsnames.ora</p></li>
+<li><p>配置系统环境变量</p>
+
+<ol>
+<li><p>ORACLE_HOME</p>
+
+<p>值：D:\oracle10g</p></li>
+<li><p>TNS_ADMIN<br/>
+值：D:\oracle10g</p></li>
+<li><p>NLS_LANG<br/>
+值：SIMPLIFIED CHINESE_CHINA.ZHS16GBK</p></li>
+</ol></li>
+<li><p>配置 PL/SQL Dev</p></li>
+</ol>
+
+<p>工具 -&gt; 首选项，Oracle 主目录名：D:\oracle10g，OCI 库：D:\oracle10g\oci.dll</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-09-08-ten-jdbc-best-practices.html">十个 JDBC 最佳实践</a></h1>
 			<p class="meta"><time datetime="2012-09-08T18:18:10+08:00" 
 			pubdate data-updated="true">2012/9/8</time></p>
@@ -1360,72 +1399,6 @@ C.java:3: reference to NAME is ambiguous, both variable NAME <br/>
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-01-29-review-fast-sort.html">纪念大师，复习快排</a></h1>
-			<p class="meta"><time datetime="2012-01-29T00:25:18+08:00" 
-			pubdate data-updated="true">2012/1/29</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<pre><code>package com.test;
-
-public class Sort {
-    // 对R[low..high]快速排序
-    public static void QuickSort(Comparable[] data, int low, int high) { 
-        int pivotpos; // 划分后的基准记录的位置
-
-        if (low &lt; high) {// 仅当区间长度大于1时才须排序
-            pivotpos = Partition(data, low, high); // 对Comparable[] data做划分
-            QuickSort(data, low, pivotpos - 1); // 对左区间递归排序
-            QuickSort(data, pivotpos + 1, high); // 对右区间递归排序
-        }
-    } // QuickSort
-
-    private static int Partition(Comparable[] data, int i, int j) {
-        // 从数组两端交替地向中间扫描
-        Comparable pivotKey = data[i];
-        // 进行扫描的指针i,j;i从左边开始,j从右边开始
-        while (i &lt; j) {
-            while (i &lt; j &amp;&amp; data[j].compareTo(pivotKey) &gt; 0) {
-                j--;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素小的移动到左边
-                data[i] = data[j];
-                i++;
-            }// end if
-            while (i &lt; j &amp;&amp; data[i].compareTo(pivotKey) &lt; 0) {
-                i++;
-            }// end while
-            if (i &lt; j) {
-                // 比枢纽元素大的移动到右边
-                data[j] = data[i];
-                j--;
-            }// end if
-        }// end while
-        // 枢纽元素移动到正确位置
-        data[i] = pivotKey;
-        return i;
-    }
-
-    public static void main(String[] args) {
-        Comparable[] c = {4, 9, 23, 1, 45, 27, 5, 2 };
-        QuickSort(c, 0, c.length - 1);
-        for (Comparable data : c) {
-            System.out.println(data);
-        }
-    }
-}
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_9.html">&larr; Older</a> 
@@ -1451,6 +1424,12 @@ public class Sort {
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -1470,12 +1449,6 @@ public class Sort {
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

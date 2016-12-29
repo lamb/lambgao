@@ -88,6 +88,101 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-02-16-golang-get-user-home-dir.html">Golang 获取用户 home 目录路径</a></h1>
+			<p class="meta"><time datetime="2015-02-16T23:34:06+08:00" 
+			pubdate data-updated="true">2015/2/16</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">os/user</h3>
+
+<p>一般情况下我们可以使用 os/user 包提供的 Current() 函数来获取用户信息：</p>
+
+<pre><code>user, err := user.Current()
+if nil == err {
+    return user.HomeDir, nil
+}
+</code></pre>
+
+<p>但这个方式交叉编译后不能完全跨平台，在 darwin 下需要 cgo 才能正常工作。</p>
+
+<h3 id="toc_1">改进</h3>
+
+<p>为了解决这个问题，我们需要进行一点增强，在通过 os/user 获取失败时再通过环境变量、命令来获取：</p>
+
+<pre><code>// Home returns the home directory for the executing user.
+//
+// This uses an OS-specific method for discovering the home directory.
+// An error is returned if a home directory cannot be detected.
+func Home() (string, error) {
+    user, err := user.Current()
+    if nil == err {
+        return user.HomeDir, nil
+    }
+
+    // cross compile support
+    
+    if &quot;windows&quot; == runtime.GOOS {
+        return homeWindows()
+    }
+
+    // Unix-like system, so just assume Unix
+    return homeUnix()
+}
+
+func homeUnix() (string, error) {
+    // First prefer the HOME environmental variable
+    if home := os.Getenv(&quot;HOME&quot;); home != &quot;&quot; {
+        return home, nil
+    }
+
+    // If that fails, try the shell
+    var stdout bytes.Buffer
+    cmd := exec.Command(&quot;sh&quot;, &quot;-c&quot;, &quot;eval echo ~$USER&quot;)
+    cmd.Stdout = &amp;stdout
+    if err := cmd.Run(); err != nil {
+        return &quot;&quot;, err
+    }
+
+    result := strings.TrimSpace(stdout.String())
+    if result == &quot;&quot; {
+        return &quot;&quot;, errors.New(&quot;blank output when reading home directory&quot;)
+    }
+
+    return result, nil
+}
+
+func homeWindows() (string, error) {
+    drive := os.Getenv(&quot;HOMEDRIVE&quot;)
+    path := os.Getenv(&quot;HOMEPATH&quot;)
+    home := drive + path
+    if drive == &quot;&quot; || path == &quot;&quot; {
+        home = os.Getenv(&quot;USERPROFILE&quot;)
+    }
+    if home == &quot;&quot; {
+        return &quot;&quot;, errors.New(&quot;HOMEDRIVE, HOMEPATH, and USERPROFILE are blank&quot;)
+    }
+
+    return home, nil
+}
+</code></pre>
+
+<h3 id="toc_2">参考</h3>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/7922270/obtain-users-home-directory">Obtain user’s home directory</a></li>
+<li><a href="https://github.com/mitchellh/go-homedir">go-homedir</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-02-10-java-web-framework-dev-fundamentals.html">Java Web 框架开发基础</a></h1>
 			<p class="meta"><time datetime="2015-02-10T23:30:09+08:00" 
 			pubdate data-updated="true">2015/2/10</time></p>
@@ -498,47 +593,6 @@ $(document).ready(function(event) {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-08-13-swift-nil-coalescing.html">Swift中 Nil Coalescing 运算符的使用技巧</a></h1>
-			<p class="meta"><time datetime="2014-08-13T22:43:15+08:00" 
-			pubdate data-updated="true">2014/8/13</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在Swift官方《The Swift Programming Language》文档的Basic Operators一节中添加了Nil Coalescing Operator小结，介绍了一个新的运算符Nil Coalescing，符号是??，它的表现形成如下：</p>
-
-<pre><code>let c = a ?? b
-</code></pre>
-
-<p>这个运算符有两个条件：</p>
-
-<ul>
-<li>a必须是Optional类型的。</li>
-<li>b的类型必须要和a解包后的值类型一致。</li>
-</ul>
-
-<p>符合这两个条件后，我们来解释一下上述这行代码，意思就是c的值是a或b中一个的值，但有前提条件，就是当a解包后值不为nil时，那么就将a解包后的值赋值给c，如果a解包后值为nil，那么就将b的值赋值给c。</p>
-
-<p>我们还可以用三目运算来更形象的解释这个运算符：</p>
-
-<pre><code>let c = a != nil ? a! : b
-</code></pre>
-
-<p>从上面的代码我们很容易理解，当a的值不等于nil时，将a解包后的值赋值给c，否则将b的值赋值给c。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-08-13-swift-nil-coalescing.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -564,6 +618,12 @@ $(document).ready(function(event) {
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -583,12 +643,6 @@ $(document).ready(function(event) {
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  

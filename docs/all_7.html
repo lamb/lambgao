@@ -88,6 +88,104 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-05-hello-world.html">为什么这段代码输出的是”Hello World”</a></h1>
+			<p class="meta"><time datetime="2013-03-05T15:36:51+08:00" 
+			pubdate data-updated="true">2013/3/5</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Stackoverlfow.com上有一篇有趣的讨论帖：</p>
+
+<p>在这篇帖子里提到了如下的程序：</p>
+
+<pre><code>import java.util.*;
+ 
+public class HelloWorld{
+ 
+    public static String randomString(int i)
+    {
+        Random ran = new Random(i);
+        StringBuilder sb = new StringBuilder();
+        for (int n = 0; ; n++)
+        {
+            int k = ran.nextInt(27);
+            if (k == 0)
+                break;
+ 
+            sb.append((char)(&#39;`&#39; + k));
+        }
+ 
+        return sb.toString();
+    }
+ 
+    public static void main(String[] args){
+        System.out.println(randomString(-229985452)+&quot; &quot;+randomString(-147909649));
+    }
+ 
+}
+</code></pre>
+
+<p>明明是在程序里使用了java.util.Ramdom()函数产生随机数，为什么每次打出的结果都是Hello world? 各位程序员，你们怎么看？请务必要独立思考后再看下面的内容哦~</p>
+
+<p>--------------- 独立思考的分割线 ---------------</p>
+
+<p>OK，假如你通过独立思考了以后有了答案，那么可以参照一下下面的各种理解，这些都是来自stackoverflow对此问题的回复。</p>
+
+<p>首先看一下这个程序的工作原理：</p>
+
+<p>通过这句命令首先得到的六个数是:</p>
+
+<p>8 5 12 12 15 0</p>
+
+<p>然后，通过new Random(-147909649).nextInt(27)得到的6个数是：</p>
+
+<p>23 15 18 12 4 0</p>
+
+<p>这样一来，根据：sb.append((char) (‘`’+n)); 得到：</p>
+
+<p>8 + 96 = 104 --&gt; h <br/>
+5 + 96 = 101 --&gt; e <br/>
+12 + 96 = 108 --&gt; l <br/>
+12 + 96 = 108 --&gt; l <br/>
+15 + 96 = 111 --&gt; o <br/>
+23 + 96 = 119 --&gt; w <br/>
+15 + 96 = 111 --&gt; o <br/>
+18 + 96 = 114 --&gt; r <br/>
+12 + 96 = 108 --&gt; l <br/>
+4 + 96 = 100 --&gt; d</p>
+
+<p>整个程序的执行就是这样。</p>
+
+<p>关于这个程序的运行原理的解释，最置顶的一个回复如下：</p>
+
+<p>“如果java.util.Random是被一个具体的数字做为“随机数种子”而实例化（在本例中是-229985452和-147909649），那么该实例就会以这个随机数种子作为随机算法产生随机数的基础。</p>
+
+<p>使用同样的种子实例化的Random对象，每次运行时将会遵循同一种模式，产生同样的序列。”<br/>
+这就是为什么每次运行该程序都会产生同样的结果的原理啦~</p>
+
+<p>当然，关于这个话题，高手林立的Stackoverflow上是不缺乏懂行的专家和见解的。其实对于这个帖子本身，很快就有人论坛上提出了，这不是一个新鲜的问题，之前的某个帖子已经很详细地说明了原理：</p>
+
+<p>参见：<a href="http://stackoverflow.com/questions/8044570/why-does-the-use-of-random-with-a-hardcoded-seed-always-produce-the-same-results">stackoverflow.com/questions/8044570/why-does-the-use-of-random-with-a-hardcoded-seed-always-produce-the-same-results</a></p>
+
+<p>还有的人就非常精辟地指出了，这是计算机所谓的“伪随机数”问题（详细见扩展阅读），更有部分Geek的回复者从计算机理论和概率论的角度说明了，应该如何找到这些神奇的“随机数种子”。能够把这么一个原意为搞笑的帖子发展到理论的高度~，相信这应该也是计算机科学家的境界和觉悟了吧！</p>
+
+<h4 id="toc_0">扩展阅读：计算机伪随机数问题</h4>
+
+<p>随机数在计算机科学和计算机应用中都扮演非常重要的角色（例如通信、安全、密码等方面）。但是，由于计算机本身的结构和原理，实际上是无法产生出所谓的“绝对随机数”的。也就是说，计算机所产生的随机数，实际上是有某种规律或者模式的“伪随机数”（Pseudo random number)。</p>
+
+<p>如何用计算机程序产生高质量随机数，这是计算机理论科学中的一个非常重要的课题。尤其是在复杂的计算环境下的高质量随机数的产生，需要牵涉到非常高深的计算科学和数学方面的理论研究。</p>
+
+<p>在计算机随机数产生的理论研究上，美籍华人姚期智（目前任职于清华大学）是世界顶尖的专家。正是因为他在计算理论和伪随机数产生方面多项贡献，于2000年获得了ACM图灵奖，这也是计算机科学领域的最高奖项。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2013-02-22-log4j-2.html">Log4j 2 介绍</a></h1>
 			<p class="meta"><time datetime="2013-02-22T15:44:19+08:00" 
 			pubdate data-updated="true">2013/2/22</time></p>
@@ -2552,45 +2650,6 @@ startup.js | 152.81 ms | 52.04 ms</p>
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-09-14-plsql-developer-oracle-min-client.html">PL/SQL Developer 与 Oracle 精简客户端</a></h1>
-			<p class="meta"><time datetime="2012-09-14T18:20:40+08:00" 
-			pubdate data-updated="true">2012/9/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>本文介绍如何安装 PL/SQL Developer 9 与 Oracle 精简客户端。</p>
-
-<ol>
-<li><p>下载 <a href="https://www.allroundautomations.com/bodyplsqldevreg.html">PL/SQL Dev</a></p></li>
-<li><p>下载 <a href="http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html">Oracle 精简客户端</a></p></li>
-<li><p>安装 PL/SQL Dev 以及汉化包</p></li>
-<li><p>解压 Oracle 精简客户端，比如解压目录为 D:\oracle10g</p></li>
-<li><p>配置 Oracle 连接。D:\oracle10g\tnsnames.ora，D:\oracle10g\NETWORK\ADMIN\tnsnames.ora</p></li>
-<li><p>配置系统环境变量</p>
-
-<ol>
-<li><p>ORACLE_HOME</p>
-
-<p>值：D:\oracle10g</p></li>
-<li><p>TNS_ADMIN<br/>
-值：D:\oracle10g</p></li>
-<li><p>NLS_LANG<br/>
-值：SIMPLIFIED CHINESE_CHINA.ZHS16GBK</p></li>
-</ol></li>
-<li><p>配置 PL/SQL Dev</p></li>
-</ol>
-
-<p>工具 -&gt; 首选项，Oracle 主目录名：D:\oracle10g，OCI 库：D:\oracle10g\oci.dll</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_8.html">&larr; Older</a> 
@@ -2616,6 +2675,12 @@ startup.js | 152.81 ms | 52.04 ms</p>
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
@@ -2635,12 +2700,6 @@ startup.js | 152.81 ms | 52.04 ms</p>
 	      
 		      <li class="post">
 		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-08-swift-sizeof-into-memorylayout.html">Swift 3：sizeof移进MemoryLayout</a>
 		      </li>
 	     
 	  
