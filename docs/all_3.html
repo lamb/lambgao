@@ -88,6 +88,63 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-03-03-golang-mysql-load-data-local-infile.html">Golang MySQL LOAD DATA LOCAL INFILE 使用</a></h1>
+			<p class="meta"><time datetime="2015-03-03T23:37:09+08:00" 
+			pubdate data-updated="true">2015/3/3</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在往 MySQL 写入大量数据时直接 insert 效率太低，应该使用 MySQL 的 LOAD DATA LOCAL INFILE。</p>
+
+<p>Golang 的 MySQL 驱动 <a href="https://github.com/go-sql-driver/mysql">https://github.com/go-sql-driver/mysql</a> 支持这个用法，有用到的朋友可以参考如下代码：</p>
+
+<pre><code>db, err := sql.Open(&quot;mysql&quot;, conf.DB)
+    byts := &amp;bytes.Buffer{}
+    for _, pv := range stat {
+        line := strings.Join([]string{&quot;field1-data&quot;, &quot;field2-data&quot;}, &quot;\x1F&quot;)
+        byts.WriteString(line)
+        byts.WriteString(&quot;\x1E&quot;)
+    }
+
+    mysql.RegisterReaderHandler(&quot;data&quot;, func() io.Reader {
+        return io.Reader(byts)
+    })
+
+    _, err = db.Exec(`LOAD DATA LOCAL INFILE &#39;Reader::data&#39; INTO TABLE t_pvlogs 
+    CHARACTER SET UTF8 
+    FIELDS TERMINATED BY X&#39;1F&#39;
+    LINES TERMINATED BY X&#39;1E&#39;
+    (field1, field2);`)
+    if err != nil {
+        fmt.Println(err)
+
+        return
+    }
+
+    err = db.Close()
+    if err != nil {
+        fmt.Println(err)
+
+        return
+    }
+</code></pre>
+
+<p>其中：</p>
+
+<ul>
+<li>在 import 包的时候不要用 _，因为要直接使用 mysql 包</li>
+<li>设置了字段分隔符为 \x1F，行分隔符为 \x1E</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-02-16-golang-get-user-home-dir.html">Golang 获取用户 home 目录路径</a></h1>
 			<p class="meta"><time datetime="2015-02-16T23:34:06+08:00" 
 			pubdate data-updated="true">2015/2/16</time></p>
@@ -571,28 +628,6 @@ func homeWindows() (string, error) {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-08-18-swift-value-and-reference-types.html">Swift中的值类型和引用类型</a></h1>
-			<p class="meta"><time datetime="2014-08-18T22:49:02+08:00" 
-			pubdate data-updated="true">2014/8/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在Swift中，类型分为两类：第一种是值类型，该类型的每个实例持有数据的副本，并且该副本对于每个实例来说是独一无二的一份，比如结构体（struct）、枚举（enum）、元组（tuple）都是值类型。第二种是参照类型，该类型的实例共享数据唯一的一份副本（在native层面说的话，就是该类型的每个实例都指向内存中的同一个地址），比如类（class）就是参照类型。在这篇文章中，我们将深入探讨值类型和参照类型的使用价值，以及如何在某种场景下选择正确的类型。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-08-18-swift-value-and-reference-types.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -618,6 +653,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
@@ -637,12 +678,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  

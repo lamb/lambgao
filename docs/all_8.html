@@ -88,6 +88,84 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-10-08-small-test-node-introduction.html">小试Node 简介</a></h1>
+			<p class="meta"><time datetime="2012-10-08T18:25:34+08:00" 
+			pubdate data-updated="true">2012/10/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Node（或者Node.js），是一个构建于Google Chrome JavaScript运行环境（runtime）之上的一个平台，为了提供一种简单的构建快速、可伸缩的网络程序的方法。Node采用事件驱动、非阻塞/异步IO模型，使得它轻量高效，可完美地构建运行于分布式环境的数据密集型即时应用程序。</p>
+
+<h3 id="toc_0">1.1　Node不是什么</h3>
+
+<p>Node不是JavaScript，也不是JavaScript应用。Node是一个平台，是一个JavaScript运行环境。Node可以让JavaScript摆脱浏览器的束缚，在浏览器之外运行JavaScript，但是Node绝对不仅仅是JavaScript。Node之所以采用了Google Chrome浏览器的V8引擎来解释和执行JavaScript代码，除了V8引擎性能优异，还因为V8引擎可以独立运行，并支持将其嵌入任何C++应用程序进行扩展。Node除了提供可以运行JavaScript的运行环境，还用编写了很多系统级的API，比如网络，文件等。这样Node就可以用来开发系统级或者服务器端的应用程序。</p>
+
+<h3 id="toc_1">1.2　Node的特点</h3>
+
+<h4 id="toc_2">1.2.1　事件驱动、非阻塞/异步IO</h4>
+
+<p>Node以单进程、单线程的模式运行，它通过事件轮询来完成并行操作。Node内部采用了一些非阻塞“库”来支持实现事件轮询，目的就是可以为耗费资源的操作提供回调操作。当你像文件系统发送一个请求时，无需等待硬盘完成复杂的寻址和检索文件操作，硬盘在完成这些耗时操作时会触发完成事件通知Node，继续调用执行回调函数完成后序操作。Node代码在运行时会一直执行，不会阻塞的等待某个结果返回（如请求访问一个文件），阻塞的部分会靠事件监听来完成，这样就构成了事件驱动模型。</p>
+
+<h4 id="toc_3">1.2.2　性能优异</h4>
+
+<p>创始人Ryan Dahl在早期分享过一个测试程序（<a href="http://nodejs.org/cinco_de_node.pdf">http://nodejs.org/cinco_de_node.pdf</a> ），该程序返回一个1M的缓冲Buffer，Node每秒处理822个请求，而Nginx每秒处理708个。Node有很强大的吞吐能力，每秒可以响应更多的请求数。你完全不必为Node的性能担忧和顾虑，放心地使用它。</p>
+
+<p>你也许会担心在不同平台下面的性能差异。Node在0.6.x版本后可以直接在Windows平台上运行，不需要借助Cygwin的支持。Node在Windows平台上的性能和Unix/Linux平台已经相差无几，而且在某些方面性能要更优。Ryan Dahl分享了具体测试数据：</p>
+
+<p>| Linux v 0.4.12 | Linux v 0.6.0<br/>
+http_simple.js /bytes/1024 | 5461 r/s | 6263 r/s<br/>
+io.js 读 | 19.75 MB/s | 26.63 MB/s<br/>
+io.js 写 | 21.60 MB/s | 17.40 MB/s<br/>
+startup.js | 74.7 ms | 49.6 ms</p>
+
+<p>| Windows v 0.4.12 | Windows v 0.6.0<br/>
+http_simple.js /bytes/1024 | 3858 r/s | 5823 r/s<br/>
+io.js 读 | 12.41 MB/s | 26.51 MB/s<br/>
+io.js 写 | 12.61 MB/s | 33.58 MB/s<br/>
+startup.js | 152.81 ms | 52.04 ms</p>
+
+<h4 id="toc_4">1.2.3　JavaScript &amp; V8</h4>
+
+<p>Node支持的语言是JavaScript。JavaScript对Web开发人员来说一定很熟悉，它是一门动态弱类型语言，能按需非正式声明和可动态扩展对象。匿名函数、闭包等特性也非常适合事件驱动、异步编程。你如果已经对JavaScript熟悉，那么你无需学习新的语言，你可以很快上手Node。</p>
+
+<p>一个完整的JavaScript实现应该包括三个部分：ECMAScript(核心)、BOM(浏览器模型)和DOM(文档对象模型)。Node没有BOM和DOM，只有ECMAScript。</p>
+
+<p>Node受益于V8引擎的JIT(Just In Time)编译功能，Node的运行速度可以和本地代码媲美。随着V8引擎的发展与进步，Node也会同时从中收益。V8实现了ECMA-262第五版(<a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">http://www.ecma-international.org/publications/standards/Ecma-262.htm</a> )。不同的浏览器使用了不同的JavaScript引擎，例如Chakra(IE9)、SpiderMonkey(Firefox)、JavaScriptCore(Safari)。不同的引擎对ECMA-262的实现会略有不同，需要加以注意。</p>
+
+<h3 id="toc_5">1.3　Node不是银弹</h3>
+
+<p>Node的出现，引发了很激烈的讨论，有人支持有人反对。很多人在公开发表自己的看法，《如果你正在使用Node，你就是误入歧途》就是其中很有名的一篇文章（英文原文地址：<a href="http://codeslinger.posterous.com/if-youre-using-nodejs-youre-doing-life-wrong">http://codeslinger.posterous.com/if-youre-using-nodejs-youre-doing-life-wrong</a> ）。当然，也会有人针对回应，一位自由软件开发者Craig回应《Node不是银弹，而仍然是一颗子弹》（英文原文地址：<a href="http://crgwbr.com/details/41/nodejs-isnt-a-silver-bullet-but-still-a-bullet/">http://crgwbr.com/details/41/nodejs-isnt-a-silver-bullet-but-still-a-bullet/</a> ）。在这里并不想讨论孰对孰错的问题，因为根本无法定论。Bjarne Stroustrup曾经说过的一句话：“世界上只有两种语言：整天被人喷的语言，没有人用的语言。”或许这句话可以解释一切。</p>
+
+<h3 id="toc_6">1.4　谁在使用Node</h3>
+
+<p>虽然Node诞生刚刚两年多，还很年轻，但是发展速度迅猛。有很多企业在生产环境中使用了Node，那么我们来看看几个企业应用中的案例。<br/>
+在社交网站LinkedIn最新发布的移动应用中，HTML5技术抢占前端开发，而Node则是该移动应用的后台基础。LinkedIn移动开发主管Kiran Prasad对媒体表示，其整个移动软件平台都由Node构建而成。选择Node的原因，第一是因为其灵活性；第二是Node擅长与其他服务通信。</p>
+
+<p>知名项目托管网站GitHub也尝试了Node应用，其开发人员在博客中介绍了使用Node的情况。该Node应用称为NodeLoad，是一个存档下载服务器（每当你下载某个存储分支的tarball或者zip文件时就会用到它）。GitHub之前的存档下载服务器采用Ruby编写。在旧系统中，下载存档的请求会创建一个Resque任务。该任务实际上在存档服务器上运行一个git archive命令，从某个文件服务器中取出数据。然后，初始的请求分配给你一个小型Ruby Sinatra应用等待该任务。它其实只是在检查memcache flag是否存在，然后再重定向到最终的下载地址上。旧系统运行大约3个Sinatra实例和3个Resque worker。GitHub的开发人员觉得这是Node应用的好机会。Node基于事件驱动，相比Ruby的阻塞模型，Node能够更好地处理git存档。在编写新下载服务器过程中，开发人员觉得Node非常适合该功能，此外，他们还利用了Node库socket.io来监控下载状态。</p>
+
+<p>国内知名电子商务平台淘宝网在产品中也实际应用了Node。MyFOX是一个数据处理中间件，负责从一个MySQL集群中提取数据，计算，并输出统计结果。用户提交一段SQL语句，MyFOX根据该SQL命令的语义，生成各个数据库分片所需要执行的查询语句，并发送至各个分片，再将结果进行汇总和计算。 MyFOX的特点是CPU密集，无文件IO，并只处理只读数据。起初MyFOX使用PHP编写，但遇到许多问题。例如PHP是单线程的，MySQL又需要阻塞查询，因此很难并发请求数据，后来的解决方案是使用Nginx和Dirzzle，并基于HTTP协议实现接口，并通过curl_multi_get命令进行请求。不过MyFOX项目组最终还是决定使用Node来实现MyFOX。</p>
+
+<h3 id="toc_7">1.5　小结</h3>
+
+<p>本章简要介绍了Node，具体包括：</p>
+
+<ul>
+<li>Node不仅仅是JavaScript； </li>
+<li>Node采用事件驱动、非阻塞/异步IO模型；</li>
+<li>Node性能优异，可跨平台，平台间的性能相差无几；</li>
+<li>Node支持的语言是JavaScript，但是没有DOM和BOM；</li>
+<li>Node已经不少在企业生产环境中的成功案例；</li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-09-14-plsql-developer-oracle-min-client.html">PL/SQL Developer 与 Oracle 精简客户端</a></h1>
 			<p class="meta"><time datetime="2012-09-14T18:20:40+08:00" 
 			pubdate data-updated="true">2012/9/14</time></p>
@@ -1349,56 +1427,6 @@ public class SecondFilter implements Filter {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-02-03-multiple-inheritance.html">Java面试题：多继承</a></h1>
-			<p class="meta"><time datetime="2012-02-03T16:48:09+08:00" 
-			pubdate data-updated="true">2012/2/3</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h4 id="toc_0">Java是否支持多重继承？</h4>
-
-<p>好了，很明显传统意义上Java并没有多继承，所以正确的答案应该是：“没有”或者“有，但是”或者“没有，但是”。单从这点就可以探索出不同的方法来。通常我会问“是否因Java语言的设计者笨到没法实现多重继承”作为我们话题的开始，为什么C++那帮家伙实现了呢？我主要以<a href="http://en.wikipedia.org/wiki/Diamond_problem#The_diamond_problem">菱形继承问题</a>来说明：</p>
-
-<p><em>在面向对象的编程语言中总伴随着多重继承及组织的理解。菱形继承问题就是在如下情景时出现含糊不清的情况：当两个类B和C继承自A，类D同时继承自B和C，如果D中的一个方法调用一个在A中定义的方法(不是覆盖方法).而B和C分别用不同地方式重写（overridden)了方法，那么这个方法到底是继承的哪个类呢，B还是C？</em></p>
-
-<p>另一探索性的方法是：Java怎么模拟“多重继承”？我想答案已经浮出水面了，就是接口（Interface）。我们经常在Java中讨论接口，那么应试者在什么时候，怎么使用接口的呢？使用接口又有什么好处呢？应试者是否喜欢使用接口？我可以检测他对建模有多熟练，有时还会让他针对接口画画图。我们继续谈论Java中接口的问题，当两个接口有相同的静态域（field)，有一个类实现了Java中所谓的“多继承”的两个接口时会出现什么情况？</p>
-
-<pre><code>public interface I1 {
-   String NAME = &quot;codemonkeyism&quot;;
-}
- 
-public interface I2 {
-   String NAME = &quot;stephan&quot;;
-}
- 
-public class C implements I1, I2 {
-   public static void main(String[] args) {
-      System.out.println(NAME);
-   }
-}
-</code></pre>
-
-<p>Java坚持了他们的做法，语言的设计者决定不让其编译通过。<br/>
-C.java:3: reference to NAME is ambiguous, both variable NAME <br/>
-              in I1 and variable NAME in I2 match<br/>
-      System.out.println(NAME);<br/>
-                         ^<br/>
-1 error<br/>
-还有更多的方法和我们的应试者去探讨多继承的问题，例如：接口中方法的修饰符是什么？对于菱形继承问题使用traits实现混合结构是否比使用接口更好，还是和多继承一样的糟糕？正如我不在那么钟爱继承一样，大量使用继承是一种代码异味。我们还可以和应试者讨论继承的负面因素—–重耦合的例子。</p>
-
-<h4 id="toc_1">为什么会有这问题？</h4>
-
-<p>我为什么会问这个问题呢，从这个问题中又学到了什么？继承在面向对象（OO）中是很基础的概念，是每个Java程序员都应该理解的概念。同时也是他反映到工作中，理解超出语法层面的另一个基本的特性。所以对于多继承问题，我喜欢那些可以引出很多可以探讨与思考的问题。这个继承问题只是多继承、语言设计、代码味道、解决方案、接口、基于角色的开发等众多问题中的一种而已。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_9.html">&larr; Older</a> 
@@ -1424,6 +1452,12 @@ C.java:3: reference to NAME is ambiguous, both variable NAME <br/>
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
@@ -1443,12 +1477,6 @@ C.java:3: reference to NAME is ambiguous, both variable NAME <br/>
 	      
 		      <li class="post">
 		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  

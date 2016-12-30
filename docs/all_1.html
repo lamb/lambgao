@@ -88,6 +88,41 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-04-22-load-big-image.html">解决MWPhotoBrowser中的SDWebImage加载大图导致的内存警告问题</a></h1>
+			<p class="meta"><time datetime="2016-04-22T01:56:38+08:00" 
+			pubdate data-updated="true">2016/4/22</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="https://github.com/mwaterfall/MWPhotoBrowser.git">MWPhotoBrowser</a>是一个非常不错的照片浏览器，在github的star接近3000个。</p>
+
+<p>MWPhotoBrowser来加载小图1M以下的都应该不会有内存警告的问题。如果遇到大图，3M、4M、5M的大图，很有可能导致内存警告。最近我就遇到这个问题，很是头疼。来回滑动查看照片内存飙到100M以上。</p>
+
+<p>网上查了很多资料，都没有解决问题。</p>
+
+<p>我们来看一下MWPhotoBrowser，其实MWPhotoBrowser用的是<a href="https://github.com/rs/SDWebImage.git">SDWebImage</a>来下载图片的。</p>
+
+<p>在github看到SDWebImage的介绍，后面说到：</p>
+
+<p>Future Enhancements<br/>
+LRU memory cache cleanup instead of reset on memory warning</p>
+
+<p>看到这个真是欲哭无泪啊。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2016-04-22-load-big-image.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-03-29-gitconfig-alias.html">gitconfig配置别名alias</a></h1>
 			<p class="meta"><time datetime="2016-03-29T01:50:52+08:00" 
 			pubdate data-updated="true">2016/3/29</time></p>
@@ -614,30 +649,6 @@ export GOARCH=amd64
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-09-02-difference-between-hashmap-and-hashtable.html">HashMap和Hashtable的区别</a></h1>
-			<p class="meta"><time datetime="2015-09-02T23:01:13+08:00" 
-			pubdate data-updated="true">2015/9/2</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>HashMap和Hashtable的比较是Java面试中的常见问题，用来考验程序员是否能够正确使用集合类以及是否可以随机应变使用多种思路解决问题。HashMap的工作原理、ArrayList与Vector的比较以及这个问题是有关Java 集合框架的最经典的问题。Hashtable是个过时的集合类，存在于Java API中很久了。在Java 4中被重写了，实现了Map接口，所以自此以后也成了Java集合框架中的一部分。Hashtable和HashMap在Java面试中相当容易被问到，甚至成为了集合框架面试题中最常被考的问题，所以在参加任何Java面试之前，都不要忘了准备这一题。</p>
-
-<p>这篇文章中，我们不仅将会看到HashMap和Hashtable的区别，还将看到它们之间的相似之处。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-09-02-difference-between-hashmap-and-hashtable.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_2.html">&larr; Older</a> 
@@ -663,6 +674,12 @@ export GOARCH=amd64
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
@@ -682,12 +699,6 @@ export GOARCH=amd64
 	      
 		      <li class="post">
 		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  

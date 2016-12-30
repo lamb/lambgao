@@ -88,6 +88,152 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-07-activemq-jdbc-master-slave.html">ActiveMQ JDBC 主从集群</a></h1>
+			<p class="meta"><time datetime="2013-03-07T10:51:38+08:00" 
+			pubdate data-updated="true">2013/3/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>从 ActiveMQ 4.1 版本开始支持 JDBC 主从集群。</p>
+
+<p>如果你正在使用纯 JDBC 以及非高性能日志，那可以认为数据库是一个存在单点故障的地方。</p>
+
+<p>如果你的应用没有高性能需求，那单一数据库的方式是最容易备份与管理的。（译注：可以理解为使用 JDBC 主从集群使用单一数据库容易配置）</p>
+
+<h3 id="toc_0">启动</h3>
+
+<p>当你使用 JDBC 作为数据源时，你可以使用主从方式进行 ActiveMQ 集群，运行多个代理如下图。</p>
+
+<p>启动时，一个主代理将从数据库获取排它锁——所有其他的从代理将暂停服务，等待获取锁。</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1ppjaNmr4-UPWlDqz6BgkecpHO2OIn8ytlTKciI3lsulh6WymOj5EP6-Bly1ki0KJ7IaiKlI63AsnVdmzkztl9oSQYOQ5y3LPX/Startup.png?psid=1" alt="Startup"/></p>
+
+<p>客户端应该使用故障转移传输来连接 ActiveMQ 服务代理。例如使用如下形式的 URL：</p>
+
+<pre><code>failover:(tcp://broker1:61616,tcp://broker2:61616,tcp://broker3:61616)
+</code></pre>
+
+<p>主代理必须启动传输连接器后客户端才能连接到，详见文末配置示例。（译注：获取排它锁后，主代理才会启动传输连接器）</p>
+
+<h3 id="toc_1">主代理故障</h3>
+
+<p>当主代理丢失数据库连接或丢失排它锁时，主代理将被关闭。当主代理关闭或故障时，其他任一从代理将获取到排它锁，拓扑逻辑如下图：</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1p_vnTTWIQEcYk-YF0FsJRZU_FpdFUKrsMZabyM0MFh4Hk5OjWRJ69dWXulblEjHuOfENQtc8Yf1Tc4iG0NB8tphs8oAq0D1N_/MasterFailed.png?psid=1" alt="MasterFailed"/></p>
+
+<p>一旦某一从代理获取了数据库排它锁，则它将成为主代理，并启用传输连接器。</p>
+
+<p>客户端丢失对已经停止服务的代理，并使用故障转移传输尝试连接其他代理——唯一可用的就是刚才新启的主代理。（译注：客户端应该是逐一尝试，因为此时客户端并不知道哪个地址的代理成为了主代理）</p>
+
+<h3 id="toc_2">主代理重启</h3>
+
+<p>任何时刻你都可以重启集群中已经挂了的代理，重启后拓扑逻辑如下图：</p>
+
+<p><img src="https://pyqebw.dm1.livefilestore.com/y1ppjaNmr4-UPV02ix2WOrBAAzaTjhgLNEdJLliIf3eqhBX-lOg1LfC7M5aS8ST8-LAuC8iMane3psWUYpjXIeerTbrQOUJKc9L/MasterRestarted.png?psid=1" alt="MasterRestarted"/></p>
+
+<h3 id="toc_3">配置 JDBC 主从</h3>
+
+<p>使用 <jdbcPersistenceAdapter/> 避免高性能日志，从而使用默认的 JDBC 主从配置。你只需启动多个代理并配置客户端 URLs 来连接该主从集群。</p>
+
+<p>这些代理都会尝试获取数据库表排它锁，并且只有一个代理会获取到从而成为主代理。</p>
+
+<p>如下的配置示例展示了如何配置 ActiveMQ JDBC 主从集群：</p>
+
+<pre><code>&lt;beans&gt;
+ 
+  &lt;!-- Allows us to use system properties as variables in this configuration file --&gt;
+  &lt;bean class=&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;/&gt;
+   
+  &lt;broker xmlns=&quot;http://activemq.apache.org/schema/core&quot;&gt;
+ 
+    &lt;destinationPolicy&gt;
+      &lt;policyMap&gt;&lt;policyEntries&gt;
+         
+          &lt;policyEntry topic=&quot;FOO.&gt;&quot;&gt;
+            &lt;dispatchPolicy&gt;
+              &lt;strictOrderDispatchPolicy /&gt;
+            &lt;/dispatchPolicy&gt;
+            &lt;subscriptionRecoveryPolicy&gt;
+              &lt;lastImageSubscriptionRecoveryPolicy /&gt;
+            &lt;/subscriptionRecoveryPolicy&gt;
+          &lt;/policyEntry&gt;
+ 
+      &lt;/policyEntries&gt;&lt;/policyMap&gt;
+    &lt;/destinationPolicy&gt;
+   
+   
+    &lt;persistenceAdapter&gt;
+        &lt;jdbcPersistenceAdapter dataDirectory=&quot;${activemq.base}/activemq-data&quot;/&gt;
+ 
+        &lt;!-- 
+        &lt;jdbcPersistenceAdapter dataDirectory=&quot;activemq-data&quot; dataSource=&quot;#oracle-ds&quot;/&gt;
+        --&gt;
+    &lt;/persistenceAdapter&gt;
+   
+    &lt;transportConnectors&gt;
+       &lt;transportConnector name=&quot;default&quot; uri=&quot;tcp://localhost:61616&quot;/&gt;
+    &lt;/transportConnectors&gt;
+     
+  &lt;/broker&gt;
+   
+  &lt;!--  This xbean configuration file supports all the standard spring xml configuration options --&gt;
+   
+  &lt;!-- Postgres DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;postgres-ds&quot; class=&quot;org.postgresql.ds.PGPoolingDataSource&quot;&gt;
+    &lt;property name=&quot;serverName&quot; value=&quot;localhost&quot;/&gt;
+    &lt;property name=&quot;databaseName&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;portNumber&quot; value=&quot;0&quot;/&gt;
+    &lt;property name=&quot;user&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;dataSourceName&quot; value=&quot;postgres&quot;/&gt;
+    &lt;property name=&quot;initialConnections&quot; value=&quot;1&quot;/&gt;
+    &lt;property name=&quot;maxConnections&quot; value=&quot;10&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt;
+   
+  &lt;!-- MySql DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;mysql-ds&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
+    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost/activemq?relaxAutoCommit=true&quot;/&gt;
+    &lt;property name=&quot;username&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;activemq&quot;/&gt;
+    &lt;property name=&quot;poolPreparedStatements&quot; value=&quot;true&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt; 
+    
+  &lt;!-- Oracle DataSource Sample Setup --&gt;
+  &lt;!--
+  &lt;bean id=&quot;oracle-ds&quot; class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
+    &lt;property name=&quot;driverClassName&quot; value=&quot;oracle.jdbc.driver.OracleDriver&quot;/&gt;
+    &lt;property name=&quot;url&quot; value=&quot;jdbc:oracle:thin:@localhost:1521:AMQDB&quot;/&gt;
+    &lt;property name=&quot;username&quot; value=&quot;scott&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;tiger&quot;/&gt;
+    &lt;property name=&quot;poolPreparedStatements&quot; value=&quot;true&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt;
+       
+  &lt;!-- Embedded Derby DataSource Sample Setup --&gt;
+  &lt;!-- 
+  &lt;bean id=&quot;derby-ds&quot; class=&quot;org.apache.derby.jdbc.EmbeddedDataSource&quot;&gt;
+    &lt;property name=&quot;databaseName&quot; value=&quot;derbydb&quot;/&gt;
+    &lt;property name=&quot;createDatabase&quot; value=&quot;create&quot;/&gt;
+  &lt;/bean&gt;
+  --&gt; 
+ 
+&lt;/beans&gt;
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2013-03-05-hello-world.html">为什么这段代码输出的是”Hello World”</a></h1>
 			<p class="meta"><time datetime="2013-03-05T15:36:51+08:00" 
 			pubdate data-updated="true">2013/3/5</time></p>
@@ -2572,84 +2718,6 @@ Server running at http://127.0.0.1:1337/
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-10-08-small-test-node-introduction.html">小试Node 简介</a></h1>
-			<p class="meta"><time datetime="2012-10-08T18:25:34+08:00" 
-			pubdate data-updated="true">2012/10/8</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Node（或者Node.js），是一个构建于Google Chrome JavaScript运行环境（runtime）之上的一个平台，为了提供一种简单的构建快速、可伸缩的网络程序的方法。Node采用事件驱动、非阻塞/异步IO模型，使得它轻量高效，可完美地构建运行于分布式环境的数据密集型即时应用程序。</p>
-
-<h3 id="toc_0">1.1　Node不是什么</h3>
-
-<p>Node不是JavaScript，也不是JavaScript应用。Node是一个平台，是一个JavaScript运行环境。Node可以让JavaScript摆脱浏览器的束缚，在浏览器之外运行JavaScript，但是Node绝对不仅仅是JavaScript。Node之所以采用了Google Chrome浏览器的V8引擎来解释和执行JavaScript代码，除了V8引擎性能优异，还因为V8引擎可以独立运行，并支持将其嵌入任何C++应用程序进行扩展。Node除了提供可以运行JavaScript的运行环境，还用编写了很多系统级的API，比如网络，文件等。这样Node就可以用来开发系统级或者服务器端的应用程序。</p>
-
-<h3 id="toc_1">1.2　Node的特点</h3>
-
-<h4 id="toc_2">1.2.1　事件驱动、非阻塞/异步IO</h4>
-
-<p>Node以单进程、单线程的模式运行，它通过事件轮询来完成并行操作。Node内部采用了一些非阻塞“库”来支持实现事件轮询，目的就是可以为耗费资源的操作提供回调操作。当你像文件系统发送一个请求时，无需等待硬盘完成复杂的寻址和检索文件操作，硬盘在完成这些耗时操作时会触发完成事件通知Node，继续调用执行回调函数完成后序操作。Node代码在运行时会一直执行，不会阻塞的等待某个结果返回（如请求访问一个文件），阻塞的部分会靠事件监听来完成，这样就构成了事件驱动模型。</p>
-
-<h4 id="toc_3">1.2.2　性能优异</h4>
-
-<p>创始人Ryan Dahl在早期分享过一个测试程序（<a href="http://nodejs.org/cinco_de_node.pdf">http://nodejs.org/cinco_de_node.pdf</a> ），该程序返回一个1M的缓冲Buffer，Node每秒处理822个请求，而Nginx每秒处理708个。Node有很强大的吞吐能力，每秒可以响应更多的请求数。你完全不必为Node的性能担忧和顾虑，放心地使用它。</p>
-
-<p>你也许会担心在不同平台下面的性能差异。Node在0.6.x版本后可以直接在Windows平台上运行，不需要借助Cygwin的支持。Node在Windows平台上的性能和Unix/Linux平台已经相差无几，而且在某些方面性能要更优。Ryan Dahl分享了具体测试数据：</p>
-
-<p>| Linux v 0.4.12 | Linux v 0.6.0<br/>
-http_simple.js /bytes/1024 | 5461 r/s | 6263 r/s<br/>
-io.js 读 | 19.75 MB/s | 26.63 MB/s<br/>
-io.js 写 | 21.60 MB/s | 17.40 MB/s<br/>
-startup.js | 74.7 ms | 49.6 ms</p>
-
-<p>| Windows v 0.4.12 | Windows v 0.6.0<br/>
-http_simple.js /bytes/1024 | 3858 r/s | 5823 r/s<br/>
-io.js 读 | 12.41 MB/s | 26.51 MB/s<br/>
-io.js 写 | 12.61 MB/s | 33.58 MB/s<br/>
-startup.js | 152.81 ms | 52.04 ms</p>
-
-<h4 id="toc_4">1.2.3　JavaScript &amp; V8</h4>
-
-<p>Node支持的语言是JavaScript。JavaScript对Web开发人员来说一定很熟悉，它是一门动态弱类型语言，能按需非正式声明和可动态扩展对象。匿名函数、闭包等特性也非常适合事件驱动、异步编程。你如果已经对JavaScript熟悉，那么你无需学习新的语言，你可以很快上手Node。</p>
-
-<p>一个完整的JavaScript实现应该包括三个部分：ECMAScript(核心)、BOM(浏览器模型)和DOM(文档对象模型)。Node没有BOM和DOM，只有ECMAScript。</p>
-
-<p>Node受益于V8引擎的JIT(Just In Time)编译功能，Node的运行速度可以和本地代码媲美。随着V8引擎的发展与进步，Node也会同时从中收益。V8实现了ECMA-262第五版(<a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">http://www.ecma-international.org/publications/standards/Ecma-262.htm</a> )。不同的浏览器使用了不同的JavaScript引擎，例如Chakra(IE9)、SpiderMonkey(Firefox)、JavaScriptCore(Safari)。不同的引擎对ECMA-262的实现会略有不同，需要加以注意。</p>
-
-<h3 id="toc_5">1.3　Node不是银弹</h3>
-
-<p>Node的出现，引发了很激烈的讨论，有人支持有人反对。很多人在公开发表自己的看法，《如果你正在使用Node，你就是误入歧途》就是其中很有名的一篇文章（英文原文地址：<a href="http://codeslinger.posterous.com/if-youre-using-nodejs-youre-doing-life-wrong">http://codeslinger.posterous.com/if-youre-using-nodejs-youre-doing-life-wrong</a> ）。当然，也会有人针对回应，一位自由软件开发者Craig回应《Node不是银弹，而仍然是一颗子弹》（英文原文地址：<a href="http://crgwbr.com/details/41/nodejs-isnt-a-silver-bullet-but-still-a-bullet/">http://crgwbr.com/details/41/nodejs-isnt-a-silver-bullet-but-still-a-bullet/</a> ）。在这里并不想讨论孰对孰错的问题，因为根本无法定论。Bjarne Stroustrup曾经说过的一句话：“世界上只有两种语言：整天被人喷的语言，没有人用的语言。”或许这句话可以解释一切。</p>
-
-<h3 id="toc_6">1.4　谁在使用Node</h3>
-
-<p>虽然Node诞生刚刚两年多，还很年轻，但是发展速度迅猛。有很多企业在生产环境中使用了Node，那么我们来看看几个企业应用中的案例。<br/>
-在社交网站LinkedIn最新发布的移动应用中，HTML5技术抢占前端开发，而Node则是该移动应用的后台基础。LinkedIn移动开发主管Kiran Prasad对媒体表示，其整个移动软件平台都由Node构建而成。选择Node的原因，第一是因为其灵活性；第二是Node擅长与其他服务通信。</p>
-
-<p>知名项目托管网站GitHub也尝试了Node应用，其开发人员在博客中介绍了使用Node的情况。该Node应用称为NodeLoad，是一个存档下载服务器（每当你下载某个存储分支的tarball或者zip文件时就会用到它）。GitHub之前的存档下载服务器采用Ruby编写。在旧系统中，下载存档的请求会创建一个Resque任务。该任务实际上在存档服务器上运行一个git archive命令，从某个文件服务器中取出数据。然后，初始的请求分配给你一个小型Ruby Sinatra应用等待该任务。它其实只是在检查memcache flag是否存在，然后再重定向到最终的下载地址上。旧系统运行大约3个Sinatra实例和3个Resque worker。GitHub的开发人员觉得这是Node应用的好机会。Node基于事件驱动，相比Ruby的阻塞模型，Node能够更好地处理git存档。在编写新下载服务器过程中，开发人员觉得Node非常适合该功能，此外，他们还利用了Node库socket.io来监控下载状态。</p>
-
-<p>国内知名电子商务平台淘宝网在产品中也实际应用了Node。MyFOX是一个数据处理中间件，负责从一个MySQL集群中提取数据，计算，并输出统计结果。用户提交一段SQL语句，MyFOX根据该SQL命令的语义，生成各个数据库分片所需要执行的查询语句，并发送至各个分片，再将结果进行汇总和计算。 MyFOX的特点是CPU密集，无文件IO，并只处理只读数据。起初MyFOX使用PHP编写，但遇到许多问题。例如PHP是单线程的，MySQL又需要阻塞查询，因此很难并发请求数据，后来的解决方案是使用Nginx和Dirzzle，并基于HTTP协议实现接口，并通过curl_multi_get命令进行请求。不过MyFOX项目组最终还是决定使用Node来实现MyFOX。</p>
-
-<h3 id="toc_7">1.5　小结</h3>
-
-<p>本章简要介绍了Node，具体包括：</p>
-
-<ul>
-<li>Node不仅仅是JavaScript； </li>
-<li>Node采用事件驱动、非阻塞/异步IO模型；</li>
-<li>Node性能优异，可跨平台，平台间的性能相差无几；</li>
-<li>Node支持的语言是JavaScript，但是没有DOM和BOM；</li>
-<li>Node已经不少在企业生产环境中的成功案例；</li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_8.html">&larr; Older</a> 
@@ -2675,6 +2743,12 @@ startup.js | 152.81 ms | 52.04 ms</p>
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
@@ -2694,12 +2768,6 @@ startup.js | 152.81 ms | 52.04 ms</p>
 	      
 		      <li class="post">
 		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  

@@ -88,6 +88,28 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-08-18-swift-value-and-reference-types.html">Swift中的值类型和引用类型</a></h1>
+			<p class="meta"><time datetime="2014-08-18T22:49:02+08:00" 
+			pubdate data-updated="true">2014/8/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在Swift中，类型分为两类：第一种是值类型，该类型的每个实例持有数据的副本，并且该副本对于每个实例来说是独一无二的一份，比如结构体（struct）、枚举（enum）、元组（tuple）都是值类型。第二种是参照类型，该类型的实例共享数据唯一的一份副本（在native层面说的话，就是该类型的每个实例都指向内存中的同一个地址），比如类（class）就是参照类型。在这篇文章中，我们将深入探讨值类型和参照类型的使用价值，以及如何在某种场景下选择正确的类型。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-08-18-swift-value-and-reference-types.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-08-13-swift-nil-coalescing.html">Swift中 Nil Coalescing 运算符的使用技巧</a></h1>
 			<p class="meta"><time datetime="2014-08-13T22:43:15+08:00" 
 			pubdate data-updated="true">2014/8/13</time></p>
@@ -766,43 +788,6 @@ export PATH=$MONGO_HOME/bin:$PATH
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-10-javamail-smtp-163.html">JavaMail 使用 163 发送邮件</a></h1>
-			<p class="meta"><time datetime="2014-04-10T18:43:23+08:00" 
-			pubdate data-updated="true">2014/4/10</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在通过 JavaMail 使用 163 邮箱发邮件时有几点问题需要注意。</p>
-
-<ul>
-<li><p>550 用户被锁定：普通 163 邮箱是无法通过 smtp.163.com 发送邮件的，只有 163 VIP 邮箱才行，然后设置 mail.smtp.host=smtp.vip.163.com</p></li>
-<li><p>454 Command not permitted when TLS active：需要设置 mail.smtp.starttls.enable=false</p></li>
-<li><p>553 authentication is required：需要设置 mail.smtp.auth=true</p></li>
-<li><p>550 Invalid User：from 必须写成带 @ 的邮件格式，且 username 要用 @ 前面的</p></li>
-</ul>
-
-<p>一个完整的配置示例：</p>
-
-<p>mail.smtp.auth=true<br/>
-mail.smtp.starttls.enable=false<br/>
-mail.debug=false<br/>
-mail.smtp.host=smtp.vip.163.com<br/>
-mail.smtp.port=465<br/>
-mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory<br/>
-mail.smtp.socketFactory.fallback=false<br/>
-mail.smtp.socketFactory.port=465</p>
-
-<p>编程实参：Authenticator 用户名：xxx；mimeMessage.setFrom(&quot;<a href="mailto:xxx@vip.163.com">xxx@vip.163.com</a>&quot;)</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_5.html">&larr; Older</a> 
@@ -828,6 +813,12 @@ mail.smtp.socketFactory.port=465</p>
 	  
 	      
 		      <li class="post">
+		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
@@ -847,12 +838,6 @@ mail.smtp.socketFactory.port=465</p>
 	      
 		      <li class="post">
 		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-10-31-close-wait-problem.html">CLOSE_WAIT 问题分析</a>
 		      </li>
 	     
 	  
