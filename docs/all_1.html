@@ -88,6 +88,41 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-05-11-realm.html">移动端数据库新王者：realm</a></h1>
+			<p class="meta"><time datetime="2016-05-11T00:18:47+08:00" 
+			pubdate data-updated="true">2016/5/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">介绍</h3>
+
+<p><a href="https://realm.io/cn/">realm</a>是一个跨平台移动数据库引擎，支持iOS、OS X（Objective‑C和Swift）以及Android。<br/>
+2014年7月发布。由YCombinator孵化的创业团队历时几年打造，是第一个专门针对移动平台设计的数据库。目标是取代SQLite。<br/>
+为了彻底解决性能问题，核心数据引擎用C++打造，并不是建立在SQLite之上的ORM。如果对数据引擎实现想深入了解可以查看：Realm 核心数据库引擎探秘。因此得到的收益就是比普通的ORM要快很多，甚至比单独无封装的SQLite还要快。<br/>
+因为是ORM，本身在设计时也针对移动设备（iOS、Android），所以非常简单易用，学习成本很低。</p>
+
+<p>碾压级性能<br/>
+数据引自：introducing-realm<br/>
+每秒能在20万条数据中进行查询后count的次数。realm每秒可以进行30.9次查询后count。</p>
+
+<p>在20万条中进行一次遍历查询，数据和前面的count相似：realm一秒可以遍历20万条数据31次，而coredata只能进行两次查询。</p>
+
+<p>一次事务每秒插入数据的对比，realm每秒可以插入9.4万条记录，在这个比较里纯SQLite的性能最好，每秒可以插入17.8万条记录。然而封装了SQLite的FMDB的成绩大概是realm的一半。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2016-05-11-realm.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-04-22-load-big-image.html">解决MWPhotoBrowser中的SDWebImage加载大图导致的内存警告问题</a></h1>
 			<p class="meta"><time datetime="2016-04-22T01:56:38+08:00" 
 			pubdate data-updated="true">2016/4/22</time></p>
@@ -625,30 +660,6 @@ export GOARCH=amd64
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-09-02-difference-between-hashmap-and-hashset.html">HashMap和HashSet的区别</a></h1>
-			<p class="meta"><time datetime="2015-09-02T23:03:27+08:00" 
-			pubdate data-updated="true">2015/9/2</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>HashMap和HashSet的区别是Java面试中最常被问到的问题。如果没有涉及到Collection框架以及多线程的面试，可以说是不完整。而Collection框架的问题不涉及到HashSet和HashMap，也可以说是不完整。HashMap和HashSet都是collection框架的一部分，它们让我们能够使用对象的集合。collection框架有自己的接口和实现，主要分为Set接口，List接口和Queue接口。它们有各自的特点，Set的集合里不允许对象有重复的值，List允许有重复，它对集合中的对象进行索引，Queue的工作原理是FCFS算法(First Come, First Serve)。</p>
-
-<p>首先让我们来看看什么是HashMap和HashSet，然后再来比较它们之间的分别。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-09-02-difference-between-hashmap-and-hashset.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_2.html">&larr; Older</a> 
@@ -674,6 +685,12 @@ export GOARCH=amd64
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
@@ -693,12 +710,6 @@ export GOARCH=amd64
 	      
 		      <li class="post">
 		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  

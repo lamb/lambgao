@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2016-12-31T23:24:24+08:00</updated>
+  <updated>2017-01-01T20:25:05+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Instagram 是如何做持续部署的]]></title>
+    <link href="http://lambgao.com/2017-01-01-continuous-deployment-at-instagram.html"/>
+    <updated>2017-01-01T20:24:02+08:00</updated>
+    <id>http://lambgao.com/2017-01-01-continuous-deployment-at-instagram.html</id>
+    <content type="html"><![CDATA[
+<p>他们一天部署后台代码30到50次，大部分情况不用人为干预。直接部署master branch的代码。文章描述了他们从非常手动的快糙猛的部署代码的流程，进化到几乎是全自动的持续部署的过程。</p>
+
+<p>如果哪个工程师成为了老鼠屎，commit了有bug的代码，导致CI的测试挂掉挂掉、或者canary机器上有太多错误，他们oncall的工程师还是得手动地revert这个commit并把这件事及时通知团队其他成员。软件工程真是团体运动，每个人都要力争成为一个好队友。</p>
+
+<p>有效的、全面的、快速的测试，是实践持续部署的基础。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2016 总结 - 工作十小时，休息五分钟]]></title>
@@ -1621,110 +1636,6 @@ VPN — prefs:root=General&amp;path=Network/VPN
 Wallpaper — prefs:root=Wallpaper
 Wi-Fi — prefs:root=WIFI
 </code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Carthage去中心化的Cocoa依赖管理器]]></title>
-    <link href="http://lambgao.com/2015-12-18-carthage-decentralized-dependency-manager.html"/>
-    <updated>2016-12-21T00:36:07+08:00</updated>
-    <id>http://lambgao.com/2015-12-18-carthage-decentralized-dependency-manager.html</id>
-    <content type="html"><![CDATA[
-<p>说到 iOS 的依赖管理工具，大家一定首先想到的是 CocoaPods ，不错，CocoaPods 确实是一个很好依赖管理工具，已然成为了 Cocoa 依赖管理的标准，丰富的支持库、文档等等，CocoaPods 相关的文章有很多，这里就不一一赘述了。</p>
-
-<p>今天要介绍的是一款新的依赖管理工具，名曰 “Carthage”，名字有点难理解，简单方便，完全独立，不修改 XCode 项目文件或配置。我们已经有了CocoaPods，非常好用，那么为什么还要创建这样一个项目呢？本文翻译自Carthage的Github的README.md，带大家来了解一下这个工具有何不同之处。</p>
-
-<p>Carthage的目标是用最简单的方式来管理Cocoa第三方框架。</p>
-
-<p>基本的工作流如下：</p>
-
-<ol>
-<li>创建一个Cartfile，包含你希望在项目中使用的框架的列表</li>
-<li>运行Carthage，将会获取列出的框架并编译它们</li>
-<li>将编译完成的.framework二进制文件拖拽到你的Xcode项目当中</li>
-</ol>
-
-<p>Carthage编译你的依赖，并提供框架的二进制文件，但你仍然保留对项目的结构和设置的完整控制。Carthage不会自动的修改你的项目文件或编译设置。</p>
-
-<span id="more"></span><!-- more -->
-
-<h3 id="toc_0">Carthage与CocoaPods的不同</h3>
-
-<p>CocoaPods是已存在很长时间的Cocoa依赖管理器，那么为什么要创建Carthage呢？</p>
-
-<p>首先，CocoaPods默认会自动创建并更新你的应用程序和所有依赖的Xcode workspace。Carthage使用xcodebuild来编译框架的二进制文件，但如何集成它们将交由用户自己判断。CocoaPods的方法更易于使用，但Carthage更灵活并且是非侵入性的。</p>
-
-<p>CocoaPods的目标在它的README文件描述如下：</p>
-
-<p>…为提高第三方开源库的可见性和参与度，创建一个更中心化的生态系统。</p>
-
-<p>与之对照，Carthage创建的是去中心化的依赖管理器。它没有总项目的列表，这能够减少维护工作并且避免任何中心化带来的问题（如中央服务器宕机）。不过，这样也有一些缺点，就是项目的发现将更困难，用户将依赖于Github的趋势页面或者类似的代码库来寻找项目。</p>
-
-<p>CocoaPods项目同时还必须包含一个podspec文件，里面是项目的一些元数据，以及确定项目的编译方式。Carthage使用xcodebuild来编译依赖，而不是将他们集成进一个workspace，因此无需类似的设定文件。不过依赖需要包含自己的Xcode工程文件来描述如何编译。</p>
-
-<p>最后，我们创建Carthage的原因是想要一种尽可能简单的工具——一个只关心本职工作的依赖管理器，而不是取代部分Xcode的功能，或者需要 让框架作者做一些额外的工作。CocoaPods提供的一些特性很棒，但由于附加的复杂性，它们将不会被包含在Carthage当中。</p>
-
-<h3 id="toc_1">安装Carthage</h3>
-
-<p>Carthage提供OS X平台的pkg安装文件，你可以从Github的最新release中找到，按照引导一步步安装即可。</p>
-
-<p>如果你想安装最新的开发版本（可能存在稳定性和兼容性的问题），你只需要clone本仓库的master分支，然后运行make install.</p>
-
-<h3 id="toc_2">添加框架到应用程序</h3>
-
-<p>安装完Carthage后，你能够使用它来添加框架到你的项目。注意Carthage只支持动态框架，而后者只存在于iOS 8以上（以及任意版本的OS X）。</p>
-
-<p>开始使用：</p>
-
-<p>创建一个Cartfile，将你想要使用的框架列在里面<br/>
-运行carthage update，将获取依赖文件到一个Carthage.checkout文件夹，然后编译每个依赖<br/>
-在你的应用程序target的“General”设置标签中的“Embedded Binaries”区域，将框架从Carthage.build文件夹拖拽进去。<br/>
-在这个过程当中，Carthage将创建一些build artifacts，其中最重要的是Cartfile.lock文件，里面将列出每个框架的具体版本，确保你提交了这个文件到版本控制工具里面（如Git、SVN），因为每个用到项目的人都需要它来编译相同版本的框架。</p>
-
-<p>完成上面的步骤并提交你的修改，项目的其他用户就只需要获取该仓库并执行carthage bootstrap就能使用你所添加的框架。</p>
-
-<h3 id="toc_3">添加框架到单元测试或另一个框架</h3>
-
-<p>使用Carthage添加框架到任意目标的方法，和添加到应用程序差不多。主要的不同在于框架是如何设置并链接到Xcode的。</p>
-
-<p>因为非应用程序目标没有“Embedded Binaries”设置区域，你需要将编译完成后的框架拖拽到“Link Binaries With Libraries”的区域里。</p>
-
-<p>在某些稀有案例中，你也许会想要复制每个依赖到已编译的项目中（比如，在外部框架中嵌入依赖，或确保依赖在测试工具中正常显示）。想要达到这个目的，你需要创建一个新的“Copy Files”编译选项和“Frameworks”组，然后将框架的引用添加到里面。</p>
-
-<h3 id="toc_4">升级框架</h3>
-
-<p>如果你改动了你的Cartfile，或者你想升级到框架的最新版本（服从于你指定的需求版本），执行carthage update命令可以达到目的。</p>
-
-<h3 id="toc_5">让你的框架支持Carthage</h3>
-
-<p>Carthage只正式支持动态框架，动态框架能够在任何版本的OS X上使用，但只能在iOS 8及以上版本使用。</p>
-
-<p>因为Carthage拥有非中心化的包列表，以及没有项目指定的编译设置，大多数框架应该能自动编译。</p>
-
-<h3 id="toc_6">分享你的Xcode schemes</h3>
-
-<p>Carthage将只从你的.xcodeproj中标记为已分享的Xcode schemes来编译。如果你想检查编译是否成功，执行carthage build --no-skip-current命令，然后检查Carthage.build文件夹。</p>
-
-<p>如果当执行命令但有scheme没有被编译，打开Xcode并确定对应scheme被标记为“Shared”，以便Carthage能够发现它。</p>
-
-<h3 id="toc_7">解决编译失败</h3>
-
-<p>如果你在执行carthage build --no-skip-current时编译失败，尝试执行xcodebuild -scheme SCHEME -workspace WORKSPACE build 或xcodebuild -scheme SCHEME -project PROJECT build（将其中的大写单词换成你项目的对应名称），然后观察是否有相同的失败发生，这应该能生成足够的失败信息来解决问题。</p>
-
-<h3 id="toc_8">稳定版发布的标签</h3>
-
-<p>Carthage使用语义化标签来发布稳定版本。如1.2.0，如带有字母则是不受支持的版本（如1.2-alpha-1）.</p>
-
-<h3 id="toc_9">CarthageKit</h3>
-
-<p>大多数carthage命令行工具的功能都封装在一个名为CarthageKit的框架中。</p>
-
-<p>如果你希望将Carthage作为另一个工具的一部分，或者希望扩展Carthage的功能，可以看看CarthageKit的源码，检查API是否符合你的需求。</p>
-
-<h3 id="toc_10">授权协议</h3>
-
-<p>Carthage使用MIT开源协议授权发布。</p>
 
 ]]></content>
   </entry>

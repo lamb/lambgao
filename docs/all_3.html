@@ -88,6 +88,53 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-03-06-auto-layout-start-up.html">Auto Layout 使用心得（一）—— 初体验</a></h1>
+			<p class="meta"><time datetime="2015-03-06T23:43:00+08:00" 
+			pubdate data-updated="true">2015/3/6</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">简介</h3>
+
+<p>Auto Layout 是苹果在 Xcode 5 (iOS 6) 中新引入的布局方式，旨在解决 3.5 寸和 4 寸屏幕的适配问题。屏幕适配工作在 iPhone 6 及 plus 发布以后变得更加重要，而且以往的“笨办法”的工作量大幅增加，所以很多人开始学习使用 Auto Layout 技术。</p>
+
+<h3 id="toc_1">初体验</h3>
+
+<h4 id="toc_2">0. 开发环境</h4>
+
+<p>本系列文章的开发环境为：</p>
+
+<ul>
+<li>OS X 10.10.3</li>
+<li>Xcode Version 6.3.1 (6D1002)</li>
+</ul>
+
+<h4 id="toc_3">1. 新建应用</h4>
+
+<p>新建一个 Single View Application，命名为 AutoLayout，如下：</p>
+
+<p><img src="/resource/image/2015-03-06-auto-layout-start-up/1.jpg" alt="Image1"/></p>
+
+<p>点击选中 Main.storyboard，右侧内容如下：</p>
+
+<p><img src="/resource/image/2015-03-06-auto-layout-start-up/2.jpg" alt="Image2"/></p>
+
+<p>1、2 两个按钮将会在未来的开发中产生巨大的作用，他们将拥有本系列文章的全局名称：按钮1，按钮2。请先记下他们的位置。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-06-auto-layout-start-up.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-03-03-golang-mysql-load-data-local-infile.html">Golang MySQL LOAD DATA LOCAL INFILE 使用</a></h1>
 			<p class="meta"><time datetime="2015-03-03T23:37:09+08:00" 
 			pubdate data-updated="true">2015/3/3</time></p>
@@ -603,31 +650,6 @@ func homeWindows() (string, error) {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-08-27-change-ubuntu-display-resolution.html">修改 Ubuntu 分辨率</a></h1>
-			<p class="meta"><time datetime="2014-08-27T23:02:01+08:00" 
-			pubdate data-updated="true">2014/8/27</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>通常我们可以在 Settings -&gt; Hardware -&gt; Display 中选择适合的分辨率，但有些情况下这里没有列出合适的分辨率，此时我们可以通过命令调整显示分辨率。</p>
-
-<ol>
-<li><p>先通过 xrandr 获取当前的显示设备名</p></li>
-<li><p>然后通过 cvt 命令获取需要的显示模式编辑行</p></li>
-<li><p>新建显示模式 xrandr --newmode &quot;1368x768_60.00&quot; 85.25 1368 1440 1576 1784 768 771 781 798 -hsync +vsync</p></li>
-<li><p>添加显示模式 xrandr --addmode VBOX0 &quot;1368x768_60.00&quot;</p></li>
-<li><p>应用显示模式 xrandr --output VBOX0 --mode &quot;1368x768_60.00&quot;</p></li>
-</ol>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -653,6 +675,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
@@ -672,12 +700,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  

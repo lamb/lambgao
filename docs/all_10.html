@@ -88,6 +88,125 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2011-08-06-storage-options-on-google-appengine.html">GAE 数据保存方式</a></h1>
+			<p class="meta"><time datetime="2011-08-06T14:27:33+08:00" 
+			pubdate data-updated="true">2011/8/6</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>GAE 为应用提供了多种保存数据的方式，例如大家熟知的 Datastore，不过也有一些方式大家不太熟悉。本文将尽量全地列出所有 GAE 上保存数据的方式，并分别描述其优势与劣势，以便开发者更明晰地进行选择。</p>
+
+<h3 id="toc_0">Datastore</h3>
+
+<p>大家最熟悉、使用最广泛的保存数据的方式自然是 Datastore 了。Datastore 是 GAE 的非关系型数据库，它提供了健壮、持久的存贮，也提供了最具灵活性性的数据存取操作。</p>
+
+<h4 id="toc_1">优势</h4>
+
+<p>持久 - 保存在 datastore 里的数据是持久的。<br/>
+读写 - 应用能够读写保存在 datastore 里的数据，并且 datastore 提供了事务机制以保证完整性。<br/>
+全局一致 - 所有应用实例拥有同一个 datastore 视图。<br/>
+灵活 - 通过查询（Query）与索引提供了多种获取数据的方式。</p>
+
+<h4 id="toc_2">劣势</h4>
+
+<p>延迟 - datastore 是把数据保存在磁盘上，并提供了可靠保证，写操作必须确保数据已经被保存才返回（译注：异步 API 呢？），读操作不得不经常从磁盘取回数据（译注：底层如何进行缓存的呢？）</p>
+
+<h3 id="toc_3">Memcache</h3>
+
+<p>Memcache 是大家最熟悉的“二级”存储机制，它缓存数据以避免重复进行代价高（译注：例如 CPU、API 耗时特别高的调用）的操作。Memcache 常作为其他 APIs 的缓存层，例如 datastore，缓存某种数据源生成的结果集。</p>
+
+<h4 id="toc_4">优势</h4>
+
+<p>快 - 毫秒级别的存取操作（译注：1-4 毫秒，还是比较慢的-_-b）。<br/>
+全局一致 - 所有应用实例拥有同一个 memcache 视图。Memcache 提供了操作数据的原子操作，保证完整性（译注：对象序列化）。</p>
+
+<h4 id="toc_5">劣势</h4>
+
+<p>不可靠 - 数据可能随时被丢弃（译注：GAE 默认会尽可能长时间地持有缓存项）。</p>
+
+<h3 id="toc_6">Blobstore</h3>
+
+<p>Blobstore 提供了便捷高效保存用户上传的大数据的方法。</p>
+
+<h4 id="toc_7">优势</h4>
+
+<p>支持大文件 - 2GB（译注：没有在现在的官方文档里找到根据。另外，30 秒的请求限制能传 2G？-_-b）。<br/>
+不用自己处理 blob。<br/>
+提供了高性能的 blobs 存取，特别是对图片。<br/>
+应用能够向读取本地文件一样读取 blob。</p>
+
+<h4 id="toc_8">劣势</h4>
+
+<p>只读 - 应用不能自行创建 blobs，也不能修改已上传的 blobs。<br/>
+需要要付费才能使用 blobstore。</p>
+
+<h3 id="toc_9">实例内存</h3>
+
+<p>应用实例也能通过类成员（译注：Java 里是类字段）或 globals（译注：貌似是 Python 里的概念）在本地（译注：该实例 JVM）内存中缓存数据。这个方式提供了最快的存取速度，但却有一些不利的方面。</p>
+
+<h4 id="toc_10">优势</h4>
+
+<p>快 - 能有多快有多快，因为数据保存在正在访问的同一个进程中。<br/>
+方便 - 不需要 GAE APIs。<br/>
+灵活 - 能够保存任何格式的数据，没有序列化/反序列化限制。</p>
+
+<h4 id="toc_11">劣势</h4>
+
+<p>不可靠 - 实例可能在任何时间被启动或关闭，所以应用只应该用这种方式来进行缓存数据（译注：应用实例的 JVM 内存不是跨实例的哦，所以这种方式缓存的数据可能会有一致性问题，见下点）。<br/>
+不全局一致 - 每个应用实例都拥有自己的运行环境，自己的本地变量。对某一实例中的变量修改并不会影响其他实例。<br/>
+容量限制 - 实例的内存使用是有大小限制的。</p>
+
+<h3 id="toc_12">本地文件</h3>
+
+<p>应用可以使用标准文件系统 APIs 来读取随应用一起上传的文件。</p>
+
+<h4 id="toc_13">优势</h4>
+
+<p>快 - 读取本地文件只需要访问应用实例运行的机器磁盘，延迟与 Memcache 接近。<br/>
+可靠 - 只要应用在服务，就能够读取到文件。<br/>
+灵活 - 能够使用任何格式的文件。</p>
+
+<h4 id="toc_14">劣势</h4>
+
+<p>只读 - 应用不能修改文件；这些文件的内容在部署的时候就已经确定了。<br/>
+容量限制 - 单个文件最大 10MB，应用所有文件大小总和必须小于 150MB。</p>
+
+<h3 id="toc_15">任务队列负荷（Payloads）</h3>
+
+<p>虽然这不是传统意义上的存贮，但任务队列是能够保存持有一定的数据的。</p>
+
+<h4 id="toc_16">优势</h4>
+
+<p>快 - 任务运行时发送 payloads，获取这些数据不用调用额外的 API。<br/>
+如果使用得到，可以不用保存任务数据（译注：？）。</p>
+
+<h4 id="toc_17">劣势</h4>
+
+<p>意图单一 - payloads 是提供给任务队列任务的数据存贮。<br/>
+容量限制 - 任务最大大小 10KB（译注：现在 Push 队列是 100KB，Pull 队列是 1MB），包含了负荷数据。</p>
+
+<h3 id="toc_18">结论</h3>
+
+<p>GAE 提供了多种数据存储机制，我们得在应用场景下选择适当的存储方式。通常，较好的方案是组合使用这些数据保存方式，例如 datastore 与 memcache，本地文件与实例内存。</p>
+
+<p>注：</p>
+
+<ol>
+<li>原文中的链接是 GAE/Python 版的，译文中的链接是 GAE/Java 版的</li>
+<li>“优势”/“劣势”这两个词可能翻译不当....</li>
+</ol>
+
+<p>附上原文（<a href="http://blog.notdot.net/2010/11/Storage-options-on-App-Engine">Storage options on App Engine</a>）</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2011-07-28-java-7-technologies.html">Java 7 的新特性一览表</a></h1>
 			<p class="meta"><time datetime="2011-07-28T17:28:19+08:00" 
 			pubdate data-updated="true">2011/7/28</time></p>
@@ -732,31 +851,6 @@ public class Decimal2Fraction {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2010-12-25-android-go.html">Android, GO!</a></h1>
-			<p class="meta"><time datetime="2010-12-25T00:12:47+08:00" 
-			pubdate data-updated="true">2010/12/25</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Android 的 Dalvik 虚拟机运行的不是 Java 程序，可以说 Dalvik 完全可以运行其它语言开发的程序，但是 Google 为了吸引 Java 程序员，允许 程序员使用 Android 的SDK 将 Java 代码转换成 Dalvik 可以运行的代码。它是如何实现的呢？Google 在开发 Android 的时候，雇佣了 Sun 的一些程序员，利用 Harmony 中的开源 Java 库来实现 Java 程序的转换，避开了授权费用。这意味着开发者可以使用 Java 语言为非 Java 平台开发程序，Android 的火爆发展不能给 Sun 带来商业利益，而且可能造成平台分裂。</p>
-
-<p>开源领袖Ricard Stallman 早就指出Java 是“带着镣铐的自由”（Free but shackled），警告开发者谨防 Java 陷阱。此后，Sun 开源了大部分的 Java 实现代码，因此 Java 陷阱已经可以避免，但仍然要注意使用完全自由的平台，因为并非所有的平台都是自由的。 </p>
-
-<p>如果 Google 收购 Sun，将 Java 收归己有，或者当初与 Sun 达成协议，也许今天情形会不同。或着当初开发 Android 的时候，Google 应该培育自己的 Go 语言，而不是急于利用现有的 Java 开发者队伍。Java 关于开放的说法只是一个假象，而如今 Java 易手，一切都改变了。 </p>
-
-<p>很难想象 Google 会放弃 Android 系统，问题是如何发展它。Java 将逐步脱离开源社区，沦为 Oracle 的生财之道，这是一个利益当头、注重企业而不考虑个人开发者的公司，与 Java 的纠缠不清只能带来更多的麻烦。</p>
-
-<p>现有的智能手机平台中，Java 已经不是开发者的首选，iOS，MeeGo 都有自己的开发环境，WebOS 不需要 Java 实现，而 RIM 也在逐渐抛弃 Java，转向 Adobe AIR，这意味着 Java 在手机市场的空间在逐步缩小。讽刺的是，现在 Android 的飞速发展反而有利于 Java 语言在手持领域的地位。如果 Google 抛弃 Java，是否 Java 将只能在低端机之间苟延残喘，逐渐消亡呢？相信随着 Web 开发技术的进步，HTML/CSS/Javascript这样的网络开发环境将成为网络应用的首选，而底层应用开发将会是 C/C++的天下。 </p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_11.html">&larr; Older</a> 
@@ -782,6 +876,12 @@ public class Decimal2Fraction {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
@@ -801,12 +901,6 @@ public class Decimal2Fraction {
 	      
 		      <li class="post">
 		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  

@@ -88,6 +88,114 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-10-09-small-test-hello-node.html">小试Node Hello Node</a></h1>
+			<p class="meta"><time datetime="2012-10-09T18:26:57+08:00" 
+			pubdate data-updated="true">2012/10/9</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Node还很年轻，正处于快速发展中，版本更新速度也很快。下面内容介绍的是最新的0.6.x（笔者使用的是0.6.18版本，如果版本号不同，只需替换版本号即可）的版本安装和配置。如果你想使用旧版本（比如0.4.x），安装和配置会不尽相同，请借助搜索引擎搜索安装和配置方法。</p>
+
+<h3 id="toc_0">2.1　安装Node</h3>
+
+<h4 id="toc_1">2.1.1  Windows平台下安装</h4>
+
+<p>在Node官方网站上面下载安装文件（ <a href="http://nodejs.org/dist/v0.6.18/node-v0.6.18.msi">http://nodejs.org/dist/v0.6.18/node-v0.6.18.msi</a> ），双击即可在程序的引导下完成安装。完成以上操作后，检查一下是否安装成功：</p>
+
+<p><code>node -v</code></p>
+
+<p>检查是否返回：</p>
+
+<p><code>v0.6.18</code></p>
+
+<p>至此，Node已经安装完成。如需卸载，可以在控制面板\程序\程序和功能中找到Node进行卸载。</p>
+
+<h4 id="toc_2">2.1.1  Unix/Linux平台下安装</h4>
+
+<pre><code>wget http://nodejs.org/dist/v0.6.18/node-v0.6.18.tar.gz 
+tar zxvf node-v0.6.1.tar.gz 
+cd node-v0.6.1 
+./configure 
+</code></pre>
+
+<p>上面几行命令是通过wget命令下载最新版本的代码，并解压之。./configure命令将会检查环境是否符合Node的编译要求。如果检查没有通过，请安装提示需要的库。如果configure命令执行成功，就可以进行编译了：</p>
+
+<pre><code>make 
+make install 
+</code></pre>
+
+<p>Node通过make工具进行编译和安装（如果make install不成功，请使用sudo以确保拥有权限）。完成以上操作后，检查一下是否安装成功：</p>
+
+<p><code>node -v</code></p>
+
+<p>检查是否返回：</p>
+
+<p><code>v0.6.18</code></p>
+
+<p>至此，Node已经编译并安装完成。如需卸载，可以执行make uninstall进行卸载。</p>
+
+<h3 id="toc_3">2.2　安装NPM</h3>
+
+<p>NPM(Node Package Manager)是Node的模块管理器。最新版本的Node已经内置了NPM，无需另行安装。可以在安装Node完成后，检查NPM是否已经安装成功：</p>
+
+<p><code>npm -v</code></p>
+
+<p>检查是否返回：</p>
+
+<p><code>1.1.21</code></p>
+
+<p>至此，Node和NPM都已经安装完成。</p>
+
+<h3 id="toc_4">2.3　Hello World!</h3>
+
+<p>我们从最简单的Hello World开始我们的Node之旅。新建一个文件helloworld.js，并编写代码。</p>
+
+<p><code>console.log(&#39;Hello World!&#39;);</code></p>
+
+<p>现在我们要运行这个代码文件。这个操作非常简单，直接输入以下命令即可运行：</p>
+
+<pre><code>node helloworld.js 
+Hello World! 
+</code></pre>
+
+<p>用node命令加上文件名即可运行代码文件，在运行成功后打印输出了HelloWorld!，打印完成后程序自动停止退出。<br/>
+下面我们来启动一个HTTP服务器，当在浏览器访问时，会向浏览器输出HelloWorld!。新建一个文件http.js，并编写代码。</p>
+
+<pre><code>var http = require(&#39;http&#39;);
+http.createServer(function (req, res) {
+  res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;});
+  res.end(&#39;Hello World!\n&#39;);
+}).listen(1337, &#39;127.0.0.1&#39;);
+console.log(&#39;Server running at http://127.0.0.1:1337/&#39;);
+</code></pre>
+
+<p>使用node命令运行这个文件：</p>
+
+<pre><code>node http.js 
+Server running at http://127.0.0.1:1337/ 
+</code></pre>
+
+<p>这样就启动了一个用Node编写的最简单的HTTP服务器。你会发现这次运行的代码在运行到最后一行后不会自动停止退出，去系统进程列表可以找到一个node的进程一直在运行。这是因为listen函数创建了一个监听1337端口的监听器。这个事件监听器会使http.js一直保持执行状态，知道你在终端窗口中执行退出操作，如Ctrl+C。你可以在任意浏览器中访问<a href="http://127.0.0.1:1337/%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E5%A6%82%E5%9B%BE%E6%89%80%E7%A4%BA%E7%9A%84%E7%BB%93%E6%9E%9C%EF%BC%9A">http://127.0.0.1:1337/就可以看到如图所示的结果：</a></p>
+
+<p><img src="/resource/image/2012-10-09-small-test-hello-node/helloworld.png" alt="浏览器结果"/></p>
+
+<h3 id="toc_5">2.4　小结</h3>
+
+<p>我们在这一章学习了Node和NPM的安装，并编写和运行了两个简单的Node程序。<br/>
+本章具体内容包括：<br/>
+* Node和NPM的安装，并验证是否安装成功； <br/>
+* 如何运行和停止代码；<br/>
+* 用Node编写的一个最简单的HTTP服务器。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-10-08-small-test-node-introduction.html">小试Node 简介</a></h1>
 			<p class="meta"><time datetime="2012-10-08T18:25:34+08:00" 
 			pubdate data-updated="true">2012/10/8</time></p>
@@ -1409,24 +1517,6 @@ public class SecondFilter implements Filter {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-03-05-ziiiro-originality-watch.html">ziiiro创意手表，大爱这个品牌</a></h1>
-			<p class="meta"><time datetime="2012-03-05T00:25:53+08:00" 
-			pubdate data-updated="true">2012/3/5</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><a href="http://www.ziiiro.com/">ziiiro</a>创意手表，大爱这个品牌<br/>
-<p><img src="http://www.ziiiro.com/wp-content/uploads/2014/10/ziiiro-mercury-watch-chrome-ocean-blue-front.jpg" alt="" width="361" height="500"></p></p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_9.html">&larr; Older</a> 
@@ -1452,6 +1542,12 @@ public class SecondFilter implements Filter {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
@@ -1471,12 +1567,6 @@ public class SecondFilter implements Filter {
 	      
 		      <li class="post">
 		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  

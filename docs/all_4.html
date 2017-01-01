@@ -88,6 +88,31 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-08-27-change-ubuntu-display-resolution.html">修改 Ubuntu 分辨率</a></h1>
+			<p class="meta"><time datetime="2014-08-27T23:02:01+08:00" 
+			pubdate data-updated="true">2014/8/27</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>通常我们可以在 Settings -&gt; Hardware -&gt; Display 中选择适合的分辨率，但有些情况下这里没有列出合适的分辨率，此时我们可以通过命令调整显示分辨率。</p>
+
+<ol>
+<li><p>先通过 xrandr 获取当前的显示设备名</p></li>
+<li><p>然后通过 cvt 命令获取需要的显示模式编辑行</p></li>
+<li><p>新建显示模式 xrandr --newmode &quot;1368x768_60.00&quot; 85.25 1368 1440 1576 1784 768 771 781 798 -hsync +vsync</p></li>
+<li><p>添加显示模式 xrandr --addmode VBOX0 &quot;1368x768_60.00&quot;</p></li>
+<li><p>应用显示模式 xrandr --output VBOX0 --mode &quot;1368x768_60.00&quot;</p></li>
+</ol>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-08-18-swift-value-and-reference-types.html">Swift中的值类型和引用类型</a></h1>
 			<p class="meta"><time datetime="2014-08-18T22:49:02+08:00" 
 			pubdate data-updated="true">2014/8/18</time></p>
@@ -746,48 +771,6 @@ export PATH=$MONGO_HOME/bin:$PATH
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-04-21-alibaba-cobar-survey.html">Cobar 概述</a></h1>
-			<p class="meta"><time datetime="2014-04-21T18:38:49+08:00" 
-			pubdate data-updated="true">2014/4/21</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><a href="https://github.com/alibaba/cobar">Cobar</a> 是由 Alibaba 开源的 MySQL 分布式处理中间件，它可以在分布式的环境下看上去像传统数据库一样提供海量数据服务。</p>
-
-<p><img src="https://01yttw.dm1.livefilestore.com/y2ppdD23riGhI6sLiZu6c-Wf2GZ7gU_O8JFZMPpGUjahD5WNMRpUmjTjPfLNTwtrOORN2GWW5JweAkqDqfblR8Xi_YfMvTbVq0znhJGlxcSW-Y/cobar.png?psid=1" alt="Cobar 架构"/></p>
-
-<h3 id="toc_0">Cobar 解决的问题</h3>
-
-<p>分布式：Cobar 的分布式主要是通过将表放入不同的库来实现：</p>
-
-<ol>
-<li><p>Cobar 支持将一张表水平拆分成多份分别放入不同的库来实现表的水平拆分</p></li>
-<li><p>Cobar 也支持将不同的表放入不同的库</p></li>
-<li><p>多数情况下，用户会将以上两种方式混合使用</p></li>
-</ol>
-
-<p>HA：在用户配置了 MySQL 心跳的情况下，Cobar 可以自动向后端连接的 MySQL 发送心跳，判断 MySQL 运行状<br/>
-况，一旦运行出现异常，Cobar 可以自动切换到备机工作。但需要强调的是：</p>
-
-<ol>
-<li><p>Cobar 的主备切换有两种触发方式，一种是用户手动触发，一种是 Cobar 的心跳语句检测到异常后自动触发。那么，当心跳检测到主机异常，切换到备机，如果主机恢复了，需要用户手动切回主机工作，Cobar 不会在主机恢复时自动切换回主机，除非备机的心跳也返回异常</p></li>
-<li><p>Cobar 只检查 MySQL 主备异常，不关心主备之间的数据同步，因此用户需要在使用 Cobar 之前在 MySQL 主备上配置双向同步</p></li>
-</ol>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-04-21-alibaba-cobar-survey.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_5.html">&larr; Older</a> 
@@ -813,6 +796,12 @@ export PATH=$MONGO_HOME/bin:$PATH
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
@@ -832,12 +821,6 @@ export PATH=$MONGO_HOME/bin:$PATH
 	      
 		      <li class="post">
 		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-02-douban-rexxar.html">Rexxar：豆瓣对混合开发的思考</a>
 		      </li>
 	     
 	  
