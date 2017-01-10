@@ -88,6 +88,30 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a></h1>
+			<p class="meta"><time datetime="2017-01-10T19:43:25+08:00" 
+			pubdate data-updated="true">2017/1/10</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>春节临近，能用红包解决的，咱尽量不用语言表达。但是只恨手速太慢啊！那么问题来了，如果可以自动抢就完美了。辣么这肯定难不倒程序猿。如果你的手机已经越狱了，那么直接在Cydia市场搜索Tweak就可以了。如果没有越狱，又非常不想越狱或者根本就不会越狱该肿么办？办法也是有的，下面记录一下过程，虽然复杂了一些，但是亲测好用！</p>
+
+<p><em>注意：本篇文章只是记录过程，并不深入原理，iOS 逆向比较复杂，这里只是初探，大家可以一起讨论。</em></p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a></h1>
 			<p class="meta"><time datetime="2017-01-01T20:24:02+08:00" 
 			pubdate data-updated="true">2017/1/1</time></p>
@@ -695,47 +719,6 @@ func foo(inout x:  Int)
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2016-05-11-sensitive-data-processing.html">敏感数据处理</a></h1>
-			<p class="meta"><time datetime="2016-05-11T00:19:41+08:00" 
-			pubdate data-updated="true">2016/5/11</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h3 id="toc_0">背景</h3>
-
-<p>大多数应用或多或少都会涉及到敏感数据处理，比如用户的手机号、身份证号，甚至银行卡账号。作为应用的开发者，如何 安全地 维护这些敏感数据呢？</p>
-
-<p>这里讨论的安全不是指服务器如何保护，而是在数据库层面做敏感数据的分离：</p>
-
-<ul>
-<li>业务库中不保存敏感数据，只保存混淆过的数据，比如电话字段保存的是 133****9961，在数据层面就进行脱敏</li>
-<li>敏感数据统一保存在另一个库中，有应用调用一个服务来建立原值和混淆值的映射关系</li>
-<li>业务库中因为保存的是脱敏过的数据，通过只读复制镜像可以很方便地提供给其他服务使用，比如 OLAP</li>
-<li>除了技术开发上方便，运维上也方便了很多，降低了敏感数据被暴露到外部的可能性</li>
-</ul>
-
-<h3 id="toc_1">技术设计</h3>
-
-<p>提供服务接口给应用存取敏感数据，本质上是一个 KV 存取服务。</p>
-
-<p><img src="/resource/image/2016-05-11-sensitive-data-processing/4910a7b5389945cc870dcc8f9cbfaf88.png" alt="4910a7b5389945cc870dcc8f9cbfaf88"/></p>
-
-<p>一些细节：</p>
-
-<ul>
-<li>表 protyle 的 domain 字段用于标识该记录的作用域，在一个作用域上相同的值要保证唯一</li>
-<li>表 protyle 的 hash 字段值是 SHA-512(domain/value) 的结果，用于唯一性校验</li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_1.html">&larr; Older</a> 
@@ -761,6 +744,12 @@ func foo(inout x:  Int)
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
 		      </li>
 	     
@@ -780,12 +769,6 @@ func foo(inout x:  Int)
 	      
 		      <li class="post">
 		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
 		      </li>
 	     
 	  

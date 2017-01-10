@@ -88,6 +88,43 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-03-07-auto-layout-three-equal-parts.html">Auto Layout 使用心得（二）—— 实现三等分</a></h1>
+			<p class="meta"><time datetime="2015-03-07T23:56:08+08:00" 
+			pubdate data-updated="true">2015/3/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">准备</h3>
+
+<p>上一篇文章中，我们共同进行了 Auto Layout 的初体验，在本篇我们将一起尝试用 Auto Layout 实现三等分。</p>
+
+<h3 id="toc_1">Auto Layout 的本质原理</h3>
+
+<p>Auto Layout 的本质是用一些约束条件对元素进行约束，从而让他们显示在我们想让他们显示的地方。</p>
+
+<p>约束主要分为以下几种（欢迎补充）：</p>
+
+<ol>
+<li>相对于父 view 的约束。如：距离上边距 10，左边距 10。</li>
+<li>相对于前一个元素的约束。如：距离上一个元素 20，距离左边的元素 5 等。</li>
+<li>对齐类约束。如：跟父 view 左对齐，跟上一个元素居中对齐等。</li>
+<li>相等约束。如：跟父 view 等宽。</li>
+</ol>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-07-auto-layout-three-equal-parts.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-03-06-auto-layout-start-up.html">Auto Layout 使用心得（一）—— 初体验</a></h1>
 			<p class="meta"><time datetime="2015-03-06T23:43:00+08:00" 
 			pubdate data-updated="true">2015/3/6</time></p>
@@ -624,32 +661,6 @@ func homeWindows() (string, error) {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-09-01-closure-expressions-in-swift.html">Swift中的闭包（Closure）</a></h1>
-			<p class="meta"><time datetime="2014-09-01T22:57:30+08:00" 
-			pubdate data-updated="true">2014/9/1</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>闭包在Swift中非常有用。通俗的解释就是一个Int类型里存储着一个整数，一个String类型包含着一串字符，同样，闭包是一个包含着函数的类型。有了闭包，你就可以处理很多在一些古老的语言中不能处理的事情。这是因为闭包使用的多样性，比如你可以将闭包赋值给一个变量，你也可以将闭包作为一个函数的参数，你甚至可以将闭包作为一个函数的返回值。它的强大之处可见一斑。</p>
-
-<p>在Swift的很多文档教材中都说函数是“一等公民”，起初我还不是很理解“一等公民”是什么意思，但当我理解了闭包以及它的强大功能后，我恍然大悟、茅塞顿开、醍醐灌顶。原来闭包的这些特性就是“一等公民”的特性啊！参见维基百科<a href="http://en.wikipedia.org/wiki/First-class_citizen">First-class citizen</a>。</p>
-
-<p>Swift中的闭包类似Objective-C中的Block。其实，如果你想在Swift中实现Objective-C里的Block功能，你可以直接使用闭包来代替。Block和闭包的区别只是语法的不同而已，而且闭包的可读性比较强。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-09-01-closure-expressions-in-swift.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -675,6 +686,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
 		      </li>
 	     
@@ -694,12 +711,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
 		      </li>
 	     
 	  

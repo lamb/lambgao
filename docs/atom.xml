@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2017-01-03T17:00:56+08:00</updated>
+  <updated>2017-01-10T21:06:29+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,220 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[不越狱iOS自动抢红包]]></title>
+    <link href="http://lambgao.com/2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html"/>
+    <updated>2017-01-10T19:43:25+08:00</updated>
+    <id>http://lambgao.com/2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html</id>
+    <content type="html"><![CDATA[
+<p>春节临近，能用红包解决的，咱尽量不用语言表达。但是只恨手速太慢啊！那么问题来了，如果可以自动抢就完美了。辣么这肯定难不倒程序猿。如果你的手机已经越狱了，那么直接在Cydia市场搜索Tweak就可以了。如果没有越狱，又非常不想越狱或者根本就不会越狱该肿么办？办法也是有的，下面记录一下过程，虽然复杂了一些，但是亲测好用！</p>
+
+<p><em>注意：本篇文章只是记录过程，并不深入原理，iOS 逆向比较复杂，这里只是初探，大家可以一起讨论。</em></p>
+
+<span id="more"></span><!-- more --> 
+
+<h3 id="toc_0">获取砸壳版本的微信 ipa</h3>
+
+<p>因为在 AppStore 上面下载得到的应用都是经过加密的，可以执行文件上已经被加过一层壳，所以我们需要先拿到砸过壳版本的微信应用。</p>
+
+<p>有两种方法：</p>
+
+<ol>
+<li>直接在 PP 助手下载</li>
+<li>使用 Clutch 对越狱手机上应用进行砸壳</li>
+</ol>
+
+<p>第一种方法没什么好说的，这里主要讲讲第二种方法。</p>
+
+<p>首先，将 Cluth 仓库 clone 到本地：</p>
+
+<pre><code>$ git clone https://github.com/KJCracks/Clutch
+$ cd Clutch
+</code></pre>
+
+<p>接着，使用 Xcode 进行构建，得到可执行文件：</p>
+
+<pre><code>$ xcodebuild -project Clutch.xcodeproj -configuration Release ARCHS=&quot;armv7 armv7s arm64&quot; build
+</code></pre>
+
+<p>生成出来的可执行文件就在 Clutch 目录下，将其拷贝到手机上：</p>
+
+<pre><code>scp Clutch/clutch root@&lt;your.device.ip&gt;:/usr/bin/
+</code></pre>
+
+<p>之后，就可以使用这个工具来进行砸壳了。</p>
+
+<p>先 ssh 到越狱手机上，然后列出当前安装的应用：</p>
+
+<pre><code>$ ssh root@&lt;your.device.ip&gt;
+$ clutch -i
+# Installed apps:
+# 1:   WeChat &lt;com.tencent.xin&gt;
+# 2:   DingTalk &lt;com.laiwang.DingTalk&gt;
+# 3:   喜马拉雅FM（听书社区）电台有声小说相声英语 &lt;com.gemd.iting&gt;
+</code></pre>
+
+<p>可以得到 clutch 把相应的包名也显示出来了，这时我们就可以进行砸壳了：</p>
+
+<pre><code>$ clutch -d com.tencent.xin
+# com.tencent.xin contains watchOS 2 compatible application. It&#39;s not possible to dump watchOS 2 apps with Clutch 2.0.4 at this moment.
+# Zipping WeChat.app
+# Swapping architectures..
+# ASLR slide: 0xb3000
+# ...
+# writing new checksum
+# DONE: /private/var/mobile/Documents/Dumped/com.tencent.xin-iOS7.0-(Clutch-2.0.4).ipa
+# Finished dumping com.tencent.xin in 76.9 seconds
+</code></pre>
+
+<p>可以看到，clutch 将砸过后的 ipa 文件放到了 /private/var/mobile/Documents/Dumped/ 目录下。</p>
+
+<p>我们将它改成一个比较简单的名字，然后拷回电脑上：</p>
+
+<pre><code>$ mv /private/var/mobile/Documents/Dumped/com.tencent.xin-iOS7.0-\(Clutch-2.0.4\).ipa /private/var/mobile/Documents/Dumped/wechat.ipa
+$ scp root@&lt;your.device.ip&gt;:/private/var/mobile/Documents/Dumped/wechat.ipa ~/Desktop
+</code></pre>
+
+<p>这里，我把它拷到了电脑桌面上。之后就可以进行下一步操作了。</p>
+
+<p>注意：我尝试了第一种办法，但是从 PP 助手下载下来的文件执行后续操作不成功，所以应该是第二种方法最可靠，然而我手头又没有越狱设备，不用着急，原作者有共享一个版本，可以从这里下载。链接: <a href="https://pan.baidu.com/s/1gf9hM1d">https://pan.baidu.com/s/1gf9hM1d</a> 密码: tbub</p>
+
+<h3 id="toc_1">准备 dylib 动态链接库</h3>
+
+<p>这步就很简单了，直接到我的 WeChatRedEnvelop 上把源码 clone 下来，然后执行 make 命令，就能拿到 dylib 文件了。</p>
+
+<pre><code>$ git clone https://github.com/buginux/WeChatRedEnvelop.git
+$ cd WeChatRedEnvelop
+$ make 
+# &gt; Making all for tweak WeChatRedEnvelop…
+# ==&gt; Preprocessing Tweak.xm…
+# ==&gt; Compiling Tweak.xm (armv7)…
+# ==&gt; Compiling XGPayingViewController.m (armv7)…
+# ...
+# ==&gt; Signing WeChatRedEnvelop…
+$ cp .theos/obj/debug/WeChatRedEnvelop.dylib ~/Desktop # 注意是 .theos 目录，这是个隐藏目录
+</code></pre>
+
+<p>将生成的 dylib 文件拷贝到桌面，跟刚刚砸过壳的微信应用放到一个目录层级。</p>
+
+<h3 id="toc_2">检查依赖项</h3>
+
+<p>因为这个代码是我自己写的，所以我知道这个 dylib 除了 mobilesustrate 外没有依赖其它的库。但是如果我们拿到的是别人的 dylib，就需要先进行一下依赖项检查，以确保之后我们将所有的依赖库都打包进 ipa 当中。</p>
+
+<p>使用 macOS 自带的 otool 工具就可以进行依赖项检查：</p>
+
+<pre><code>$ otool -L WeChatRedEnvelop.dylib
+WeChatRedEnvelop.dylib (architecture armv7):
+    /Library/MobileSubstrate/DynamicLibraries/WeChatRedEnvelop.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 228.0.0)
+    /System/Library/Frameworks/Foundation.framework/Foundation (compatibility version 300.0.0, current version 1349.1.0)
+    /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (compatibility version 150.0.0, current version 1348.0.0)
+    /System/Library/Frameworks/UIKit.framework/UIKit (compatibility version 1.0.0, current version 3600.5.2)
+    /usr/lib/libsubstrate.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 307.4.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.0.0)
+WeChatRedEnvelop.dylib (architecture arm64):
+    /Library/MobileSubstrate/DynamicLibraries/WeChatRedEnvelop.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 228.0.0)
+    /System/Library/Frameworks/Foundation.framework/Foundation (compatibility version 300.0.0, current version 1349.1.0)
+    /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (compatibility version 150.0.0, current version 1348.0.0)
+    /System/Library/Frameworks/UIKit.framework/UIKit (compatibility version 1.0.0, current version 3600.5.2)
+    /usr/lib/libsubstrate.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 307.4.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.0.0)
+</code></pre>
+
+<p>可以看到除了 substrate 库，其它依赖的都是系统自带的库。我们将 libsubstrate.dylib 拷出，使用 install_name_tool 命令修改动态库的路径，指向 app 二进制文件的同级目录。</p>
+
+<p>如果你的系统中不是 /usr/lib/libsubstrate.dylib 而是 /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate 的话，解决方法可以参考 <a href="https://github.com/buginux/WeChatRedEnvelop/issues/35">Github 上的 issue</a>。</p>
+
+<pre><code class="language-$">$ install_name_tool -change /usr/lib/libsubstrate.dylib @loader_path/libsubstrate.dylib WeChatRedEnvelop.dylib
+$ otool -L WeChatRedEnvelop.dylib
+WeChatRedEnvelop.dylib (architecture armv7):
+    /Library/MobileSubstrate/DynamicLibraries/WeChatRedEnvelop.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 228.0.0)
+    /System/Library/Frameworks/Foundation.framework/Foundation (compatibility version 300.0.0, current version 1349.1.0)
+    /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (compatibility version 150.0.0, current version 1348.0.0)
+    /System/Library/Frameworks/UIKit.framework/UIKit (compatibility version 1.0.0, current version 3600.5.2)
+    @loader_path/libsubstrate.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 307.4.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.0.0)
+WeChatRedEnvelop.dylib (architecture arm64):
+    /Library/MobileSubstrate/DynamicLibraries/WeChatRedEnvelop.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libobjc.A.dylib (compatibility version 1.0.0, current version 228.0.0)
+    /System/Library/Frameworks/Foundation.framework/Foundation (compatibility version 300.0.0, current version 1349.1.0)
+    /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (compatibility version 150.0.0, current version 1348.0.0)
+    /System/Library/Frameworks/UIKit.framework/UIKit (compatibility version 1.0.0, current version 3600.5.2)
+    @loader_path/libsubstrate.dylib (compatibility version 0.0.0, current version 0.0.0)
+    /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 307.4.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1238.0.0)
+</code></pre>
+
+<p>可以看到 libsubstrate.dylib 的路径已经变更了。</p>
+
+<p>注意：libsubstrate.dylib这个文件是从越狱手机中提取的，但是没有越狱手机，辣么从这里下载吧。链接: <a href="https://pan.baidu.com/s/1qXBqHSo">https://pan.baidu.com/s/1qXBqHSo</a> 密码: efvy</p>
+
+<h3 id="toc_3">将动态链接库注入二进制文件中</h3>
+
+<p>接下来，就需要将我们的库注入到微信的二进制文件中，可以使用开源的 <a href="https://github.com/alexzielenski/optool">optool 工具</a>。</p>
+
+<p>编译安装 optool 工具：</p>
+
+<pre><code># 因为 optool 添加了 submodule，因为需要使用 --recuresive 选项，将子模块全部 clone 下来
+$ git clone --recursive https://github.com/alexzielenski/optool.git
+$ cd optool
+$ xcodebuild -project optool.xcodeproj -configuration Release ARCHS=&quot;i386 x86_64&quot; build
+</code></pre>
+
+<p>将砸壳过的 ipa 文件解压，然后将 libsubstrate.dylib 与 WeChatRedEnvelop.dylib 拷贝到解压后的 WeChat.app 目录下。</p>
+
+<pre><code>$ cd ~/Desktop
+$ unzip wechat.ipa -d wechat
+$ cp libsubstrate.dylib WeChatRedEnvelop.dylib wechat/Payload/WeChat.app
+</code></pre>
+
+<p>使用 optool 把 WeChatRedEnvelop.dylib 注入到二进制文件中：</p>
+
+<pre><code>$ /path/to/optool install -c load -p &quot;@executable_path/WeChatRedEnvelop.dylib&quot; -t wechat/Payload/WeChat.app/WeChat
+</code></pre>
+
+<p>注意：如果你的系统版本非常新，那么再编译的步骤肯定会报错。你可以尝试用Xcode打开项目，选中Target - Build Settings - Base SDK - Latest macOS 然后点击Build按钮进行编译。</p>
+
+<h3 id="toc_4">打包并重签名</h3>
+
+<p>打包 ipa 与重签名可以直接使用图形化工具 <a href="https://github.com/DanTheMan827/ios-app-signer.git">ios-app-signer</a> 来完成。</p>
+
+<p>这个工具可以自动加载出本机的证书以及 Provisioning Profile 文件，使用起来十分方便，当然也可以手动选择证书文件。</p>
+
+<p>如果是使用个人开发者证书，需要先将设备的 UUID 加到 Provisioning Profile 中。</p>
+
+<p>我这里是直接从一个 archive 过的应用中提取 embedded.mobileprovision 文件，并在 Provisioning Profile 一栏中选择 Choose Custom File 使用这个文件。</p>
+
+<p>点击 start 后，指定保存路径，iOS App Signer 就会帮你搞定所有事情。</p>
+
+<p>注意：这一步之前要把 WeChat.app 里面的 Watch 目录删除，要不后续用Xcode安装的时候出现这个错误A WatchKit app within this app is not a valid bundle.</p>
+
+<h3 id="toc_5">安装</h3>
+
+<p>在 iOS App Signer 完成打包与重签名后，我们就可以进行安装了。</p>
+
+<p>安装有两种方法，一种是使用 iTool 工具安装 ipa 文件。</p>
+
+<p>另外一种是针对有 XCode 的同学，在菜单 - Window - Devices 中打开设置窗口。点击 Installed Apps 栏下面的 + 号就可以选择 ipa 文件进行安装了。</p>
+
+<h3 id="toc_6">参考文章</h3>
+
+<ul>
+<li><a href="http://www.swiftyper.com/2016/12/26/wechat-redenvelop-tweak-for-non-jailbroken-iphone/">免越狱版 iOS 抢红包插件</a></li>
+<li><a href="http://www.swiftyper.com/2016/01/25/ios-tweak-install-guide/">iOS微信抢红包Tweak安装教程</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577384&amp;idx=1&amp;sn=b44a9c9651bf09c5bea7e0337031c53c&amp;scene=0#wechat_redirect">移动App入侵与逆向破解技术－iOS篇</a></li>
+<li><a href="https://github.com/yohunl/DingTalkNoJailTweak">DingTalkNoJailTweak</a></li>
+<li><a href="https://github.com/buginux/WeChatRedEnvelop.git">微信抢红包 Tweak 的 Github 地址</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Instagram 是如何做持续部署的]]></title>
@@ -1574,155 +1788,6 @@ func main() {
 <li><a href="http://php.net/manual/en/function.crypt.php">PHP: crypt - Manual</a></li>
 <li><a href="https://github.com/kless/osutil/tree/master/user/crypt">A golang password hashing library</a></li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS开发之如何跳到系统设置里的各种设置界面]]></title>
-    <link href="http://lambgao.com/2016-01-30-goto-settings.html"/>
-    <updated>2016-12-29T01:32:41+08:00</updated>
-    <id>http://lambgao.com/2016-01-30-goto-settings.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">需求</h3>
-
-<p>从应用跳到系统设置里的WiFi界面有这个需求存在吗？答案是肯定的。比如以下两个例子：</p>
-
-<p>在没有网的状态下，你可能想提醒用户去设置界面连接WiFi。如果不能跳到WiFi界面，只能在APP里面做出文字提示。这样很多小白用户可能不会看提示，只会觉得APP没有做好。</p>
-
-<p>还有一种情况，做智能家居的APP，智能硬件设备自带WiFi（局域网）。如果用户没有连接设备的WiFi进入APP时，需要提示用户去设置界面连接WiFi。</p>
-
-<p>以上这两种情况只是举个例子，这个小功能的用处还是很多的，大家可以自行探索。</p>
-
-<h3 id="toc_1">实现</h3>
-
-<p>info里面设置</p>
-
-<p>在项目中的info.plist中添加 URL types 并设置一项URL Schemes为prefs，如下图：</p>
-
-<p><img src="http://images.90159.com/12/wifi1.png" alt="wifi1"/></p>
-
-<p>实现代码</p>
-
-<pre><code>NSURL *url = [NSURL URLWithString:@&quot;prefs:root=WIFI&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<span id="more"></span><!-- more -->
-
-<h3 id="toc_2">跳到更多设置界面</h3>
-
-<p>除了跳到WiFi设置界面，能不能跳到其他的设置界面呢？比如：定位服务、FaceTime、音乐等等。都是可以的，一起来看看如何实现的！</p>
-
-<h4 id="toc_3">定位服务</h4>
-
-<p>定位服务有很多APP都有，如果用户关闭了定位，那么，我们在APP里面可以提示用户打开定位服务。点击到设置界面设置，直接跳到定位服务设置界面。代码如下：</p>
-
-<pre><code>//定位服务设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=LOCATION_SERVICES&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<p>这样就可以跳到系统设置的定位服务界面啦！我们继续看几个列子。</p>
-
-<h4 id="toc_4">FaceTime</h4>
-
-<pre><code>//FaceTime设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=FACETIME&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<h4 id="toc_5">音乐</h4>
-
-<pre><code>//音乐设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=MUSIC&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<h4 id="toc_6">墙纸设置界面</h4>
-
-<pre><code>//墙纸设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=Wallpaper&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<h4 id="toc_7">蓝牙设置界面</h4>
-
-<pre><code>//蓝牙设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=Bluetooth&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url])
-{
-   [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<h4 id="toc_8">iCloud设置界面</h4>
-
-<pre><code>//iCloud设置界面
-NSURL *url = [NSURL URLWithString:@&quot;prefs:root=CASTLE&quot;];
-if ([[UIApplication sharedApplication] canOpenURL:url]
-{
-   [[UIApplication sharedApplication] openURL:url];
-}
-</code></pre>
-
-<h3 id="toc_9">参数配置</h3>
-
-<p>看到这几个例子，大家有没有发现，想跳到哪个设置界面只需要prefs:root=后面的值即可！是的，就是这样的。</p>
-
-<p>我在网上找到一个列表，可以跳到这些界面的参数配置：</p>
-
-<pre><code>About — prefs:root=General&amp;path=About
-Accessibility — prefs:root=General&amp;path=ACCESSIBILITY
-Airplane Mode On — prefs:root=AIRPLANE_MODE
-Auto-Lock — prefs:root=General&amp;path=AUTOLOCK
-Brightness — prefs:root=Brightness
-Bluetooth — prefs:root=General&amp;path=Bluetooth
-Date &amp; Time — prefs:root=General&amp;path=DATE_AND_TIME
-FaceTime — prefs:root=FACETIME
-General — prefs:root=General
-Keyboard — prefs:root=General&amp;path=Keyboard
-iCloud — prefs:root=CASTLE
-iCloud Storage &amp; Backup — prefs:root=CASTLE&amp;path=STORAGE_AND_BACKUP
-International — prefs:root=General&amp;path=INTERNATIONAL
-Location Services — prefs:root=LOCATION_SERVICES
-Music — prefs:root=MUSIC
-Music Equalizer — prefs:root=MUSIC&amp;path=EQ
-Music Volume Limit — prefs:root=MUSIC&amp;path=VolumeLimit
-Network — prefs:root=General&amp;path=Network
-Nike + iPod — prefs:root=NIKE_PLUS_IPOD
-Notes — prefs:root=NOTES
-Notification — prefs:root=NOTIFICATIONS_ID
-Phone — prefs:root=Phone
-Photos — prefs:root=Photos
-Profile — prefs:root=General&amp;path=ManagedConfigurationList
-Reset — prefs:root=General&amp;path=Reset
-Safari — prefs:root=Safari
-Siri — prefs:root=General&amp;path=Assistant
-Sounds — prefs:root=Sounds
-Software Update — prefs:root=General&amp;path=SOFTWARE_UPDATE_LINK
-Store — prefs:root=STORE
-Twitter — prefs:root=TWITTER
-Usage — prefs:root=General&amp;path=USAGE
-VPN — prefs:root=General&amp;path=Network/VPN
-Wallpaper — prefs:root=Wallpaper
-Wi-Fi — prefs:root=WIFI
-</code></pre>
 
 ]]></content>
   </entry>

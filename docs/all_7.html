@@ -88,6 +88,74 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-18-xmpp-simple-irc-psyc.html">即时消息协议预研</a></h1>
+			<p class="meta"><time datetime="2013-03-18T11:00:44+08:00" 
+			pubdate data-updated="true">2013/3/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>选取了主流的四种即时消息协议作为预研对象，分别描述了这四种消息技术的原理、适用场景以及限制。</p>
+
+<h3 id="toc_0">XMPP</h3>
+
+<p>XMPP（The Extensible Messaging and Presence Protocol，可扩展的消息通讯与呈现协议），前身是开源即时消息协议 <a href="http://www.jabber.org/">Jabber</a>，现在已经被 IETF 标准化（<a href="http://www.ietf.org/rfc/rfc3920.txt">RFC 3920</a>）。</p>
+
+<p>应用非常广泛，可选择的实现很多，<a href="http://www.igniterealtime.org/projects/openfire/">Openfire</a> 是目前比较成熟的。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pIDQtf-tFsJZ_2e0f4a6C02OuBYE5Qr2WpFLYgQoc_wXaRB_vz13zpAoNPkbaY7KD6Sr7bqPtYwldqB6lQTV6Gq758-fbIQl8/xmpp.gif?psid=1" alt="XMPP"/></p>
+
+<h3 id="toc_1">SIMPLE</h3>
+
+<p>SIMPLE（SIP for Instant Messaging and Presence Leveraging Extensions，基于 SIP 的即时消息与呈现扩展），IBM/微软主推的即时消息协议，虽然 Java 有相关 JSRs（164、165）定义了接口，但没有找到适合的实现。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1p4KVz3qLNvK7CoVUFkHOnnPMV0zNntw81J_c2uC5PDkoVycAhsBO-mFG_nbNwV1TNoPBO_UP6o738vPOvdVys_95bMuYHQanE/simple.png?psid=1" alt="SIMPLE"/></p>
+
+<p>各实体功能如下：</p>
+
+<ul>
+<li>Presence Service：接收、存储和分发 presence information。Presence Service 既可以是一个物理实体上的 server，也可以只是 presentity 和 watcher 之间的直接通信。在具体实现中前者比较常见，后者是 P2P 的模式</li>
+<li>Presentity：用于提供 presence information 给 Presence Service</li>
+<li>Watcher：向 Presence Service 请求获取 Presentity 的 presence information 或者自身的 watcher information</li>
+<li>Principal：指单个的人、程序或者设备，也可以是人、程序、设备的集合体。对于 Presence Service 来说，各个 Principal 是不同的</li>
+<li>Presence User Agent：为 Principal 提供手段来操作 0 个或者多个 Presentity，Principal 操作 Presence User Agent 改变 Presentity 的状态。是 Principal 和 Presentity 交互的 interface</li>
+<li>Watcher User Agent：类似 Presence User Agent，Principal 通过其来操作 0 个或多个 Watcher，Watcher 收到 Presentity 的新状态之后也通过 Watcher User Agent 呈现给 Principal</li>
+<li>Presence Protocol：定义了 Presentity 和 Presence Service，Watcher 和 Presence Service 之间交换消息的一组标准</li>
+<li>在具体的实现中最常见的是把 Presence Service 实现为一个 Presence Server，Presence User Agent 和 Presentity 组合在一起，Watcher 和 Watcher User Agent 组合在一起，由一个终端来同时支持这两种组合体，这样，一个终端就既能订阅别人的也能发布自己的 presence information</li>
+</ul>
+
+<h3 id="toc_2">IRC</h3>
+
+<p>IRC（Internet Relay Chat，互联网中继聊天协议），以服务器中转为原理进行消息转发，机制成熟稳定，应用广泛，可选择的实现较多。</p>
+
+<p><img src="https://py8ifw.dm1.livefilestore.com/y1pYk_HjXE41e-TbezFqQ9VdnWRBcaLlNfkC5_lIfnE7ZKOkLkV20-JdTwxV-3AIbyRetleM8LCZxXFOWV-WpaSmqbIaXbp03UN/irc.png?psid=1" alt="IRC"/></p>
+
+<p>A作为客户端连接到了服务器 S1 的 ChannelX 频道，B 作为客户端连接到了服务器 S2 的 ChannelX 频道，此时 A 发消息后通过 S1 转发给 S2，然后 S2 有把消息发送给了 B。</p>
+
+<p>其中频道是一个广播组，用户可以进入频道，也可以离开频道。当一个用户在频道里发消息时，频道里的其他所有用户都能够收到该消息。当第一个用户进入频道，频道被创建，当最后一个用户离开此频道时，频道被销毁。</p>
+
+<p>在 IRC 服务器网络中，频道由这些服务器共同维护，频道相当于一条通信管道，将所有开通此项频道的服务器贯穿起来，消息在这个管道中流通。</p>
+
+<h3 id="toc_3">PSYC</h3>
+
+<p>PSYC（Protocol for SYnchronous Conferencing，同步会话协议），设计用来取代 IRC，兼容 IRC/XMPP 客户端，据称其可以无限扩容，弥补 IRC/XMPP 中使用 s2s 后服务器网络拓扑膨胀时性能急剧下降的缺陷。</p>
+
+<p>比较新，应用较少，可选择的实现较少。<a href="http://about.psyc.eu/Comparison">http://about.psyc.eu/Comparison</a>。</p>
+
+<h3 id="toc_4">结论</h3>
+
+<p>可选择 XMPP 作为即时消息底层支持协议，Openfire 作为实现。</p>
+
+<p>在单机 Openfire 不能满足用户数时可考虑使用 Openfire Connection Manager 模块增加客户端连接数；配置 Openfire 集群增加整体容量。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2013-03-13-irc-intro.html">互联网中继聊天协议（IRC）</a></h1>
 			<p class="meta"><time datetime="2013-03-13T10:57:26+08:00" 
 			pubdate data-updated="true">2013/3/13</time></p>
@@ -2423,230 +2491,6 @@ Node允许用户在独立的文件夹中方便的组织程序，为这个文件�
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-10-10-small-test-node-module.html">小试Node Node模块</a></h1>
-			<p class="meta"><time datetime="2012-10-10T18:28:07+08:00" 
-			pubdate data-updated="true">2012/10/10</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>模块是Node的基本单位，让我们从模块开始深入了解Node。</p>
-
-<h3 id="toc_0">3.1　CommonJS规范</h3>
-
-<p>JavaScript是一门强大的面向对象的语言，但是JavaScript的标准定义是为了构建基于浏览器的应用程序，它没有一个用于更广泛的应用程序的标准库。CommonJS（官方主页 <a href="http://www.commonjs.org">http://www.commonjs.org</a> ）定义了很多用于普通应用程序（主要指非浏览器应用）使用的API，从而弥补了这个空白。</p>
-
-<p>CommonJS是一种规范，内容包括模块、二进制、编码、文件、系统、断言、套接字、事件队列等。Node是CommonJS的一种实现，但是只实现了它的部分规范。CommonJS有很多实现，如SeaJS、CouchDB和RequireJS等。这些项目大部分也只实现了CommonJS的部分规范（可以在这里查看某个项目的实现部分 <a href="http://www.commonjs.org/impl/">http://www.commonjs.org/impl/</a> ）。</p>
-
-<p>先简要说明一下CommonJS规范对模块的定义。每个模块都有对应的标识符，而标识符有两种：相对标识符与绝对标识符。模块的上下文中有require、exports两个变量。模块的加载是通过模块中的require函数完成，参数是模块的标识符，返回值是被加载模块向外exports导出的属性或方法。</p>
-
-<h3 id="toc_1">3.2　第一个 Node模块</h3>
-
-<p>Node有一个简明的模块加载系统。一个文件就可以被作为一个模块使用，比如，在foo.js文件中加载同一目录下的circle.js模块。</p>
-
-<p>circle.js：</p>
-
-<pre><code>var PI = Math.PI;
-
-exports.area = function (r) {
-  return PI * r * r;
-};
-
-exports.circumference = function (r) {
-  return 2 * PI * r;
-};
-</code></pre>
-
-<p>foo.js：</p>
-
-<pre><code>var circle = require(&#39;./circle.js&#39;);
-console.log( &#39;The area of a circle of radius 4 is &#39;+ circle.area(4));
-</code></pre>
-
-<p>Node模块的定义和使用都非常的简单，只需调用require方法加载模块即可。在foo.js文件中调用require方法完成对circle.js的加载，这样就可以在foo.js文件中使用circle.js文件中定义并exports导出的函数了。这里require的参数是一个相对路径定义的模块标识符。使用相对路径定义的模块的标识符以“./”或者“../”开头，前者表示当前文件夹，后者表示上级文件夹。使用绝对路径定义的模块的标识符以“/”开头，这种方法定义的标识符和文件系统的根目录相关。</p>
-
-<h3 id="toc_2">3.3　模块的分类和加载</h3>
-
-<p>Node模块可以分成两类，一类为核心模块，一类为文件模块。<br/>
-核心模块在Node源代码编译的时候已经被编译成了二进制可执行文件。核心模块的源代码在Node源代码的lib文件夹中可以找到。调用require函数加载模块时，核心模块总是优先被加载。核心模块的模块标识符就是模块名，前面米有路径。例如，require(&#39;http&#39;)总是返回核心模块HTTP模块。核心模块的说明文档可以在官网上面很容易被找到。</p>
-
-<p>文件模块是动态加载的，加载速度较核心模块较慢。文件模块包含三种文件，扩展名分别为.js、.json和.node。文件模块的模块标识符是使用相对路径或者绝对路径定义的模块标识符。如果模块标识符不包含文件的扩展名，显然这样Node无法找到确切的文件，Node将依次将.js、.json、.node三种扩展名添加上再进行加载。例如执行require(&#39;./circle&#39;)时首先查找当前目录circle文件，然后再尝试circle.js文件，加载成功即返回。.js文件被视为JavaScript文本文件，通过核心模块fs模块被读取后编译并执行；.json文件被视为JSON文本文件，读取后会调用JSON.parse被解析加载；.node被视为已编译的C/C++插件模块，通过dlopen方法进行加载。</p>
-
-<p>如果传递给require函数的模块标识符不以“/”、“./”或“../”开头，也不是核心模块名，这时Node会从当前模块所在的目录下的node_modules这个文件夹下查找文件尝试加载。如果还是没有找到，那么Node会跳到上层目录完成同样的动作，知道模块被找到，或者到达根目录为止。例如，如果在文件&#39;/home/ry/projects/foo.js&#39;中调用require(&#39;bar.js&#39;)，Node会在下列位置查找，顺序如下：</p>
-
-<pre><code>/home/ry/projects/node_modules/bar.js
-/home/ry/node_modules/bar.js
-/home/node_modules/bar.js
-/node_modules/bar.js
-</code></pre>
-
-<p>Node允许用户在独立的文件夹中方便的组织程序，为这个文件夹指定一个单一的入口后可以把这个文件夹当作模块被加载。有三种方式可以将文件夹作为require函数的参数。第一种方式是在该文件夹中创建package.json文件，指定一个main模块，一个简单的package.json文件会是这样：</p>
-
-<pre><code>{ &quot;name&quot; : &quot;some-library&quot;,
-  &quot;main&quot; : &quot;./lib/some-library.js&quot; }
-</code></pre>
-
-<p>如果此文件位于./some-library文件夹，加载这个文件夹可以调用require(&#39;./some-library&#39;)，这时会尝试加载./some-library/lib/some-library.js。如果Node在该文件夹下没有找到package.json这个文件，那么Node将依次尝试加载改文件夹下的index.js或index.node文件。例如，如果上面的例子找不到package.json，那么会依次尝试加载：</p>
-
-<pre><code>./some-library/index.js
-./some-library/index.node
-</code></pre>
-
-<p>除了上述的查找目录，Node还会去全局的模块目录查找。如果在系统的环境变量中添加了NODE_PATH，Node会去NODE_PATH 设置的目录中去查找。NODE_PATH 配置的目录为绝对路径，允许多个，用冒号:隔开（Windows下使用分号;）。如果模块还没有找到，Node还会从下面的目录查找：</p>
-
-<pre><code>$HOME/.node_modules
-$HOME/.node_libraries
-$PREFIX/lib/node
-</code></pre>
-
-<p>\(HOME是用户主目录，\)PREFIX是Node安装目录的前缀。</p>
-
-<p>Node模块在首次加载成功后会被缓存起来，这意味着同一模块每次调用require方法得到的是完全相同的对象。</p>
-
-<h3 id="toc_3">3.4　NPM Node包管理器</h3>
-
-<p>NPM（Node  Package Manager），是一个Node包管理工具。NPM可以帮助你很方便的进行包的下载、安装和管理。NPM的实现大部分也遵循CommonJS规范中对包的定义（ <a href="http://wiki.commonjs.org/wiki/Packages/1.0">http://wiki.commonjs.org/wiki/Packages/1.0</a> ）。</p>
-
-<p>一个NPM包有如下结构：<br/>
-* package.json文件位于包顶级目录下，记录包的相关信息；<br/>
-* bin目录下存放C/C++扩展编译后的二进制文件；<br/>
-* lib目录下存放JavaScript代码文件。<br/>
-* doc目录下存放文档；<br/>
-* test目录下存放测试代码。</p>
-
-<p>一个基本的package.json文件是这样的：</p>
-
-<pre><code>{
-  &quot;name&quot;: &quot;chapter3&quot;, 
-  &quot;version&quot;: &quot;0.0.0&quot;,
-  &quot;main&quot;: &quot;./index.js&quot;, 
-  &quot;dependencies&quot;: {
-    &quot;pinyin&quot;: &quot;0.0.1&quot;
-  }
-}
-</code></pre>
-
-<p>name是包名，在NPM库中是唯一的；version是用于标识包的版本，通常为x.y.z；dependencies用于声明需要的依赖。其他字段的说明可以在CommonJS规范中对包的定义的文档中查看。</p>
-
-<h3 id="toc_4">3.5　NPM常用命令介绍</h3>
-
-<p>NPM通过使用npm命令来完成对包的管理操作，这些命令涉及到一个Node包整个生命周期的每一个操作，包括发布、下载、使用或者移除等。</p>
-
-<p>npm install packageName<br/>
-安装一个指定包名的Node包到当前文件夹。<br/>
-npm install -g packageName<br/>
-安装一个指定包名的Node包到Node的安装目录。<br/>
-npm install<br/>
-如果命令中不指定包名，则在当前文件中中寻找package.json文件读取dependencies的值进行安装。<br/>
-npm uninstall packageName<br/>
-卸载一个指定包名的Node包。<br/>
-npm update packageName<br/>
-更新一个指定包名的Node包。<br/>
-npm adduser<br/>
-在NPM仓库上注册一个账号，需要填写用户名、密码和电子邮件地址。<br/>
-npm init<br/>
-初始化一个Node包，根据输入的内容创建一个package.json文件。<br/>
-npm publish<br/>
-发布一个Node包。<br/>
-npm unpublish<br/>
-移除一个Node包。<br/>
-npm search packageName<br/>
-查找一个指定包名的Node包。<br/>
-npm help <command><br/>
-获取npm的帮助信息。</p>
-
-<p>以上仅仅只介绍了一些相对比较常用的命令，其他命令及详细使用说明可以使用help命令查看，或者在NPM的官方网站（ <a href="http://npmjs.org/">http://npmjs.org/</a> ）查看。NPM除了提供search命令用来查找Node包，NPM也提供了网页的形式（ <a href="http://search.npmjs.org/">http://search.npmjs.org/</a> ）供访问。现在通过NPM发布的Node包的数量已经达到一万多。如果你开发了一个Node包，非常期待你发布到NPM上去，为Node平台添砖加瓦。</p>
-
-<h3 id="toc_5">3.6　依赖的问题</h3>
-
-<h4 id="toc_6">3.6.1  循环依赖</h4>
-
-<p>循环依赖，是指两个文件互引用对方。例如a.js文件中require b.js文件，而b.js文件中又require a.js文件，这样造成一个死循环。让我们来看一下的代码：<br/>
- a.js：</p>
-
-<pre><code>console.log(&#39;a starting&#39;);
-exports.done = false;
-var b = require(&#39;./b.js&#39;);
-console.log(&#39;in a, b.done = %j&#39;, b.done);
-exports.done = true;
-console.log(&#39;a done&#39;);
-</code></pre>
-
-<p>b.js：</p>
-
-<pre><code>console.log(&#39;b starting&#39;);
-exports.done = false;
-var a = require(&#39;./a.js&#39;);
-console.log(&#39;in b, a.done = %j&#39;, a.done);
-exports.done = true;
-console.log(&#39;b done&#39;);
-</code></pre>
-
-<p>main.js：</p>
-
-<pre><code>console.log(&#39;main starting&#39;);
-var a = require(&#39;./a.js&#39;);
-var b = require(&#39;./b.js&#39;);
-console.log(&#39;in main, a.done=%j, b.done=%j&#39;, a.done, b.done);
-
-</code></pre>
-
-<p>当main.js加载a.js时，a.js也会加载b.js。在这个时候b.js也会反过来加载a.js。为了防止这样一个死循环，a.js返回了一个未完成的exports对象给b.js。当b.js加载完成，它会将它的exports对象返回给a.js，然后a.js会继续完成加载。运行main.js输出如下：</p>
-
-<pre><code>main starting 
-a starting 
-b starting 
-in b, a.done = false 
-b done 
-in a, b.done = true 
-a done 
-in main, a.done=true, b.done=true 
-</code></pre>
-
-<h4 id="toc_7">3.6.1  传递依赖</h4>
-
-<p>传递依赖，是指重复的间接依赖。Node对模块有缓存机制，Node是靠模块的路径来判断是否已经被加载的，当这个模块的路径变了，就会被重新加载。当然在我们自己的应用中不会把一个文件拷贝成双份放到两个不同的目录然后去使用，这种重复加载的情况完全可以避免。但是当Node包出现传递依赖的时候，就会出现模块被重复加载。例如，一个项目同时依赖mine包和express包，express也依赖mine包，使用NPM安装包后文件目录结构如下：</p>
-
-<pre><code>./node_modules
-├── mime
-└── express
-    └── node_modules
-        └── mime
-</code></pre>
-
-<p>从目录上可以看到mime包出现了两次，可以说有两个完全相同的包，这个包中的模块会被重复加载两次，产生了两个模块的实例。</p>
-
-<p>如果你对Maven很熟悉，你会知道Maven在处理传递依赖的版本确定规则为：深度越浅，越被优先选择；若两个依赖包处于依赖树的同一层则优先选择排列在前面的。Node中的包是以文件夹的形式存在的，所以不会存在同一层中存在相同的包。当两个依赖包处于不同层时，Maven不管两个包的版本只会选择深度较浅的那个依赖包，也就是说只会选择一个版本。Node则不然，Node会产生两个不同的实例，会多版本共存。如果你想避免这种重复加载，你可以手动删除深度较深的包，只保留在公共路径上的包。</p>
-
-<p>当嵌套依赖关系的层次很深时，文件的查找列表可能会变的很长。因此Node在查找时进行如下优化：/node_modules不会附加到一个以/node_modules结尾的文件夹后面。例如，如果在文件&#39;/home/ry/projects/foo/node_modules/bar/node_modules/baz/quux.js&#39;中调用require函数时，会搜索如下目录：</p>
-
-<pre><code>/home/ry/projects/foo/node_modules/bar/node_modules/baz/node_modules/
-/home/ry/projects/foo/node_modules/bar/node_modules/node_modules/
-/home/ry/projects/foo/node_modules/bar/node_modules/
-/home/ry/projects/foo/node_modules/node_modules/
-/home/ry/projects/foo/node_modules/
-/home/ry/projects/node_modules/
-/home/ry/node_modules/
-/home/node_modules/
-/node_modules/
-</code></pre>
-
-<h3 id="toc_8">3.7　小结</h3>
-
-<p>我们在这一章学习了Node的模块和包，具体内容如下：<br/>
-* CommonJS是一种规范，Node是CommonJS的一种实现； <br/>
-* Node模块可以分成两类，一类为核心模块，一类为文件模块；<br/>
-* NPM，是一个Node包管理工具，过使用npm命令来完成对包的管理操作；<br/>
-* Node模块存在循环依赖和传递依赖这两种问题，在使用中需要注意。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_8.html">&larr; Older</a> 
@@ -2672,6 +2516,12 @@ in main, a.done=true, b.done=true
 	  
 	      
 		      <li class="post">
+		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
 		      </li>
 	     
@@ -2691,12 +2541,6 @@ in main, a.done=true, b.done=true
 	      
 		      <li class="post">
 		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-27-benefits-and-pitfalls-of-micro-service.html">微服务的好处和陷阱</a>
 		      </li>
 	     
 	  
