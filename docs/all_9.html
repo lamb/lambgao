@@ -88,6 +88,75 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-03-31-how-to-skip-filters-in-java.html">如何跳过过滤器处理？</a></h1>
+			<p class="meta"><time datetime="2012-03-31T17:02:45+08:00" 
+			pubdate data-updated="true">2012/3/31</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>假如应用中存在多个过滤器，如何在第一个过滤器处理时根据某些条件跳过后续过滤器处理？这里提供了两种方式来解决这个问题。</p>
+
+<h4 id="toc_0">方式一：</h4>
+
+<p>在后续过滤器中根据前面过滤器处理后设置的标识手动跳过。标识可以放在 Request Attributes 里。</p>
+
+<pre><code>public class FirstFilter implements Filter {
+    //...
+ 
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        servletRequest.setAttribute(&quot;executeSecondFilter&quot;, true);
+        //...
+        if(someReason)
+            servletRequest.setAttribute(&quot;executeSecondFilter&quot;, false);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+}
+ 
+public class SecondFilter implements Filter {
+    //..
+ 
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        if (servletRequest.getAttribute(&quot;executeSecondFilter&quot;) == null || !((Boolean) servletRequest.getAttribute(&quot;executeSecondFilter&quot;))) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+        //...
+    }
+}
+</code></pre>
+
+<h4 id="toc_1">方式二：</h4>
+
+<p>过滤器处理时，不进行后续过滤器链处理（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/Filter.html#doFilter%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse,%20javax.servlet.FilterChain%29">FilterChain#doFilter()</a>），而是直接转发请求给 Servlet（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/RequestDispatcher.html#forward%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse%29">RequestDispatcher#forward()</a>）。</p>
+
+<pre><code>if (condition) {
+    request.getRequestDispatcher(httpServletRequest.getServletPath() + httpServletRequest.getPathInfo()).forward(request, response);
+} else {
+    chain.doFilter(request, response);
+}
+</code></pre>
+
+<p>这样会跳过后续的所有过滤器处理，如果有某个过滤器仍然需要进行处理，那可以在 web.xml 中配置该过滤器 <filter-mapping>：</p>
+
+<p><code>&lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;</code></p>
+
+<p>细节可参阅 Servlet 3.0 规范（<a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">JSR-315</a>）6.2.5 Filters and the RequestDispatcher</p>
+
+<p>参考：</p>
+
+<ul>
+<li>StackOverflow：<a href="http://stackoverflow.com/questions/3738162/how-to-skip-a-filter-in-the-filter-chain-in-java">How to skip a filter in the filter chain in java</a></li>
+<li><a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">Servlet 3.0 规范</a></li>
+</ul>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-03-30-distributed-transaction-principle.html">分布式事务原理</a></h1>
 			<p class="meta"><time datetime="2012-03-30T16:54:11+08:00" 
 			pubdate data-updated="true">2012/3/30</time></p>
@@ -850,44 +919,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-09-03-transaction_isolation.html">GAE 事务隔离</a></h1>
-			<p class="meta"><time datetime="2011-09-03T14:47:08+08:00" 
-			pubdate data-updated="true">2011/9/3</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h4 id="toc_0">一致性</h4>
-
-<p>GAE 上的事务隔离是快照隔离。在事务开启后，可以把事务中操作的实体组看作是该实体组在数据存储中的一个带有版本的快照。</p>
-
-<p>事务中的所有操作都将只针该快照进行，并且事务中的查询操作只能获取到事务开启时快照中的实体。这一点<a href="/2010-11-15-gae-transaction.html">前面已经提到过</a> ;-)</p>
-
-<p>快照隔离的最终目的就是乐观并发控制，保证一致性。</p>
-
-<h4 id="toc_1">可用性</h4>
-
-<p>GAE 一直在限制事务内只能操作同一个实体组是有原因的。同一实体组将被存储在同一 Google 分布式存储单元中，如果事务中</p>
-
-<p>同时操作多个实体组，失败的可能性会增加很多。所以为了保证可用性，才做出了这个限制。</p>
-
-<p>不过这个限制即将为可选的，SDK 1.5.3 里面已经加入了<a href="http://code.google.com/appengine/docs/java/javadoc/com/google/appengine/api/datastore/TransactionOptions.html">事务配置</a>，可以让事务操作多个实体组。不过目前经测试，1.5.3 里面还不可用。</p>
-
-<p>参考</p>
-
-<ul>
-<li><a href="http://code.google.com/appengine/docs/java/datastore/transactions.html">Google App Engine Transactions</a></li>
-<li><a href="http://code.google.com/appengine/articles/transaction_isolation.html">Transaction Isolation in App Engine</a></li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_10.html">&larr; Older</a> 
@@ -913,6 +944,12 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	  
 	      
 		      <li class="post">
+		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
 		      </li>
 	     
@@ -932,12 +969,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	      
 		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
 	  

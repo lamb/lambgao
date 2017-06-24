@@ -88,6 +88,48 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a></h1>
+			<p class="meta"><time datetime="2014-05-07T00:31:56+08:00" 
+			pubdate data-updated="true">2014/5/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在Mac下可以通过往/etc/launchd.conf文件中追加命令去来实现对一些环境变量的设置</p>
+
+<pre><code>setenv  HOME  /PATH
+</code></pre>
+
+<p>intellij idea下会默认去读取M2_HOME这个环境变量，可以往/etc/launchd.conf文件中追加命令</p>
+
+<pre><code>setenv M2_HOME /Users/Lamb/Applications/maven/apache-maven-3.2.1
+</code></pre>
+
+<p>mac下面安装了最新版本的jdk(如1.8)，但是运行eclipse和idea还是提示需要安装jre,如果点击同意会自动安装一个jre6，安装至下面的路径：</p>
+
+<pre><code>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</code></pre>
+
+<p>但是其实不需要安装，只需要设置一下JAVA_HOME环境变量即可，安装最新版本的jdk会被安装至下面的路径：</p>
+
+<pre><code>/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
+</code></pre>
+
+<p>可以往/etc/launchd.conf文件中追加命令</p>
+
+<pre><code>setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
+</code></pre>
+
+<p>如果你安装了苹果提供的jre6，也就是想当于设置了JAVA_HOME为jre6，这样在运行java应用程序（如java ***）或者依赖于java的应用程序（如mvn ***）时，默认使用的是jre6，eclipse和idea的运行是没有问题的，但是运行maven命令行是有可能会出现错误。如果你的maven-compiler-plugin插件中的编译级别高于1.6，比如设置为1.8。但是运行mvn tomcat7:run时maven的jre版本却为1.6,相当于用jre6来运行1.8编译的代码，这肯定会出现一些问题的。这也可以通过上面重新设置JAVA_HOME来解决。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-05-06-system-health-status.html">系统健康状态管理设计思路</a></h1>
 			<p class="meta"><time datetime="2014-05-06T10:54:53+08:00" 
 			pubdate data-updated="true">2014/5/6</time></p>
@@ -918,126 +960,6 @@ sudo chroot /media/ubuntu/xxx
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2013-12-17-building-android-projects-with-gradle.html">使用Gradle构建Android项目</a></h1>
-			<p class="meta"><time datetime="2013-12-17T17:26:29+08:00" 
-			pubdate data-updated="true">2013/12/17</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在最近的Google IO大会上我注意到Android Studio开发环境引起了大家的关注。我发现Eclipse经常会变慢而且健壮性不强，所以一个新的替代Android IDE是最受欢迎的消息。在仔细关注这次的发布时，我发现另一个亮点是基于Gradle的Android项目新的构建系统。因此我决定更仔细地了解Gradle。</p>
-
-<p>下面列举了一些使用Gradle构建Android项目的好处：</p>
-
-<ul>
-<li>在IDE环境和命令行下使用同一个构建系统</li>
-<li>改进的依赖关系管理</li>
-<li>更容易地集成到自动化构建系统</li>
-</ul>
-
-<p>一个额外的好处来自Android函数库包格式“aar”格式。以前，Android函数库通常需要被导入到IDE以此将App需要的资源加入编译。但是现在的Android函数库可以被直接包含，与“jar”文件被Java项目包含的方式类似。这项功能虽然出现已久，但确实非常受欢迎。</p>
-
-<p>下面是我一个项目的gradle构建脚本：</p>
-
-<pre><code>buildscript {
-    //定义一些项目需要的JAR函数库
-    LIBS_DIR = &quot;../../../libs&quot;
- 
-    //需要从maven中央库得到gradle的android插件
-    repositories {
-        mavenCentral()
-    }
- 
-    dependencies {
-        classpath &#39;com.android.tools.build:gradle:0.4.2&#39;
-    }
-}
- 
-//声明项目是一个android构建
-apply plugin: &#39;android&#39;
- 
-dependencies {
-    //同时用本地maven库查找依赖
-    repositories {
-        mavenLocal()
-    }
- 
-    //下面是一些app需要的jar文件
-    compile files(&quot;${LIBS_DIR}/hiscore/hiscore.jar&quot;)
-    compile files(&quot;${LIBS_DIR}/GoogleAnalytics/libGoogleAnalytics.jar&quot;)
- 
-    //这是一个我存放在本地maven仓库（使用“aar”格式）的android函数库
-    compile (&#39;com.mopub.mobileads:mopub-android-sdk:unknown&#39;)
-}
- 
-//android构建的项目定义
-android {
-    compileSdkVersion 15
-    buildToolsVersion &quot;17.0.0&quot;
- 
-    //下面的代码路径不是推荐的新项目结构
-    //我仍然使用的Eclipse风格结构
-    sourceSets {
-        main {
-            manifest.srcFile &#39;AndroidManifest.xml&#39;
-            java.srcDirs = [&#39;src&#39;]
- 
-            resources.srcDirs = [&#39;src&#39;]
-            aidl.srcDirs = [&#39;src&#39;]
- 
-            renderscript.srcDirs = [&#39;src&#39;]
- 
-            res.srcDirs = [&#39;res&#39;]
-            assets.srcDirs = [&#39;assets&#39;]
-        }
- 
-        instrumentTest.setRoot(&#39;tests&#39;)
-    }
- 
-    //声明创建一个带签名的发布版本细节
-    signingConfigs {
-        release {
-            storeFile file(&quot;../keys/android.keystore&quot;)
-            storePassword &quot;######&quot;
-            keyAlias &quot;######&quot;
-            keyPassword &quot;######&quot;           
-        }
-    }
- 
-    //声明此发布构建在签名之前需要运行proguard
-    buildTypes {
-        release {
-            runProguard true
-            proguardFile getDefaultProguardFile(&#39;proguard-android.txt&#39;)
-            proguardFile &#39;proguard.cfg&#39;
-            signingConfig signingConfigs.release
-        }    
-    }    
-}
-</code></pre>
-
-<p>从命令行构建app可以运行下面的命令：</p>
-
-<pre><code>gradle assembleDebug    #debug构建
-gradle assembleRelease  #release构建
-</code></pre>
-
-<p>我以前用过Maven做了几个项目，发现用Maven来管理项目配置非常有用，尤其是在依赖管理方面。但是我发现Maven在某些情况下缺少灵活性，你不得不为某些特殊的情况进行自定义。理论上你可以编写自己的Maven插件，但实践起来大多数用户不会这么做通常他们会依赖现有的插件。所以我经常使用Ant而不是Maven，因为它在处理项目特殊操作，比如拷贝或修改代码文件时更加灵活。</p>
-
-<p>Gradle看上去在这两方面都做得很好：通过插件为绝大多数的常用情况提供了全面支持，管理依赖关系方面与Maven做得同样好；同时也提供了良好的灵活性，在需要修改构建脚本时可以自由地定制。</p>
-
-<p>我相信Gradle是构建Android应用的趋势。Gradle还提供了很多其他很赞的特性，例如构建“佐料（flavors）”等，本文没有涉及。我相信Google采用Gradle是在Android发展上的一个重要进步。现在，我会将其他的项目都转为使用Gradle。</p>
-
-<p>原文链接： <a href="http://spweblog.blogspot.com/2013/07/building-android-projects-with-gradle.html">spweblog.blogspot.com</a></p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_6.html">&larr; Older</a> 
@@ -1063,6 +985,12 @@ gradle assembleRelease  #release构建
 	  
 	      
 		      <li class="post">
+		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
 		      </li>
 	     
@@ -1082,12 +1010,6 @@ gradle assembleRelease  #release构建
 	      
 		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
 	  

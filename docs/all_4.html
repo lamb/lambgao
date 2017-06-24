@@ -88,6 +88,30 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-09-02-optionals-case-study.html">Swift中Optional类型的使用案例分析：valuesForKeys</a></h1>
+			<p class="meta"><time datetime="2014-09-02T22:53:15+08:00" 
+			pubdate data-updated="true">2014/9/2</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>这篇文章将带我们探索在Swift中如何使用Optional类型保证强类型的安全性。我们将创建一个Swift版本的Objective-C的API。虽然在Swift中这个API存在的意义不是很大，但是这将会是一个很有趣的例子。</p>
+
+<p>在Objective-C中，NSDictionary类有一个方法，名为-objectsForKeys:notFoundMarker:，它的作用是根据第一个NSArray类型参数中的值作为该字典的key，查找这些key对应的字典中的值，并放到一个新的NSArray中返回，如果找不到对应的值，那么就返回第二个参数指定的对象。在官方文档中对该方法有这么一句描述“返回的数组中的第N个对象，对应着第一个数组参数中的第N个值”。假如说以第一个数组参数中的第三个值作为key在字典中查不到值怎么办呢？这时候就需要notFoundMarker参数登场了。这种情况下就会返回notFoundMarker参数指定的对象了。在Foundation框架中还有专门针对该情况适用的一个类，那就是NSNull，就是当你也没有备选返回对象的时候，就可以返回NSNull对象。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-09-02-optionals-case-study.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-09-01-closure-expressions-in-swift.html">Swift中的闭包（Closure）</a></h1>
 			<p class="meta"><time datetime="2014-09-01T22:57:30+08:00" 
 			pubdate data-updated="true">2014/9/1</time></p>
@@ -736,48 +760,6 @@ export PATH=$MONGO_HOME/bin:$PATH
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a></h1>
-			<p class="meta"><time datetime="2014-05-07T00:31:56+08:00" 
-			pubdate data-updated="true">2014/5/7</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在Mac下可以通过往/etc/launchd.conf文件中追加命令去来实现对一些环境变量的设置</p>
-
-<pre><code>setenv  HOME  /PATH
-</code></pre>
-
-<p>intellij idea下会默认去读取M2_HOME这个环境变量，可以往/etc/launchd.conf文件中追加命令</p>
-
-<pre><code>setenv M2_HOME /Users/Lamb/Applications/maven/apache-maven-3.2.1
-</code></pre>
-
-<p>mac下面安装了最新版本的jdk(如1.8)，但是运行eclipse和idea还是提示需要安装jre,如果点击同意会自动安装一个jre6，安装至下面的路径：</p>
-
-<pre><code>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-</code></pre>
-
-<p>但是其实不需要安装，只需要设置一下JAVA_HOME环境变量即可，安装最新版本的jdk会被安装至下面的路径：</p>
-
-<pre><code>/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
-</code></pre>
-
-<p>可以往/etc/launchd.conf文件中追加命令</p>
-
-<pre><code>setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home
-</code></pre>
-
-<p>如果你安装了苹果提供的jre6，也就是想当于设置了JAVA_HOME为jre6，这样在运行java应用程序（如java ***）或者依赖于java的应用程序（如mvn ***）时，默认使用的是jre6，eclipse和idea的运行是没有问题的，但是运行maven命令行是有可能会出现错误。如果你的maven-compiler-plugin插件中的编译级别高于1.6，比如设置为1.8。但是运行mvn tomcat7:run时maven的jre版本却为1.6,相当于用jre6来运行1.8编译的代码，这肯定会出现一些问题的。这也可以通过上面重新设置JAVA_HOME来解决。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_5.html">&larr; Older</a> 
@@ -803,6 +785,12 @@ export PATH=$MONGO_HOME/bin:$PATH
 	  
 	      
 		      <li class="post">
+		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
 		      </li>
 	     
@@ -822,12 +810,6 @@ export PATH=$MONGO_HOME/bin:$PATH
 	      
 		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
 	  

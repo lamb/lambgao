@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2017-02-16T16:17:28+08:00</updated>
+  <updated>2017-02-16T16:18:14+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,136 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a]]></title>
+    <link href="http://lambgao.com/2017-06-24-ios-arm.html"/>
+    <updated>2017-06-24T13:03:13+08:00</updated>
+    <id>http://lambgao.com/2017-06-24-ios-arm.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">一、概要</h3>
+
+<p>平时项目开发中，可能使用第三方提供的静态库.a，如果.a提供方技术不成熟，使用的时候就会出现问题，例如：</p>
+
+<p>在真机上编译报错：No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=x86_64, VALID_ARCHS=i386).</p>
+
+<p>在模拟器上编译报错：No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=armv7s, VALID_ARCHS=armv7 armv6).</p>
+
+<p>要解决以上问题，就要了解一下Apple移动设备处理器指令集相关的一些细节知识。</p>
+
+<h3 id="toc_1">二、几个重要概念</h3>
+
+<h4 id="toc_2">1、ARM</h4>
+
+<p>ARM处理器，特点是体积小、低功耗、低成本、高性能，所以几乎所有手机处理器都基于ARM，在嵌入式系统中应用广泛。</p>
+
+<h4 id="toc_3">2、ARM处理器指令集</h4>
+
+<p>armv6｜armv7｜armv7s｜arm64都是ARM处理器的指令集，这些指令集都是向下兼容的，例如armv7指令集兼容armv6，只是使用armv6的时候无法发挥出其性能，无法使用armv7的新特性，从而会导致程序执行效率没那么高。</p>
+
+<p>还有两个我们也很熟悉的指令集：i386｜x86_64 是Mac处理器的指令集，i386是针对intel通用微处理器32架构的。x86_64是针对x86架构的64位处理器。所以当使用iOS模拟器的时候会遇到i386｜x86_64，ios模拟器没有arm指令集。</p>
+
+<h4 id="toc_4">3、目前iOS移动设备指令集</h4>
+
+<p>arm64：iPhone5S｜ iPad Air｜ iPad mini2(iPad mini with Retina Display)</p>
+
+<p>armv7s：iPhone5｜iPhone5C｜iPad4(iPad with Retina Display)</p>
+
+<p>armv7：iPhone3GS｜iPhone4｜iPhone4S｜iPad｜iPad2｜iPad3(The New iPad)｜iPad mini｜iPod Touch 3G｜iPod Touch4</p>
+
+<p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch（一般不需要去支持）</p>
+
+<h4 id="toc_5">4、Xcode中指令集相关选项（Build Setting中）</h4>
+
+<h5 id="toc_6">（1）Architectures</h5>
+
+<p>Space-separated list of identifiers. Specifies the architectures (ABIs, processor models) to which the binary is targeted. When this build setting specifies more than one architecture, the generated binary may contain object code for each of the specified architectures. </p>
+
+<p>指定工程被编译成可支持哪些指令集类型，而支持的指令集越多，就会编译出包含多个指令集代码的数据包，对应生成二进制包就越大，也就是ipa包会变大。</p>
+
+<h5 id="toc_7">（2）Valid Architectures</h5>
+
+<p>Space-separated list of identifiers. Specifies the architectures for which the binary may be built. During the build, this list is intersected with the value of ARCHS build setting; the resulting list specifies the architectures the binary can run on. If the resulting architecture list is empty, the target generates no binary. </p>
+
+<p>限制可能被支持的指令集的范围，也就是Xcode编译出来的二进制包类型最终从这些类型产生，而编译出哪种指令集的包，将由Architectures与Valid Architectures（因此这个不能为空）的交集来确定，例如：</p>
+
+<p>比如，你的Valid Architectures设置的支持arm指令集版本有：armv7/armv7s/arm64，对应的Architectures设置的支持arm指令集版本有：armv7s，这时Xcode只会生成一个armv7s指令集的二进制包。</p>
+
+<p>再比如：将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s</p>
+
+<p>在Xcode6.1.1里的 Valid Architectures  设置里， 默认为 Standard architectures(armv7,arm64),如果你想改的话，自己在other中更改。</p>
+
+<p>原因解释如下： </p>
+
+<p>使用 standard architectures (including 64-bit)(armv7,arm64) 参数，则打的包里面有32位、64位两份代码，在iPhone5s（ iPhone5s的cpu是64位的 ）下，会首选运行64位代码包， 其余的iPhone（ 其余iPhone都是32位的,iPhone5c也是32位 ），只能运行32位包，但是包含两种架构的代码包，只有运行在ios6，ios7系统上。 </p>
+
+<p>这也就是说，这种打包方式，对手机几乎没要求，但是对系统有要求，即ios6以上。 </p>
+
+<p>而使用 standard architectures (armv7,armv7s) 参数， 则打的包里只有32位代码， iPhone5s的cpu是64位，但是可以兼容32位代码，即可以运行32位代码。但是这会降低iPhone5s的性能。 其余的iPhone对32位代码包更没问题， 而32位代码包，对系统也几乎也没什么限制。 </p>
+
+<p>所以总结如下：  </p>
+
+<p>要发挥iPhone5s的64位性能，就要包含64位包，那么系统最低要求为ios6。 如果要兼容ios5以及更低的系统，只能打32位的包，系统都能通用，但是会丧失iPhone5s的性能。</p>
+
+<h5 id="toc_8">（3）Build Active Architecture Only</h5>
+
+<p>指定是否只对当前连接设备所支持的指令集编译</p>
+
+<p>当其值设置为YES，这个属性设置为yes，是为了debug的时候编译速度更快，它只编译当前的architecture版本，而设置为no时，会编译所有的版本。 编译出的版本是向下兼容的，连接的设备的指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。比如你设置此值为yes，用iphone4编译出来的是armv7版本的，iphone5也可以运行，但是armv6的设备就不能运行。  所以，一般debug的时候可以选择设置为yes，release的时候要改为no，以适应不同设备。 </p>
+
+<h6 id="toc_9">1）</h6>
+
+<p>Architectures:  armv7, armv7s, arm64</p>
+
+<p>ValidArchitectures:  armv6, armv7s, arm64</p>
+
+<p>生成二进制包支持的指令集： arm64</p>
+
+<h6 id="toc_10">2）</h6>
+
+<p>Architectures: armv6, armv7, armv7s</p>
+
+<p>Valid Architectures:  armv6, armv7s, arm64</p>
+
+<p>生成二进制包支持的指令集： armv7s </p>
+
+<h6 id="toc_11">3）</h6>
+
+<p>Architectures: armv7, armv7s, arm64</p>
+
+<p>Valid Architectures: armv7，armv7s</p>
+
+<p>这种情况是报错的，因为允许使用指令集中没有arm64。</p>
+
+<p>注：如果你对ipa安装包大小有要求，可以减少安装包的指令集的数量，这样就可以尽可能的减少包的大小。当然这样做会使部分设备出现性能损失，当然在普通应用中这点体现几乎感觉不到，至少不会威胁到用户体检。</p>
+
+<h3 id="toc_12">三、制作静态库.a是指令集选择</h3>
+
+<p>现在回归到正题，如何制作一个“没有问题”的.a静态库，通过以上信息了解到，当我们做App的时候，为了追求高效率，并且减小包的大小，Build Active Architecture Only设置成YES，Architectures按Xcode默认配置就可以，因为arm64向前兼容。但制作.a静态库就不同了，因为要保证兼容性，包括不同iOS设备以及模拟器运行不出错，所以结合当前行业情况，要做到最大的兼容性。</p>
+
+<p>ValidArchitectures设置为：armv7｜armv7s｜arm64｜i386｜x86_64 </p>
+
+<p>Architectures设置不变（或根据你需要）:  armv7｜arm64</p>
+
+<p>然后分别选择iOS设备和模拟器进行编译，最后找到相关的.a进行合包，使用lipo -create 真机库.a的路径 模拟器库.a的的路径 －output 合成库的名字.a（详情可以参考<a href="http://blog.csdn.NET/lizhongfu2013/article/details/12648633%EF%BC%89">http://blog.csdn.NET/lizhongfu2013/article/details/12648633）</a></p>
+
+<p>这样就制作了一个通用的静态库.a</p>
+
+<p>.a 与 FrameWork 合并技巧</p>
+
+<p>查看.a 和 FrameWork 的适配机型  </p>
+
+<pre><code>lipo -create Debug-iphoneos/libMJRefresh.a Debug-iphonesimulator/libMJRefresh.a -output libMJRefresh.a
+
+lipo -create /Users/harvey/Library/Developer/Xcode/DerivedData/FMDB-ctegiztcjikewoeprxxtmryzetfa/Build/Products/Release-iphoneos/libFMDB.a /Users/harvey/Library/Developer/Xcode/DerivedData/FMDB-ctegiztcjikewoeprxxtmryzetfa/Build/Products/Release-iphonesimulator/libFMDB.a -output /Users/harvey/Desktop/libFMDB.a
+
+lipo -create /Users/harvey/Library/Developer/Xcode/DerivedData/FMDB-clvayfrjgytqrbdkyqrtcjkxfeuz/Build/Products/Release-iphonesimulator/FMDB.framework/FMDB /Users/harvey/Library/Developer/Xcode/DerivedData/FMDB-clvayfrjgytqrbdkyqrtcjkxfeuz/Build/Products/Release-iphoneos/Release-iphoneos.framework/FMDB -output /Users/harvey/Desktop/FMDB
+
+Architectures in the fat file: /Users/kunkkaqi/Desktop/TestFrameWork.framework/TestFrameWork.lipo are: i386 armv7 armv7s x86_64 arm64 
+</code></pre>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[不越狱iOS自动抢红包]]></title>
@@ -1670,124 +1800,6 @@ b = branch
 </code></pre>
 
 <p>具体可以根据个人习惯进行添加修改。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[你保存用户密码的姿势正确吗？]]></title>
-    <link href="http://lambgao.com/2016-02-24-secure-salted-password-hashing.html"/>
-    <updated>2016-12-28T00:15:22+08:00</updated>
-    <id>http://lambgao.com/2016-02-24-secure-salted-password-hashing.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">摘要</h3>
-
-<p>这几年陆陆续续有很多大站被脱裤，最终导致了很多用户的密码明文泄露。本文不探讨脱裤技术，主要研究的是如何正确（尽量安全）地保存用户密码。</p>
-
-<h3 id="toc_1">哈希</h3>
-
-<p>“把明文加密后再保存数据库”应该是大家的共识。这个过程应该是不可逆的（不能通过加密后的串再得到原文），所以对于这个“加密”过程更贴切的叫法应该是 - 哈希：</p>
-
-<p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的。就是把任意长度的输入通过散列算法变换成固定长度的输出，该输出就是散列值。<br/>
-这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出，所以不可能从散列值来唯一的确定输入值。<br/>
-简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
-
-<p>我们常用的 Hash 算法主要就是 MD5 和 SHA，并且很多时候我们就是使用其中一种来加密用户密码的。<br/>
-以上两类哈希算法主要是用于校验文件/数字签名，但并不适合用来保护用户密码，虽然对于我们来说_感觉上_似乎起到了一定安全防护的效果，但其实效果很差，特别是 MD5，秒秒钟就可以找到碰撞值。</p>
-
-<span id="more"></span><!-- more -->
-
-<h3 id="toc_2">加盐</h3>
-
-<p>上面我们提到过，将用户明文直接哈希后保存并不是正确的姿势，那加盐后呢？</p>
-
-<p>我们先看下加盐解决的问题：如果两个用户密码一样，那么哈希后的值也是一样，攻击者通过查表法很容易就能破解原文并且一石多鸟。因为攻击者不知道用户的颜值和哈希算法，所以不大可能破解。</p>
-
-<p>加盐的确是正确的思路，前提是：</p>
-
-<ul>
-<li>盐长度不能太短，并且必须是随机生成的</li>
-<li>用户更新密码的同时也需要更新盐值</li>
-</ul>
-
-<p>并且加盐后使用的算法非常非常重要，而恰恰是这一点大家都没怎么弄对。</p>
-
-<h3 id="toc_3">加盐哈希</h3>
-
-<p>我们直接说结论吧：</p>
-
-<ul>
-<li>不要使用自己设计的算法（比如 sha1(sha1(password+salt))、sha1(md5(salt) + md5(password)) 等类似的）</li>
-<li>要使用 <a href="%5Bhttps://en.wikipedia.org/wiki/Crypt_(Unix)#Library_Function_crypt.283.29%5D(https://en.wikipedia.org/wiki/Crypt_(Unix)#Library_Function_crypt.283.29)">crypt</a> 函数并且使用安全算法的参数（\(2y\), \(5\), \(6\)）。*nix 系统正是使用 crypt 来保护用户口令的，我们应该使用这样久经考验的姿势
-使用流程</li>
-</ul>
-
-<p>以 golang 代码举例：</p>
-
-<pre><code>package main
-
-import (
-    &quot;fmt&quot;
-
-    &quot;github.com/kless/osutil/user/crypt/sha512_crypt&quot;
-)
-
-func main() {
-    // 1. 生成密码安全处理后 hash 串
-    c := sha512_crypt.New()
-    hash, _ := c.Generate([]byte(&quot;secret&quot;), nil) // 第二个参数是 salt，设置为 nil 表示自动生成 salt
-
-    fmt.Println(hash)
-
-    // 2. 将该 hash 存库
-    // ....
-
-    // 3. 用户登录验证
-    userInput := &quot;secret&quot;
-    inputHash, _ := c.Generate([]byte(userInput), []byte(hash)) // 第一个参数是用户输入的密码，第二个参数是数据库中取出的 hash 串
-    if inputHash == hash {
-       fmt.Println(&quot;登录成功&quot;)
-    } else {
-       fmt.Println(&quot;登录失败&quot;)
-    }
-}
-</code></pre>
-
-<p>输出形如：</p>
-
-<pre><code>$6$P0pVrLOL89I7Y4.Y$IlUd2ABQnUcSecMr2nMgB8lay58RXrQGODwVOQHtfP7IYr.mpGE7dn5.nmxxb9RWkM8o/rNNJCxs3mLKsB5Xl.
-登录成功
-</code></pre>
-
-<p>要理解第 3 步中的验证原理，需要先知道 salt 的格式。在上面的例子中，我们没有指定 salt，而是使用自动生成的，最终生成的 hash 串中也是带有这个 salt 值的，也就是 \(6\)P0pVrLOL89I7Y4.Y$ 这个部分。</p>
-
-<p>我们指定一下 salt 再调用函数就清晰一些了：</p>
-
-<pre><code>hash, _ := c.Generate([]byte(&quot;secret&quot;), []byte(&quot;$6$rounds=5000$saltstr&quot;))
-</code></pre>
-
-<p>输出：</p>
-
-<pre><code>$6$rounds=5000$saltstr$SH73gRYn1O7I/XTiq3AjDklhcqGvJ9vp65/TuFq2vQOoJEaejlTvsXOfy3dBpHju9v0Vi.VOcFh.79yy/kksl1
-</code></pre>
-
-<ul>
-<li>$6：指定了 crypt 算法为 SHA512</li>
-<li>$rounds=5000：指定了迭代 5000 次</li>
-<li>$saltstr：盐值</li>
-</ul>
-
-<p>也就是说，salt 这个参数实际上是定义了算法、盐值两个部分。</p>
-
-<p>回到登录验证的例子，第 3 步中把用户输入的密码和数据库中取出的 hash 作为 salt 加密就很好理解了，其实数据库中取出的 hash 在该函数中只是使用了 salt 部分，所以如果用户输入的密码正确的话，计算结果会和持久化的 hash 一致。</p>
-
-<h3 id="toc_4">参考</h3>
-
-<ul>
-<li>文中提到的大部分内容在<a href="http://drops.wooyun.org/papers/1066">这篇文章</a>中有详述，建议阅读</li>
-<li><a href="http://php.net/manual/en/function.crypt.php">PHP: crypt - Manual</a></li>
-<li><a href="https://github.com/kless/osutil/tree/master/user/crypt">A golang password hashing library</a></li>
-</ul>
 
 ]]></content>
   </entry>

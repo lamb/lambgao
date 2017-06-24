@@ -88,6 +88,760 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-10-11-small-test-node-core-module.html">小试Node 核心模块</a></h1>
+			<p class="meta"><time datetime="2012-10-11T18:29:58+08:00" 
+			pubdate data-updated="true">2012/10/11</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Node核心模块提供了很多方便的系统级的API，如文件、数据流、网络、进程等。Node 的特点是采用事件驱动、非阻塞/异步IO模型，所以它提供的大部分API都是基于事件模型、异步的编程风格。下面让我们来深入了解Node的核心模块，熟悉Node的异步编程风格。</p>
+
+<h3 id="toc_0">4.1　全局变量相关模块</h3>
+
+<p>本小节介绍的这些对象在全局范围内均可使用，我们可以在任何位置访问这些对象。</p>
+
+<h4 id="toc_1">4.1.1 Global Objects</h4>
+
+<p>global {Object}<br/>
+global（全局）对象可以说是ECMAScript中最特别的一个对象，这是一个看不见摸不着仿佛不存在但确又存在的对象。不属于任何其他对象的属性和方法，其实都是它的属性和方法。换句话说，所有在全局作域中定义的属性和方法，都是global对象的属性。ECMAScript对于如何访问global对象并没有给出标准定义，但是浏览器都不约而同是将这个全局对象作为window对象的一部分加以实现的。在浏览器中顶级作用域就是全局作用域，在全局作用域下通过var something即定义了一个全局变量，也可以说window多了一个something的属性。而Node中并不如此，顶级作用域并非是全局作用域，在Node的一个模块中（即一个文件中）通过var something 定义的变量仅仅作用于该模块。<br/>
+process {Object}<br/>
+进程对象，在4.1.5中会详细描述。<br/>
+console {Object}<br/>
+标准输出对象，在4.1.2中会详细描述。<br/>
+Buffer {Object}<br/>
+缓冲区对象，在4.1.6中会详细描述。<br/>
+__filename {String}<br/>
+当前正在被执行的脚本的文件名。这是一个完整的绝对路径。<br/>
+<strong>dirname {String}<br/>
+当前正在被执行的脚本的目录名。<br/>
+module {Object}<br/>
+指向当前模块对象的引用。<br/>
+require() {Function}<br/>
+加载模块的方法。<br/>
+require.resolve()  {Function}<br/>
+使用内部方法require的机制查找一个模块的位置，而不是加载模块。如果查找模块成功，会返回</strong>filename，否则抛出一个找不到模块的错误。<br/>
+require.cache {Object}<br/>
+模块缓存对象。模块被首次加载会以键值对的形式缓存在此对象中，键为__filename，值为module。如果模块缓存对象中的某一个键值被删除，再次加载此模块时会被重新加载。<br/>
+require.paths {Array}<br/>
+查找模块搜索路径数组。我们可以通过修改该数组自定义搜索路径。这个变量在0.5.x版本被移除。<br/>
+exports {Object}<br/>
+模块导出对象，在4.1.4中会详细描述。exports是module.exports引用的拷贝，指向同一对象。<br/>
+module、require、exports、__filename和__dirname实际上并不真正是全局的，确切的说对于每个模块是局部的。<br/>
+setTimeout(cb, ms) {Function}<br/>
+clearTimeout(t) {Function}<br/>
+setInterval(cb, ms) {Function}<br/>
+clearInterval(t) {Function}<br/>
+定时器方法，在4.1.3中会详细描述。</p>
+
+<h4 id="toc_2">4.1.2 STDIO</h4>
+
+<p>console {Object}<br/>
+大部分浏览器都提供了标准输出对象提供打印输出功能。console这个对象与浏览器中的标准输出对象相似，也提供打印输出的功能。<br/>
+console.log() {Function}<br/>
+console.info() {Function}<br/>
+console.warn() {Function}<br/>
+console.error() {Function}<br/>
+输出一行标准信息或标准错误到控制台。这些方法可以接收多个参数。例如：<br/>
+var count = 1;<br/>
+console.log(&#39;count: %d&#39;, count);//count: 1<br/>
+如果方法检查到第一个参数没有格式化元素，那么会对每一个参赛调用util.inspect方法并打印输出其返回值。util.inspect方法在4.5.1中会详细描述。<br/>
+console.dir(obj) {Function}<br/>
+调用util.inspect方法并打印输出返回值。<br/>
+console.time(label) {Function}<br/>
+console.timeEnd(label) {Function}<br/>
+统计一段程序运行所需时间的方法。例如：<br/>
+console.time(&#39;100-elements&#39;);<br/>
+for (var i = 0; i &lt; 100; i++) {<br/>
+  ;<br/>
+}<br/>
+console.timeEnd(&#39;100-elements&#39;);// 100-elements: 0ms<br/>
+console.trace(message) {Function}<br/>
+在当前位置打印堆栈轨迹的方法。此方法后的代码会继续正常运行。<br/>
+console.assert(expression, [message]) {Function}<br/>
+断言某个表达式是否为true的方法，同断言方法assert.ok()。</p>
+
+<h4 id="toc_3">4.1.3 Timers</h4>
+
+<p>setTimeout(callback, delay, [arg], [...]) {Function}<br/>
+该方法用于在指定的delay毫秒后单次调用callback回调函数，并可以设定要传递给回调函数的参数，返回值timeoutId可用于clearTimeout()。<br/>
+clearTimeout(timeoutId) {Function}<br/>
+清楚指定timeoutId的定时器。<br/>
+setInterval(callback, delay, [arg], [...]) {Function}<br/>
+该方法用于在指定的delay毫秒后多次重复调用callback回调函数，并可以设定要传递给回调函数的参数，返回值intervalId可用于clearInterval ()。<br/>
+clearInterval(intervalId) {Function}<br/>
+清楚指定intervalId的定时器。<br/>
+代码示例：<br/>
+var timeoutId = setTimeout(function(o, b){<br/>
+  console.log(&quot;This is callback&quot;);//This is callback<br/>
+  console.log(o.a);//1<br/>
+  console.log(b);//2<br/>
+}, 3000, {&quot;a&quot;:1}, 2);</p>
+
+<p>clearTimeout(timeoutId);</p>
+
+<h4 id="toc_4">4.1.4 Modules</h4>
+
+<p>module.exports {Object} <br/>
+module.exports对象是用于向外导出方法或者变量以供外部使用。在初始时，module.exports对象就是一个空对象{}，向外导出的方法和变量都将作为module.exports对象的属性。需要注意的是，module.exports需要直接快速的赋值，不能在任何回调函数中完成这个操作。以下这样的使用，会产生不期望的效果：<br/>
+x.js:<br/>
+setTimeout(function() {<br/>
+  module.exports = { a: &quot;hello&quot; };<br/>
+}, 0);<br/>
+y.js:<br/>
+var x = require(&#39;./x&#39;);<br/>
+console.log(x.a);//undefined<br/>
+我们也可以使用exports对象来完成模块导出操作。exports是module.exports引用的拷贝，指向同一对象。在使用时，我们需要避免这样的错误：<br/>
+a.js:<br/>
+module.exports = {a: 1};<br/>
+exports.b = 2;<br/>
+b.js:<br/>
+var a = require(&#39;./a&#39;);<br/>
+console.log(a);//{ a: 1 }<br/>
+这里输出的并不是预期的{ a: 1, b: 2 }。仔细分析一下就可以明白产生这样不是预期结果的原因：module.exports和exports是引用到的同一个对象，module.exports = {}这样的赋值操作修改了module.exports的引用，但是exports的引用并没有改变，调用require()方法的时候所引用的是module.exports 对象，自然exports变量的引用就会被忽略掉了。这种问题的解决方法也很简单，一种方法是同时重写两者的引用，一种是从不重写二者的引用。<br/>
+exports = module.exports = { a: 1, b: 2 };</p>
+
+<p>exports.a = 1;<br/>
+exports.b = 2;<br/>
+module.require(id) {Function}<br/>
+加载指定模块标识符id的方法。<br/>
+module.id {String}<br/>
+模块的标识符。一般为一个完整的绝对路径。<br/>
+module.filename {String}<br/>
+模块文件的文件名。这是一个完整的绝对路径。<br/>
+module.loaded {Boolean}<br/>
+模块是否加载完成。<br/>
+module.parent {Object}<br/>
+加载该模块的父模块对象。<br/>
+module.children {Array}<br/>
+模块加载的子模块对象数组。<br/>
+require.main {Object}<br/>
+主模块对象。我们可以使用require.main === module来判断是否是主模块。</p>
+
+<h4 id="toc_5">4.1.5 Process</h4>
+
+<p>process {Object}<br/>
+进程对象。它是一个EventEmitter的实例。<br/>
+Event: &#39;exit&#39;<br/>
+当进程退出时，此事件被触发。这是一个检查模块状态的好时机（比较单元测试）。由于在exit事件触发回调函数完成后主事件循环将终止，所以计时器不会生效。<br/>
+监听exit事件的示例，onexit.js：<br/>
+process.on(&#39;exit&#39;, function () {<br/>
+  process.nextTick(function () {<br/>
+   console.log(&#39;This will not run&#39;);<br/>
+  });<br/>
+  console.log(&#39;About to exit.&#39;);<br/>
+});<br/>
+Event: &#39;uncaughtException&#39;<br/>
+当发生一个未处理的异常时，此事件会被触发。如果该异常有这样一个监听器，那么不执行默认行为（即打印错误堆栈信息并结束应用程序的执行）。<br/>
+监听uncaughtException事件的示例，uncaughtException.js：<br/>
+process.on(&#39;uncaughtException&#39;, function (err) {<br/>
+  console.log(&#39;Caught exception: &#39; + err);<br/>
+});</p>
+
+<p>setTimeout(function () {<br/>
+  console.log(&#39;This will still run.&#39;);<br/>
+}, 500);</p>
+
+<p>// Intentionally cause an exception, but don&#39;t catch it.<br/>
+nonexistentFunc();<br/>
+console.log(&#39;This will not run.&#39;);<br/>
+注意，uncaughtException事件是一种非常粗糙的异常处理机制。我们可以在程序中使用try/catch来更好的控制程序流程。特别是对于在服务器端程序，因为它要持续运行，所以uncaughtException事件是个很有用的安全机制。<br/>
+Signal Events<br/>
+当进程接收到信号时，此事件会被触发。具体信号名请查看sigaction(2)中的标准POSIX信号名称列表，比如SIGINT、SIGUSR1等。<br/>
+监听SIGINT信号的示例，SIGINT.js：<br/>
+// Start reading from stdin so we don&#39;t exit.<br/>
+process.stdin.resume();</p>
+
+<p>process.on(&#39;SIGINT&#39;, function () {<br/>
+  console.log(&#39;Got SIGINT.  Press Control-D to exit.&#39;);<br/>
+});<br/>
+发送SIGINT信号最简单的方法是使用CTRL+C，大多数情况下这会终止应用程序的执行。<br/>
+process.stdout {Object}<br/>
+标准输出流对象。console.log方法的定义：<br/>
+console.log = function (d) {<br/>
+  process.stdout.write(d + &#39;\n&#39;);<br/>
+};<br/>
+process.stderr {Object}<br/>
+错误输出流对象。<br/>
+process.stdout 和process.stderr不像Node中的其他数据流，它们在写入时通常阻塞。他们在被指向到普通文件或者TTY文件描述符时是阻塞的；指向到数据通道时是非阻塞的。<br/>
+process.stdin {Object}<br/>
+标准输入流对象。默认情况下标准输入流会阻塞程序，要读取输入内容需要调用方法process.stdin.resume()。<br/>
+下面是打开标准输入并监听它的两个事件的示例，stdin.js:<br/>
+process.stdin.resume();<br/>
+process.stdin.setEncoding(&#39;utf8&#39;);</p>
+
+<p>process.stdin.on(&#39;data&#39;, function (chunk) {<br/>
+  process.stdout.write(&#39;data: &#39; + chunk);<br/>
+});</p>
+
+<p>process.stdin.on(&#39;end&#39;, function () {<br/>
+  process.stdout.write(&#39;end&#39;);<br/>
+});<br/>
+process.argv {Array}<br/>
+命令行参数数组。第一个参数是&quot;node&quot;，第二个参数是JavaScript文件的绝对路径。接下来是附加的命令行参数。<br/>
+argv.js:<br/>
+// print process.argv<br/>
+process.argv.forEach(function (val, index, array) {<br/>
+  console.log(index + &#39;: &#39; + val);<br/>
+});<br/>
+上面的代码将产生如下输出：<br/>
+$ node process-2.js one two=three four<br/>
+0: node<br/>
+1: /Users/mjr/work/node/process-2.js<br/>
+2: one<br/>
+3: two=three<br/>
+4: four<br/>
+process.execPath {String}<br/>
+进程可执行文件的绝对路径。<br/>
+process.cwd() {Function}<br/>
+返回进程的当前工作目录。<br/>
+process.chdir(directory) {Function}<br/>
+改变进程的当前工作目录，失败时抛出异常。<br/>
+chdir.js<br/>
+console.log(&#39;Starting directory: &#39; + process.cwd());<br/>
+try {<br/>
+  process.chdir(&#39;/tmp&#39;);<br/>
+  console.log(&#39;New directory: &#39; + process.cwd());<br/>
+}<br/>
+catch (err) {<br/>
+  console.log(&#39;chdir: &#39; + err);<br/>
+}<br/>
+process.env {Object}<br/>
+装有用户环境变量的对象。<br/>
+process.exit([code]) {Function}<br/>
+使用指定的退出代码进程退出进程。如果不指定参数，方法将使用表示成功的代码0。退出程序并返回错误状态的示例，exit.js:<br/>
+process.exit(1);<br/>
+执行node的shell将会得到返回值1。<br/>
+process.getgid() {Function}<br/>
+获取进程的群组标识（详见getgid(2)）。这是一个数字的群组ID，不是群组名称。<br/>
+process.setgid(id) {Function}<br/>
+设置进程的群组标识（详见setgid(2)）。参数可以是一个数字ID或者群组名字符串。如果指定了一个群组名，这个方法会阻塞等待将群组名解析为数字ID。<br/>
+gid.js:<br/>
+console.log(&#39;Current gid: &#39; + process.getgid());<br/>
+try {<br/>
+  process.setgid(501);<br/>
+  console.log(&#39;New gid: &#39; + process.getgid());<br/>
+}<br/>
+catch (err) {<br/>
+  console.log(&#39;Failed to set gid: &#39; + err);<br/>
+}<br/>
+process.getuid() {Function}<br/>
+获取进程的用户ID（详见getuid(2)）。这是一个数字用户ID，不是用户名。<br/>
+process.setuid(id) {Function}<br/>
+设置进程的用户ID（详见setuid(2)）。参数可以是一个数字ID或者用户名字符串。如果指定了一个用户名，那么该方法会阻塞等待将用户名解析为数字ID。<br/>
+uid.js：<br/>
+console.log(&#39;Current uid: &#39; + process.getuid());<br/>
+try {<br/>
+  process.setuid(501);<br/>
+  console.log(&#39;New uid: &#39; + process.getuid());<br/>
+}<br/>
+catch (err) {<br/>
+  console.log(&#39;Failed to set uid: &#39; + err);<br/>
+}<br/>
+process.version {String}<br/>
+一个编译内置的属性，用于显示Node的版本。<br/>
+version.js:<br/>
+console.log(&#39;Version: &#39; + process.version);<br/>
+process.versions {Object}<br/>
+用于显示Node依赖库的版本的对象。<br/>
+versions.js:<br/>
+console.log(process.versions);<br/>
+输出如下：<br/>
+{ node: &#39;0.6.19&#39;,<br/>
+  v8: &#39;3.6.6.25&#39;,<br/>
+  ares: &#39;1.7.5-DEV&#39;,<br/>
+  uv: &#39;0.6&#39;,<br/>
+  openssl: &#39;0.9.8r&#39; }<br/>
+process.installPrefix {String}<br/>
+一个编译内置的属性，用于显示Node的安装目录的前缀NODE_PREFIX。<br/>
+installPrefix.js:<br/>
+console.log(&#39;Prefix: &#39; + process.installPrefix);<br/>
+process.kill(pid, [signal]) {Function}<br/>
+向一个进程发送信号，参数pid为进程ID，参数signal是一个描述要发送信号的字符串，如“SIGINT”或者“SIGUSR1”。如果不指定，默认发送“SIGTERM”信号。更多信息请查看kill(2)。<br/>
+注意，虽然此方法名为process.kill，但是它仅仅用于发送信号，就像kill系统调用一样。发送的信号除了可以结束目标进程外，还可以完成其他的操作。<br/>
+发送信号的示例，kill.js:<br/>
+process.on(&#39;SIGHUP&#39;, function () {<br/>
+  console.log(&#39;Got SIGHUP signal.&#39;);<br/>
+});</p>
+
+<p>setTimeout(function () {<br/>
+  console.log(&#39;Exiting.&#39;);<br/>
+  process.exit(0);<br/>
+}, 100);</p>
+
+<p>process.kill(process.pid, &#39;SIGHUP&#39;);<br/>
+process.pid {String}<br/>
+进程PID。<br/>
+process.title {String}<br/>
+设置、获取ps命令中显示的名称。<br/>
+process.arch {String}<br/>
+运行程序的处理器架构：“arm”、“ia32”、“x64”。<br/>
+process.platform {String}<br/>
+程序运行的平台，如“linux2”、“darwin”等。<br/>
+process.memoryUsage() {Function}<br/>
+返回一个描述Node进程内存使用情况的对象。<br/>
+memoryUsage.js:<br/>
+console.log(process.memoryUsage());<br/>
+输出如下：<br/>
+{ rss: 8552448, heapTotal: 2546784, heapUsed: 1234140 }<br/>
+heapTotal和heapUsed指V8内存使用情况。<br/>
+process.nextTick(callback) {Function}<br/>
+在事件循环的下一轮执行callback回调函数。这个方法不是setTimeout(fn, 0)的别名，它更加高效。<br/>
+nextTick.js：<br/>
+process.nextTick(function () {<br/>
+  console.log(&#39;nextTick callback&#39;);<br/>
+});<br/>
+process.umask([mask]) {Function}<br/>
+设置或读取进程的文件创建模式掩码，子进程会从父进程继承这个掩码。如果使用此方法设置新的掩码，则它返回旧的掩码，否则返回当前掩码。<br/>
+umask.js:<br/>
+var oldmask, newmask = 0644;<br/>
+oldmask = process.umask(newmask);<br/>
+console.log(&#39;Changed umask from: &#39; + oldmask.toString(8) + &#39; to &#39; + newmask.toString(8));<br/>
+process.uptime() {Function}<br/>
+返回Node进程运行的时间，单位为秒。<br/>
+uptime.js:<br/>
+console.log(process.uptime());</p>
+
+<h4 id="toc_6">4.1.6 Buffer</h4>
+
+<p>Buffer {Class}<br/>
+纯JavaScript语言对Unicode很友好，但是难以处理二进制数据。在处理TCP数据流和文件时不可避免地需要操作字节流。Node提供一些方法来创建、操作和接收二进制数据。<br/>
+原始的数据被存放在Buffer的实例中。Buffer类似于一个整数数组，不同之处在于它和V8内存堆之外分配的一段内存数据相对应。Buffer对象的大小不能动态调整。Buffer是全局的，不需要在使用前还需每次&quot;require(&#39;buffer&#39;)&quot;后才能够使用它，并有多种不同的方法实例化。<br/>
+Buffer和JavaScript中的String对象之间的转换需要指定编码方式。如下是Node支持的编码方式:<br/>
+&#39;ascii&#39; - 仅对应7位的ASCII数据。这种编码方式速度很快，它会删除字节的高位。<br/>
+&#39;utf-8&#39; - Unicode字符。许多网页和其他文档使用这种编码方式。<br/>
+&#39;ucs2&#39; - 2字节的，低字节序编码Unicode字符。它只能编码BMP（基本多语言面，U+0000-U+FFFF）字符。<br/>
+&#39;base64&#39; - base64字符串编码。<br/>
+&#39;binary&#39; - 一种只使用每个字符前8个字节将原始二进制数据编码进字符串的方式。这个方式已经废弃，应当尽量使用buffer对象。这个编码将在未来版本中移除。<br/>
+&#39;hex&#39; - 将一个字节编码为两个16进制字符。<br/>
+new Buffer(size) {ClassMethod}<br/>
+创建指定大小的Buffer对象。<br/>
+new Buffer(array) {ClassMethod}<br/>
+用数组新建Buffer对象。<br/>
+new Buffer(str, [encoding]) {ClassMethod}<br/>
+新建一个保存指定字符串的Buffer对象。字符编码默认&#39;utf-8&#39;。<br/>
+buf.write(string, [offset], [length], [encoding]) {Function}<br/>
+使用指定的编码方式将字符串从指定偏移量开始写入Buffer，然后返回实际写入的大小。编码默认是&#39;utf-8&#39;，偏移量默认是0，length为写入的字节长度。如果Buffer空间不足，则只会写入部分字符串。这种方式不会出现一个字符被拆分成半个字符被写入。下面是将一个utf-8字符串写入buffer，然后打印出来的示例，write.js：<br/>
+buf = new Buffer(256);<br/>
+len = buf.write(&#39;\u00bd + \u00bc = \u00be&#39;, 0);<br/>
+console.log(len + &quot; bytes: &quot; + buf.toString(&#39;utf8&#39;, 0, len));<br/>
+//12 bytes: ½ + ¼ = ¾<br/>
+buf.toString([encoding], [start], [end]) {Function}<br/>
+使用指定的编码方式将Buffer从指定起始位置到指定结束位置解码为字符串并返回。编码默认是&#39;utf-8&#39;，起始位置默认是0，结束位置默认为Buffer的长度。<br/>
+buf[index] {Byte}<br/>
+获取或设置位于索引字节的值。由于返回值为单个的字节，因此其范围应该在0x00到0xff（16进制）或者0到255（10进制）之间。下面是将一个ASCII字符串复制进Buffer，每次一个字节，index.js：<br/>
+str = &quot;node.js&quot;;<br/>
+buf = new Buffer(str.length);<br/>
+for (var i = 0; i &lt; str.length ; i++) {<br/>
+  buf[i] = str.charCodeAt(i);<br/>
+}<br/>
+console.log(buf);<br/>
+Buffer.isBuffer(obj) {ClassMethod}<br/>
+验证传入的对象是否是Buffer的一个实例。<br/>
+Buffer.byteLength(string, [encoding]) {ClassMethod}<br/>
+返回字符串的实际字节数。这个方法和String.prototype.length不同，后者返回字符串的字符数。<br/>
+byteLength.js：<br/>
+str = &#39;\u00bd + \u00bc = \u00be&#39;;</p>
+
+<p>console.log(str + &quot;: &quot; + str.length + &quot; characters, &quot; +<br/>
+  Buffer.byteLength(str, &#39;utf8&#39;) + &quot; bytes&quot;);</p>
+
+<p>// ½ + ¼ = ¾: 9 characters, 12 bytes<br/>
+buf.length {Number}<br/>
+Buffer的大小（以字节为单位）。请注意，这个不是存放内容的大小，而是分配buffer对象的内存大小。这个大小不随Buffer中存放内容的多少而改变。<br/>
+length.js：<br/>
+buf = new Buffer(1234);</p>
+
+<p>console.log(buf.length);// 1234<br/>
+buf.write(&quot;some string&quot;, &quot;ascii&quot;, 0);<br/>
+console.log(buf.length);// 1234<br/>
+buf.copy(targetBuffer, [targetStart], [sourceStart], [sourceEnd]) {Function}<br/>
+在两个Buffer之间执行内存拷贝。targetStart和sourceStart默认为0，sourceEnd默认为buf.length。例如，新建连个buffer对象，然后将buf1中16至19字节拷贝到buf2中第8字节开始的空间中。<br/>
+copy.js：<br/>
+buf1 = new Buffer(26);<br/>
+buf2 = new Buffer(26);</p>
+
+<p>for (var i = 0 ; i &lt; 26 ; i++) {<br/>
+  buf1[i] = i + 97; // 97 is ASCII a<br/>
+  buf2[i] = 33; // ASCII !<br/>
+}</p>
+
+<p>buf1.copy(buf2, 8, 16, 20);<br/>
+console.log(buf2.toString(&#39;ascii&#39;, 0, 25));<br/>
+// !!!!!!!!qrst!!!!!!!!!!!!!<br/>
+buf.slice([start], [end]) {Function}<br/>
+返回指定起始位置和结束位置的原Buffer引用的分片。当修改新Buffer时也将会被体现在原Buffer上，因为两个Buffer指向同一段内存地址。例如，使用字母表简历一个Buffer对象，并分片出一个新的Buffer，然后修改原始Buffer的一个字节。<br/>
+slice.js：<br/>
+var buf1 = new Buffer(26);</p>
+
+<p>for (var i = 0 ; i &lt; 26 ; i++) {<br/>
+  buf1[i] = i + 97; // 97 is ASCII a<br/>
+}</p>
+
+<p>var buf2 = buf1.slice(0, 3);<br/>
+console.log(buf2.toString(&#39;ascii&#39;, 0, buf2.length));// abc<br/>
+buf1[0] = 33;// ASCII !<br/>
+console.log(buf2.toString(&#39;ascii&#39;, 0, buf2.length));// !bc<br/>
+buf.fill(value, [offset], [end]) {Function}<br/>
+用指定的值填充Buffer。如果偏移量offset（默认0）和结束位置end（默认buf.length）都没有值，它将填充整个Buffer。<br/>
+fill.js：<br/>
+var b = new Buffer(50);<br/>
+b.fill(&quot;h&quot;);<br/>
+console.log(b);<br/>
+buf.inspect()<br/>
+返回Buffer的字符串表示，每个字节用十六进制表示。当调用console.dir的时候打印的就是这个方法返回的结果。当Buffer超长（默认为50）时，会用...省略超长的内容。<br/>
+buffer.INSPECT_MAX_BYTES  {Number}<br/>
+这个数值会在调用buffer.inspect()方法时被用到，默认为50，我们可以直接对这个属性赋值来修改其值的大小。<br/>
+注意，这是buffer核心模块的一个属性，需要通过调用require(&#39;buffer&#39;)返回的对象来访问，它不是全局的Buffer或者Buffer实例的属性。<br/>
+SlowBuffer {Class}<br/>
+SlowBuffer 这个类主要是内部使用。JavaScript程序应该使用Buffer，避免使用SlowBuffer 。SlowBuffer 不是全局的，需要导入后才可以使用。为了避免频繁的给Buffer对象分配小内存块，对于创建小于8k的Buffer，其实是从一个池中分片得来的，只有大于8k的Buffer才会每次都新创建一个SlowBuffer实例。<br/>
+Buffer.poolSize {Number}<br/>
+Buffer类创建的池大小，大于此值则每次new一个SlowBuffer，否则从池中slice返回一个Buffer，如果池剩余空间不够，则新创建一个SlowBuffer做为池。我们可以直接对这个属性赋值来修改池的大小。<br/>
+除了上述方法外，Buffer模块还提供了许多读取和写入各种数值类型的方法，我们可以在Node的官方文档Buffer模块（<a href="http://www.nodejs.org/api/buffer.html%EF%BC%89%E4%B8%AD%E6%9F%A5%E7%9C%8B%E5%88%B0%EF%BC%8C%E8%BF%99%E9%87%8C%E5%B0%B1%E4%B8%8D%E5%86%8D%E8%AF%A6%E7%BB%86%E6%8F%8F%E8%BF%B0%E3%80%82">http://www.nodejs.org/api/buffer.html）中查看到，这里就不再详细描述。</a></p>
+
+<h3 id="toc_7">4.2　事件模块</h3>
+
+<h4 id="toc_8">4.2.1 Events</h4>
+
+<p>events.EventEmitter {Class}<br/>
+事件驱动是Node一个很重要的特点。Node中有很多对象都会触发事件，比如一个进程退出时会触发事件。所有能够触发事件的对象都是EventEmitter的实例。我们可以通过require(&quot;events&quot;)来访问这个模块，通过调用require(&#39;events&#39;).EventEmitter可以使用事件触发器类。通常，事件名称采用驼峰式命名法，不过目前没有对事件名称作任何限制，也就是说任何字符串都可以被用作事件名。<br/>
+Event: &#39;newListener&#39;<br/>
+可以将函数注册给对象，使其在事件触发时执行，此类函数被称作监听器。当新的事件监听器被添加时，事件触发器都会触发&#39;newListener&#39;事件。<br/>
+Event: &#39;error&#39;<br/>
+当事件触发器遇到错误时，会触发&#39;error&#39;事件。这个事件特殊的地方在于：如果没有监听器处理这个事件，它将会输出堆栈信息，并退出应用程序。<br/>
+emitter.addListener(event, listener) {Function}<br/>
+emitter.on(event, listener) {Function}<br/>
+这两个方法都可以将一个监听器添加到指定的事件监听器数组的末尾。<br/>
+server.on(&#39;connection&#39;, function (stream) {<br/>
+  console.log(&#39;someone connected!&#39;);<br/>
+});<br/>
+emitter.once(event, listener) {Function}<br/>
+这个方法可以添加一次性的监听器。该监听器在事件触发第一次时执行，随后被移除。<br/>
+server.once(&#39;connection&#39;, function (stream) {<br/>
+  console.log(&#39;Ah, we have our first user!&#39;);<br/>
+});<br/>
+emitter.removeListener(event, listener) {Function}<br/>
+将监听器从指定的事件的监听器数组中移除出去。非常值得注意的是：这个操作将会改变监听器数组的下标。<br/>
+var callback = function(stream) {<br/>
+  console.log(&#39;someone connected!&#39;);<br/>
+};<br/>
+server.on(&#39;connection&#39;, callback);<br/>
+// ...<br/>
+server.removeListener(&#39;connection&#39;, callback);<br/>
+emitter.removeAllListeners([event]) {Function}<br/>
+将指定事件的所有监听器从监听器数组中移除。<br/>
+emitter.setMaxListeners(n) {Function}<br/>
+默认情况下，当事件触发器注册了超过10个以上的监听器时，系统会打印警告信息。这个默认配置将有助于我们查找内存泄漏问题。很显然并不是所有的事件触发器都需要进行10个监听器的限制，此方法允许我们手动设置该数量值。如果这个值被设置为0，意味着没有数量限制。<br/>
+emitter.listeners(event) {Function}<br/>
+返回指定事件的监听器数组。我们可以对该数组进行操作，比如删除监听器等。<br/>
+server.on(&#39;connection&#39;, function (stream) {<br/>
+  console.log(&#39;someone connected!&#39;);<br/>
+});<br/>
+var listeners = server.listeners(&#39;connection&#39;);<br/>
+console.log(util.inspect(listeners);// [ [Function] ]<br/>
+emitter.emit(event, [arg1], [arg2], [...]) {Function}<br/>
+顺序执行监听器列表中的每个监听器函数并传递相应的参数。</p>
+
+<h3 id="toc_9">4.3　文件和数据流相关模块</h3>
+
+<h4 id="toc_10">4.3.1 Stream</h4>
+
+<p>Stream（流）是一个抽象接口，Node中有很多实例对象实现了这个接口。例如，请求http服务器的request是一个流。所有的流都是EventEmitter的实例。流可以分为可读的、可写的或者既可读又可写。所以下面分两部分来介绍流，一部分为可读流，另一部分来可写流。<br/>
+Readable Stream（可读流）具有下述的事件、成员和方法。<br/>
+Event: &#39;data&#39; function (data) { }<br/>
+&#39;data&#39;事件的回调函数参数默认情况下是一个Buffer对象。如果使用了setEncoding()则参数为一个字符串。<br/>
+Event: &#39;end&#39; function () { }<br/>
+此事件在流中遇到EOF（TCP中为FIN）时被触发，表示流不会再有数据（不会触发&#39;data事件&#39;）。如果流同时也是可写的，那它还可以继续写入。<br/>
+Event: &#39;error&#39; function (exception) { }<br/>
+此事件在读取数据出错时被触发。<br/>
+Event: &#39;close&#39; function () { }<br/>
+当底层的文件描述符被关闭时触发此事件，并不是所有的流都会触发这个事件。例如，一个http请求就不会触发&#39;close&#39;事件。<br/>
+Event: &#39;fd&#39; function (fd) { }<br/>
+当流读取到文件描述符信息时触发此事件。一个文件数据流包含两部分信息：文件描述符信息和文件数据信息。此事件只支持Unix流，其他类型的流不会触发此事件。<br/>
+stream.readable {Boolean}<br/>
+这是一个布尔值，默认为true。当读取流遇到错误（&#39;error&#39;事件）或者读到结尾（&#39;end&#39;事件）或者调用destroy()方法后，该值会设置为false。<br/>
+stream.setEncoding(encoding) {Function}<br/>
+调用此方法后，&#39;data&#39;事件的回调函数参数会由默认的Buffer变为字符串。这个方法的参数编码类型科研室&#39;utf-8&#39;、&#39;ascii&#39;或&#39;base64&#39;。<br/>
+stream.pause() {Function}<br/>
+暂停&#39;data&#39;事件的触发。<br/>
+stream.resume() {Function}<br/>
+恢复被pause()方法暂停的&#39;data&#39;事件。<br/>
+stream.destroy() {Function}<br/>
+关闭底层的文件描述符。流将不会再触发任何事件。<br/>
+stream.pipe(destination, [options]) {Function}<br/>
+这是Stream.prototype（Stream原型对象）的一个方法，所有Stream对象都可以使用它。这个方法用于将这个可读流与流向目标连接起来，传入这个流中数据将会写入的流向目标中。通过在必要时暂停和恢复流，使来源流和目的流得以保持同步。以模拟Unix系统的cat命令为例：<br/>
+process.stdin.resume();<br/>
+process.stdin.pipe(process.stdout);<br/>
+默认情况下，当来源流的&#39;end&#39;事件出发时，目的流的end()方法会被调用，此时目的流将不再可写入。要在这种情况下为了保持目的流仍然可写入，可将options参数设置为{ end: false}。这使process.stdout保存打开状态，因此&quot;Goodbye&quot;可以在end事件发生后被写入。<br/>
+process.stdin.resume();</p>
+
+<p>process.stdin.pipe(process.stdout, { end: false });</p>
+
+<p>process.stdin.on(&quot;end&quot;, function() {<br/>
+  process.stdout.write(&quot;Goodbye\n&quot;);<br/>
+});<br/>
+注意：如果来源流不支持pause()和resume()方法，pipe此方法将在来源流对象上增加这两个方法的简单定义，使其可以触发&#39;pause&#39;和&#39;resume&#39;事件。<br/>
+Writable Stream（可写流）具有下述的事件、成员和方法。<br/>
+Event: &#39;drain&#39; function () { }<br/>
+当在write()方法被调用并返回false后触发此事件。此事件被触发说明缓冲区已空，再次写入是安全的。<br/>
+Event: &#39;error&#39; function (exception) { }<br/>
+此事件在发生错误的时候被触发，回调函数接受一个异常参数exception。<br/>
+Event: &#39;close&#39; function () { }<br/>
+底层文件描述符被关闭时触发此事件。<br/>
+Event: &#39;pipe&#39; function (src) { }<br/>
+当此可写流作为参数传给一个可读流的pipe方法时触发此事件。<br/>
+stream.writable {Boolean}<br/>
+这是一个布尔值，默认为true。当读取流遇到错误（&#39;error&#39;事件）或者end()/destroy()方法被调用后，该值会设置为false。<br/>
+stream.write(string, [encoding], [fd]) {Function}<br/>
+使用指定编码encoding将字符串string写入到流中。如果字符串被成功写入内核缓冲区，此方法返回true。如果内核缓冲区已满，此方法返回false，数据将在未来被写出。当内核缓冲区再次被清空后，&#39;drain&#39;事件将被触发。Encoding参数默认为&#39;utf-8&#39;。<br/>
+如果指定了可选参数fd，它将被作为一个文件描述符通过流传送。此功能仅被Unix流所支持，对于其他流此操作将被忽略而没有任何提示。当使用此方法传送一个文件描述符时，如果在流没有清空前关闭此文件描述符，将造成传送一个无效（已关闭）FD的风险。<br/>
+stream.write(buffer) {Function}<br/>
+与上面的write方法类似，写入一个Buffer对象。<br/>
+stream.end() {Function}<br/>
+使用EOF或FIN结束一个流的输出。<br/>
+stream.end(string, encoding) {Function}<br/>
+以指定的字符编码encoding写入一个字符串string，然后使用EOF或FIN结束流的输出。这对降低数据包传输量有所帮助。<br/>
+stream.end(buffer) {Function}<br/>
+与上面的end方法类似，写入一个Buffer对象，然后使用EOF或FIN结束流的输出。<br/>
+stream.destroy() {Function}<br/>
+关闭底层的文件描述符。流将不会再触发任何事件。<br/>
+stream.destroySoon() {Function}<br/>
+清空当前的写队列（写操作完成），然后关闭文件描述符。</p>
+
+<h4 id="toc_11">4.3.2 Readline</h4>
+
+<p>Readline模块可以帮助我们一行一行地读取一个流（如STDIN）。我们可以调用require(&#39;readline&#39;)来使用此模块。<br/>
+注意：一旦我们调用这个模块，Node程序不会终止，直到我们关闭这个接口和STDIN流。如何正常终止我们的程序，请看下面的例子。<br/>
+createInterface.js:<br/>
+var rl = require(&#39;readline&#39;);</p>
+
+<p>var i = rl.createInterface(process.stdin, process.stdout, null);<br/>
+i.question(&quot;What do you think of node.js?&quot;, function(answer) {<br/>
+  // TODO: Log the answer in a database<br/>
+  console.log(&quot;Thank you for your valuable feedback.&quot;);</p>
+
+<p>// These two lines together allow the program to terminate. <br/>
+  // Without them, it would run forever.<br/>
+  i.close();<br/>
+  process.stdin.destroy();<br/>
+});<br/>
+rl.createInterface(input, output, completer) {Function}<br/>
+创建一个读行接口，方法接收的参数是输入input与输出output两个流。参数completer是一个方法，用于自动完成。当接收到一个子串，它会返回[[substr1, substr2, ...], originalsubstring]。Completer方法也可以在异步模式下运行，这样它需要接收两个参数：<br/>
+function completer(linePartial, callback) { callback(null, [[&#39;123&#39;], linePartial]); }<br/>
+createInterface这个方法常与process.stdin和 process.stdout并用，以接收用户输入。<br/>
+Interface {Class}<br/>
+用于stdin和stdout这两个流进行一行一行读取流操作的抽象接口类。<br/>
+rl.setPrompt(prompt, length) {Function}<br/>
+设置提示。比如当你在Node命令行模式（在终端上直接运行node命令不带任何参数即可进入命令行模式）上时，你会看到这样的提示&#39;&gt;&#39;。<br/>
+rl.prompt() {Function}<br/>
+用当前的提示信息新起一行以供用户输入，并准备好从用户输入读取一行。<br/>
+rl.question(query, callback) {Function}<br/>
+先显示提示信息query，然后调用callback这个回调函数来响应用户的输入。<br/>
+rl.close() {Function}<br/>
+关闭TTY。<br/>
+rl.pause() {Function}<br/>
+暂停TTY。<br/>
+rl.resume() {Function}<br/>
+恢复TTY。<br/>
+rl.write() {Function}<br/>
+写入TTY。<br/>
+Event: &#39;line&#39; function (line) {}<br/>
+当在流中接收到\n就会触发此事件。通常当用户敲打回车或者退出就会触发此事件。这是一个很好的钩子去监听用户的输入。例如这样监听每一行的输入：<br/>
+rl.on(&#39;line&#39;, function (cmd) {<br/>
+  console.log(&#39;You just typed: &#39;+cmd);<br/>
+});<br/>
+Event: &#39;close&#39; function () {}<br/>
+当在流中接收到<sup>C（SIGINT）或<sup>D（EOT）就会触发此事件。这是一个探知用户已经完成使用应用程序的很好的方式。例如可以这样监听close事件，并随后退出程序:</sup></sup><br/>
+rl.on(&#39;close&#39;, function() {<br/>
+  console.log(&#39;goodbye!&#39;);<br/>
+  process.exit(0);<br/>
+});<br/>
+这里有一个如何融合使用前面介绍的事件和方法模拟出一个简单的命令行交互的例子，readline.js:<br/>
+var readline = require(&#39;readline&#39;),<br/>
+  rl = readline.createInterface(process.stdin, process.stdout),<br/>
+  prefix = &#39;OHAI&gt; &#39;;</p>
+
+<p>rl.on(&#39;line&#39;, function(line) {<br/>
+  switch(line.trim()) {<br/>
+    case &#39;hello&#39;:<br/>
+      console.log(&#39;world!&#39;);<br/>
+      break;<br/>
+    default:<br/>
+      console.log(&#39;Say what? I might have heard <code>&#39; + line.trim() + &#39;</code>&#39;);<br/>
+      break;<br/>
+  }<br/>
+  rl.setPrompt(prefix, prefix.length);<br/>
+  rl.prompt();<br/>
+}).on(&#39;close&#39;, function() {<br/>
+  console.log(&#39;Have a great day!&#39;);<br/>
+  process.exit(0);<br/>
+});<br/>
+console.log(prefix + &#39;Good to see you. Try typing stuff.&#39;);<br/>
+rl.setPrompt(prefix, prefix.length);<br/>
+rl.prompt();</p>
+
+<h4 id="toc_12">4.3.3 TTY</h4>
+
+<p>在Linux中，TTY也许是跟终端有关系的最为混乱的术语。TTY是TeleTYpe的一个老缩写。Teletypes，或者teletypewriters，原来指的是电传打字机，是通过串行线用打印机键盘通过阅读和发送信息的东西，和古老的电报机区别并不是很大。之后，当计算机只能以批处理方式运行时(当时穿孔卡片阅读器是唯一一种使程序载入运行的方式)，电传打字机成为唯一能够被使用的“实时”输入/输出设备。最终，电传打字机被键盘和显示器终端所取代，但在终端或TTY接插的地方，操作系统仍然需要一个程序来监视串行端口。TTY也可以简单理解为一个程序监视物理的TTY/终端接口。我们可以调用require(&#39;tty&#39;)来使用此模块。<br/>
+tty.js:<br/>
+var tty = require(&#39;tty&#39;);<br/>
+process.stdin.resume();<br/>
+tty.setRawMode(true);<br/>
+process.stdin.on(&#39;keypress&#39;, function(char, key) {<br/>
+  if (key &amp;&amp; key.ctrl &amp;&amp; key.name == &#39;c&#39;) {<br/>
+    console.log(&#39;graceful exit&#39;);<br/>
+    process.exit();<br/>
+  }<br/>
+});<br/>
+tty.isatty(fd) {Function}<br/>
+这个方法返回一个布尔值。这取决于文件描述符fd是否和本终端有关联，有关联返回true，否则返回false。<br/>
+tty.setRawMode(mode) {Function}<br/>
+参数mode是一个布尔值，可以被设置为true或false。此方法可以改变当前进程的stdin（标准输入）为原始设备方式或默认方式。</p>
+
+<h4 id="toc_13">4.3.4 Path</h4>
+
+<p>Path模块包含很多用于处理文件路径的小工具。几乎所有方法仅仅是执行字符串的转换，并没有去文件系统检查是否是有效的路径。Path.exists和path.existsSync这两个方法是例外，很容易发现这两个方法是在访问文件系统。我们可以调用require(&#39;path&#39;)来使用此模块。<br/>
+path.normalize(p)<br/>
+该方法用于标准化一个字符型的路径。请注意&#39;..&#39;和&#39;.&#39;的使用。当发现有多个斜杠（/）时，系统会将他们替换为一个斜杠；如果路径末尾中包含有一个斜杠，那么系统会保留这个斜杠。在Windows中，上述路径中的斜杠（/）要换成反斜杠（\）。<br/>
+normalize.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+var string = &#39;/foo/bar//baz/asdf/quux/..&#39;;<br/>
+string = path.normalize(string);<br/>
+console.log(string);<br/>
+// returns  &#39;/foo/bar/baz/asdf&#39;<br/>
+path.join([path1], [path2], [...])<br/>
+该方法用于合并传入的参数得到一个标准化的路径字符串。<br/>
+join.js：<br/>
+var path = require(&#39;path&#39;);<br/>
+var string = path.join(&#39;/foo&#39;, &#39;bar&#39;, &#39;baz/asdf&#39;, &#39;quux&#39;, &#39;..&#39;);<br/>
+console.log(string);<br/>
+// returns  &#39;/foo/bar/baz/asdf&#39;<br/>
+path.resolve([from ...], to)<br/>
+将参数to解析为绝对路径。如果参数 to当前不是绝对的，系统会将from 参数按从右到左的顺序依次前缀到to上，直到在from中找到一个绝对路径时停止。如果遍历所有from中的路径后，系统依然没有找到一个绝对路径，那么当前工作目录也会作为参数使用。最终得到的路径是标准化的字符串，并且标准化时系统会自动删除路径末尾的斜杠，但是如果获取的路径是解析到根目录的，那么系统将保留路径末尾的斜杠。你也可以将这个方法理解为Shell中的一组cd命令。path.resolve(&#39;foo/bar&#39;, &#39;/tmp/file/&#39;, &#39;..&#39;, &#39;a/../subfile&#39;)就类似于：<br/>
+cd foo/bar<br/>
+cd /tmp/file/<br/>
+cd ..<br/>
+cd a/../subfile<br/>
+pwd<br/>
+该方法与cd命令的区别在于该方法中不同的路径不一定存在，而且这些路径也可能是文件。<br/>
+resolve.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+path.resolve(&#39;/foo/bar&#39;, &#39;./baz&#39;)<br/>
+// returns &#39;/foo/bar/baz&#39;</p>
+
+<p>path.resolve(&#39;/foo/bar&#39;, &#39;/tmp/file/&#39;)<br/>
+// returns &#39;/tmp/file&#39;</p>
+
+<p>path.resolve(&#39;wwwroot&#39;, &#39;static_files/png/&#39;, &#39;../gif/image.gif&#39;)<br/>
+// if currently in /home/myself/node, it returns<br/>
+// &#39;/home/myself/node/wwwroot/static_files/gif/image.gif&#39;<br/>
+path.relative(from, to)<br/>
+解析参数，返回相对路径。有时我们有两个绝对路径，我们需要获得从一个到另一个的相对路径。这实际上相当于path.resolve的反向转换，就像这样：<br/>
+path.resolve(from, path.relative(from, to)) == path.resolve(to)<br/>
+relative.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+path.relative(&#39;C:\orandea\test\aaa&#39;, &#39;C:\orandea\impl\bbb&#39;);<br/>
+// returns &#39;..\..\impl\bbb&#39;</p>
+
+<p>path.relative(&#39;/data/orandea/test/aaa&#39;, &#39;/data/orandea/impl/bbb&#39;);<br/>
+// returns &#39;../../impl/bbb&#39;<br/>
+path.dirname(p)<br/>
+该方法返回一个路径的目录名，类似于Unix中的dirname命令。<br/>
+dirname.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+path.dirname(&#39;/foo/bar/baz/asdf/quux&#39;)<br/>
+// returns &#39;/foo/bar/baz/asdf&#39;<br/>
+path.basename(p, [ext])<br/>
+该方法返回一个路径中最低一级目录名，类似于Unix中的 basename命令。<br/>
+basename.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+path.basename(&#39;/foo/bar/baz/asdf/quux.html&#39;);<br/>
+// returns &#39;quux.html&#39;</p>
+
+<p>path.basename(&#39;/foo/bar/baz/asdf/quux.html&#39;, &#39;.html&#39;);<br/>
+// returns &#39;quux&#39;<br/>
+path.extname(p)<br/>
+该方法返回路径中的文件扩展名，即路径最低一级的目录中&#39;.&#39;字符后的任何字符串。如果路径最低一级的目录中&#39;没有&#39;.&#39; 或者只有&#39;.&#39;，那么该方法返回一个空字符串。<br/>
+extname.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+path.extname(&#39;index.html&#39;);<br/>
+// returns &#39;.html&#39;</p>
+
+<p>path.extname(&#39;index&#39;);<br/>
+// returns &#39;&#39;<br/>
+path.exists(p, [callback])<br/>
+该方法用于测试参数p中的路径是否存在。然后以true或者false作为参数调用callback回调函数。<br/>
+exists.js:<br/>
+var path = require(&#39;path&#39;);<br/>
+var util = require(&#39;util&#39;);<br/>
+path.exists(&#39;/etc/passwd&#39;, function (exists) {<br/>
+  util.debug(exists ? &quot;it&#39;s there&quot; : &quot;no passwd!&quot;);<br/>
+});<br/>
+path.existsSync(p)<br/>
+path.exists的同步方法。</p>
+
+<h4 id="toc_14">4.3.5 File System</h4>
+
+<p>文件的I/O是由标准POSIX函数封装而成。需要使用require(&#39;fs&#39;)访问这个模块。所有的方法都提供了异步和同步两种方式。异步形式下，方法的最后一个参数需要传入一个执行完成时的回调函数。传给回调函数的参数取决于具体的异步方法，但第一个参数总是保留给异常对象。如果操作成功，那么该异常对象就变为null或者undefined。<br/>
+这里是一个异步调用的例子：<br/>
+var fs = require(&#39;fs&#39;);<br/>
+fs.unlink(&#39;/tmp/hello&#39;, function (err) {<br/>
+  if (err) throw err;<br/>
+  console.log(&#39;successfully deleted /tmp/hello&#39;);<br/>
+});<br/>
+这里是进行相同操作的同步调用的例子：<br/>
+var fs = require(&#39;fs&#39;);<br/>
+fs.unlinkSync(&#39;/tmp/hello&#39;)<br/>
+console.log(&#39;successfully deleted /tmp/hello&#39;);<br/>
+由于异步方法调用无法保证执行的顺序，所以下面的代码容易导致出现错误。<br/>
+fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, function (err) {<br/>
+  if (err) throw err;<br/>
+  console.log(&#39;renamed complete&#39;);<br/>
+});<br/>
+fs.stat(&#39;/tmp/world&#39;, function (err, stats) {<br/>
+  if (err) throw err;<br/>
+  console.log(&#39;stats: &#39; + JSON.stringify(stats));<br/>
+});<br/>
+这样做有可能导致fs.stat在fs.rename之前执行，正确的做法是链式调用回调函数。<br/>
+fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, function (err) {<br/>
+  if (err) throw err;<br/>
+  fs.stat(&#39;/tmp/world&#39;, function (err, stats) {<br/>
+    if (err) throw err;<br/>
+    console.log(&#39;stats: &#39; + JSON.stringify(stats));<br/>
+  });<br/>
+});<br/>
+当需要频繁操作时，强烈建议使用异步方法。同步方式在其完成之前将会阻塞当前的整个进程，即搁置所有连接。</p>
+
+<p>Node会跳到上层目录完成同样的动作，知道模块被找到，或者到达根目录为止。例如，如果在文件&#39;/home/ry/projects/foo.js&#39;中调用require(&#39;bar.js&#39;)，Node会在下列位置查找，顺序如下：<br/>
+/home/ry/projects/node_modules/bar.js<br/>
+/home/ry/node_modules/bar.js<br/>
+/home/node_modules/bar.js<br/>
+/node_modules/bar.js<br/>
+Node允许用户在独立的文件夹中方便的组织程序，为这个文件夹指定一个单一的入口后可以把这个文件夹当作模块被加载。</p>
+
+<h4 id="toc_15">4.3.6 Crypto</h4>
+
+<p>有三种方式可以将文件夹作为require函数的参数。第一种方式是在该文件夹中创建package.json文件，指定一个main模块，一个简单的package.json文件会是这样：<br/>
+{ &quot;name&quot; : &quot;some-library&quot;,<br/>
+  &quot;main&quot; : &quot;./lib/some-library.js&quot; }<br/>
+如果此文件位于./some-library文件夹，加载这个文件夹可以调用require(&#39;./some-library&#39;)，这时会尝试加载./some-library/lib/some-library.js。如果Node在该文件夹下没有找到package.json这个文件，那么Node将依次尝试加载改文件夹下的index.js或index.node文件。例如，如果上面的例子找不到package.json，那么会依次尝试加载：<br/>
+./some-library/index.js<br/>
+./some-library/index.node</p>
+
+<h4 id="toc_16">4.3.7 ZLIB</h4>
+
+<p>Node模块在首次加载成功后会被缓存起来，这意味着同一模块每次调用require方法得到的是完全相同的对象。</p>
+
+<p>整理后记：这四篇文章以前是想整理一本node书籍的，但是由于琐事没坚持下来。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-10-10-small-test-node-module.html">小试Node Node模块</a></h1>
 			<p class="meta"><time datetime="2012-10-10T18:28:07+08:00" 
 			pubdate data-updated="true">2012/10/10</time></p>
@@ -1558,75 +2312,6 @@ Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-03-31-how-to-skip-filters-in-java.html">如何跳过过滤器处理？</a></h1>
-			<p class="meta"><time datetime="2012-03-31T17:02:45+08:00" 
-			pubdate data-updated="true">2012/3/31</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>假如应用中存在多个过滤器，如何在第一个过滤器处理时根据某些条件跳过后续过滤器处理？这里提供了两种方式来解决这个问题。</p>
-
-<h4 id="toc_0">方式一：</h4>
-
-<p>在后续过滤器中根据前面过滤器处理后设置的标识手动跳过。标识可以放在 Request Attributes 里。</p>
-
-<pre><code>public class FirstFilter implements Filter {
-    //...
- 
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        servletRequest.setAttribute(&quot;executeSecondFilter&quot;, true);
-        //...
-        if(someReason)
-            servletRequest.setAttribute(&quot;executeSecondFilter&quot;, false);
-        filterChain.doFilter(servletRequest, servletResponse);
-    }
-}
- 
-public class SecondFilter implements Filter {
-    //..
- 
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if (servletRequest.getAttribute(&quot;executeSecondFilter&quot;) == null || !((Boolean) servletRequest.getAttribute(&quot;executeSecondFilter&quot;))) {
-            filterChain.doFilter(servletRequest, servletResponse);
-        }
-        //...
-    }
-}
-</code></pre>
-
-<h4 id="toc_1">方式二：</h4>
-
-<p>过滤器处理时，不进行后续过滤器链处理（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/Filter.html#doFilter%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse,%20javax.servlet.FilterChain%29">FilterChain#doFilter()</a>），而是直接转发请求给 Servlet（<a href="http://download.oracle.com/javaee/6/api/javax/servlet/RequestDispatcher.html#forward%28javax.servlet.ServletRequest,%20javax.servlet.ServletResponse%29">RequestDispatcher#forward()</a>）。</p>
-
-<pre><code>if (condition) {
-    request.getRequestDispatcher(httpServletRequest.getServletPath() + httpServletRequest.getPathInfo()).forward(request, response);
-} else {
-    chain.doFilter(request, response);
-}
-</code></pre>
-
-<p>这样会跳过后续的所有过滤器处理，如果有某个过滤器仍然需要进行处理，那可以在 web.xml 中配置该过滤器 <filter-mapping>：</p>
-
-<p><code>&lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;</code></p>
-
-<p>细节可参阅 Servlet 3.0 规范（<a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">JSR-315</a>）6.2.5 Filters and the RequestDispatcher</p>
-
-<p>参考：</p>
-
-<ul>
-<li>StackOverflow：<a href="http://stackoverflow.com/questions/3738162/how-to-skip-a-filter-in-the-filter-chain-in-java">How to skip a filter in the filter chain in java</a></li>
-<li><a href="http://download.oracle.com/otndocs/jcp/servlet-3.0-fr-oth-JSpec/">Servlet 3.0 规范</a></li>
-</ul>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_9.html">&larr; Older</a> 
@@ -1652,6 +2337,12 @@ public class SecondFilter implements Filter {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-01-10-wechat-redenvelop-tweak-for-non-jailbroken-iphone.html">不越狱iOS自动抢红包</a>
 		      </li>
 	     
@@ -1671,12 +2362,6 @@ public class SecondFilter implements Filter {
 	      
 		      <li class="post">
 		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-28-wechat-small-app.html">张小龙首次公开解读小程序：1月9号上线</a>
 		      </li>
 	     
 	  
