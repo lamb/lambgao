@@ -88,6 +88,64 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-03-31-docker-inspect-template-magic-chinese.html">奇妙的 Docker Inspect 模版</a></h1>
+			<p class="meta"><time datetime="2015-03-31T23:39:43+08:00" 
+			pubdate data-updated="true">2015/3/31</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">概述</h3>
+
+<p>很多 Docker 用户都知道 docker inspect 命令，该命令用于获取容器/镜像的元数据，其中 -f 参数可以用于获取指定的数据，例如使用 docker inspect -f {{.IPAddress}} 来获取容器的 IP 地址。不过很多用户容易被该特性的语法搞晕，并很少有人能将它的优势发挥出来（大部分人都是通过 grep 来获取指定数据，虽然有效但比较零散混乱）。本文将详细介绍 -f 参数，并给出一些例子来说明如何使用它。</p>
+
+<h3 id="toc_1">docker inspect</h3>
+
+<p>简单地说，-f 的实参是个 Go 模版，并在容器/镜像的元数据上以该 Go 模版作为输入，最终返回模版指定的数据。第一个问题就是该命令说明文档中的用词“Go 模版”对于没有 Go 开发经验的人来说很模糊——我的第一感觉就是它类似恐怖的 C++ 模版。还好 Go 模版和 C++ 模版/泛型毫不相干，Go 模版是一种模板引擎，让数据以指定的模式输出。这个概念对于 Web 开发者是非常熟悉的，Web 领域有很多模版引擎，比如 Jinga2（用于 Python 和 Flask）、Mustache、JSP 等等，看下面的简单示例：</p>
+
+<pre><code>$ docker inspect -f &#39;Hello from container {{.Name}}&#39; jenkins
+Hello from container /jenkins
+</code></pre>
+
+<p>我们可以看到，-f 指定了一个简单的模式（或称之为模版）并应用于容器的元数据。当然，对于元数据，我们也可以什么都不指定：</p>
+
+<pre><code>$ docker inspect -f &quot;This is a bit pointless&quot; jenkins
+This is a bit pointless
+</code></pre>
+
+<p>下面让我们来进一步看看 Go 模版的奇妙之处，例如我们可以通过模版来查找所有退出码为非 0 的容器名：</p>
+
+<pre><code>$ docker inspect -f &#39;{{if ne 0.0 .State.ExitCode }}{{.Name}} {{.State.ExitCode}}{{ end }}&#39; $(docker ps -aq)
+
+/tender_colden 1
+/clever_mcclintock 126
+
+/grave_bartik 1
+</code></pre>
+
+<p>（无论是否匹配到，对于每个容器都会输出一行）</p>
+
+<p>或者在 jenkins-data 容器中查找卷 /var/jenkins_home 对应在 host 的目录：</p>
+
+<pre><code>docker inspect -f &#39;{{index .Volumes &quot;/var/jenkins_home&quot;}}&#39; jenkins-data
+/var/lib/docker/vfs/dir/5a6f7b306b96af38723fc4d31def1cc515a0d75c785f3462482f60b730533b1a
+</code></pre>
+
+<p>上面的例子可能稍微有点难理解，不过没关系，我们先来了解一下 Go 模版的基本用法。</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-03-31-docker-inspect-template-magic-chinese.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-03-08-auto-layout-drag-rebound.html">Auto Layout 使用心得（三）—— 22 行代码实现拖动回弹</a></h1>
 			<p class="meta"><time datetime="2015-03-08T00:00:46+08:00" 
 			pubdate data-updated="true">2015/3/8</time></p>
@@ -651,28 +709,6 @@ func homeWindows() (string, error) {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-09-11-swift-final.html">Swift中的final修饰符</a></h1>
-			<p class="meta"><time datetime="2014-09-11T23:08:41+08:00" 
-			pubdate data-updated="true">2014/9/11</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Swift中的final修饰符可以防止类（class）被继承，还可以防止子类重写父类的属性、方法以及下标。需要注意的是，final修饰符只能用于类，不能修饰结构体（struct）和枚举（enum），因为结构体和枚举只能遵循协议（protocol）。虽然协议也可以遵循其他协议，但是它并不能重写遵循的协议的任何成员，这就是结构体和枚举不需要final修饰的原因。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-09-11-swift-final.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -698,6 +734,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -717,12 +759,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

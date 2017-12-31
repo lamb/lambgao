@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2017-02-16T16:18:14+08:00</updated>
+  <updated>2017-06-24T13:06:53+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2017 总结 - 乘风破浪]]></title>
+    <link href="http://lambgao.com/2017-12-31-life-2017.html"/>
+    <updated>2017-12-31T20:00:49+08:00</updated>
+    <id>http://lambgao.com/2017-12-31-life-2017.html</id>
+    <content type="html"><![CDATA[
+<p>2017年快过了。<br/>
+这一年我们经历过很多不开心的事。<br/>
+我们看到送外卖因为超时在电梯里哭出来的小哥。<br/>
+看到在大雨里嚎啕大哭的快递员。<br/>
+看到地铁口十二点多还在摆摊的麻辣烫老板。<br/>
+看到清洁工阿姨舍不得吃十五块钱的盒饭。<br/>
+我们也曾因某些事情的发生而义愤填膺，也曾为了一些正能量的伸张而努力贡献自己的一份力量。<br/>
+尽管生活中，我们也总是过得普普通通。<br/>
+没那么好，也没想象中的那么困难。<br/>
+但每个加班的夜晚，温暖的被窝总能让我找到归宿。<br/>
+每个不开心的时刻，跟朋友聊天吐槽也总能甩掉那些阴霾。<br/>
+每个疲惫的星期，周末也都有沙发和电影在等我。<br/>
+2018，也许会很忙更累。<br/>
+日子有些难过，生活也总是困难。<br/>
+但我知道，那些美好就像我们曾经为之感动的温暖一样。<br/>
+它可能会迟到，但不会让你久等。<br/>
+美好就快到来了。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a]]></title>
@@ -1756,50 +1783,6 @@ LRU memory cache cleanup instead of reset on memory warning</p>
   NSData *data = UIImageJPEGRepresentation(image, 1);
   self.imageData =  [NSMutableData dataWithData:data];
 </code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[gitconfig配置别名alias]]></title>
-    <link href="http://lambgao.com/2016-03-29-gitconfig-alias.html"/>
-    <updated>2016-12-29T01:50:52+08:00</updated>
-    <id>http://lambgao.com/2016-03-29-gitconfig-alias.html</id>
-    <content type="html"><![CDATA[
-<p>git有一些命令如：git pull 、 git push等等，这些命令可以设置alias，也就是缩写。如：git pull 是 git pl， git push 是 git ps。可以根据个人习惯进行修改。</p>
-
-<p>修改别名alias步骤如下：</p>
-
-<p>1,进入根目录</p>
-
-<p><code>$ cd</code></p>
-
-<p>2,查看根目录下面的文件</p>
-
-<p><code>$ ls -la</code></p>
-
-<p>查看一下有没有.gitconfig文件。</p>
-
-<p>3，编辑.gitconfig</p>
-
-<p><code>$ vi .gitconfig</code></p>
-
-<p>添加如下：</p>
-
-<pre><code>[alias]
-co = checkout
-ci = commit
-st = status
-pl = pull
-ps = push
-dt = difftool
-l = log --stat
-cp = cherry-pick
-ca = commit -a
-b = branch
-</code></pre>
-
-<p>具体可以根据个人习惯进行添加修改。</p>
 
 ]]></content>
   </entry>

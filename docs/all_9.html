@@ -88,6 +88,52 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-04-25-tapestry-defects.html">吐槽 Tapestry</a></h1>
+			<p class="meta"><time datetime="2012-04-25T17:23:46+08:00" 
+			pubdate data-updated="true">2012/4/25</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h4 id="toc_0">组件化</h4>
+
+<p>组件是 Tapestry 中的核心概念，将页面模版与 Java 类做对应。在运行时框架管理组件生命周期与行为，最后输出 HTML 到客户端。</p>
+
+<p>Tapestry 组件化所要达到的目标是使 Java 程序员更容易理解页面构成，使应用开发周期缩短。</p>
+
+<p>但这样的组件化思想有个根本性的问题：不同编程模型在做映射的时候存在不匹配问题，与 ORM 的<a href="http://www.hudong.com/wiki/%E9%98%BB%E6%8A%97%E4%B8%8D%E5%8C%B9%E9%85%8D">“阻抗不匹配”</a>类似。</p>
+
+<h4 id="toc_1">模版</h4>
+
+<p>从输出展现上看，前端与后端的分离是必须的。前端程序员主要使用 HTML/CSS/JS 进行开发，不关注后端的组件构成。在页面布局设计上面是以展现结构进行模块化，比如分为页头、侧边栏、页脚、主体等。各部分的展现在运行时通过模版引擎即可完成组合，后端也只需要往不同模版组装填充对应数据，后端对应页面的组件化方式就显得多余了，并且处理过程繁琐，性能低下。</p>
+
+<h4 id="toc_2">IoC</h4>
+
+<p>对象状态管理是面向对象设计中比较复杂的一个问题。IoC 主要是为了帮助应用开发者管理对象，降低实现难度。但从实践出发，应用在设计的时候一般不会考虑使用 IoC 管理域对象，而只是使用 IoC 管理服务。这样的话其实使用 IoC 意义也不是很大了，工厂方法已经足够。</p>
+
+<p>现在，随着分布式技术的普遍使用，JVM 内存领域对象必须做到最小化，以规避状态同步带来的复杂度和性能问题，目前的 IoC 容器并不能做到这一点。</p>
+
+<h4 id="toc_3">总结</h4>
+
+<ul>
+<li>组件化模型存在问题</li>
+<li>模版功能单一，只是为了辅助组件化</li>
+<li>IoC 实践意义不大</li>
+<li>多客户端视图渲染不宜扩展</li>
+<li>过于依赖 HTTP 会话</li>
+<li>版本不向后兼容</li>
+</ul>
+
+<p>框架是程序的半成品，其目的是为了降低开发难度，缩短开发周期。从某些方面上看，也是为了限制开发者，做到全局上的实现统一。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-03-31-how-to-skip-filters-in-java.html">如何跳过过滤器处理？</a></h1>
 			<p class="meta"><time datetime="2012-03-31T17:02:45+08:00" 
 			pubdate data-updated="true">2012/3/31</time></p>
@@ -890,35 +936,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-09-04-gae-blog.html">GAE 博客程序推荐</a></h1>
-			<p class="meta"><time datetime="2011-09-04T15:17:46+08:00" 
-			pubdate data-updated="true">2011/9/4</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>列出还在开发维护的活跃博客。其中有的是开源的，有的不是。</p>
-
-<ul>
-<li><p><a href="http://xuming.net/">徐明的博客</a>（<a href="http://micolog.xuming.net/zh-cn">Micolog</a>，开源，GAE/Python）</p></li>
-<li><p><a href="http://www.keakon.net/">keakon的涂鸦馆</a>（<a href="https://bitbucket.org/keakon/doodle/">Doodle</a>，开源，GAE/Python）</p></li>
-<li><p><a href="http://www.yoyolg.com/">yoyo的博客</a>（yoyo，GAE/Java）</p></li>
-<li><p><a href="http://iunbug.appspot.com/">i, unbug</a>（GAE/Java）</p></li>
-<li><p><a href="http://88250.b3log.org/">简约设计の艺术</a>（<a href="http://code.google.com/p/b3log-solo/">B3log Solo</a>，开源，GAE/Java）</p></li>
-</ul>
-
-<p>其中使用最广泛的是 Micolog，开发活跃度最高的是 B3log Solo ;-)</p>
-
-<p>性能上面表现最好的应该是 Doodle，的确很快，细节很好。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_10.html">&larr; Older</a> 
@@ -944,6 +961,12 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -963,12 +986,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

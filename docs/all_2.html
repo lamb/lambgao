@@ -88,6 +88,36 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-09-17-tvos-initial-impression.html">一个iOS开发者对tvOS SDK的初探</a></h1>
+			<p class="meta"><time datetime="2015-09-17T23:46:33+08:00" 
+			pubdate data-updated="true">2015/9/17</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>在Walter Isaacson编写的《Steve Jobs》的最后一章中，Steve说过“我最终实现并让它拥有了你们能想象到的最简单的用户界面”。当时他指的就是Apple TV。</p>
+
+<p>Steve不幸离世已经过去很久了，但是人们一直翘首以盼着这款产品。就在昨天2015年9月9日，超过四个春秋的期盼，我们终于等来了这个礼物，虽然可能与Steve对这款产品的愿景和理想有所差距，但是革命的步伐已经坚实的迈出了第一步。</p>
+
+<p>作为一名iOS开发者，昨天的产品发布会让我心潮澎湃，因为Apple宣布，新的Apple TV集成了App Store，这就意味着我们可以为它开发专有的应用，并且会让我们重新认知已了解的iOS知识，以及会开启更多新的展现想法、创意的机会。</p>
+
+<p>我和其他教程团队的成员已经开始深入研究tvOS SDK，并且正在努力准备一些有价值的tvOS教程（通宵达旦！），在此同时，我想从一个iOS开发者的视角与大家分享我对tvOS的初步印象。</p>
+
+<p>让我们一探究竟吧！</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-09-17-tvos-initial-impression.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-09-03-difference-between-concurrenthashmap.html">ConurrentHashMap和Hashtable的区别</a></h1>
 			<p class="meta"><time datetime="2015-09-03T22:59:40+08:00" 
 			pubdate data-updated="true">2015/9/3</time></p>
@@ -472,64 +502,6 @@ if source, present = p.sources[name]; !present {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-03-31-docker-inspect-template-magic-chinese.html">奇妙的 Docker Inspect 模版</a></h1>
-			<p class="meta"><time datetime="2015-03-31T23:39:43+08:00" 
-			pubdate data-updated="true">2015/3/31</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h3 id="toc_0">概述</h3>
-
-<p>很多 Docker 用户都知道 docker inspect 命令，该命令用于获取容器/镜像的元数据，其中 -f 参数可以用于获取指定的数据，例如使用 docker inspect -f {{.IPAddress}} 来获取容器的 IP 地址。不过很多用户容易被该特性的语法搞晕，并很少有人能将它的优势发挥出来（大部分人都是通过 grep 来获取指定数据，虽然有效但比较零散混乱）。本文将详细介绍 -f 参数，并给出一些例子来说明如何使用它。</p>
-
-<h3 id="toc_1">docker inspect</h3>
-
-<p>简单地说，-f 的实参是个 Go 模版，并在容器/镜像的元数据上以该 Go 模版作为输入，最终返回模版指定的数据。第一个问题就是该命令说明文档中的用词“Go 模版”对于没有 Go 开发经验的人来说很模糊——我的第一感觉就是它类似恐怖的 C++ 模版。还好 Go 模版和 C++ 模版/泛型毫不相干，Go 模版是一种模板引擎，让数据以指定的模式输出。这个概念对于 Web 开发者是非常熟悉的，Web 领域有很多模版引擎，比如 Jinga2（用于 Python 和 Flask）、Mustache、JSP 等等，看下面的简单示例：</p>
-
-<pre><code>$ docker inspect -f &#39;Hello from container {{.Name}}&#39; jenkins
-Hello from container /jenkins
-</code></pre>
-
-<p>我们可以看到，-f 指定了一个简单的模式（或称之为模版）并应用于容器的元数据。当然，对于元数据，我们也可以什么都不指定：</p>
-
-<pre><code>$ docker inspect -f &quot;This is a bit pointless&quot; jenkins
-This is a bit pointless
-</code></pre>
-
-<p>下面让我们来进一步看看 Go 模版的奇妙之处，例如我们可以通过模版来查找所有退出码为非 0 的容器名：</p>
-
-<pre><code>$ docker inspect -f &#39;{{if ne 0.0 .State.ExitCode }}{{.Name}} {{.State.ExitCode}}{{ end }}&#39; $(docker ps -aq)
-
-/tender_colden 1
-/clever_mcclintock 126
-
-/grave_bartik 1
-</code></pre>
-
-<p>（无论是否匹配到，对于每个容器都会输出一行）</p>
-
-<p>或者在 jenkins-data 容器中查找卷 /var/jenkins_home 对应在 host 的目录：</p>
-
-<pre><code>docker inspect -f &#39;{{index .Volumes &quot;/var/jenkins_home&quot;}}&#39; jenkins-data
-/var/lib/docker/vfs/dir/5a6f7b306b96af38723fc4d31def1cc515a0d75c785f3462482f60b730533b1a
-</code></pre>
-
-<p>上面的例子可能稍微有点难理解，不过没关系，我们先来了解一下 Go 模版的基本用法。</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-03-31-docker-inspect-template-magic-chinese.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_3.html">&larr; Older</a> 
@@ -555,6 +527,12 @@ This is a bit pointless
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -574,12 +552,6 @@ This is a bit pointless
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

@@ -88,6 +88,45 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2013-03-29-zookeeper-znode-type.html">ZooKeeper 节点类型</a></h1>
+			<p class="meta"><time datetime="2013-03-29T11:10:19+08:00" 
+			pubdate data-updated="true">2013/3/29</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>ZooKeeper 节点是有生命周期的，这取决于节点的类型。在 ZooKeeper 中，节点类型可以分为持久节点（PERSISTENT ）、临时节点（EPHEMERAL），以及时序节点（SEQUENTIAL ），具体在节点创建过程中，一般是组合使用，可以生成以下 4 种节点类型。</p>
+
+<h3 id="toc_0">持久节点（PERSISTENT）</h3>
+
+<p>所谓持久节点，是指在节点创建后，就一直存在，直到有删除操作来主动清除这个节点——不会因为创建该节点的客户端会话失效而消失。</p>
+
+<h3 id="toc_1">持久顺序节点（PERSISTENT_SEQUENTIAL）</h3>
+
+<p>这类节点的基本特性和上面的节点类型是一致的。额外的特性是，在ZK中，每个父节点会为他的第一级子节点维护一份时序，会记录每个子节点创建的先后顺序。基于这个特性，在创建子节点的时候，可以设置这个属性，那么在创建节点过程中，ZK会自动为给定节点名加上一个数字后缀，作为新的节点名。这个数字后缀的范围是整型的最大值。</p>
+
+<h3 id="toc_2">临时节点（EPHEMERAL）</h3>
+
+<p>和持久节点不同的是，临时节点的生命周期和客户端会话绑定。也就是说，如果客户端会话失效，那么这个节点就会自动被清除掉。注意，这里提到的是会话失效，而非连接断开。另外，在临时节点下面不能创建子节点。</p>
+
+<h3 id="toc_3">临时顺序节点（EPHEMERAL_SEQUENTIAL）</h3>
+
+<p>可以用来实现分布式锁</p>
+
+<p>客户端调用create()方法创建名为“_locknode_/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为EPHEMERAL_SEQUENTIAL。<br/>
+客户端调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，注意，这里不注册任何Watcher。<br/>
+客户端获取到所有子节点path之后，如果发现自己在步骤1中创建的节点序号最小，那么就认为这个客户端获得了锁。<br/>
+如果在步骤3中发现自己并非所有子节点中最小的，说明自己还没有获取到锁。此时客户端需要找到比自己小的那个节点，然后对其调用exist()方法，同时注册事件监听。<br/>
+之后当这个被关注的节点被移除了，客户端会收到相应的通知。这个时候客户端需要再次调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，确保自己确实是最小的节点了，然后进入步骤3。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2013-03-19-zoundry-raven.html">Zoundry Raven: ’Nonetype’ object has no attribute ‘tagName’</a></h1>
 			<p class="meta"><time datetime="2013-03-19T11:08:44+08:00" 
 			pubdate data-updated="true">2013/3/19</time></p>
@@ -1637,129 +1676,6 @@ ctx.refresh();
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-11-15-google-play-oauth.html">Google Play服务和OAuth认证工具</a></h1>
-			<p class="meta"><time datetime="2012-11-15T22:25:15+08:00" 
-			pubdate data-updated="true">2012/11/15</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>Google Play服务在2.2以上设备的发布在全球范围内已经完成，所有这些设备现在在OAuth 2.0下有了新的工具可以使用。下面是一个灵活性方面的例子，这种灵活性可以延伸Google Play服务支持的平台特性。</p>
-
-<h3 id="toc_0">为什么是OAuth 2.0</h3>
-
-<p>网上已经有很多用户名和密码了，而且密码的强度良莠不齐，进一步说，你的设备肯定能分辨出你是谁，这种情况下，业界一直认为，在缺乏高强度安全密码保护的前提下，OAuth 2.0是提供有效安全保障的最佳选择之一。Google Play服务使需要访问Google APIs的Android应用也可以使用OAuth 2.0，并且有很好的用户体验和安全性。</p>
-
-<p>一般来说，当你的Android应用需要使用Google账户去访问一些东西的时候，你得选择用这个设备上的哪个账户去访问，然后必须生成一个OAuth2.0的令牌，用这个令牌在基于Http的对话框中和资源提供者交互。</p>
-
-<p>如果使用最近为java发布的Google APIs客户端文件库的话，这些任务很大程度上可以自动完成。这里我们要讨论的是你是否直接访问服务器，比如在发送HTTP get和post请求到一个RESTful 的接口。</p>
-
-<h3 id="toc_1">准备工作</h3>
-
-<p>Google Play服务尽管已经开始对外发布，但在发布之后也仅限于2.2及以上版本，大部分机子已经可以使用了，但仍有少量机子不可以。也有可能用户选择自己关掉服务。</p>
-
-<p>因为这些原因，在你开始调用前，必须确认Google Play的服务已经安装，调用<a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/common/GooglePlayServicesUtil#isGooglePlayServicesAvailable(android.content.Context)">isGooglePlayServicesAvailable()</a>可以去确认，如何处理返回结果，在<a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/common/ConnectionResult">ConnectionResult</a>这个类中有描述。</p>
-
-<h3 id="toc_2">选择一个账户</h3>
-
-<p>这不是也永远不会是复杂困难的事，这儿有许多在线的例子，可以从Android账户管理器获得账户和显示许多种选择列表。问题是它们有自己的外观界面和一些类似的东西，比如安全问题。用户有权期待系统上的一致性。</p>
-
-<p>现在你可以使用 <a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/common/AccountPicker">AccountPicker.newChooseAccountIntent()</a>这个方法获得一个Intent，将其传给startActivityForResult()会启动一个标准的良好的用户体验界面，如果用户愿意的话会返回给你一个账户。有两点要注意：第一，当使用这些APIs时，需要使用一个Google账户（AccountManager可以处理多个账户），所以指定 <a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/auth/GoogleAuthUtil#GOOGLE_ACCOUNT_TYPE">GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE</a>的值作为 allowableAccountTypes参数的值。第二，你不需要一个android.accounts.Account对象，只需要email地址就可以，它可以唯一确定一个google账户。</p>
-
-<h3 id="toc_3">获取Token</h3>
-
-<p>你能在一次调用中提供多个用空格分开的scop这里只需要调用一个方法：GoogleAuthUtil.getToken()，它需要3个参数：Context，email地址，和另一个叫着scope的字符串变量。每一个和oauth2.0对话的信息源需要公布它使用的域（scope），比如，访问Google+的api，需要的scope是e，能得到一个可以访问所有那些scope的令牌（token）。下面就是很典型的代码：</p>
-
-<pre><code>private final static String G_PLUS_SCOPE=&quot;oauth2:https://www.googleapis.com/auth/plus.me&quot;;
- 
-private final static String USERINFO_SCOPE =  &quot;https://www.googleapis.com/auth/userinfo.profile&quot;;
- 
-private final static String SCOPES = G_PLUS_SCOPE + &quot; &quot; + USERINFO_SCOPE;
-</code></pre>
-
-<p>在理想的情况下，getToken()将会是同步的，但有3件事会让其变得不那么简单：</p>
-
-<p>应用第一次请求token访问资源时，系统会和用户交互，询问用户是否允许。<br/>
-每次请求token时，系统会和同一个后台服务器有网络会话。<br/>
-处理请求的设备可能会过载而不能立马给你token，它不会让你等或者告诉你请求失败，而会告知你先离开一会儿再回来。<br/>
-显然，你绝对不能在UI线程中调用getToken()，因为那会导致不可预知的延迟。</p>
-
-<p>当你调用getToken()时，会发生以下的事情：</p>
-
-<p>如果成功返回token，那说明各个步骤都是对的，后台认为认证是成功的，接着你处理和使用token就可以了。</p>
-
-<p>抛出<a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/auth/UserRecoverableAuthException">UserRecoverableAuthException</a>异常意味着你需要和用户交互，很可能是要求用户使用账户进行认证。异常有一个getIntent()方法，你可以将其返回值传给startActivityForResult()来搞定。当然你需要注意onActivityResult()是否ok。</p>
-
-<p>抛出IOException时，说明认证服务器很忙，后者有网络异常（在移动设备上这个情况经常出现）。你不应该马上就放弃，因为再试一次可能就好了。换句话说，如果你立马返回并再次向服务器提出请求，结果不见得好。所以你需要等一下。最好的处理办法是指数退避模式。</p>
-
-<p>抛出<a href="https://developers.google.com/android/google-play-services/reference/com/google/android/gms/auth/GoogleAuthException">GoogleAuthException</a>，意味着认证无法通过，你该礼貌地让你的用户冷静下来。如果请求的scope非法或者email地址对应的账户在当前设备上不存在的话就会发生这种异常。</p>
-
-<p>下面是一些示例代码：</p>
-
-<pre><code>try {
-  // if this returns, the OAuth framework thinks the token should be usable
-  String token = GoogleAuthUtil.getToken(this, mRequest.email(),
-  mRequest.scope());
-  response = doGet(token, this);
- 
-}catch (UserRecoverableAuthException userAuthEx) {
-  // This means that the app hasn&#39;t been authorized by the user for access
-  // to the scope, so we&#39;re going to have to fire off the (provided) Intent
-  // to arrange for that. But we only want to do this once. Multiple
-  // attempts probably mean the user said no.
-  if (!mSecondTry) {
-    startActivityForResult(userAuthEx.getIntent(), REQUEST_CODE);
-    response = null;
-  } else {
-    response = new Response(-1, null, &quot;Multiple approval attempts&quot;);
-  }
- 
-}catch (IOException ioEx) {
-  // Something is stressed out; the auth servers are by definition
-  //  high-traffic and you can&#39;t count on 100% success. But it would be
-  //  bad to retry instantly, so back off
-  if (backoff.shouldRetry()) {
-    backoff.backoff();
-    response = authenticateAndGo(backoff);
-  } else {
-    response = new Response(-1, null, &quot;No response from authorization server.&quot;);
-  }
-}catch (GoogleAuthException fatalAuthEx)  {
-  Log.d(TAG, &quot;Fatal Authorization Exception&quot;);
-  response = new Response(-1, null, &quot;Fatal authorization exception: &quot; +
-  fatalAuthEx.getLocalizedMessage());
-}
-</code></pre>
-
-<p>这是一个我已经提交到code.google.com上的一个用AuthorizedActivity类实现了的示例库。我们觉得这种认证行为将会是不同应用的特定行为，所以这个AuthorizedActivity类不见得对每个人都有用，但它是基于Apach2许可证，你可以在你需要的地方随便用。它已作为一个工程建立了起来，这里有一个叫做G+ Snowflake的应用，它用那个建好的工程取得了许多你在google+上的提交的东西。这个应用在google play上有，源码也在线上。</p>
-
-<h3 id="toc_4">注册你的应用</h3>
-
-<p>大部分进行oauth2.0认证的服务器都要你进行app注册，当然google的也不例外。访问 <a href="https://code.google.com/apis/console/%20">Google APIs Console</a>，创建一个工程，把你要访问的apis从服务菜单中拣出来，然后点击访问API的标签进行注册。输入你应用的报名，即在AndroidManifest.xml中package属性对应的值，另外需要你应用的SHA1码。任何在google play 发布过应用的人都知道秘钥和签名。但在这之前你会得到一个debug版本的应用，进行这种认证的工具在~/.android/debug.keystore，密码是android。幸运的是，你的电脑很可能已经装了keytool这个程序，你能用它来生成你的签名，对于debug版本，生成签名的命令是：</p>
-
-<p>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -v -list<br/>
-这就能生成SHA1签名，很容易剪切粘贴滴哦。</p>
-
-<p>这方法可能让人觉得有点陈旧，但却值得这么做，因为戏法就是这么发生的。当你的应用被注册过，然后你生成一个token并将其发送给服务提供者，服务提供者通过google检测token是否正确，token是google发布了的，并且google提供给你应用的包名。之前你们做过这件事的家伙们可能想要知道Client IDs和API Keys了，但在这种机制下，你们并不需要它们。</p>
-
-<h3 id="toc_5">使用你的Token</h3>
-
-<p>假设你已经注册过你的应用并调用GoogleAuthUtil.getToken()得到了一个token，假如它就是“MissassaugaParnassus42”。然后你需要做的是，当你向服务提供者发送一个HTTP请求时，包括一个像这样的HTTP请求头：</p>
-
-<p>然后你的HTTP GETs和POSTs开始工作了，你应该调用GoogleAuthUtil.getToken()在每次 GETs 或者 POSTs请求前获得一个token。在恰当的时候缓存数据还有处理token的到期和刷新，这些事情都不用你操心的。</p>
-
-<p>再说一遍，如我上面说的，如果你用着为java而存在的google apis客户端很舒服，它将会为你处理所有客户端的事情，你需要做的就是去注册一下而已。</p>
-
-<p>另外，在这里会有一些编码投入，但回报是巨大的：安全性，认证通过，已授权，拥有良好用户体验的服务访问。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_8.html">&larr; Older</a> 
@@ -1785,6 +1701,12 @@ private final static String SCOPES = G_PLUS_SCOPE + &quot; &quot; + USERINFO_SCO
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -1804,12 +1726,6 @@ private final static String SCOPES = G_PLUS_SCOPE + &quot; &quot; + USERINFO_SCO
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

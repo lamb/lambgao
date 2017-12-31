@@ -88,6 +88,64 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-01-14-grub-rescue.html">Grub 恢复命令</a></h1>
+			<p class="meta"><time datetime="2014-01-14T18:07:56+08:00" 
+			pubdate data-updated="true">2014/1/14</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>重装 Win 后，MBR 被重置，会导致 Ubuntu 进不去，这里介绍一个恢复步骤。</p>
+
+<h4 id="toc_0">1. 从 LiveCD 进入</h4>
+
+<h4 id="toc_1">2. 找到已挂载好的原 Linux 根分区（/media/ubuntu/xxx）如果 /boot 是单独安装的，也需要挂载好。</h4>
+
+<h4 id="toc_2">3. 挂载虚拟文件系统</h4>
+
+<pre><code>sudo mount --bind /dev /media/ubuntu/xxx/dev
+sudo mount --bind /proc /media/ubuntu/xxx/proc
+sudo mount --bind /sys /media/ubuntu/xxx/sys
+</code></pre>
+
+<h4 id="toc_3">4. 为确保 grub 工具是从 LiveCD 执行的，挂在 /usr</h4>
+
+<pre><code>sudo mount --bind /usr/ /media/ubuntu/xxx/usr
+sudo chroot /media/ubuntu/xxx
+</code></pre>
+
+<h4 id="toc_4">5. 更新（创建） /boot/grub/grub.cfg</h4>
+
+<pre><code>sudo update-grub2
+</code></pre>
+
+<h4 id="toc_5">6. 重新安装 grub</h4>
+
+<pre><code>grub-install /dev/sd&lt;strong&gt;X&lt;/strong&gt;
+</code></pre>
+
+<p>注意：不要带分区号，可以用 sudo fdisk -l 查看</p>
+
+<h4 id="toc_6">7. 重启</h4>
+
+<pre><code>sudo reboot
+</code></pre>
+
+<h4 id="toc_7">8. 进入 Ubuntu 后执行</h4>
+
+<pre><code>sudu update-grub2
+</code></pre>
+
+<h4 id="toc_8">9. Done!</h4>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2013-12-17-building-android-projects-with-gradle.html">使用Gradle构建Android项目</a></h1>
 			<p class="meta"><time datetime="2013-12-17T17:26:29+08:00" 
 			pubdate data-updated="true">2013/12/17</time></p>
@@ -1732,45 +1790,6 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2013-03-29-zookeeper-znode-type.html">ZooKeeper 节点类型</a></h1>
-			<p class="meta"><time datetime="2013-03-29T11:10:19+08:00" 
-			pubdate data-updated="true">2013/3/29</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>ZooKeeper 节点是有生命周期的，这取决于节点的类型。在 ZooKeeper 中，节点类型可以分为持久节点（PERSISTENT ）、临时节点（EPHEMERAL），以及时序节点（SEQUENTIAL ），具体在节点创建过程中，一般是组合使用，可以生成以下 4 种节点类型。</p>
-
-<h3 id="toc_0">持久节点（PERSISTENT）</h3>
-
-<p>所谓持久节点，是指在节点创建后，就一直存在，直到有删除操作来主动清除这个节点——不会因为创建该节点的客户端会话失效而消失。</p>
-
-<h3 id="toc_1">持久顺序节点（PERSISTENT_SEQUENTIAL）</h3>
-
-<p>这类节点的基本特性和上面的节点类型是一致的。额外的特性是，在ZK中，每个父节点会为他的第一级子节点维护一份时序，会记录每个子节点创建的先后顺序。基于这个特性，在创建子节点的时候，可以设置这个属性，那么在创建节点过程中，ZK会自动为给定节点名加上一个数字后缀，作为新的节点名。这个数字后缀的范围是整型的最大值。</p>
-
-<h3 id="toc_2">临时节点（EPHEMERAL）</h3>
-
-<p>和持久节点不同的是，临时节点的生命周期和客户端会话绑定。也就是说，如果客户端会话失效，那么这个节点就会自动被清除掉。注意，这里提到的是会话失效，而非连接断开。另外，在临时节点下面不能创建子节点。</p>
-
-<h3 id="toc_3">临时顺序节点（EPHEMERAL_SEQUENTIAL）</h3>
-
-<p>可以用来实现分布式锁</p>
-
-<p>客户端调用create()方法创建名为“_locknode_/guid-lock-”的节点，需要注意的是，这里节点的创建类型需要设置为EPHEMERAL_SEQUENTIAL。<br/>
-客户端调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，注意，这里不注册任何Watcher。<br/>
-客户端获取到所有子节点path之后，如果发现自己在步骤1中创建的节点序号最小，那么就认为这个客户端获得了锁。<br/>
-如果在步骤3中发现自己并非所有子节点中最小的，说明自己还没有获取到锁。此时客户端需要找到比自己小的那个节点，然后对其调用exist()方法，同时注册事件监听。<br/>
-之后当这个被关注的节点被移除了，客户端会收到相应的通知。这个时候客户端需要再次调用getChildren(“_locknode_”)方法来获取所有已经创建的子节点，确保自己确实是最小的节点了，然后进入步骤3。</p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_7.html">&larr; Older</a> 
@@ -1796,6 +1815,12 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -1815,12 +1840,6 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

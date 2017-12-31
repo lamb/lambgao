@@ -88,6 +88,38 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-06-04-swift-noescape.html">Swift中被忽略的@noescape</a></h1>
+			<p class="meta"><time datetime="2016-06-04T00:03:16+08:00" 
+			pubdate data-updated="true">2016/6/4</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>这里需要先介绍一下escape的概念。当一个闭包当做一个参数传进函数里，这个闭包是在这个函数执行完后执行的，这个时候我们就说这个闭包从函数逃出来了（escape）。这种场景很常见，比如我们进行一个异步的请求，请求时会传入一个handler，比如当请求成功后执行达到回调的目的。</p>
+
+<p>众所周知swift的内存管理是引用计数。闭包里用到的数据都需要捕捉到闭包里，保证闭包执行时这些数据不会被释放还在内存里。Xcode为了让我们意识到闭包里用到的对象其实已经被retain了，就要求我们访问当前属性时显示声明self。<br/>
+这个时候如果新手就很容易犯引用循环的错误。闭包retain了self，self如果又持有retain了闭包。最后就谁都释放不了，内存就泄露了。</p>
+
+<p>这是swift中默认闭包的使用场景。<br/>
+但是这里是有另外一种可能，假设有一个闭包是传入用于sort用的，或者比如作为map参数的闭包。当这行代码执行完成时，这个闭包也就使用完了，之后不会再被执行。这个情况下，闭包就不必再持有里面用到的对象。<br/>
+这就是非escape闭包。</p>
+
+<p>swift里针对非escape用@noescape表示。<br/>
+比如map函数就使用了：</p>
+
+<pre><code>func map&lt;T&gt;(@noescape transform: (Self.Generator.Element) throws -&gt; T) rethrows -&gt; [T]
+</code></pre>
+
+<p>这样标记之后能看到的好处就是这个闭包里如果再使用self的属性不需要加self.了。对于编译器而言，在知道是noescape闭包后可以进行一些内存的优化。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-05-14-swift-inout.html">Swift 3：inout 关键字位置的变化</a></h1>
 			<p class="meta"><time datetime="2016-05-14T01:19:18+08:00" 
 			pubdate data-updated="true">2016/5/14</time></p>
@@ -688,36 +720,6 @@ export GOARCH=amd64
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-09-17-tvos-initial-impression.html">一个iOS开发者对tvOS SDK的初探</a></h1>
-			<p class="meta"><time datetime="2015-09-17T23:46:33+08:00" 
-			pubdate data-updated="true">2015/9/17</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在Walter Isaacson编写的《Steve Jobs》的最后一章中，Steve说过“我最终实现并让它拥有了你们能想象到的最简单的用户界面”。当时他指的就是Apple TV。</p>
-
-<p>Steve不幸离世已经过去很久了，但是人们一直翘首以盼着这款产品。就在昨天2015年9月9日，超过四个春秋的期盼，我们终于等来了这个礼物，虽然可能与Steve对这款产品的愿景和理想有所差距，但是革命的步伐已经坚实的迈出了第一步。</p>
-
-<p>作为一名iOS开发者，昨天的产品发布会让我心潮澎湃，因为Apple宣布，新的Apple TV集成了App Store，这就意味着我们可以为它开发专有的应用，并且会让我们重新认知已了解的iOS知识，以及会开启更多新的展现想法、创意的机会。</p>
-
-<p>我和其他教程团队的成员已经开始深入研究tvOS SDK，并且正在努力准备一些有价值的tvOS教程（通宵达旦！），在此同时，我想从一个iOS开发者的视角与大家分享我对tvOS的初步印象。</p>
-
-<p>让我们一探究竟吧！</p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-09-17-tvos-initial-impression.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_2.html">&larr; Older</a> 
@@ -743,6 +745,12 @@ export GOARCH=amd64
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -762,12 +770,6 @@ export GOARCH=amd64
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  

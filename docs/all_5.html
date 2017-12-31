@@ -88,6 +88,68 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-05-08-elegant-uninstall-default-git.html">优雅的卸载Mac默认的Xcode附带的git</a></h1>
+			<p class="meta"><time datetime="2014-05-08T00:32:32+08:00" 
+			pubdate data-updated="true">2014/5/8</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>这里说的优雅的卸载其实不是真正的卸载，而是不用动Xcode附带的git，通过用户~/.bash_profile的文件来优雅的完成。仅仅需要在~/.bash_profile文件后追加如下的导出变量代码即可:</p>
+
+<pre><code>export GIT_HOME=/usr/local/git
+export PATH=$GIT_HOME/bin:$PATH
+</code></pre>
+
+<p>通git官网下载的mac安装包进行安装，git会被安装到</p>
+
+<pre><code>/usr/local/git
+</code></pre>
+
+<p>Xcode附带的git被安装到</p>
+
+<pre><code>/usr/bin
+</code></pre>
+
+<p>不必移动或者删除这里的git版本，仅仅需要更改一下用户下面的~/.bash_profile的文件即可优雅的解决git版本的问题.</p>
+
+<p>如果您非要卸载旧的也可以通过下面的命令来完成</p>
+
+<pre><code>sudo cd /usr/bin
+sudo mkdir old-git
+sudo mv git* old-git
+ln -s /usr/local/git ./
+</code></pre>
+
+<p>~/.bash_profile文件这个文件除了导出GIT_HOME，也会导出其他的HOME，下面是我常用的一些导出</p>
+
+<pre><code>export COCOS2DX_ROOT=/Users/Lamb/Applications/cocos2d/cocos2d-x-2.2.1
+export PATH=$COCOS2DX_ROOT:$PATH
+
+export NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_NDK_ROOT=/Users/Lamb/Applications/android-ndk-r9c
+export ANDROID_SDK_ROOT=/Users/Lamb/Applications/android-sdk-macosx
+export PATH=$NDK_ROOT:$PATH
+export PATH=$ANDROID_NDK_ROOT:$PATH
+export PATH=$ANDROID_SDK_ROOT:$PATH
+
+export M2_HOME=/Users/Lamb/Applications/maven/apache-maven-3.2.1
+export PATH=$M2_HOME/bin:$PATH
+export GRADLE_HOME=/Users/Lamb/Applications/gradle/gradle-1.11
+export PATH=$GRADLE_HOME/bin:$PATH
+
+export MONGO_HOME=/Users/Lamb/Applications/mongodb/mongodb-osx-x86_64-2.6.1
+export PATH=$MONGO_HOME/bin:$PATH
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-05-07-mac-launchd-conf.html">Mac通过launchd.conf文件进行环境变量的设置</a></h1>
 			<p class="meta"><time datetime="2014-05-07T00:31:56+08:00" 
 			pubdate data-updated="true">2014/5/7</time></p>
@@ -902,64 +964,6 @@ for db in ${databases[*]}
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-01-14-grub-rescue.html">Grub 恢复命令</a></h1>
-			<p class="meta"><time datetime="2014-01-14T18:07:56+08:00" 
-			pubdate data-updated="true">2014/1/14</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>重装 Win 后，MBR 被重置，会导致 Ubuntu 进不去，这里介绍一个恢复步骤。</p>
-
-<h4 id="toc_0">1. 从 LiveCD 进入</h4>
-
-<h4 id="toc_1">2. 找到已挂载好的原 Linux 根分区（/media/ubuntu/xxx）如果 /boot 是单独安装的，也需要挂载好。</h4>
-
-<h4 id="toc_2">3. 挂载虚拟文件系统</h4>
-
-<pre><code>sudo mount --bind /dev /media/ubuntu/xxx/dev
-sudo mount --bind /proc /media/ubuntu/xxx/proc
-sudo mount --bind /sys /media/ubuntu/xxx/sys
-</code></pre>
-
-<h4 id="toc_3">4. 为确保 grub 工具是从 LiveCD 执行的，挂在 /usr</h4>
-
-<pre><code>sudo mount --bind /usr/ /media/ubuntu/xxx/usr
-sudo chroot /media/ubuntu/xxx
-</code></pre>
-
-<h4 id="toc_4">5. 更新（创建） /boot/grub/grub.cfg</h4>
-
-<pre><code>sudo update-grub2
-</code></pre>
-
-<h4 id="toc_5">6. 重新安装 grub</h4>
-
-<pre><code>grub-install /dev/sd&lt;strong&gt;X&lt;/strong&gt;
-</code></pre>
-
-<p>注意：不要带分区号，可以用 sudo fdisk -l 查看</p>
-
-<h4 id="toc_6">7. 重启</h4>
-
-<pre><code>sudo reboot
-</code></pre>
-
-<h4 id="toc_7">8. 进入 Ubuntu 后执行</h4>
-
-<pre><code>sudu update-grub2
-</code></pre>
-
-<h4 id="toc_8">9. Done!</h4>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_6.html">&larr; Older</a> 
@@ -985,6 +989,12 @@ sudo chroot /media/ubuntu/xxx
 	  
 	      
 		      <li class="post">
+		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-06-24-ios-arm.html">iOS开发 - 制作同时支持armv7,armv7s,arm64,i386,x86_64的静态库.a</a>
 		      </li>
 	     
@@ -1004,12 +1014,6 @@ sudo chroot /media/ubuntu/xxx
 	      
 		      <li class="post">
 		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-29-chrome-plugin.html">Chrome插件：网易云音乐一键全赞</a>
 		      </li>
 	     
 	  
