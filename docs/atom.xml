@@ -4,7 +4,7 @@
   <title><![CDATA[金氧]]></title>
   <link href="http://lambgao.com/atom.xml" rel="self"/>
   <link href="http://lambgao.com/"/>
-  <updated>2017-06-24T13:06:53+08:00</updated>
+  <updated>2019-01-22T20:35:31+08:00</updated>
   <id>http://lambgao.com/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2018 总结 - 凤凰项目]]></title>
+    <link href="http://lambgao.com/2018-12-31-life-2018.html"/>
+    <updated>2019-01-22T19:49:14+08:00</updated>
+    <id>http://lambgao.com/2018-12-31-life-2018.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">DT</h3>
+
+<p>Design Thinking 是一种以人为本的思维方式，通过 Empathize（同理心）、Define（需求定义）、Ideate（创意动脑）、Prototype（制作原型）、Test（实际测试）五个环节，寻求创新的解决方案，创造多元的可能性。<br/>
+Empathize：从使用者（用户）的角度出发，以移情的方式思考使用者真正的问题和需求。</p>
+
+<p>Define：将上一步骤中搜集到的所有信息，经过“架构”、“删去”、“挖深”、“组合”后（可交互使用），对问题重新的作更深入的定义，用简短的一句话定义使用者的需求。即通过写出Problem Statement 来阐述一个有独特关注点的 Point of View.</p>
+
+<p>Ideate：通过头脑风暴，发散思维寻求多种方案来解决上一步骤中提出的问题（需求）。要尽可能多的想，Go for Volume and Go for Variety，然后再简化为一个真正合适的具体的方法。</p>
+
+<p>Prototype：用最短的时间和花销来做出解决方案。通过制作 Prototype 甚至 Pretotype（Prototype 的 Prototype），通过一个具体的呈现，让思考更为明确，同时反思出现过的问题在完善 Prototype 的过程中加以改进。</p>
+
+<p>Test：通过测试产品原型来重新审视自己的产品，在使用情境的模拟中，观察使用者（用户）的反应、使用状况、回应等，重新定义需求，或改进解决方法。</p>
+
+<p>Design Thinking是一种思维方式，它有几个特定的步骤，可以用于不同的项目和人。</p>
+
+<p>有个比喻，在我跟别人介绍的时候经常提起：“Design Thinking 就像一本菜谱，它会告诉你烧菜的步骤，烧的时间等等，但是每个人用它炒出来的东西都不一样。可以有不同的口味，不同的原料和配料，而只要跟着这本菜谱仔细做，一般不会做得太难吃。”</p>
+
+<h3 id="toc_1">敏捷与DevOps</h3>
+
+<p>敏捷提供创新的大脑，DevOps提供创新的肌肉。</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2017 总结 - 乘风破浪]]></title>
@@ -1619,170 +1649,6 @@ let specimens = Specimen.objectsWithPredicate(predicate).arraySortedByProperty(&
 <h4 id="toc_10">查询的结果不是数组</h4>
 
 <p>为了能够支持查询结果的链式查询，realm自定义了一个集合类型。可以枚举，但是不是熟悉的数组了。又因为realm的懒加载机制，所以不建议在数据层把这个枚举转成数组类型。这样的缺点就是上层知道了数据的存储逻辑。严格的说这里不应该让上层知道。但是这样设计也许是为了方便上层进行再次检索，realm有着优越的查询性能。</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[解决MWPhotoBrowser中的SDWebImage加载大图导致的内存警告问题]]></title>
-    <link href="http://lambgao.com/2016-04-22-load-big-image.html"/>
-    <updated>2016-12-29T01:56:38+08:00</updated>
-    <id>http://lambgao.com/2016-04-22-load-big-image.html</id>
-    <content type="html"><![CDATA[
-<p><a href="https://github.com/mwaterfall/MWPhotoBrowser.git">MWPhotoBrowser</a>是一个非常不错的照片浏览器，在github的star接近3000个。</p>
-
-<p>MWPhotoBrowser来加载小图1M以下的都应该不会有内存警告的问题。如果遇到大图，3M、4M、5M的大图，很有可能导致内存警告。最近我就遇到这个问题，很是头疼。来回滑动查看照片内存飙到100M以上。</p>
-
-<p>网上查了很多资料，都没有解决问题。</p>
-
-<p>我们来看一下MWPhotoBrowser，其实MWPhotoBrowser用的是<a href="https://github.com/rs/SDWebImage.git">SDWebImage</a>来下载图片的。</p>
-
-<p>在github看到SDWebImage的介绍，后面说到：</p>
-
-<p>Future Enhancements<br/>
-LRU memory cache cleanup instead of reset on memory warning</p>
-
-<p>看到这个真是欲哭无泪啊。</p>
-
-<span id="more"></span><!-- more -->
-
-<p>再去看看SDWebImage的，有个人提问了：</p>
-
-<p>How to disable &quot;memory cache&quot;?  I don&#39;t want memory cache,  it used a lot of memory and got memory waring easily,  disk is enough for me...</p>
-
-<p>有人回答：</p>
-
-<p>There is no way to disable the memory cache. But the cache is designed to flush itself when you get a memory warning, so you shouldn&#39;t need to worry it.</p>
-
-<p>说的是SDWebImage遇到内存警告会自动释放内存，但是这还是解决不了问题，加载大图的时候，内存会突然蹦到100多M，在4s及以下的手机上跑，再就挂了。</p>
-
-<p>还是没有解决内存警告的问题。怎么办呢？</p>
-
-<p>我是这么解决的：</p>
-
-<p>SDWebImage有一个SDWebImageDownloaderOperation类来执行下载操作的。里面有个下载完成的方法：</p>
-
-<pre><code>- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-   SDWebImageDownloaderCompletedBlock completionBlock = self.completedBlock;
-   @synchronized(self) {
-       CFRunLoopStop(CFRunLoopGetCurrent());
-       self.thread = nil;
-       self.connection = nil;
-       [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:nil];
-   }
-
-   if (![[NSURLCache sharedURLCache] cachedResponseForRequest:_request]) {
-       responseFromCached = NO;
-   }
-
-   if (completionBlock)
-   {
-       if (self.options &amp; SDWebImageDownloaderIgnoreCachedResponse &amp;&amp; responseFromCached) {
-           completionBlock(nil, nil, nil, YES);
-       }
-       else {
-           UIImage *image = [UIImage sd_imageWithData:self.imageData];
-           NSString *key = [[SDWebImageManager sharedManager] cacheKeyForURL:self.request.URL];
-           image = [self scaledImageForKey:key image:image];
-
-           // Do not force decoding animated GIFs
-           if (!image.images) {
-               image = [UIImage decodedImageWithImage:image];
-           }
-           if (CGSizeEqualToSize(image.size, CGSizeZero)) {
-               completionBlock(nil, nil, [NSError errorWithDomain:@&quot;SDWebImageErrorDomain&quot; code:0 userInfo:@{NSLocalizedDescriptionKey : @&quot;Downloaded image has 0 pixels&quot;}], YES);
-           }
-           else {
-               completionBlock(image, self.imageData, nil, YES);
-           }
-       }
-   }
-   self.completionBlock = nil;
-   [self done];
-}
-</code></pre>
-
-<p>其中，UIImage *image = [UIImage sd_imageWithData:self.imageData];就是将data转换成image。</p>
-
-<p>再看看sd_imageWithData:这个方法：</p>
-
-<pre><code>+ (UIImage *)sd_imageWithData:(NSData *)data {
-   UIImage *image;
-   NSString *imageContentType = [NSData sd_contentTypeForImageData:data];
-   if ([imageContentType isEqualToString:@&quot;image/gif&quot;]) {
-       image = [UIImage sd_animatedGIFWithData:data];
-   }
-#ifdef SD_WEBP
-   else if ([imageContentType isEqualToString:@&quot;image/webp&quot;])
-   {
-       image = [UIImage sd_imageWithWebPData:data];
-   }
-#endif
-   else {
-       image = [[UIImage alloc] initWithData:data];
-       UIImageOrientation orientation = [self sd_imageOrientationFromImageData:data];
-       if (orientation != UIImageOrientationUp) {
-           image = [UIImage imageWithCGImage:image.CGImage
-                                       scale:image.scale
-                                 orientation:orientation];
-       }
-   }
-
-
-   return image;
-}
-</code></pre>
-
-<p>这个方法在UIImage+MultiFormat里面，是UIImage的一个类别处理。这句话很重要image = [[UIImage alloc] initWithData:data]; SDWebImage把下载下来的data直接转成image，然后没做等比缩放直接存起来使用。所以，我们只需要在这边做处理即可：</p>
-
-<p>UIImage+MultiFormat添加一个方法：</p>
-
-<pre><code>+(UIImage *)compressImageWith:(UIImage *)image
-{
-   float imageWidth = image.size.width;
-   float imageHeight = image.size.height;
-   float width = 640;
-   float height = image.size.height/(image.size.width/width);
-
-   float widthScale = imageWidth /width;
-   float heightScale = imageHeight /height;
-
-   // 创建一个bitmap的context
-   // 并把它设置成为当前正在使用的context
-   UIGraphicsBeginImageContext(CGSizeMake(width, height));
-
-   if (widthScale &gt; heightScale) {
-       [image drawInRect:CGRectMake(0, 0, imageWidth /heightScale , height)];
-   }
-   else {
-       [image drawInRect:CGRectMake(0, 0, width , imageHeight /widthScale)];
-   }
-
-   // 从当前context中创建一个改变大小后的图片
-   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-   // 使当前的context出堆栈
-   UIGraphicsEndImageContext();
-
-   return newImage;
-
-}
-</code></pre>
-
-<p>然后在：image = [[UIImage alloc] initWithData:data];下面调用以下：</p>
-
-<pre><code>if (data.length/1024 &gt; 1024) {
-    image = [self compressImageWith:image];
-}
-</code></pre>
-
-<p>当data大于1M的时候做压缩处理。革命尚未成功，还需要一步处理。在SDWebImageDownloaderOperation的connectionDidFinishLoading方法里面的：</p>
-
-<pre><code>  UIImage *image = [UIImage sd_imageWithData:self.imageData];
-
-  //将等比压缩过的image在赋在转成data赋给self.imageData
-  NSData *data = UIImageJPEGRepresentation(image, 1);
-  self.imageData =  [NSMutableData dataWithData:data];
-</code></pre>
 
 ]]></content>
   </entry>

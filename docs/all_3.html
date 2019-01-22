@@ -88,6 +88,50 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html">优化 Go 中的 map 并发存取</a></h1>
+			<p class="meta"><time datetime="2015-04-02T23:51:43+08:00" 
+			pubdate data-updated="true">2015/4/2</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p><a href="https://github.com/PreetamJinka/catena">Catena</a> （时序存储引擎）中有一个函数的实现备受争议，它从 map 中根据指定的 name 获取一个 metricSource。每一次插入操作都会至少调用一次这个函数，现实场景中该函数调用更是频繁，并且是跨多个协程的，因此我们必须要考虑同步。</p>
+
+<p>该函数从 map[string]*metricSource 中根据指定的 name 获取一个指向 metricSource 的指针，如果获取不到则创建一个并返回。其中要注意的关键点是我们只会对这个 map 进行插入操作。</p>
+
+<p>简单实现如下：（为节省篇幅，省略了函数头和返回，只贴重要部分）</p>
+
+<pre><code>var source *memorySource
+var present bool
+
+p.lock.Lock() // lock the mutex
+defer p.lock.Unlock() // unlock the mutex at the end
+
+if source, present = p.sources[name]; !present {
+    // The source wasn&#39;t found, so we&#39;ll create it.
+    source = &amp;memorySource{
+        name: name,
+        metrics: map[string]*memoryMetric{},
+    }
+
+    // Insert the newly created *memorySource.
+    p.sources[name] = source
+}
+</code></pre>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-03-31-docker-inspect-template-magic-chinese.html">奇妙的 Docker Inspect 模版</a></h1>
 			<p class="meta"><time datetime="2015-03-31T23:39:43+08:00" 
 			pubdate data-updated="true">2015/3/31</time></p>
@@ -675,40 +719,6 @@ func homeWindows() (string, error) {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-09-18-write-doc-via-gitbook.html">使用 GitBook 写文档</a></h1>
-			<p class="meta"><time datetime="2014-09-18T23:05:19+08:00" 
-			pubdate data-updated="true">2014/9/18</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>最近发现很多技术书籍都放在 GitBook 上提供给人们阅读，刚好 Wide 也需要写文档，索性就尝试使用 GitBook 来做。</p>
-
-<h3 id="toc_0">GitBook 简介</h3>
-
-<p>GitBook 是一个通过 Git 和 Markdown 来撰写书籍的工具，最终可以生成 3 种格式：</p>
-
-<ul>
-<li>静态站点：包含了交互功能（例如搜索、书签）的站点</li>
-<li>PDF：PDF 格式的文件</li>
-<li>eBook：ePub 格式的电子书文件</li>
-</ul>
-
-<p>GitBook 是免费且开源的，项目地址：<a href="https://github.com/GitbookIO/gitbook">https://github.com/GitbookIO/gitbook</a></p>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-09-18-write-doc-via-gitbook.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_4.html">&larr; Older</a> 
@@ -734,6 +744,12 @@ func homeWindows() (string, error) {
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -753,12 +769,6 @@ func homeWindows() (string, error) {
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

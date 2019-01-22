@@ -88,6 +88,222 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-05-07-web-message-push.html">消息推送技术</a></h1>
+			<p class="meta"><time datetime="2012-05-07T17:26:55+08:00" 
+			pubdate data-updated="true">2012/5/7</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<h3 id="toc_0">消息推送</h3>
+
+<p>消息推送是针对 Web 应用开发领域的技术，指服务端以主动方式将信息送达客户端。主要用于提升用户体验，避免用户刷新页面从服务端拉取数据。例如 Web 邮件中自动出现刚收到的邮件项，Web 即时通讯自动提示新到消息等应用场景。</p>
+
+<p>要实现消息推送机制，涉及两方面的内容：<br/>
+* Web 层消息推送<br/>
+* 服务层消息服务</p>
+
+<h3 id="toc_1">Web 层消息推送</h3>
+
+<h4 id="toc_2">套接字</h4>
+
+<p>可以使用套接字接口进行全双工通讯。可以通过 Flash XMLSocket、Java Applet 技术实现。<br/>
+但由于实现方案与厂商技术绑定过紧，不属于 Web 标准化范畴，并且存在一些限制（通讯端口开启安全、客户端插件），这里不进行描述。</p>
+
+<h4 id="toc_3">HTTP 请求轮询</h4>
+
+<p>目前的 Web 应用是基于 HTTP 协议的，其规定了请求-响应的处理模型，位于应用层的单工通讯模式使得纯粹意义上的服务端推送方式变得难以实现。</p>
+
+<p>为了基于 HTTP 协议进行“推送”实现，可由客户端发起 HTTP 请求轮询，服务端在请求后返回响应。</p>
+
+<p>根据轮询时间、请求处理方式，分为以下三种推。</p>
+
+<h4 id="toc_4">简单轮询</h4>
+
+<p>客户端一般以定时方式发起请求，服务端处理后返回响应。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pKG8qSIKx4nniHeaUQwfGkn7_AOS8GwVUrn63-xV6m5W6slIEvRMWLM8c13e6gqWmfcoNq-KPHaE_cSzsWYiPSg/simple-poll.png?psid=1" alt="简单轮询"/></p>
+
+<ul>
+<li>原理、客户端/服务端实现简单</li>
+<li>可根据应用场景调整轮询时间间隔</li>
+<li>服务端需要处理大量请求</li>
+</ul>
+
+<h4 id="toc_5">长轮询</h4>
+
+<p>客户端发起请求后服务端将该请求挂起（不返回响应），直到超时、异常或需要处理响应（推内容）才返回。客户端收到响应后再次请求（即轮询）服务端，并处理响应。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB9FvU9eVTCSJTko6y9nBiqZDzKVBAR6PA5ZEeQWUo-g9-BIDGUcnzgp-o2jfNqeKa9iMtg-8oP80w/long-poll.png?psid=1" alt="长轮询"/></p>
+
+<ul>
+<li>实时性高</li>
+<li>服务端需要管理挂起请求</li>
+</ul>
+
+<h4 id="toc_6">HTTP 流</h4>
+
+<p>客户端发起请求后服务器端处理请求，并通过 HTTP 流一直向客户端写入数据，直到超时或异常才返回响应。连接断开后客户端再次请求服务端，属于长轮询的一种。</p>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB_dSNHMdTAGrE3L-qzp-3wRJGRGg3vep25W61bdfXvlMSZZn7xezEgptcNNk3MPEAEZ1W-7BEOuzw/stream.png?psid=1" alt="HTTP 流"/></p>
+
+<h4 id="toc_7">HTML 5 WebSocket</h4>
+
+<p>这是标准化的客户端全<a href="http://dev.w3.org/html5/websockets/">双工通讯规范</a>，但由于目前<a href="http://jcp.org/en/jsr/summary?id=356">服务端规范</a>尚未成型，且考虑到现有客户端对 HTML 5 的支持有限，这里不进行描述。</p>
+
+<h4 id="toc_8">多客户端支持</h4>
+
+<p>上述介绍是针对浏览器客户端的，在实际应用场景中，还需要考虑其他客户端支持，例如 iOS、Android 等。</p>
+
+<p>在移动客户端方面，需要考虑如下几点。</p>
+
+<h5 id="toc_9">APIs 多样</h5>
+
+<p>不同客户端本地 APIs 接口存在差异，但都支持基本的 HTTP 协议。直接基于 HTTP 协议进行开发可将差异最小化。</p>
+
+<h5 id="toc_10">网络连接不稳定</h5>
+
+<p>通讯信道打开后不一定能长时间维护，客户端与服务端的状态管理复杂。</p>
+
+<h5 id="toc_11">最小化流量</h5>
+
+<p>需要尽量最小化网络流量，提升移动客户端可用性。</p>
+
+<h3 id="toc_12">服务层消息服务</h3>
+
+<p>消息是系统或组件间通讯的一种低耦合方式，是系统级异步架构的基础。</p>
+
+<p>在 Web 消息推送中，服务端管理应用状态，当状态发生变迁时需要通知客户端，完成消息推送。</p>
+
+<h4 id="toc_13">Java Message Service</h4>
+
+<p>需要重点关注如下技术点：</p>
+
+<h5 id="toc_14">消息域</h5>
+
+<ul>
+<li><p>点对点只有一个客户端可以接收到消息。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKx8JlI0OEosOio1o4ukP3Xlq1Fb-gzO4T6rXa4vrjXP8MUUFgk6R5_c9lltWVrQtnO3aeZi5AjD7Q/jms-pointToPoint.gif?psid=1" alt="JMS p2p"/></p></li>
+<li><p>发布/订阅<br/>
+广播给订阅的客户端。可配置持久化订阅。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKxAtr19116nVAs_T-MJCBnyLPgpCZA8UyOT6A9Komub9StYUSNXykqk8WFB3IKt6DPC3KU4FtVHow/jms-publishSubscribe.gif?psid=1" alt="JMS Pub/Sub"/></p></li>
+</ul>
+
+<h5 id="toc_15">消息确认</h5>
+
+<p>会话本地事务提交时会对收到的消息进行确认，回滚时将重传所有消息<br/>
+非本地事务确认：Session.AUTO_ACKNOWLEDGE、Session.CLIENT_ACKNOWLEDGE、Session.DUPS_OK_ACKNOWLEDGE</p>
+
+<h3 id="toc_16">技术设计</h3>
+
+<h4 id="toc_17">目标</h4>
+
+<ul>
+<li>支持浏览器客户端的推送</li>
+<li>高性能、高可靠</li>
+<li>模块化，不与应用耦合</li>
+<li>未来可支持多种移动客户端</li>
+</ul>
+
+<h4 id="toc_18">Web 层设计</h4>
+
+<p>Web 层考虑采用开源组件 <a href="http://www.pushlets.com/">Pushlets</a> 进行实现。</p>
+
+<h5 id="toc_19">Pushlets 组件</h5>
+
+<p>Pushlets 基于 HTTP 协议的发布/订阅模型，提供了 Poll（轮询）、Pull（拉）两种推方式实现。其中 Pull 即长轮询方式，当有消息时就返回。</p>
+
+<ul>
+<li>发布：GET/POST 或方法调用ethod call（Dispatcher 接口）</li>
+<li>订阅：GET 流，拉/轮询模式</li>
+<li>树形主题：可层次化订阅</li>
+<li>协议格式：JS，XML（JSON 尚未支持）</li>
+<li>对使用 HTTP 协议的客户端都可用</li>
+<li>易扩展：例如事件源实现</li>
+<li>方便整合：可独立为 Web 应用，也可为 Web 应用组件</li>
+<li>多种实现：J2EE/servlets，JavaScript (AJAX)
+<img src="https://public.sn2.livefilestore.com/y1pTsZtjVvNgmTlwZ7_PaqcNsOFttmKJ49e0S4_L482d0X0nfuF5xG0pWYpaCmSIj46i7iq0EzCuKuDZTW_mBfz8w/pushlets.png?psid=1" alt="Pushlets"/></li>
+</ul>
+
+<h5 id="toc_20">JS 客户端</h5>
+
+<ul>
+<li>js-pushlet-client.js
+
+<ul>
+<li>使用 “隐藏 iframe 技巧”</li>
+<li>格式：JavaScript 函数事件</li>
+</ul></li>
+<li>ajax-pushlet-client.js
+
+<ul>
+<li>使用 XMLHttpRequest</li>
+<li>格式：XML</li>
+<li>不支持 HTTP 流
+使用 AJAX 客户端，较为灵活，便于封装。</li>
+</ul></li>
+</ul>
+
+<h4 id="toc_21">服务层设计</h4>
+
+<p>服务层消息服务采用应用服务器 JMS 中间件。通过发布/订阅模型实现状态同步。</p>
+
+<h5 id="toc_22">处理步骤</h5>
+
+<ol>
+<li>配置主题订阅</li>
+<li>应用状态变迁时发布 JMS 消息</li>
+<li>JMS 消息监听器将监听到的消息发布到 Pushlets</li>
+<li>将该消息写入 Web 层消息表</li>
+</ol>
+
+<h5 id="toc_23">消息表</h5>
+
+<p>保存推送多的消息记录，用于客户端刷新时/多客户端查找消息。</p>
+
+<p>消息体使用 JSON 字符串存放于 msg 字段中。其余字段可根据通用性进行抽取，比如用户名等。</p>
+
+<p>消息监听器接收到消息时推 Pushlets，并进行记录写入（记录 lastGetTime 为写入时间，表示这条消息已经推送过）。</p>
+
+<p>设置定时任务对超时记录进行删除。</p>
+
+<h4 id="toc_24">逻辑架构</h4>
+
+<p>JMS 消息系统为单独的通讯总线服务独立于应用系统，Pushlets 为应用系统中的一个组件。</p>
+
+<p>消息表管理组件提供消息新增，以及对推送过的消息记录的查询、删除。<br/>
+<img src="https://public.sn2.livefilestore.com/y1pJ_acuYt_CkkiHarLltUaKNjDom3zMbwe4EIjC5Uaj_Z-dS8TjrLofeSWl8BCH1e6xApcxf200RDtKTNiWNq4nQ/components.png?psid=1" alt="组件图"/></p>
+
+<h5 id="toc_25">推时序</h5>
+
+<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB-AzkrrJdr8rJyXVHgO0CgLBYHOKqFk15LmxOJMRsmKkOnqQBG4TEOGvpF_-gPnW9v0NEL2FXa_0Q/sequences.png?psid=1" alt="时序图"/></p>
+
+<h4 id="toc_26">关键点</h4>
+
+<p>服务层消息监听<br/>
+消息表管理<br/>
+Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业项目使用时必须进行封装<br/>
+前端容错开关</p>
+
+<h3 id="toc_27">参考</h3>
+
+<ul>
+<li><a href="http://www.ibm.com/developerworks/cn/web/wa-lo-comet/">Comet：基于 HTTP 长连接的“服务器推”技术</a></li>
+<li><a href="http://www.pushlets.com/">Pushlets 官网</a></li>
+<li><a href="http://docs.oracle.com/javaee/6/tutorial/doc/bncdq.html">The JavaEE 6 Tutorial - Java Message Service</a></li>
+<li><a href="https://docs.google.com/open?id=0B9vEkLPApAcqMGZWNFFrczBOckU">《JMS 规范教程》</a></li>
+</ul>
+
+<p>原文：<a href="https://docs.google.com/document/d/1qHVKlGz1raVemA2eHMSrPQppVKAiIrnFmfkpoyYE-U4/edit">《消息推送技术》via Google Docs</a></p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-04-25-tapestry-defects.html">吐槽 Tapestry</a></h1>
 			<p class="meta"><time datetime="2012-04-25T17:23:46+08:00" 
 			pubdate data-updated="true">2012/4/25</time></p>
@@ -916,26 +1132,6 @@ console.log(&#39;Server is running&#39;);
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2011-09-09-commons-configuration.html">Commons Configuration 1.7 发布</a></h1>
-			<p class="meta"><time datetime="2011-09-09T15:23:58+08:00" 
-			pubdate data-updated="true">2011/9/9</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><img src="http://commons.apache.org/images/commons-logo.png" alt="Apache Commons Logo"/><br/>
-Commons Configuration 1.7 发布了，Commons Configuration是一个java应用程序的配置管理类库。可以从properties或者xml文件中加载软件的配置信息，用来构建支撑软件运行的基础环境。在一些配置文件较多较的复杂的情况下，使用该配置工具比较可以简化配置文件的解析和管理。也提高了开发效率和软件的可维护性。</p>
-
-<p>新版本包含了很多bug的修复，详细改进记录请看：<a href="http://commons.apache.org/configuration/changes-report.html">http://commons.apache.org/configuration/changes-report.html</a></p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_10.html">&larr; Older</a> 
@@ -961,6 +1157,12 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -980,12 +1182,6 @@ Commons Configuration 1.7 发布了，Commons Configuration是一个java应用�
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

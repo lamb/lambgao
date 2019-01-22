@@ -88,6 +88,53 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2015-09-20-compile-go-cross-platform.html">Go 编译跨平台</a></h1>
+			<p class="meta"><time datetime="2015-09-20T00:03:02+08:00" 
+			pubdate data-updated="true">2015/9/20</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>适用于 [Linux] ，拷贝代码后新建文件 cross.bash，并在 ${go 安装路径}/src 目录下执行。</p>
+
+<pre><code>#!/usr/bin/env bash
+
+export CGO_ENABLED=0
+
+export GOOS=darwin
+export GOARCH=386
+./make.bash
+
+export GOOS=linux
+export GOARCH=386
+./make.bash
+
+export GOOS=windows
+export GOARCH=386
+./make.bash
+
+
+export GOOS=darwin
+export GOARCH=amd64
+./make.bash
+
+export GOOS=linux
+export GOARCH=amd64
+./make.bash
+
+export GOOS=windows
+export GOARCH=amd64
+./make.bash
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2015-09-17-tvos-initial-impression.html">一个iOS开发者对tvOS SDK的初探</a></h1>
 			<p class="meta"><time datetime="2015-09-17T23:46:33+08:00" 
 			pubdate data-updated="true">2015/9/17</time></p>
@@ -458,50 +505,6 @@ class UserApi {
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html">优化 Go 中的 map 并发存取</a></h1>
-			<p class="meta"><time datetime="2015-04-02T23:51:43+08:00" 
-			pubdate data-updated="true">2015/4/2</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p><a href="https://github.com/PreetamJinka/catena">Catena</a> （时序存储引擎）中有一个函数的实现备受争议，它从 map 中根据指定的 name 获取一个 metricSource。每一次插入操作都会至少调用一次这个函数，现实场景中该函数调用更是频繁，并且是跨多个协程的，因此我们必须要考虑同步。</p>
-
-<p>该函数从 map[string]*metricSource 中根据指定的 name 获取一个指向 metricSource 的指针，如果获取不到则创建一个并返回。其中要注意的关键点是我们只会对这个 map 进行插入操作。</p>
-
-<p>简单实现如下：（为节省篇幅，省略了函数头和返回，只贴重要部分）</p>
-
-<pre><code>var source *memorySource
-var present bool
-
-p.lock.Lock() // lock the mutex
-defer p.lock.Unlock() // unlock the mutex at the end
-
-if source, present = p.sources[name]; !present {
-    // The source wasn&#39;t found, so we&#39;ll create it.
-    source = &amp;memorySource{
-        name: name,
-        metrics: map[string]*memoryMetric{},
-    }
-
-    // Insert the newly created *memorySource.
-    p.sources[name] = source
-}
-</code></pre>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2015-04-02-optimizing-concurrent-map-access-in-go-chinese.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_3.html">&larr; Older</a> 
@@ -527,6 +530,12 @@ if source, present = p.sources[name]; !present {
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -546,12 +555,6 @@ if source, present = p.sources[name]; !present {
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

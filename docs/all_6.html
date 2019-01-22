@@ -88,6 +88,35 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-01-15-java-exec-utli.html">Java 执行命令</a></h1>
+			<p class="meta"><time datetime="2014-01-15T18:12:02+08:00" 
+			pubdate data-updated="true">2014/1/15</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>Java 调用命令行有两种方式，ProcessBuilder 或 Runtime。</p>
+
+<p>在使用 Runtime 时，有两点需要注意：</p>
+
+<ol>
+<li>需要开启线程读取错误流，否则可能会造成进程阻塞</li>
+<li>执行带管道或重定向的命令时需要拆成多个命令执行</li>
+</ol>
+
+<pre><code>Execs.exec(new String[]{&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /proc/cpuinfo | grep &#39;model name&#39; | awk &#39;{ print $NF }&#39;&quot;});
+</code></pre>
+
+<p>细节请参考这个<a href="https://github.com/b3log/b3log-latke/blob/master/latke/src/main/java/org/b3log/latke/util/Execs.java">实现</a>。</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-01-14-grub-rescue.html">Grub 恢复命令</a></h1>
 			<p class="meta"><time datetime="2014-01-14T18:07:56+08:00" 
 			pubdate data-updated="true">2014/1/14</time></p>
@@ -1758,38 +1787,6 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2013-04-10-gae-java-sdk-1.7.7-release.html">GAE Java 1.7.7 发布</a></h1>
-			<p class="meta"><time datetime="2013-04-10T11:16:34+08:00" 
-			pubdate data-updated="true">2013/4/10</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<ul>
-<li>The Sockets API, which allows applications to make outgoing TCP connections and send/receive UDP packets to the Internet using both IPv4 and IPv6, is now available as an experimental feature. </li>
-<li>The Java runtime now defaults to Java7. If you still need to use the Java6 runtime, please use the --use_java6 flag when deploying your app. We encourage you to move to Java7 as soon as possible.</li>
-<li>Billing enabled apps will no longer be subject to a $2.10 minimum weekly spend. Instead, apps will only be charged for their actual usage.</li>
-<li>Fixed an issue where Datastore auto ids assigned by the scattered id policy were too large to be represented as floating point numbers in the SDK.</li>
-<li><p>Fixed an issue with sort by doc_id not translating correctly causing InvalidRequest errors in the Search API</p>
-
-<ul>
-<li><a href="https://code.google.com/p/googleappengine/issues/detail?id=8958">https://code.google.com/p/googleappengine/issues/detail?id=8958</a></li>
-</ul></li>
-</ul>
-
-<ol>
-<li>终于支持 Sockets API 了，不过目前还是实验特性</li>
-<li>默认运行环境升级到了 Java7</li>
-</ol>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_7.html">&larr; Older</a> 
@@ -1815,6 +1812,12 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -1834,12 +1837,6 @@ public final class MySQLPaginationPlugin extends PluginAdapter {
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

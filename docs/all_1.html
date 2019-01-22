@@ -88,6 +88,37 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2016-07-26-xcode-could-not-be-verified.html">Xcode真机调试报错：The Application Could Not Be Verified.</a></h1>
+			<p class="meta"><time datetime="2016-07-26T01:47:59+08:00" 
+			pubdate data-updated="true">2016/7/26</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>今天真机调试的时候遇到这个错误：</p>
+
+<p>The application could not be verified.</p>
+
+<p>这还是第一次遇到，应该是手机上的app的证书跟现在的证书不一致导致。</p>
+
+<p>解决方法有两个</p>
+
+<h3 id="toc_0">xcode中切换证书：</h3>
+
+<p>你手机上的app用的是哪个证书，你现在还用那个证书运行。</p>
+
+<h3 id="toc_1">删除手机上的app</h3>
+
+<p>直接删除手机上的app，再运行就可以啦！</p>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2016-06-04-swift-noescape.html">Swift中被忽略的@noescape</a></h1>
 			<p class="meta"><time datetime="2016-06-04T00:03:16+08:00" 
 			pubdate data-updated="true">2016/6/4</time></p>
@@ -673,53 +704,6 @@ if ([[UIApplication sharedApplication] canOpenURL:url])
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2015-09-20-compile-go-cross-platform.html">Go 编译跨平台</a></h1>
-			<p class="meta"><time datetime="2015-09-20T00:03:02+08:00" 
-			pubdate data-updated="true">2015/9/20</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>适用于 [Linux] ，拷贝代码后新建文件 cross.bash，并在 ${go 安装路径}/src 目录下执行。</p>
-
-<pre><code>#!/usr/bin/env bash
-
-export CGO_ENABLED=0
-
-export GOOS=darwin
-export GOARCH=386
-./make.bash
-
-export GOOS=linux
-export GOARCH=386
-./make.bash
-
-export GOOS=windows
-export GOARCH=386
-./make.bash
-
-
-export GOOS=darwin
-export GOARCH=amd64
-./make.bash
-
-export GOOS=linux
-export GOARCH=amd64
-./make.bash
-
-export GOOS=windows
-export GOARCH=amd64
-./make.bash
-</code></pre>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_2.html">&larr; Older</a> 
@@ -745,6 +729,12 @@ export GOARCH=amd64
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -764,12 +754,6 @@ export GOARCH=amd64
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

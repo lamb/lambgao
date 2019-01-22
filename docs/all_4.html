@@ -88,6 +88,40 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2014-09-18-write-doc-via-gitbook.html">使用 GitBook 写文档</a></h1>
+			<p class="meta"><time datetime="2014-09-18T23:05:19+08:00" 
+			pubdate data-updated="true">2014/9/18</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>最近发现很多技术书籍都放在 GitBook 上提供给人们阅读，刚好 Wide 也需要写文档，索性就尝试使用 GitBook 来做。</p>
+
+<h3 id="toc_0">GitBook 简介</h3>
+
+<p>GitBook 是一个通过 Git 和 Markdown 来撰写书籍的工具，最终可以生成 3 种格式：</p>
+
+<ul>
+<li>静态站点：包含了交互功能（例如搜索、书签）的站点</li>
+<li>PDF：PDF 格式的文件</li>
+<li>eBook：ePub 格式的电子书文件</li>
+</ul>
+
+<p>GitBook 是免费且开源的，项目地址：<a href="https://github.com/GitbookIO/gitbook">https://github.com/GitbookIO/gitbook</a></p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="2014-09-18-write-doc-via-gitbook.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2014-09-11-swift-final.html">Swift中的final修饰符</a></h1>
 			<p class="meta"><time datetime="2014-09-11T23:08:41+08:00" 
 			pubdate data-updated="true">2014/9/11</time></p>
@@ -678,48 +712,6 @@ abs(42) == 42
     	
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2014-05-30-cloud-app-platform-multitenancy.html">云平台之多租户</a></h1>
-			<p class="meta"><time datetime="2014-05-30T10:57:55+08:00" 
-			pubdate data-updated="true">2014/5/30</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<p>在云领域我们经常会听到一个词：多租户。这个词在不同的语境中有着不同的含义，本文将介绍云平台中的多租户的概念以及实现多租户支持的思路。</p>
-
-<h3 id="toc_0">什么是租户</h3>
-
-<p>刚开始接触这个概念时，你肯定感觉“租户”这个词怪怪的，但如果我们换个词，我相信你马上就有感觉了，这个词就是“客户”（这里的客户指的就是商业上面的客户）。一个租户就是一个客户，比如我们开发的服务是给 XXX 企业使用的，那该企业就是我们的一个客户/租户；如果这个服务是面向互联网的，那么使用该服务的每个互联网用户都是一个客户/租户。</p>
-
-<h3 id="toc_1">为什么需要多租户支持</h3>
-
-<p>开发者辛辛苦苦开发出一个服务，提供给了个人/企业使用，这样就完事了么？当然不应该只是这样，我们开发出一个服务，最好是能够同时提供给多个个人/企业使用，而且这些客户最好是共享同一套服务运行时（Runtime），这样可以大大降低服务的运维成本：</p>
-
-<ul>
-<li>服务运行时如果分开，则运维的成本与客户数成正比（比如更新部署大量客户的场景）</li>
-<li>节省资源（将服务所需资源利用最大化：运维团队统一、硬件使用）</li>
-</ul>
-
-<p>另外，这样也可以降低服务的开发成本：</p>
-
-<ul>
-<li>我们只需要考虑如何实现单用户的服务逻辑：业务逻辑对应其所有客户都是相同的，无论什么客户来使用，程序提供的服务都是一样的。进一步说，在业务层面我们开发这个服务时理论上不需要考虑多客户支持，我们只用关注该服务的业务逻辑如何实现</li>
-<li>多客户的管理功能可以进行统一：开发者应该不用考虑客户管理功能，这部分应该是由云平台统一提供的</li>
-</ul>
-
-
-
-		</div>
-
-		 
-		 <footer>
-      	<a rel="full-article" href="2014-05-30-cloud-app-platform-multitenancy.html#more">read more &rarr;</a>
-    	</footer>
-    	
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_5.html">&larr; Older</a> 
@@ -745,6 +737,12 @@ abs(42) == 42
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -764,12 +762,6 @@ abs(42) == 42
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  

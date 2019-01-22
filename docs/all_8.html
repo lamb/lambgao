@@ -88,6 +88,222 @@ $(document).ready(function(event) {
 
 	<article>
 		 <header>
+		  	<h1 class="entry-title"><a href="2012-11-20-spring-environment-profile.html">如何用Spring 3.1的Environment和Profile简化工作</a></h1>
+			<p class="meta"><time datetime="2012-11-20T22:34:11+08:00" 
+			pubdate data-updated="true">2012/11/20</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<p>编写或设计的软件通常需要部署在不同的环境，也需要使用不同的部署配置。这些部署配置大致可以分为以下几类：</p>
+
+<ul>
+<li>Java企业级容器（包括JBoss、WebLogic、Tomcat、Glassfish等）</li>
+<li>独立运行的Java应用程序</li>
+<li>GUI应用程序</li>
+<li>测试框架</li>
+</ul>
+
+<p>本文暂不对GUI应用程序进行讨论，留到后续再说。对于其他的类型（容器、独立应用程序和测试框架）来说，代码往往是相同的。因此，在设计或者编码这类软件的时候，这一点非常关键。对于每种场景来说，我所写的代码需要完美运行在每一种场景中。</p>
+
+<p>这是程序合格并且健壮的关键！这里的问题是，有一些资源的配置是与代码的运行平台息息相关的。在我编写单元测试的时候，我无法（其实我能，这么说是为了让你领会文章的主题）获得绑定到JNDI树上的数据源。而在容器中，我只需要遍历JNDI树，询问是否可以获取数据源即可。</p>
+
+<p>另外，想Spring这样的框架也是鼓励这样的开发模式的，至少控制反转挺受欢迎。不同于直接用代码配置数据库和队列，Spring框架是在运行时注入这些对象的，生活依然美好。</p>
+
+<p>你以为我的博客会把网上到处都是控制反转的示例代码再罗列一遍么？当然不是。看下面的代码：</p>
+
+<pre><code>public class BusinessClazz implements SomethingReallyImportant {
+   private DataSource dataSource;
+   @Required
+   public void setDataSource(DataSource dataSource) {
+       this.dataSource = dataSource;
+   }
+}
+</code></pre>
+
+<p>数据源是通过运行时注入获得的，BusinessClazz对数据源本身一无所知。我不是世上最聪明的人，但也肯定不是最笨的人。我是说，我曾经读过像《J2ee Development Without Ejb》和《Expert one-on-one J2EE design and development》这类的书，并且自以为已经理解了其中的内容。但这些都是给妹子们看的，不是么？开个玩笑。我在Spring中间了一个数据源实例，并注入到BusinessClazz实例中。</p>
+
+<pre><code>&lt;bean name=&quot;myBusinessClazz&quot;&gt;
+  &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+&lt;/bean&gt;
+
+</code></pre>
+
+<p>现在，我的可以完全不考虑数据源的具体实现，仍能在所有的部署环境中运行。但对于数据源呢，应该如何配置才能保证“一次配置，到处运行”？我们将注重对数据源的配置做说明，这个例子也是用于那些因运行环境或运行时不同而需要做修改的组件。</p>
+
+<p>一般情况下，数据源需要两部分配置信息。第一部分是关于数据库位于何处，以及如何连接该数据库的信息。这里需要的信息包括主机名、款口端口号、服务名等。</p>
+
+<p>第二部分是关于如何展示描述配置信息的。下面是一些可选方案。在其中，我建立了一个到数据库的连接，</p>
+
+<pre><code>&lt;bean id=&quot;dataSource&quot; destroy-method=&quot;close&quot;
+   class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
+   &lt;property name=&quot;driverClassName&quot; value=&quot;org.hsqldb.jdbcDriver&quot;/&gt;
+   &lt;property name=&quot;url&quot; value=&quot;jdbc:hsqldb:hsql://localhost&quot;/&gt;
+   &lt;property name=&quot;username&quot; value=&quot;sa&quot;/&gt;
+   &lt;property name=&quot;password&quot; value=&quot;&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p>也可以使用Apache的commons-dbcp库创建一个连接池，</p>
+
+<pre><code>&lt;bean id=&quot;dataSource&quot;  class=&quot;org.apache.commons.dbcp.BasicDataSource&quot; destroy-method=&quot;close&quot;&gt;
+ &lt;property name=&quot;driverClassName&quot; value=&quot;net.sourceforge.jtds.jdbc.Driver&quot;/&gt;
+ &lt;property name=&quot;url&quot; value=&quot;jdbc:myserver&quot;/&gt;
+ &lt;property name=&quot;username&quot; value=&quot;username&quot;/&gt;
+ &lt;property name=&quot;password&quot; value=&quot;password&quot;/&gt;
+ &lt;property name=&quot;initialSize&quot; value=&quot;2&quot;/&gt;
+ &lt;property name=&quot;maxActive&quot; value=&quot;5&quot;/&gt;
+ &lt;property name=&quot;maxIdle&quot; value=&quot;2&quot;/&gt;
+&lt;/bean
+</code></pre>
+
+<p>还可以使用容器来管理连接，再从容器中获取连接，</p>
+
+<pre><code>&lt;jee:jndi-lookup id=&quot;dataSource&quot; jndi-name=&quot;java:mydatasource&quot;/&gt;
+</code></pre>
+
+<p>当然，还有其他许多方法可以配置数据源，但为了说明问题，上面的示例已经够用了。Spring框架的<a href="http://static.springsource.org/spring/docs/3.1.x/javadoc-api/org/springframework/beans/factory/config/PropertyPlaceholderConfigurer.html">PropertyPlaceholderConfigurer</a>类可以用来处理随运行环境而变化的属性，使用简单，功能强大。</p>
+
+<p>现在的问题是，如何在不同的部署环境中无缝切换，并选择不同类型的数据源呢？</p>
+
+<h4 id="toc_0">自己搞定</h4>
+
+<p>本文所说的问题并不起最近才有的，在过去的6、7年中，许多部署团队想出了各种不同的方法来解决它。每个团队都针对其特定的问题，采取了适合自身条件的方法来解决，他们会在代码中加入一些自适应的判断来简化问题。</p>
+
+<p>这里，希望代码可以“一次编写，到处运行”的最大驱动力之一，就是可以开发人员编写用于测试生还 生产环境代码的单元测试。</p>
+
+<p>对这个问题的一个典型的示例方案是将数据源定义在不同上下文文件中，这些文件需要按照统一的命名约定来命名，以免造成混乱。例如，假设我们有3个操作模式，所以需要建3个不同的上下文文件，</p>
+
+<ul>
+<li>datasources-containerContext.xml</li>
+<li>datasources-pooledConnection.xml</li>
+<li>datasources-singleConnection.xml</li>
+</ul>
+
+<p>接下来就是平台相关的代码了，会在你的应用程序初始化Spring的时候执行。它通过Ant式的通配符跨越部署的类路径来查找上下文文件。</p>
+
+<pre><code>ClassPathXmlApplicationContext containerContext = 
+  new ClassPathXmlApplicationContext(&quot;**/**-containerContext.xml&quot;);
+ClassPathXmlApplicationContext nonContainerContext = 
+  new ClassPathXmlApplicationContext(&quot;**/**-pooledContext.xml&quot;);
+ClassPathXmlApplicationContext testingContextContext = 
+  new ClassPathXmlApplicationContext(&quot;**/**-singleContext.xml&quot;);
+</code></pre>
+
+<p>好了，在刚刚过去的几个小时里，你已经建立一个可以在多种环境中运行的系统，所编写的代码也充分利用这个特点。这个办法你已经用了好几年了，但是，这个办法的主要缺点是，每个团队、每个项目都会有自己的方式来解决前面提到的问题。</p>
+
+<h4 id="toc_1">使用Spring Profile</h4>
+
+<p>Spring 3.1为这个问题提供了一个解决方案（如果你还没有为自己的项目升级Spring版本，嗯，你麻烦大了）。</p>
+
+<p>Spring在容器中引入Environment和Profile的概念。每个应用程序上下文都有一个都可以访Environment对象。</p>
+
+<pre><code>ClassPathXmlApplicationContext classPathXmlApplicationContext = 
+   new ClassPathXmlApplicationContext();
+ConfigurableEnvironment configurableEnvironment = 
+   classPathXmlApplicationContext.getEnvironment();
+</code></pre>
+
+<p>每种运行环境都有很多活动Profile类可供使用。大多数讲解Spring Profile的例子都是在开发模式或生产模式下。对于不同运行环境问题来说，我的解决方案是使用使用多个Profile来适应不同运行时。这个解决方案的优势是你可以自行决定如何使用Profile。</p>
+
+<p>默认星空情况下，你所创建的Bean在载入容器中后是没有Profile对象的。下面看一个例子。假设下面是我的应用程序中，数据源实例的定义。</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;…&quot;&gt;
+&lt;bean id=&quot;dataSource&quot; destroy-method=&quot;close&quot;
+  class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
+  &lt;property name=&quot;driverClassName&quot; value=&quot;org.hsqldb.jdbcDriver&quot;/&gt;
+  &lt;property name=&quot;url&quot; value=&quot;jdbc:hsqldb:hsql://localhost&quot;/&gt;
+  &lt;property name=&quot;username&quot; value=&quot;sa&quot;/&gt;
+  &lt;property name=&quot;password&quot; value=&quot;&quot;/&gt;
+&lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+
+<p>在Spring 3.0中，增加了一个新的容器类<a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/context/support/GenericXmlApplicationContext.html">GenericXmlApplicationContext</a> ，可以作为ClassPathXmlApplicationContext和FileSystemXmlApplicationContext之外的另一个选择。</p>
+
+<p>GenericXmlApplicationContext类的特点是可以通过Setter方法完成所有的配置，而无需依靠笨重的构造器去完成配置。记住，在初始化容器的准备工作完成后，需要调用refresh()方法完成实际的初始化工作。</p>
+
+<p>下面的代码展示了如何使用GenericXmlApplicationContext类初始化容器：</p>
+
+<pre><code>GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+ctx.getEnvironment().setActiveProfiles(&quot;standalone&quot;);
+ctx.load(&quot;*Context.xml&quot;);
+ctx.refresh();
+</code></pre>
+
+<p>这里，我将活动Profile设置为“standalone”。在这个工程里，我希望代码既可以作为“standalone”运行在应用程序容器之外，还可以作为“container”运行在容器中。这里，我可以设置多个Profile，例如，下面的代码设置了Profile为“standalone”与“activemq”。</p>
+
+<pre><code>ctx.getEnvironment().setActiveProfiles(&quot;standalone&quot;, &quot;activemq&quot;);
+</code></pre>
+
+<p>虽然做了上面的配置，实际上并不会对当前的配置上下文产生影响，因为还没有配置Profile实例。所以，修改配置上下文为：</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;…&quot; profile=&quot;standalone&quot;&gt;
+ &lt;bean id=&quot;dataSource&quot; destroy-method=&quot;close&quot;
+  class=&quot;org.apache.commons.dbcp.BasicDataSource&quot;&gt;
+  &lt;property name=&quot;driverClassName&quot; value=&quot;org.hsqldb.jdbcDriver&quot;/&gt;
+  &lt;property name=&quot;url&quot; value=&quot;jdbc:hsqldb:hsql://localhost&quot;/&gt;
+  &lt;property name=&quot;username&quot; value=&quot;sa&quot;/&gt;
+  &lt;property name=&quot;password&quot; value=&quot;&quot;/&gt;
+&lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+
+<p>只有当活动Profile设置为“standalone”时，才会实例化这个Bean。Profile是Bean的属性，而不是一个实例对象，因此，你无法配置单独的Bean来选择Profile。在较早的Spring版本中，这会导致产生多个文件，而Ant的通配符无法在运行时找到正确的配置文件。</p>
+
+<p>在Spring 3.1中，<beans/>标签可以嵌套在<beans/>标签内。现在，我们重新编写一下数据源配置文件：</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;…&quot;&gt;
+&lt;beans profile=&quot;standalone&quot;&gt;  
+&lt;bean id=&quot;dataSource&quot;&gt; 
+&lt;property name=&quot;driverClassName&quot; value=&quot;org.hsqldb.jdbcDriver&quot;/&gt; 
+&lt;property name=&quot;url&quot; value=&quot;jdbc:hsqldb:hsql://localhost&quot;/&gt; 
+&lt;property name=&quot;username&quot; value=&quot;sa&quot;/&gt; 
+&lt;property name=&quot;password&quot; value=&quot;&quot;/&gt; 
+&lt;/bean&gt; 
+&lt;/beans&gt; 
+ 
+&lt;beans profile=&quot;container&quot;&gt;
+&lt;jee:jndi-lookup id=&quot;dataSource&quot; jndi-name=&quot;java:mydatasource&quot;/&gt;
+&lt;/beans&gt;
+&lt;/beans&gt;
+</code></pre>
+
+<p>这样，就可以通过下面的代码快速切换Profile：</p>
+
+<pre><code>ctx.getEnvironment().setActiveProfiles(&quot;container&quot;);
+</code></pre>
+
+<p>另一种切换Profile的方法是在运行时作为系统参数传入：</p>
+
+<pre><code>-Dspring.profiles.active=&quot;standalone&quot;
+</code></pre>
+
+<p>此外，也可以作为Ear/War的初始化参数传入：</p>
+
+<pre><code>&lt;servlet&gt;
+&lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+&lt;servlet-class&gt;
+  org.springframework.web.servlet.DispatcherServlet
+&lt;/servlet-class&gt;
+&lt;init-param&gt;
+  &lt;param-name&gt;spring.profiles.active&lt;/param-name&gt;
+  &lt;param-value&gt;production&lt;/param-value&gt;
+&lt;/init-param&gt;
+&lt;/servlet&gt;
+</code></pre>
+
+
+		</div>
+
+		
+
+	</article>
+ 
+	<article>
+		 <header>
 		  	<h1 class="entry-title"><a href="2012-11-15-google-play-oauth.html">Google Play服务和OAuth认证工具</a></h1>
 			<p class="meta"><time datetime="2012-11-15T22:25:15+08:00" 
 			pubdate data-updated="true">2012/11/15</time></p>
@@ -2173,222 +2389,6 @@ refresh 指令中指定客户端下次请求的等待时间区间，值取该区
 		
 
 	</article>
- 
-	<article>
-		 <header>
-		  	<h1 class="entry-title"><a href="2012-05-07-web-message-push.html">消息推送技术</a></h1>
-			<p class="meta"><time datetime="2012-05-07T17:26:55+08:00" 
-			pubdate data-updated="true">2012/5/7</time></p>
-		 </header>
-	  	<div class="entry-content">
-		  	
-		  	<h3 id="toc_0">消息推送</h3>
-
-<p>消息推送是针对 Web 应用开发领域的技术，指服务端以主动方式将信息送达客户端。主要用于提升用户体验，避免用户刷新页面从服务端拉取数据。例如 Web 邮件中自动出现刚收到的邮件项，Web 即时通讯自动提示新到消息等应用场景。</p>
-
-<p>要实现消息推送机制，涉及两方面的内容：<br/>
-* Web 层消息推送<br/>
-* 服务层消息服务</p>
-
-<h3 id="toc_1">Web 层消息推送</h3>
-
-<h4 id="toc_2">套接字</h4>
-
-<p>可以使用套接字接口进行全双工通讯。可以通过 Flash XMLSocket、Java Applet 技术实现。<br/>
-但由于实现方案与厂商技术绑定过紧，不属于 Web 标准化范畴，并且存在一些限制（通讯端口开启安全、客户端插件），这里不进行描述。</p>
-
-<h4 id="toc_3">HTTP 请求轮询</h4>
-
-<p>目前的 Web 应用是基于 HTTP 协议的，其规定了请求-响应的处理模型，位于应用层的单工通讯模式使得纯粹意义上的服务端推送方式变得难以实现。</p>
-
-<p>为了基于 HTTP 协议进行“推送”实现，可由客户端发起 HTTP 请求轮询，服务端在请求后返回响应。</p>
-
-<p>根据轮询时间、请求处理方式，分为以下三种推。</p>
-
-<h4 id="toc_4">简单轮询</h4>
-
-<p>客户端一般以定时方式发起请求，服务端处理后返回响应。</p>
-
-<p><img src="https://public.sn2.livefilestore.com/y1pKG8qSIKx4nniHeaUQwfGkn7_AOS8GwVUrn63-xV6m5W6slIEvRMWLM8c13e6gqWmfcoNq-KPHaE_cSzsWYiPSg/simple-poll.png?psid=1" alt="简单轮询"/></p>
-
-<ul>
-<li>原理、客户端/服务端实现简单</li>
-<li>可根据应用场景调整轮询时间间隔</li>
-<li>服务端需要处理大量请求</li>
-</ul>
-
-<h4 id="toc_5">长轮询</h4>
-
-<p>客户端发起请求后服务端将该请求挂起（不返回响应），直到超时、异常或需要处理响应（推内容）才返回。客户端收到响应后再次请求（即轮询）服务端，并处理响应。</p>
-
-<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB9FvU9eVTCSJTko6y9nBiqZDzKVBAR6PA5ZEeQWUo-g9-BIDGUcnzgp-o2jfNqeKa9iMtg-8oP80w/long-poll.png?psid=1" alt="长轮询"/></p>
-
-<ul>
-<li>实时性高</li>
-<li>服务端需要管理挂起请求</li>
-</ul>
-
-<h4 id="toc_6">HTTP 流</h4>
-
-<p>客户端发起请求后服务器端处理请求，并通过 HTTP 流一直向客户端写入数据，直到超时或异常才返回响应。连接断开后客户端再次请求服务端，属于长轮询的一种。</p>
-
-<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB_dSNHMdTAGrE3L-qzp-3wRJGRGg3vep25W61bdfXvlMSZZn7xezEgptcNNk3MPEAEZ1W-7BEOuzw/stream.png?psid=1" alt="HTTP 流"/></p>
-
-<h4 id="toc_7">HTML 5 WebSocket</h4>
-
-<p>这是标准化的客户端全<a href="http://dev.w3.org/html5/websockets/">双工通讯规范</a>，但由于目前<a href="http://jcp.org/en/jsr/summary?id=356">服务端规范</a>尚未成型，且考虑到现有客户端对 HTML 5 的支持有限，这里不进行描述。</p>
-
-<h4 id="toc_8">多客户端支持</h4>
-
-<p>上述介绍是针对浏览器客户端的，在实际应用场景中，还需要考虑其他客户端支持，例如 iOS、Android 等。</p>
-
-<p>在移动客户端方面，需要考虑如下几点。</p>
-
-<h5 id="toc_9">APIs 多样</h5>
-
-<p>不同客户端本地 APIs 接口存在差异，但都支持基本的 HTTP 协议。直接基于 HTTP 协议进行开发可将差异最小化。</p>
-
-<h5 id="toc_10">网络连接不稳定</h5>
-
-<p>通讯信道打开后不一定能长时间维护，客户端与服务端的状态管理复杂。</p>
-
-<h5 id="toc_11">最小化流量</h5>
-
-<p>需要尽量最小化网络流量，提升移动客户端可用性。</p>
-
-<h3 id="toc_12">服务层消息服务</h3>
-
-<p>消息是系统或组件间通讯的一种低耦合方式，是系统级异步架构的基础。</p>
-
-<p>在 Web 消息推送中，服务端管理应用状态，当状态发生变迁时需要通知客户端，完成消息推送。</p>
-
-<h4 id="toc_13">Java Message Service</h4>
-
-<p>需要重点关注如下技术点：</p>
-
-<h5 id="toc_14">消息域</h5>
-
-<ul>
-<li><p>点对点只有一个客户端可以接收到消息。<br/>
-<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKx8JlI0OEosOio1o4ukP3Xlq1Fb-gzO4T6rXa4vrjXP8MUUFgk6R5_c9lltWVrQtnO3aeZi5AjD7Q/jms-pointToPoint.gif?psid=1" alt="JMS p2p"/></p></li>
-<li><p>发布/订阅<br/>
-广播给订阅的客户端。可配置持久化订阅。<br/>
-<img src="https://public.sn2.livefilestore.com/y1pn-rGJlFftKxAtr19116nVAs_T-MJCBnyLPgpCZA8UyOT6A9Komub9StYUSNXykqk8WFB3IKt6DPC3KU4FtVHow/jms-publishSubscribe.gif?psid=1" alt="JMS Pub/Sub"/></p></li>
-</ul>
-
-<h5 id="toc_15">消息确认</h5>
-
-<p>会话本地事务提交时会对收到的消息进行确认，回滚时将重传所有消息<br/>
-非本地事务确认：Session.AUTO_ACKNOWLEDGE、Session.CLIENT_ACKNOWLEDGE、Session.DUPS_OK_ACKNOWLEDGE</p>
-
-<h3 id="toc_16">技术设计</h3>
-
-<h4 id="toc_17">目标</h4>
-
-<ul>
-<li>支持浏览器客户端的推送</li>
-<li>高性能、高可靠</li>
-<li>模块化，不与应用耦合</li>
-<li>未来可支持多种移动客户端</li>
-</ul>
-
-<h4 id="toc_18">Web 层设计</h4>
-
-<p>Web 层考虑采用开源组件 <a href="http://www.pushlets.com/">Pushlets</a> 进行实现。</p>
-
-<h5 id="toc_19">Pushlets 组件</h5>
-
-<p>Pushlets 基于 HTTP 协议的发布/订阅模型，提供了 Poll（轮询）、Pull（拉）两种推方式实现。其中 Pull 即长轮询方式，当有消息时就返回。</p>
-
-<ul>
-<li>发布：GET/POST 或方法调用ethod call（Dispatcher 接口）</li>
-<li>订阅：GET 流，拉/轮询模式</li>
-<li>树形主题：可层次化订阅</li>
-<li>协议格式：JS，XML（JSON 尚未支持）</li>
-<li>对使用 HTTP 协议的客户端都可用</li>
-<li>易扩展：例如事件源实现</li>
-<li>方便整合：可独立为 Web 应用，也可为 Web 应用组件</li>
-<li>多种实现：J2EE/servlets，JavaScript (AJAX)
-<img src="https://public.sn2.livefilestore.com/y1pTsZtjVvNgmTlwZ7_PaqcNsOFttmKJ49e0S4_L482d0X0nfuF5xG0pWYpaCmSIj46i7iq0EzCuKuDZTW_mBfz8w/pushlets.png?psid=1" alt="Pushlets"/></li>
-</ul>
-
-<h5 id="toc_20">JS 客户端</h5>
-
-<ul>
-<li>js-pushlet-client.js
-
-<ul>
-<li>使用 “隐藏 iframe 技巧”</li>
-<li>格式：JavaScript 函数事件</li>
-</ul></li>
-<li>ajax-pushlet-client.js
-
-<ul>
-<li>使用 XMLHttpRequest</li>
-<li>格式：XML</li>
-<li>不支持 HTTP 流
-使用 AJAX 客户端，较为灵活，便于封装。</li>
-</ul></li>
-</ul>
-
-<h4 id="toc_21">服务层设计</h4>
-
-<p>服务层消息服务采用应用服务器 JMS 中间件。通过发布/订阅模型实现状态同步。</p>
-
-<h5 id="toc_22">处理步骤</h5>
-
-<ol>
-<li>配置主题订阅</li>
-<li>应用状态变迁时发布 JMS 消息</li>
-<li>JMS 消息监听器将监听到的消息发布到 Pushlets</li>
-<li>将该消息写入 Web 层消息表</li>
-</ol>
-
-<h5 id="toc_23">消息表</h5>
-
-<p>保存推送多的消息记录，用于客户端刷新时/多客户端查找消息。</p>
-
-<p>消息体使用 JSON 字符串存放于 msg 字段中。其余字段可根据通用性进行抽取，比如用户名等。</p>
-
-<p>消息监听器接收到消息时推 Pushlets，并进行记录写入（记录 lastGetTime 为写入时间，表示这条消息已经推送过）。</p>
-
-<p>设置定时任务对超时记录进行删除。</p>
-
-<h4 id="toc_24">逻辑架构</h4>
-
-<p>JMS 消息系统为单独的通讯总线服务独立于应用系统，Pushlets 为应用系统中的一个组件。</p>
-
-<p>消息表管理组件提供消息新增，以及对推送过的消息记录的查询、删除。<br/>
-<img src="https://public.sn2.livefilestore.com/y1pJ_acuYt_CkkiHarLltUaKNjDom3zMbwe4EIjC5Uaj_Z-dS8TjrLofeSWl8BCH1e6xApcxf200RDtKTNiWNq4nQ/components.png?psid=1" alt="组件图"/></p>
-
-<h5 id="toc_25">推时序</h5>
-
-<p><img src="https://public.sn2.livefilestore.com/y1pg8zn2O3wRB-AzkrrJdr8rJyXVHgO0CgLBYHOKqFk15LmxOJMRsmKkOnqQBG4TEOGvpF_-gPnW9v0NEL2FXa_0Q/sequences.png?psid=1" alt="时序图"/></p>
-
-<h4 id="toc_26">关键点</h4>
-
-<p>服务层消息监听<br/>
-消息表管理<br/>
-Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业项目使用时必须进行封装<br/>
-前端容错开关</p>
-
-<h3 id="toc_27">参考</h3>
-
-<ul>
-<li><a href="http://www.ibm.com/developerworks/cn/web/wa-lo-comet/">Comet：基于 HTTP 长连接的“服务器推”技术</a></li>
-<li><a href="http://www.pushlets.com/">Pushlets 官网</a></li>
-<li><a href="http://docs.oracle.com/javaee/6/tutorial/doc/bncdq.html">The JavaEE 6 Tutorial - Java Message Service</a></li>
-<li><a href="https://docs.google.com/open?id=0B9vEkLPApAcqMGZWNFFrczBOckU">《JMS 规范教程》</a></li>
-</ul>
-
-<p>原文：<a href="https://docs.google.com/document/d/1qHVKlGz1raVemA2eHMSrPQppVKAiIrnFmfkpoyYE-U4/edit">《消息推送技术》via Google Docs</a></p>
-
-
-		</div>
-
-		
-
-	</article>
   
 	<div class="pagination">
 	 <a class="prev" href="all_9.html">&larr; Older</a> 
@@ -2414,6 +2414,12 @@ Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业
 	  
 	      
 		      <li class="post">
+		        <a href="2018-12-31-life-2018.html">2018 总结 - 凤凰项目</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
 		        <a href="2017-12-31-life-2017.html">2017 总结 - 乘风破浪</a>
 		      </li>
 	     
@@ -2433,12 +2439,6 @@ Pushlets 配置，License 问题：Pushlets 是以 LGPL 开源的，对于商业
 	      
 		      <li class="post">
 		        <a href="2017-01-01-continuous-deployment-at-instagram.html">Instagram 是如何做持续部署的</a>
-		      </li>
-	     
-	  
-	      
-		      <li class="post">
-		        <a href="2016-12-30-life-2016.html">2016 总结 - 工作十小时，休息五分钟</a>
 		      </li>
 	     
 	  
